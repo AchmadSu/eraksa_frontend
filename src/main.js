@@ -1,6 +1,16 @@
 import { createApp } from 'vue'
 import router from './router/index'
 import App from './App.vue'
+
+import axios from 'axios'
+
+axios.defaults.withCredentials = true   
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
+axios.defaults.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+axios.defaults.headers['Content-Type'] = 'application/json';
+// axios.defaults.headers['content'] = window.csrf_token;
+axios.defaults.headers['X-CSRF-TOKEN'] = window.csrf_token;
+
 // import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'

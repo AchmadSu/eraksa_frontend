@@ -18,14 +18,14 @@
                 <img src="src/assets/img/Data_security_28.jpg" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form" action="#" id="app" @submit.prevent="onSubmit" method="POST" novalidate="true">
+                <form class="form" id="app" @submit.prevent="submit">
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                         <h3 class="fw-bolder">
                             Log In
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
-                        <div class="input-group mb-3" :class="{ error: v$.form.email.$errors.length }">
+                        <div class="input-group mb-3">
                             <span class="input-group-text bg-transparent" id="basic-addon1">
                                 <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
                             </span>
@@ -37,13 +37,13 @@
                             />
                         </div>
                         <div v-if="passwordHidden">
-                            <div class="input-group mb-3" :class="{ error: v$.form.email.$errors.length }">
+                            <div class="input-group mb-3">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                 </span>
                                 <input 
                                     name="password" type="password" class="form-control"
-                                    v-model="passwordText" placeholder="Password" aria-label="Password"
+                                    v-model="password" placeholder="Password" aria-label="Password"
                                     aria-describedby="basic-addon2" required minlength="6" 
                                     />
                                 <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
@@ -56,7 +56,7 @@
                                 </span>
                                 <input 
                                     name="password" type="text" class="form-control"
-                                    v-model="passwordText" placeholder="Password"
+                                    v-model="password" placeholder="Password"
                                     aria-label="Password" aria-describedby="basic-addon2"
                                     required minlength="6"
                                 />
@@ -91,12 +91,30 @@
 </template>
 
 <script>
-    
-    import useVuelidate from '@vuelidate/core'
-    import { required, email, minLength } from '@vuelidate/validators'
+    import { ref } from 'vue'
+    import { useRouter } from 'vue-router'
+    import axios from 'axios'
+
     export default {
+        name : "Login",
         setup(){
-            return { v$: useVuelidate() }
+            const email = ref('');
+            const password = ref('');
+            const router = useRouter();
+
+            const submit = async () => {
+                const response = await axios.post('/login', {
+                    email: email.value,
+                    password : password.value,
+                });
+                localStorage.setItem('token', response.data.token);
+                await router.push({path: '/'});
+            }
+            return {
+                email,
+                password,
+                submit,
+            }
         },
         data (){
             return {
@@ -105,24 +123,6 @@
                     type: Boolean
                 },
                 windowWidth: window.innerWidth,
-                form : {
-                    email : '',
-                    passwordText : '',
-                },
-            }
-        },
-
-        validations(){
-            return {
-                form : {
-                    email : {
-                        required, email
-                    },
-                    passwordText : {
-                        required,
-                        min: minLength(6)
-                    }
-                }
             }
         },
 
