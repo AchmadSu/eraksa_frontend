@@ -5,6 +5,7 @@
 </template>
 
 <script>
+window.csrf_token = "{{ csrf_token() }}"
     export default{
         
     }
