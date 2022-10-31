@@ -1,3 +1,19 @@
+<script setup>
+    import { reactive } from 'vue';
+
+    let form = reactive({
+        email: '',
+        password: '',
+    })
+    
+    const login = async()=>{
+        await axios.post('/login', form)
+        .then(response => {
+            console.log(response)
+        })
+    }
+
+</script>
 <template>
     <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= 760 ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
@@ -18,7 +34,7 @@
                 <img src="src/assets/img/Data_security_28.jpg" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form" id="app" @submit.prevent="submit">
+                <form class="form" id="app" @submit.prevent="login">    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                         <h3 class="fw-bolder">
                             Log In
@@ -33,7 +49,7 @@
                                 name="email" type="email" class="form-control"
                                 placeholder="Email" aria-label="Email" 
                                 aria-describedby="basic-addon1"
-                                v-model="email" required
+                                v-model="form.email" required
                             />
                         </div>
                         <div v-if="passwordHidden">
@@ -43,7 +59,7 @@
                                 </span>
                                 <input 
                                     name="password" type="password" class="form-control"
-                                    v-model="password" placeholder="Password" aria-label="Password"
+                                    v-model="form.password" placeholder="Password" aria-label="Password"
                                     aria-describedby="basic-addon2" required minlength="6" 
                                     />
                                 <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
@@ -56,7 +72,7 @@
                                 </span>
                                 <input 
                                     name="password" type="text" class="form-control"
-                                    v-model="password" placeholder="Password"
+                                    v-model="form.password" placeholder="Password"
                                     aria-label="Password" aria-describedby="basic-addon2"
                                     required minlength="6"
                                 />
@@ -96,26 +112,6 @@
     import axios from 'axios'
 
     export default {
-        name : "Login",
-        setup(){
-            const email = ref('');
-            const password = ref('');
-            const router = useRouter();
-
-            const submit = async () => {
-                const response = await axios.post('/login', {
-                    email: email.value,
-                    password : password.value,
-                });
-                localStorage.setItem('token', response.data.token);
-                await router.push({path: '/'});
-            }
-            return {
-                email,
-                password,
-                submit,
-            }
-        },
         data (){
             return {
                 passwordHidden: {

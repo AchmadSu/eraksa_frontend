@@ -8,8 +8,10 @@ axios.defaults.withCredentials = true
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
 axios.defaults.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 axios.defaults.headers['Content-Type'] = 'application/json';
-// axios.defaults.headers['content'] = window.csrf_token;
-axios.defaults.headers['X-CSRF-TOKEN'] = window.csrf_token;
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
+axios.defaults.headers['Access-Control-Allow-Methods'] = "DELETE, PUT, GET, POST";
+axios.defaults.headers['Access-Control-Allow-Headers'] = "Content-type, Authorization, X-Requested-With";
+axios.defaults.withCredentials = true;
 
 // import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
