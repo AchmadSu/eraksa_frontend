@@ -20,6 +20,7 @@ import 'bootstrap/dist/js/bootstrap.min'
 // import './assets/fontawesome-free-6.2.0-web/css/all.min.css'
 import './assets/fontawesome-free-6.2.0-web/css/fontawesome.css'
 import './assets/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
+import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
 import './assets/img/login.jpg'
 // @import = url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 // import { library } from '@fortawesome/fontawesome-svg-core'
@@ -31,12 +32,13 @@ import {
     faLock,
     faCopyright,
     faEye,
-    faEyeSlash 
+    faEyeSlash,
+    faPhone, 
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 // createApp(App).mount('#app')
-library.add(faUser, faEnvelope, faKey, faLock, faCopyright, faEye, faEyeSlash)
+library.add(faUser, faEnvelope, faKey, faLock, faCopyright, faEye, faEyeSlash, faPhone)
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)
