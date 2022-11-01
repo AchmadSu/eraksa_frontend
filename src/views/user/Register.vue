@@ -256,7 +256,7 @@
                         <p>Sudah punya akun?</p>
                     </div>
                     <div class="col-6">
-                        <button class="btn btn-primary w-100">Masuk</button>
+                        <button @click="login" class="btn btn-primary w-100">Masuk</button>
                     </div>
                 </div>
                 <div :class="windowWidth < 760 ? 'row my-3' : 'd-none'">
@@ -264,7 +264,7 @@
                         <p>Atau</p>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-primary w-100">Masuk</button>
+                        <button @click="login" class="btn btn-primary w-100">Masuk</button>
                     </div>
                 </div>
             </div>
@@ -280,7 +280,7 @@
 
 <script>
     // import { ref } from 'vue'
-    // import { useRouter } from 'vue-router'
+    import { useRouter } from 'vue-router'
     import axios from 'axios'
     // import { response } from 'express';
     // import useVuelidate from '@vuelidate/core'
@@ -376,6 +376,11 @@
                     }
                 })
             },  
+
+            login(){
+                // console.log('test');
+                this.$router.push({ name: "user.login" });
+            },
 
             hidePassword() {
                 this.passwordHidden = true;

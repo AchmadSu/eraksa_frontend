@@ -1,18 +1,27 @@
 <template>
     <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= 760 ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <picture class="mx-5">
-                <source srcset="src/assets/img/logo-01.png" type="image/svg+xml">
-                <img src="src/assets/img/logo-01.png" class="img-fluid w-25" alt="...">
-            </picture>
+        <div :class="windowWidth >= widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+            <div :class="windowWidth >= widthRotatePhone && windowWidth < widthComputer? 'd-block' : 'd-none'">
+                <center>
+                    <picture class="mx-5">
+                        <source srcset="src/assets/img/logo-01.png" type="image/svg+xml">
+                        <img src="src/assets/img/logo-01.png" class="img-fluid w-50" alt="...">
+                    </picture>
+                </center>
+            </div>
+            <div :class="windowWidth >= widthComputer ? 'd-block' : 'd-none'">
+                <picture class="mx-5">
+                    <source srcset="src/assets/img/logo-01.png" type="image/svg+xml">
+                    <img src="src/assets/img/logo-01.png" class="img-fluid w-25" alt="...">
+                </picture>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-12 d-sm-block d-md-none text-center">
                 <picture class="mx-3">
-                    <source srcset="src/assets/img/logo.png" type="image/svg+xml">
-                    <img src="src/assets/img/logo.png" class="img-fluid w-25" alt="...">
+                    <source srcset="src/assets/img/logoPhone.png" type="image/svg+xml">
+                    <img src="src/assets/img/logoPhone.png" class="img-fluid w-50" alt="...">
                 </picture>
-                <h3 class="mt-2">ERAKSA</h3>
             </div>
             <div class="col-md-6 col-sm-12 text-center">
                 <img src="src/assets/img/Data_security_28.jpg" class="img-fluid" alt="...">
@@ -54,7 +63,7 @@
                                 </button>
                                 <div :class="windowWidth < widthComputer ? 'p-0 text-start':'d-none'">
                                     <div :class ="checkPassword == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                        <small>Panjang password miniml 6 karakter!</small>
+                                        <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +106,7 @@
                         <p>Belum memiliki akun?</p>
                     </div>
                     <div class="col-6">
-                        <button class="btn btn-success w-100">Daftar</button>
+                        <button @click="register" class="btn btn-success w-100">Daftar</button>
                     </div>
                 </div>
                 <div :class="windowWidth < 760 ? 'row my-3' : 'd-none'">
@@ -105,7 +114,7 @@
                         <p>Atau</p>
                     </div>
                     <div class="col-12">
-                        <button class="btn btn-success w-100">Daftar</button>
+                        <button @click="register" class="btn btn-success w-100">Daftar</button>
                     </div>
                 </div>
             </div>
@@ -118,7 +127,7 @@
 
 <script>
     // import { ref } from 'vue'
-    // import { useRouter } from 'vue-router'
+    import { useRouter } from 'vue-router'
     import axios from 'axios'
 
     export default {
@@ -170,6 +179,11 @@
                         console.log(error.response.headers);
                     }
                 })
+            },
+
+            register(){
+                // console.log('test');
+                this.$router.push({ name: "user.register" });
             },
             
             validateEmail(value){
