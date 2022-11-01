@@ -87,7 +87,7 @@
                                 v-model="form.email" required
                             />
                             <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
-                                Masukkan data email dengan benar
+                                Masukkan data email dengan benar!
                             </div>
                         </div>
                         <div class="input-group mb-3" tabindex="-1" id="inner">
@@ -270,6 +270,9 @@
             </div>
         </div>
         <div class="row text-center py-3">
+            <p class="text-secondary">{{ this.dataResponse }}</p>
+        </div>
+        <div class="row text-center py-3">
             <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> 2023</p>
         </div>
     </div>
@@ -346,17 +349,11 @@
                     phone: '',   
                 },
                 fullname: '',
+                dataResponse: '',
             }
         },
 
         methods: {
-            hidePassword() {
-                this.passwordHidden = true;
-            },
-            showPassword() {
-                this.passwordHidden = false;
-            },
-
             async register() {
                 // console.log(this.fullname);
                 // if()
@@ -369,9 +366,23 @@
                 }
                 await axios.post('/register', data)
                 .then(response => {
-                    console.log(response)
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    if (error.response) {
+                        console.log(typeof error.response.data.message);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
                 })
             },  
+
+            hidePassword() {
+                this.passwordHidden = true;
+            },
+            showPassword() {
+                this.passwordHidden = false;
+            },
 
             validateName(value1, value2){
                 // console.log(value1);
@@ -465,7 +476,7 @@
                 }
             }
         },
-        watch : {
+        watch: {
             form: {
                 handler: function (val) {
                     let firstname = val.firstname;
@@ -475,7 +486,6 @@
                     let password = val.password;
                     let confirmPassword = val.confirmPassword;
                     
-
                     let validateName = this.validateName(firstname, lastname);
                     let validatePhone = this.validatePhone(phone);
                     let validatePassword = this.validatePassword(password);
