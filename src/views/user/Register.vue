@@ -465,12 +465,13 @@
 
                     console.log("result: "+ (validateName && validatePhone && validatePassword && validateConfirmPassword));
                     console.log("name: "+validateName);
-                    // console.log("email: "+this.checkEmail);
+                    // console.log("email: "+this.regexExp.test(email));
+                    // console.log("name: "+email.length!==0);
                     console.log("phone: "+validatePhone);
                     console.log("password: "+validatePassword);
                     console.log("confirm: "+validateConfirmPassword);
 
-                    if(this.regexExp.test(email) && email.length != 0 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
+                    if(email.length >= 4 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
                         // console.log('Test');    
                         this.submitEnabled = true;
                     } else {
