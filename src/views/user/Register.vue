@@ -279,6 +279,7 @@
     // import { ref } from 'vue'
     // import { useRouter } from 'vue-router'
     import axios from 'axios'
+    // import { response } from 'express';
     // import useVuelidate from '@vuelidate/core'
     // import { useField } from 'vee-validate'
     // import { required, email, minLength, sameAs } from '@vuelidate/validators'
@@ -355,6 +356,23 @@
             showPassword() {
                 this.passwordHidden = false;
             },
+
+            async register() {
+                // console.log(this.fullname);
+                // if()
+                const data = {
+                    "name": this.fullname,
+                    "email": this.form.email,
+                    "phone": this.form.phone.toString(),
+                    "password": this.form.password,
+                    "confirm_pass": this.form.confirmPassword, 
+                }
+                await axios.post('/register', data)
+                .then(response => {
+                    console.log(response)
+                })
+            },  
+
             validateName(value1, value2){
                 // console.log(value1);
                 if(value1.length >= 3) {
@@ -463,15 +481,7 @@
                     let validatePassword = this.validatePassword(password);
                     let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
 
-                    console.log("result: "+ (validateName && validatePhone && validatePassword && validateConfirmPassword));
-                    console.log("name: "+validateName);
-                    // console.log("email: "+this.regexExp.test(email));
-                    // console.log("name: "+email.length!==0);
-                    console.log("phone: "+validatePhone);
-                    console.log("password: "+validatePassword);
-                    console.log("confirm: "+validateConfirmPassword);
-
-                    if(email.length >= 4 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
+                    if(email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
                         // console.log('Test');    
                         this.submitEnabled = true;
                     } else {
