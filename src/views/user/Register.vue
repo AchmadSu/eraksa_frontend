@@ -1,32 +1,4 @@
-<template>
-    <!-- Modal -->
-    <!-- v-for="item in errorResponse" :key="item.id" -->
-    <!-- <div :v-model="modalShow" class="modal fade" id="errorModal" ref="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content rounded-0">
-                <div class="modal-header bg-warning rounded-0">
-                    <h1 class="modal-title fs-5 text-white" id="errorModalLabel">
-                        <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />  item.message
-                    </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <center>
-                            <source srcset="src/assets/img/error.jpg" type="image/svg+xml">
-                            <img src="src/assets/img/error.jpg" class="img-fluid w-50" alt="...">
-                        </center>
-                    </div>
-                    <div class="row">
-                        <h5 class="text-center">
-                            item.detail
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    
+<template>    
     <!-- Body -->
     <div :class= "windowWidth <= widthRotatePhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
@@ -52,25 +24,40 @@
                     <img src="src/assets/img/logoPhone.png" class="img-fluid w-50" alt="...">
                 </picture>
             </div>
-            <div class="col-md-6 col-sm-12 text-center">
+            <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
+                <div v-if="this.windowWidth < 760">
+                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div v-else-if="this.windowWidth < this.widthComputer">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="col-md-6 col-sm-12 text-center">
                 <img src="src/assets/img/Data_security_28.jpg" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
                 <form class="form needs-validation" id="app" @submit.prevent="register" novalidate>    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
-                        <h3 class="fw-bolder">
+                        <h3 class="fw-bolder text-secondary">
                             REGISTER
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
-                        <!-- <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div> -->
                         <div :class="windowWidth >= widthComputer ? 'row' : 'd-none'">
                             <div class="col-6">
                                 <div class="input-group mb-3">
@@ -341,7 +328,7 @@
             </div>
         </div>
         <div class="row text-center py-3">
-            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> 2023</p>
+            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
         </div>
     </div>
 </template>
@@ -381,10 +368,12 @@
                 floatingTextPhone: true,
                 floatingTextConfirmation: true,
                 isLoadingResponse: false,
+                isLoadingImage: true,
 
                 successResponse: [],
                 errorResponse: [],
                 showAlert: false,
+                currentYear: new Date().getFullYear(),
 
                 checkPasswords: [
                     {
@@ -464,15 +453,14 @@
                     } else if (error.response) {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
-                        if(error.response.status === 404) {
+                        if(error.response.data.message == 'Error!') {
                             this.errorResponse = [
                                 {
                                     'id': 1,
                                     'message': error.response.data.message, 
                                     'detail': error.response.data.data.error,
                                 }
-                            ];
-                            // this.modalShow = true;
+                            ]
                         } else {
                             this.errorResponse = [
                                 {
@@ -492,7 +480,17 @@
 
             login(){
                 this.isLoadingRouter = true;
-                setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
+                try {
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
+                } catch (e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
             },
 
             hidePassword() {
@@ -631,6 +629,7 @@
                 this.windowWidth = window.innerWidth
             }
             window.scrollTo(0,0);
+            setTimeout(() => this.isLoadingImage = false, 3000);
         }
     };
 </script>

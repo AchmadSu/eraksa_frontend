@@ -23,14 +23,37 @@
                     <img src="src/assets/img/logoPhone.png" class="img-fluid w-50" alt="...">
                 </picture>
             </div>
-            <div class="col-md-6 col-sm-12 text-center">
+            <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
+                <div v-if="this.windowWidth < 760">
+                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div v-else-if="this.windowWidth < this.widthComputer">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="col-md-6 col-sm-12 text-center">
                 <img src="src/assets/img/Data_security_28.jpg" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
                 <form class="form needs-validation" id="app" @submit.prevent="login" novalidate>    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
-                        <h3 class="fw-bolder">
-                            Log In
+                        <h3 class="fw-bolder text-secondary">
+                            LOG IN
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
@@ -150,11 +173,8 @@
                 </div>
             </div>
         </div>
-        <div class="row text-center py-3">
-            <p>{{dataResponse}}</p>
-        </div>
-        <div class="row text-center py-3">
-            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> 2023</p>
+        <div class="row text-center mt-lg-5 py-3">
+            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
         </div>
     </div>
 </template>
@@ -181,6 +201,9 @@
                 checkPassword: false,
                 isLoadingResponse: false,
                 isLoadingRouter: false,
+                isLoadingImage: true,
+                currentYear: new Date().getFullYear(),
+
                 regexExp: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi,
 
                 form: {
@@ -213,7 +236,11 @@
                 }
                 await axios.post('/login', data)
                 .then(response => {
-                    console.log(response)
+                    // console.log(response.data.data);
+                    localStorage.setItem('token', response.data.data.token);
+                    localStorage.setItem('user', response.data.data.user);
+                    // document.cookie = response.data.token;
+                    // console.log(localStorage.getItem('token'));
                     this.isLoadingResponse = false;
                 })
                 .catch(error => {
@@ -224,13 +251,14 @@
                             {
                                 'id': 1,
                                 'message': 'Error!', 
-                                'detail': 'Network Error',
+                                'detail': 'Network Error. Silakan cek koneksi anda!',
                             }
                         ];
+                        console.log(!error.response);
                     } else if (error.response) {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
-                        if(error.response.status === 404) {
+                        if(error.response.data.message == 'Unauthorised!') {
                             this.errorResponse = [
                                 {
                                     'id': 1,
@@ -243,20 +271,27 @@
                                 {
                                     'id': 1,
                                     'message': error.response.status +' '+ error.response.statusText,
-                                    'detail': 'Maaf permintaan anda tidak dapat dilakukan'
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
                                 }
                             ]
                         }
-                        // this.alertMsg = error.response.status +' '+ error.response.statusText;
-                        console.log(error.response);
-                        // console.log(error.response.data);
                     }
                 })
             },
 
             register(){
                 this.isLoadingRouter = true;
-                setTimeout(() => this.$router.push({ name: "user.register" }), 5000);
+                try{
+                    setTimeout(() => this.$router.push({ name: "user.register" }), 5000);
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
             },
             
             validateEmail(value){
@@ -299,8 +334,6 @@
                     if(validateName && validatePassword) {
                         this.submitEnabled = true;
                     }
-
-                    console.log(this.showAlert);
                 },
                 deep: true,
             }
@@ -310,6 +343,9 @@
                 this.windowWidth = window.innerWidth
             }
             window.scrollTo(0,0);
+            console.log(localStorage.getItem('token'));
+            setTimeout(() => this.isLoadingImage = false, 5000);
+            // console.log(document.cookie);
         }
     };
 </script>
