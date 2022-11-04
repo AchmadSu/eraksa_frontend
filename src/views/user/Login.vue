@@ -62,14 +62,14 @@
                                     <font-awesome-icon icon="fa-solid fa-eye" />
                                 </button>
                                 <div :class="windowWidth < widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                    <div :class ="checkPassword == false ? 'py-0 text-danger' : 'd-none'">
                                         <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                             </div>
                             <div :class="windowWidth >= widthComputer ? 'p-0 text-start':'d-none'">
-                                <div :class ="checkPassword == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <small>Panjang password miniml 6 karakter!</small>
+                                <div :class ="checkPassword == false ? 'mb-3 py-0 text-danger' : 'd-none'">
+                                    <small>Panjang password minimal 6 karakter!</small>
                                 </div>
                             </div>
                         </div>
@@ -87,37 +87,71 @@
                                     <font-awesome-icon icon="fa-solid fa-eye-slash"/>
                                 </button>
                                 <div :class="windowWidth < widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                        <small>Panjang password miniml 6 karakter!</small>
+                                    <div :class ="checkPassword == false ? 'py-0 text-danger' : 'd-none'">
+                                        <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                             </div>
                             <div :class="windowWidth >= widthComputer ? 'p-0 text-start':'d-none'">
-                                <div :class ="checkPassword == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <small>Panjang password miniml 6 karakter!</small>
+                                <div :class ="checkPassword == false ? 'mb-3 py-0 text-danger' : 'd-none'">
+                                    <small>Panjang password minimal 6 karakter!</small>
                                 </div>
                             </div>
                         </div>
-                        <button :disabled="!submitEnabled" type="submit" class="btn btn-primary" style="width:100%;">Masuk</button>
+                        <div v-if="isLoadingResponse == false">
+                            <button :disabled="!submitEnabled" type="submit" class="btn btn-primary mt-2" style="width:100%;">Masuk</button>
+                        </div>
+                        <div v-if="isLoadingResponse == true">
+                            <button type="submit" class="btn btn-primary mt-2" style="width:100%;" :disabled="true">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat ...
+                            </button>
+                        </div>
+                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     </div>
                 </form>
                 <div :class="windowWidth >= 760 ? 'row my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-6 text-right">
                         <p>Belum memiliki akun?</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6" v-if="isLoadingRouter == false">
                         <button @click="register" class="btn btn-success w-100">Daftar</button>
+                    </div>
+                    <div class="col-6" v-if="isLoadingRouter == true">
+                        <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Memuat ...
+                        </button>
                     </div>
                 </div>
                 <div :class="windowWidth < 760 ? 'row my-3' : 'd-none'">
-                    <div class="col-12">
-                        <p>Atau</p>
+                    <div v-if="isLoadingRouter == false">
+                        <div class="col-12">
+                            <p>Atau</p>
+                        </div>
+                        <div class="col-12">
+                            <button @click="register" class="btn btn-success w-100">Daftar</button>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <button @click="register" class="btn btn-success w-100">Daftar</button>
+                    <div v-if="isLoadingRouter">
+                        <div class="col-12">
+                            <p>Atau</p>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat ...
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row text-center py-3">
+            <p>{{dataResponse}}</p>
         </div>
         <div class="row text-center py-3">
             <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> 2023</p>
@@ -145,12 +179,20 @@
                 submitEnabled: false,
                 checkEmail: false,
                 checkPassword: false,
+                isLoadingResponse: false,
+                isLoadingRouter: false,
                 regexExp: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi,
 
-                form : {
+                form: {
                     email: '',
                     password: '',   
                 },
+
+                errorResponse: [],
+
+                // alertMsg: null,
+                // detailMessage: null,
+                showAlert: false,
             }
         },
 
@@ -163,27 +205,58 @@
             },
 
             async login() {
-                // console.log(this.fullname);
+                this.setAlert();
+                this.isLoadingResponse = true;
                 const data = {
                     "email": this.form.email,
                     "password": this.form.password, 
                 }
                 await axios.post('/login', data)
                 .then(response => {
-                    console.log(response.data)
+                    console.log(response)
+                    this.isLoadingResponse = false;
                 })
-                .catch(function (error) {
-                    if (error.response) {
-                        console.log(typeof error.response.data.message);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
+                .catch(error => {
+                    if(!error.response){
+                        this.showAlert = true;
+                        this.isLoadingResponse = false;
+                        this.errorResponse = [
+                            {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error',
+                            }
+                        ];
+                    } else if (error.response) {
+                        this.showAlert = true;
+                        this.isLoadingResponse = false;
+                        if(error.response.status === 404) {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.data.message, 
+                                    'detail': error.response.data.data.error,
+                                }
+                            ]
+                        } else {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.status +' '+ error.response.statusText,
+                                    'detail': 'Maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ]
+                        }
+                        // this.alertMsg = error.response.status +' '+ error.response.statusText;
+                        console.log(error.response);
+                        // console.log(error.response.data);
                     }
                 })
             },
 
             register(){
-                // console.log('test');
-                this.$router.push({ name: "user.register" });
+                this.isLoadingRouter = true;
+                setTimeout(() => this.$router.push({ name: "user.register" }), 5000);
             },
             
             validateEmail(value){
@@ -207,6 +280,12 @@
                 }
             },
 
+            setAlert(){
+                // this.alertMsg = null;
+                this.showAlert = false;
+                this.errorResponse = [];
+            }
+
         },
         watch: {
             form: {
@@ -214,13 +293,14 @@
                     let email = val.email;
                     let password = val.password;
 
-                    // console.log(email);
                     let validateName = this.validateEmail(email);
                     let validatePassword = this.validatePassword(password);
 
                     if(validateName && validatePassword) {
                         this.submitEnabled = true;
                     }
+
+                    console.log(this.showAlert);
                 },
                 deep: true,
             }
@@ -229,6 +309,7 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+            window.scrollTo(0,0);
         }
     };
 </script>

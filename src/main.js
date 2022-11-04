@@ -2,6 +2,10 @@ import { createApp } from 'vue'
 import router from './router/index'
 import App from './App.vue'
 
+// import { ModalPlugin } from 'bootstrap-vue'
+// import Vue from 'vue'
+// import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
 import axios from 'axios'
 
 axios.defaults.withCredentials = true   
@@ -24,6 +28,7 @@ import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
 import './assets/img/login.jpg'
 // @import = url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 // import { library } from '@fortawesome/fontawesome-svg-core'
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
     faUser,
@@ -34,11 +39,17 @@ import {
     faEye,
     faEyeSlash,
     faPhone, 
+    faTriangleExclamation,
+    faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 // createApp(App).mount('#app')
-library.add(faUser, faEnvelope, faKey, faLock, faCopyright, faEye, faEyeSlash, faPhone)
+library.add(
+    faUser, faEnvelope, faKey, faLock, faCopyright, faEye, faEyeSlash, faPhone, faTriangleExclamation,
+    faCircleCheck
+)
+// Vue.use(ModalPlugin)
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(router)

@@ -1,4 +1,33 @@
 <template>
+    <!-- Modal -->
+    <!-- v-for="item in errorResponse" :key="item.id" -->
+    <!-- <div :v-model="modalShow" class="modal fade" id="errorModal" ref="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-0">
+                <div class="modal-header bg-warning rounded-0">
+                    <h1 class="modal-title fs-5 text-white" id="errorModalLabel">
+                        <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />  item.message
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <center>
+                            <source srcset="src/assets/img/error.jpg" type="image/svg+xml">
+                            <img src="src/assets/img/error.jpg" class="img-fluid w-50" alt="...">
+                        </center>
+                    </div>
+                    <div class="row">
+                        <h5 class="text-center">
+                            item.detail
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    
+    <!-- Body -->
     <div :class= "windowWidth <= widthRotatePhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
             <div :class="windowWidth >= widthRotatePhone && windowWidth < widthComputer? 'd-block' : 'd-none'">
@@ -34,6 +63,14 @@
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
+                        <!-- <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-primary alert-dismissible' : 'd-none'" role="alert">
+                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div> -->
                         <div :class="windowWidth >= widthComputer ? 'row' : 'd-none'">
                             <div class="col-6">
                                 <div class="input-group mb-3">
@@ -248,29 +285,60 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Daftar</button>
+                        <div v-if="isLoadingResponse == false">
+                            <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Daftar</button>
+                        </div>
+                        <div v-if="isLoadingResponse == true">
+                            <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat ...
+                            </button>
+                        </div>
+                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
+                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#errorModal">
+                        Launch demo modal
+                        </button> -->
                     </div>
                 </form>
                 <div :class="windowWidth >= 760 ? 'row my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-6 text-right">
                         <p>Sudah punya akun?</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6" v-if="isLoadingRouter == false">
                         <button @click="login" class="btn btn-primary w-100">Masuk</button>
+                    </div>
+                    <div class="col-6" v-if="isLoadingRouter == true">
+                        <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Memuat ...
+                        </button>
                     </div>
                 </div>
                 <div :class="windowWidth < 760 ? 'row my-3' : 'd-none'">
-                    <div class="col-12">
-                        <p>Atau</p>
+                    <div v-if="isLoadingRouter == false">
+                        <div class="col-12">
+                            <p>Atau</p>
+                        </div>
+                        <div class="col-12">
+                            <button @click="login" class="btn btn-primary w-100">Masuk</button>
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <button @click="login" class="btn btn-primary w-100">Masuk</button>
+                    <div v-if="isLoadingRouter">
+                        <div class="col-12">
+                            <p>Atau</p>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat ...
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row text-center py-3">
-            <p class="text-secondary">{{ this.dataResponse }}</p>
         </div>
         <div class="row text-center py-3">
             <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> 2023</p>
@@ -282,6 +350,8 @@
     // import { ref } from 'vue'
     import { useRouter } from 'vue-router'
     import axios from 'axios'
+    import { ref, onMounted } from 'vue'
+    // import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
     // import { response } from 'express';
     // import useVuelidate from '@vuelidate/core'
     // import { useField } from 'vee-validate'
@@ -310,6 +380,11 @@
                 floatingTextEmail: true,
                 floatingTextPhone: true,
                 floatingTextConfirmation: true,
+                isLoadingResponse: false,
+
+                successResponse: [],
+                errorResponse: [],
+                showAlert: false,
 
                 checkPasswords: [
                     {
@@ -349,12 +424,16 @@
                     phone: '',   
                 },
                 fullname: '',
-                dataResponse: '',
+                modalShow: false,
+                isLoadingRouter: false,
+                // errorModal: ref(null),
             }
         },
 
         methods: {
             async register() {
+                this.setAlert();
+                this.isLoadingResponse = true;
                 // console.log(this.fullname);
                 // if()
                 const data = {
@@ -366,20 +445,54 @@
                 }
                 await axios.post('/register', data)
                 .then(response => {
-                    console.log(response.data)
+                    console.log(response);
+                    this.isLoadingResponse = false;
                 })
-                .catch(function (error) {
-                    if (error.response) {
-                        console.log(typeof error.response.data.message);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
+                .catch(error => {
+                    if (!error.response) {
+                        // network error
+                        this.showAlert = true;
+                        this.isLoadingResponse = false;
+                        this.errorResponse = [
+                            {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error',
+                            }
+                        ];
+                        // this.modalShow = true;
+                    } else if (error.response) {
+                        this.showAlert = true;
+                        this.isLoadingResponse = false;
+                        if(error.response.status === 404) {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.data.message, 
+                                    'detail': error.response.data.data.error,
+                                }
+                            ];
+                            // this.modalShow = true;
+                        } else {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.status +' '+ error.response.statusText,
+                                    'detail': 'Maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            // this.modalShow = true;
+                        }
+                        // this.alertMsg = error.response.status +' '+ error.response.statusText;
+                        console.log(error.response);
+                        // console.log(error.response.data);
                     }
                 })
             },  
 
             login(){
-                // console.log('test');
-                this.$router.push({ name: "user.login" });
+                this.isLoadingRouter = true;
+                setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
             },
 
             hidePassword() {
@@ -479,6 +592,13 @@
                     this.checkConfirmPassword = false;
                     return false;
                 }
+            },
+
+            setAlert(){
+                // this.alertMsg = null;
+                this.showAlert = false;
+                this.successResponse = [];
+                this.errorResponse = [];
             }
         },
         watch: {
@@ -510,6 +630,7 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+            window.scrollTo(0,0);
         }
     };
 </script>
