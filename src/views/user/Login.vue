@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
             <div :class="windowWidth >= widthRotatePhone && windowWidth < widthComputer? 'd-block' : 'd-none'">
@@ -237,20 +237,24 @@
                 }
                 await axios.post('/login', data)
                 .then(response => {
-                    // console.log(response.data.data);
+                    // console.log(response.headers);
                     localStorage.setItem('token', response.data.data.token);
+                    localStorage.setItem('roles', response.data.data.roles);
                     this.sessionData = {
                         "id": response.data.data.user.id,
                         "name": response.data.data.user.name,
                         "email": response.data.data.user.email,
                         "status": response.data.data.user.status,
                         "phone": response.data.data.user.phone,
-                        "study_program_id": response.data.data.user.study_program_id 
+                        "study_program_id": response.data.data.user.study_program_id, 
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
-                    // document.cookie = response.data.token;
+                    localStorage.setItem('loggedIn', true);
                     // console.log(localStorage.getItem('token'));
                     this.isLoadingResponse = false;
+                    // axios.get('sanctum/csrf-cookie');
+                    // this.$cookie.set(csrf);
+                    // console.log(csrf);
                 })
                 .catch(error => {
                     if(!error.response){
@@ -267,7 +271,7 @@
                     } else if (error.response) {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
-                        if(error.response.data.message == 'Unauthorised!') {
+                        if(error.response.data.message == 'Unauthorised!' || error.response.data.message == 'Error!') {
                             this.errorResponse = [
                                 {
                                     'id': 1,
@@ -350,9 +354,10 @@
             },
         },
         mounted(){
-            // if(localStorage.getItem('token') != null) {
-            //     // this.$router.push({ name: "user.register" });
-            // }
+            // console.log(localStorage.getItem('loggedIn'));
+            if(localStorage.getItem('loggedIn') === true) {
+                this.$router.push({ name: "user.register" });
+            }
             // let retrieveSessionObject = localStorage.getItem('sessionObject');
             // console.log(JSON.parse(retrieveSessionObject));
             window.onresize = () => {
