@@ -141,7 +141,7 @@
                         <button class="btn btn-light w-100" disabled>Member baru?</button>
                     </div>
                     <div class="col-6" v-if="isLoadingRouter == false">
-                        <button @click="register" class="btn btn-success w-100">
+                        <button @click="register" class="btn btn-success w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-user-plus" />
                             Daftar
                         </button>
@@ -159,7 +159,7 @@
                             <p>Atau</p>
                         </div>
                         <div class="col-12">
-                            <button @click="register" class="btn btn-success w-100">
+                            <button @click="register" class="btn btn-success w-100" :disabled="secondaryButtonDisabled">
                                 <font-awesome-icon icon="fa-solid fa-user-plus" />
                                 Daftar
                             </button>
@@ -179,7 +179,7 @@
                 </div>
                 <div :class="windowWidth >= $widthRotatePhone ? 'row my-4' : 'd-none'">
                     <div class="col-12" v-if="isLoadingRouterResetPassword == false">
-                        <button @click="resetPassword" class="btn btn-light text-secondary w-100">
+                        <button @click="resetPassword" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-lock" />
                             Reset Password
                         </button>
@@ -194,7 +194,7 @@
                 <div :class="windowWidth < $widthRotatePhone ? 'row mt-4' : 'd-none'">
                     <div v-if="isLoadingRouterResetPassword == false">
                         <div class="col-12">
-                            <button @click="resetPassword" class="btn btn-light text-secondary w-100">
+                            <button @click="resetPassword" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                                 <font-awesome-icon icon="fa-solid fa-lock" />
                                 Reset Password
                             </button>
@@ -234,6 +234,7 @@
                 isLoadingRouterResetPassword: false,
                 loginButtonCount: 0,
 
+                secondaryButtonDisabled: false,
                 submitEnabled: false,
                 checkEmail: false,
                 checkPassword: false,
@@ -269,6 +270,7 @@
             async login() {
                 this.setAlert();
                 this.isLoadingResponse = true;
+                this.secondaryButtonDisabled = true;
                 const data = {
                     "email": this.form.email,
                     "password": this.form.password, 
@@ -296,6 +298,7 @@
                 })
                 .catch(error => {
                     if(!error.response){
+                        this.secondaryButtonDisabled = false;
                         this.showAlert = true;
                         this.isLoadingResponse = false;
                         this.errorResponse = [
@@ -307,6 +310,7 @@
                         ];
                         // console.log(!error.response);
                     } else if (error.response) {
+                        this.secondaryButtonDisabled = false;
                         this.showAlert = true;
                         this.isLoadingResponse = false;
                         if(error.response.data.message == 'Unauthorised!') {
@@ -352,6 +356,8 @@
 
             register(){
                 this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
                 try{
                     setTimeout(() => this.$router.push({ name: "user.register" }), 5000);
                 } catch(e) {
@@ -367,6 +373,8 @@
 
             resetPassword(){
                 this.isLoadingRouterResetPassword = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
                 try{
                     setTimeout(() => this.$router.push({ name: "user.requestResetPassword" }), 5000);
                 } catch(e) {
@@ -392,7 +400,7 @@
             },
 
             validatePassword(value){
-                if (value.length < 5) {
+                if (value.length <= 5) {
                     this.checkPassword = false;
                     return false
                 } else {

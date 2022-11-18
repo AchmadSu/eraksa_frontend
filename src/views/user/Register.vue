@@ -299,8 +299,8 @@
                         <button class="btn btn-light w-100" disabled>Punya akun?</button>
                     </div>
                     <div class="col-6" v-if="isLoadingRouter == false">
-                        <button @click="login" class="btn btn-primary w-100">
-                            <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
+                        <button @click="login" class="btn btn-primary w-100" :disabled="secondaryButtonDisabled">
+                            <font-awesome-icon icon="fa-solid fa-right-to-bracket"/>
                             Masuk
                         </button>
                     </div>
@@ -317,7 +317,9 @@
                             <p>Atau</p>
                         </div>
                         <div class="col-12">
-                            <button @click="login" class="btn btn-primary w-100">Masuk</button>
+                            <button @click="login" class="btn btn-primary w-100" :disabled="secondaryButtonDisabled">
+                                Masuk
+                            </button>
                         </div>
                     </div>
                     <div v-if="isLoadingRouter">
@@ -366,6 +368,7 @@
                 textnumber: /[0-9]/,
 
                 submitEnabled: false,
+                secondaryButtonDisabled: false,
                 checkName: false,
                 checkEmail: false,
                 checkPhone: false,
@@ -427,6 +430,7 @@
             async register() {
                 this.setAlert();
                 this.isLoadingResponse = true;
+                this.secondaryButtonDisabled = true;
                 // console.log(this.fullname);
                 // if()
                 const data = {
@@ -440,6 +444,7 @@
                 .then(response => {
                     this.showAlert = true;
                     this.isLoadingResponse = false;
+                    this.secondaryButtonDisabled = false;
                     // this.submitEnabled = false;
                     this.successResponse = [
                         {
@@ -454,6 +459,7 @@
                         // network error
                         this.showAlert = true;
                         this.isLoadingResponse = false;
+                        this.secondaryButtonDisabled = false;
                         this.errorResponse = [
                             {
                                 'id': 1,
@@ -465,6 +471,7 @@
                     } else if (error.response) {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
+                        this.secondaryButtonDisabled = false;
                         if(error.response.data.message == 'Error!') {
                             this.errorResponse = [
                                 {
@@ -492,9 +499,12 @@
 
             login(){
                 this.isLoadingRouter = true;
+                this.submitEnabled = false;
                 try {
                     setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
                 } catch (e) {
+                    this.submitEnabled = true;
+                    this.secondaryButtonDisabled = false;
                     this.errorResponse = [
                         {
                             'id': 1,
