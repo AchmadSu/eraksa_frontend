@@ -200,7 +200,7 @@
                 </form>
                 <div :class="windowWidth >= $widthRotatePhone ? 'row my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-12" v-if="isLoadingRouter == false">
-                        <button @click="login" class="btn btn-light text-secondary w-100">
+                        <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-arrow-left" />
                             Kembali ke laman Masuk
                         </button>
@@ -215,7 +215,7 @@
                 <div :class="windowWidth < $widthRotatePhone ? 'row mt-4' : 'd-none'">
                     <div v-if="isLoadingRouter == false">
                         <div class="col-12">
-                            <button @click="login" class="btn btn-light text-secondary w-100">
+                            <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                                 <font-awesome-icon icon="fa-solid fa-arrow-left" />
                                 Kembali ke laman Masuk
                             </button>
@@ -256,6 +256,7 @@
                 resetPasswordButtonCount: 0,
 
                 submitEnabled: false,
+                secondaryButtonDisabled: false,
                 checkEmail: false,
                 checkPassword: false,
                 isLoadingResponse: false,
@@ -327,6 +328,7 @@
 
             login(){
                 this.isLoadingRouter = true;
+                this.submitEnabled = false;
                 try {
                     setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
                 } catch (e) {
@@ -343,6 +345,7 @@
             async resetPassword() {
                 this.setAlert();
                 this.isLoadingResponse = true;
+                this.secondaryButtonDisabled = true;
                 const data = {
                     "email": this.email,
                     "token": this.token,
@@ -356,6 +359,7 @@
                     this.showAlert = true;
                     this.isLoadingResponse = false;
                     this.submitEnabled = false;
+                    this.secondaryButtonDisabled = false;
                     this.successResponse = [
                         {
                             'id': 1,
@@ -368,6 +372,7 @@
                     if(!error.response){
                         this.showAlert = true;
                         this.isLoadingResponse = false;
+                        this.secondaryButtonDisabled = false;
                         this.errorResponse = [
                             {
                                 'id': 1,
@@ -379,6 +384,7 @@
                     } else if (error.response) {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
+                        this.secondaryButtonDisabled = false;
                         if (error.response.data.message == 'Error!'){
                             this.errorResponse = [
                                 {
@@ -495,8 +501,16 @@
             // const email = URLSearchParams.get()
             // console.log(this.email);
             // console.log(this.token);
+            // console.log(this.token.length);
             // let retrieveSessionObject = localStorage.getItem('sessionObject');
             // console.log(JSON.parse(retrieveSessionObject));
+            if(this.email == null || this.token == null || this.token.length !== 60 ) {
+                // console.log(this.email);
+                // console.log(this.token);
+                // console.log(this.token.length);
+                this.$router.push({ name: "user.login" });
+            }
+
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
