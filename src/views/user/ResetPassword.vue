@@ -1,5 +1,28 @@
-<template>    
-    <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+<template>
+    <div v-if="pageExpired == true" :class= "windowWidth < 760 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
+        <div class="container">
+            <div class="row alert alert-warning">
+                <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> The page is expired </strong> <br>
+                <p>Mohon maaf halaman yang anda akses telah mencapai waktu kedaluarsa. Silakan kembali ke halaman login atau reset password!</p>
+            </div>
+            <div class="row" v-if="isLoadingRouter == false">
+                <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                    <font-awesome-icon icon="fa-solid fa-arrow-left" />
+                    Kembali ke laman Masuk
+                </button>
+            </div>
+            <div class="row" v-if="isLoadingRouter == true">
+                <button type="submit" class="btn btn-secondary" style="width:100%;" :disabled="true">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Memuat ...
+                </button>
+            </div>
+            <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-1 py-3': 'row text-center mt-lg-1 pt-3'">
+                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+            </div>
+        </div>
+    </div>    
+    <div v-if="pageExpired == false" :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
             <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
                 <center>
@@ -264,6 +287,7 @@
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 currentYear: new Date().getFullYear(),
+                pageExpired: false,
 
                 regexExp: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi,
 
@@ -278,6 +302,8 @@
 
                 email: this.$route.query.email,
                 token: this.$route.query.token,
+                now: new Date (Date.now()),
+                expiredAt: new Date (this.$route.query.expired_at.replace(/(..)\/(..)\/(....) (..):(..)/, '$3-$2-$1 $4:$5')),
 
                 checkPasswords: [
                     {
@@ -403,6 +429,7 @@
                             ]
                         }
                     }
+                    setTimeout(() => window.location.reload(), 5000);
                 })
             },
             
@@ -511,6 +538,14 @@
                 this.$router.push({ name: "user.login" });
             }
 
+
+            if (this.now > this.expiredAt) {
+                this.pageExpired = true;
+            }
+
+            // console.log(this.now);
+            // console.log(this.expiredAt);
+            // console.log(this.now > this.expiredAt);
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }

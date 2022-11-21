@@ -247,7 +247,6 @@
                 await axios.post('/requestResetPassword', data)
                 .then(response => {
                     // console.log(response.data);
-
                     this.showAlert = true;
                     this.isLoadingResponse = false;
                     this.submitEnabled = false;
@@ -261,10 +260,10 @@
                     ];
                 })
                 .catch(error => {
+                    this.showAlert = true;
+                    this.isLoadingResponse = false;
+                    this.secondaryButtonDisabled = false;
                     if(!error.response){
-                        this.showAlert = true;
-                        this.isLoadingResponse = false;
-                        this.secondaryButtonDisabled = false;
                         this.errorResponse = [
                             {
                                 'id': 1,
@@ -275,9 +274,6 @@
                         // console.log(!error.response);
                     } else if (error.response) {
                         // console.log(error.response);
-                        this.showAlert = true;
-                        this.isLoadingResponse = false;
-                        this.secondaryButtonDisabled = false;
                         if (error.response.data.message == 'Error!'){
                             this.errorResponse = [
                                 {
