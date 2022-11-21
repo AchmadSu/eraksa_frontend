@@ -1,5 +1,8 @@
 <template>    
     <!-- Body -->
+    <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
     <div :class= "windowWidth <= $widthRotatePhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
             <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
@@ -382,6 +385,10 @@
                 errorResponse: [],
                 showAlert: false,
                 currentYear: new Date().getFullYear(),
+                setProgress: false,
+                widthProgressBar: 0,
+                intervalProgressbar: null,
+                widhtStyle: '',
 
                 checkPasswords: [
                     {
@@ -491,16 +498,28 @@
                             // this.modalShow = true;
                         }
                         // this.alertMsg = error.response.status +' '+ error.response.statusText;
-                        console.log(error.response);
+                        // console.log(error.response);
                         // console.log(error.response.data);
                     }
                 })
             },  
 
             login(){
+                this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.submitEnabled = false;
                 try {
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 25;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
                     setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
                 } catch (e) {
                     this.submitEnabled = true;

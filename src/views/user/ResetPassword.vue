@@ -1,4 +1,7 @@
 <template>
+    <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
     <div v-if="pageExpired == true" :class= "windowWidth < 760 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
         <div class="container">
             <div class="row alert alert-warning">
@@ -287,6 +290,10 @@
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 currentYear: new Date().getFullYear(),
+                etProgress: false,
+                widthProgressBar: 0,
+                intervalProgressbar: null,
+                widhtStyle: '',
                 pageExpired: false,
 
                 regexExp: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi,
@@ -353,9 +360,21 @@
             },
 
             login(){
+                this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.submitEnabled = false;
                 try {
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 25;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
                     setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
                 } catch (e) {
                     this.errorResponse = [
@@ -528,10 +547,10 @@
             // const email = URLSearchParams.get()
             // console.log(this.email);
             // console.log(this.token);
-            // console.log(this.token.length);
+            console.log(JSON.stringify(this.expiredAt));
             // let retrieveSessionObject = localStorage.getItem('sessionObject');
             // console.log(JSON.parse(retrieveSessionObject));
-            if(this.email == null || this.token == null || this.token.length !== 60 ) {
+            if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
                 // console.log(this.email);
                 // console.log(this.token);
                 // console.log(this.token.length);

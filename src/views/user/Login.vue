@@ -1,4 +1,7 @@
-<template>    
+<template>
+    <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>    
     <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
         <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
             <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
@@ -242,6 +245,10 @@
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 currentYear: new Date().getFullYear(),
+                setProgress: false,
+                widthProgressBar: 0,
+                intervalProgressbar: null,
+                widhtStyle: '',
 
                 regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
@@ -355,10 +362,22 @@
             },
 
             register(){
+                this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 25;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
                     setTimeout(() => this.$router.push({ name: "user.register" }), 5000);
                 } catch(e) {
                     this.errorResponse = [
@@ -372,10 +391,22 @@
             },
 
             resetPassword(){
+                this.setProgress = true;
                 this.isLoadingRouterResetPassword = true;
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 25;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                // this.setProgress = false;
+                            }
+                            console.log(this.widhtStyle);
+                        }, 1000);
+                    }
                     setTimeout(() => this.$router.push({ name: "user.requestResetPassword" }), 5000);
                 } catch(e) {
                     this.errorResponse = [
@@ -439,11 +470,14 @@
             if(localStorage.getItem('loggedIn') === true) {
                 this.$router.push({ name: "user.register" });
             }
+            
+            // console.log(this.setProgress);
             // let retrieveSessionObject = localStorage.getItem('sessionObject');
             // console.log(JSON.parse(retrieveSessionObject));
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+            // console.log(this.widthProgressBar);
             // this.windowWidth = window.innerWidth;
             window.scrollTo(0,0);
             // console.log(localStorage.getItem('token'));
