@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
+    /** USER ROUTE */
     {
         path:'/',
         name : 'user.index',
@@ -17,7 +18,7 @@ const routes = [
         component : () => import("../views/user/RequestResetPassword.vue")
     },
     {
-        path:'/resetPassword/:token',
+        path:'/resetPassword/:data',
         name : 'user.resetPassword',
         component : () => import("../views/user/ResetPassword.vue")
     },
