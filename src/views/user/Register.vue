@@ -511,16 +511,18 @@
                 try {
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 25;
+                            this.widthProgressBar += 35;
                             this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
                             if(this.widthProgressBar == 100) {
                                 clearInterval(this.intervalProgressbar);
+                                this.widthProgressBar = 0;
+                                this.setProgress == false;
                                 // this.setProgress = false;
                             }
                             // console.log(this.widhtStyle);
                         }, 1000);
                     }
-                    setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 4000);
                 } catch (e) {
                     this.submitEnabled = true;
                     this.secondaryButtonDisabled = false;

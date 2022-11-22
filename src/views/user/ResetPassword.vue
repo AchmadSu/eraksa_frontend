@@ -366,16 +366,18 @@
                 try {
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 25;
+                            this.widthProgressBar += 35;
                             this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
                             if(this.widthProgressBar == 100) {
                                 clearInterval(this.intervalProgressbar);
+                                this.widthProgressBar = 0;
+                                this.setProgress == false;
                                 // this.setProgress = false;
                             }
                             // console.log(this.widhtStyle);
                         }, 1000);
                     }
-                    setTimeout(() => this.$router.push({ name: "user.login" }), 5000);
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 4000);
                 } catch (e) {
                     this.errorResponse = [
                         {
@@ -547,7 +549,7 @@
             // const email = URLSearchParams.get()
             // console.log(this.email);
             // console.log(this.token);
-            console.log(JSON.stringify(this.expiredAt));
+            // console.log(JSON.stringify(this.expiredAt));
             // let retrieveSessionObject = localStorage.getItem('sessionObject');
             // console.log(JSON.parse(retrieveSessionObject));
             if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {

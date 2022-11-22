@@ -369,16 +369,18 @@
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 25;
+                            this.widthProgressBar += 35;
                             this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            if(this.widthProgressBar == 100) {
-                                clearInterval(this.intervalProgressbar);
-                                // this.setProgress = false;
-                            }
-                            // console.log(this.widhtStyle);
+                            console.log(this.widhtStyle);
                         }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
                     }
-                    setTimeout(() => this.$router.push({ name: "user.register" }), 5000);
+                    setTimeout(() => this.$router.push({ name: "user.register" }), 4000);
                 } catch(e) {
                     this.errorResponse = [
                         {
@@ -398,16 +400,18 @@
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 25;
+                            this.widthProgressBar += 35;
                             this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            if(this.widthProgressBar == 100) {
-                                clearInterval(this.intervalProgressbar);
-                                // this.setProgress = false;
-                            }
-                            console.log(this.widhtStyle);
                         }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        console.log(this.widhtStyle);
                     }
-                    setTimeout(() => this.$router.push({ name: "user.requestResetPassword" }), 5000);
+                    setTimeout(() => this.$router.push({ name: "user.requestResetPassword" }), 4000);
                 } catch(e) {
                     this.errorResponse = [
                         {
