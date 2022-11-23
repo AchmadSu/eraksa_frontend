@@ -51,7 +51,6 @@ import {
     faRightToBracket
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import VueCryptojs from 'vue-cryptojs'
 
 // createApp(App).mount('#app')
 library.add(

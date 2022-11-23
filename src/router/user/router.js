@@ -1,10 +1,5 @@
 const userRouter = [
     {
-        path:'/',
-        name : 'user.index',
-        component : () => import("../../views/user/Index.vue")
-    },
-    {
         path:'/login',
         name : 'user.login',
         component : () => import("../../views/user/Login.vue")
