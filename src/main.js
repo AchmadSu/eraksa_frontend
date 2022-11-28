@@ -62,8 +62,8 @@ const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.config.globalProperties.$baseUrl = window.location.origin
 // app.config.globalProperties.$windowWidth = window.innerWidth
-app.config.globalProperties.$widthRotatePhone = 760
-app.config.globalProperties.$widthLandscapePhone = 992
+app.config.globalProperties.$widthPotraitPhone = 480
+app.config.globalProperties.$widthLandscapePhone = 720
 app.config.globalProperties.$widthComputer = 1200
 app.use(router)
 // library.add(faUser)

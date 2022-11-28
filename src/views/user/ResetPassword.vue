@@ -2,7 +2,7 @@
     <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
         <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-    <div v-if="pageExpired == true" :class= "windowWidth < 760 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
+    <div v-if="pageExpired == true" :class= "windowWidth < 720 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
         <div class="container">
             <div class="row alert alert-warning">
                 <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> The page is expired </strong> <br>
@@ -25,13 +25,13 @@
             </div>
         </div>
     </div>    
-    <div v-if="pageExpired == false" :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
+    <div v-if="pageExpired == false" :class= "windowWidth < $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+        <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+            <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
                 <center>
                     <picture class="mx-5">
                         <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-50" alt="...">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
                     </picture>
                 </center>
             </div>
@@ -46,11 +46,11 @@
             <div class="col-sm-12 d-sm-block d-md-none text-center">
                 <picture class="mx-3">
                     <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
                 </picture>
             </div>
             <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                <div v-if="windowWidth < 760">
+                <div v-if="windowWidth < 720">
                     <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -94,11 +94,11 @@
                                     aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                 />
                                 <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
-                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                    </ul>
-                                </div>
+                            </div>
+                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                </ul>
                             </div>
                             <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
                                 <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
@@ -117,11 +117,11 @@
                                     aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                 />
                                 <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
-                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                    </ul>
-                                </div>
+                            </div>
+                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                </ul>
                             </div>
                             <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
                                 <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
@@ -130,7 +130,7 @@
                             </div>
                         </div>
                         <div v-if="passwordHidden">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                 </span>
@@ -168,7 +168,7 @@
                             </div>
                         </div>
                         <div v-if="!passwordHidden">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                 </span>
@@ -206,10 +206,10 @@
                             </div>
                         </div>
                         <div v-if="isLoadingResponse == false">
-                            <button :disabled="!submitEnabled" type="submit" class="btn btn-success mt-2" style="width:100%;">Reset Password</button>
+                            <button :disabled="!submitEnabled" type="submit" class="btn btn-success my-3" style="width:100%;">Reset Password</button>
                         </div>
                         <div v-if="isLoadingResponse == true">
-                            <button type="submit" class="btn btn-success mt-2" style="width:100%;" :disabled="true">
+                            <button type="submit" class="btn btn-success my-3" style="width:100%;" :disabled="true">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Memuat ...
                             </button>
@@ -224,7 +224,7 @@
                         </div>
                     </div>
                 </form>
-                <div :class="windowWidth >= $widthRotatePhone ? 'row my-md-3 my-lg-0' : 'd-none'">
+                <div :class="windowWidth >= $widthPotraitPhone ? 'row my-3' : 'd-none'">
                     <div class="col-12" v-if="isLoadingRouter == false">
                         <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-arrow-left" />
@@ -238,7 +238,7 @@
                         </button>
                     </div>
                 </div>
-                <div :class="windowWidth < $widthRotatePhone ? 'row mt-4' : 'd-none'">
+                <div :class="windowWidth <= $widthPotraitPhone ? 'row my-3 mt-4' : 'd-none'">
                     <div v-if="isLoadingRouter == false">
                         <div class="col-12">
                             <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">

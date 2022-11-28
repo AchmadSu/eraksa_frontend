@@ -2,9 +2,9 @@
     <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
         <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
     </div>    
-    <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
+    <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+        <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+            <div :class="windowWidth >= $widthLandscapePhone && windowWidth <= $widthComputer? 'd-block' : 'd-none'">
                 <center>
                     <picture class="mx-5">
                         <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
@@ -23,11 +23,11 @@
             <div class="col-sm-12 d-sm-block d-md-none text-center">
                 <picture class="mx-3">
                     <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
                 </picture>
             </div>
             <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                <div v-if="windowWidth < 760">
+                <div v-if="windowWidth < 720">
                     <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <div v-if="passwordHidden">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                 </span>
@@ -87,20 +87,20 @@
                                 <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2">
                                     <font-awesome-icon icon="fa-solid fa-eye" />
                                 </button>
-                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'py-0 text-danger' : 'd-none'">
-                                        <small>Panjang password minimal 6 karakter!</small>
-                                    </div>
+                            </div>
+                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
+                                    <small>Panjang password minimal 6 karakter!</small>
                                 </div>
                             </div>
                             <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                <div :class ="checkPassword == false ? 'mb-3 py-0 text-danger' : 'd-none'">
+                                <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
                                     <small>Panjang password minimal 6 karakter!</small>
                                 </div>
                             </div>
                         </div>
                         <div v-if="!passwordHidden">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                 </span>
@@ -112,14 +112,14 @@
                                 <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2">
                                     <font-awesome-icon icon="fa-solid fa-eye-slash"/>
                                 </button>
-                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'py-0 text-danger' : 'd-none'">
-                                        <small>Panjang password minimal 6 karakter!</small>
-                                    </div>
+                            </div>
+                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
+                                    <small>Panjang password minimal 6 karakter!</small>
                                 </div>
                             </div>
                             <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                <div :class ="checkPassword == false ? 'mb-3 py-0 text-danger' : 'd-none'">
+                                <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
                                     <small>Panjang password minimal 6 karakter!</small>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                         </div>
                     </div>
                 </form>
-                <div :class="windowWidth >= $widthRotatePhone ? 'row my-md-3 my-lg-0' : 'd-none'">
+                <div :class="windowWidth >= $widthLandscapePhone ? 'row py-3 my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-6 text-right">
                         <button class="btn btn-light w-100" disabled>Member baru?</button>
                     </div>
@@ -156,7 +156,7 @@
                         </button>
                     </div>
                 </div>
-                <div :class="windowWidth < $widthRotatePhone ? 'row my-3' : 'd-none'">
+                <div :class="windowWidth < $widthLandscapePhone ? 'row my-3' : 'd-none'">
                     <div v-if="isLoadingRouter == false">
                         <div class="col-12">
                             <p>Atau</p>
@@ -180,7 +180,7 @@
                         </div>
                     </div>
                 </div>
-                <div :class="windowWidth >= $widthRotatePhone ? 'row my-4' : 'd-none'">
+                <div :class="windowWidth >= $widthLandscapePhone ? 'row my-4' : 'd-none'">
                     <div class="col-12" v-if="isLoadingRouterResetPassword == false">
                         <button @click="resetPassword" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-lock" />
@@ -194,7 +194,7 @@
                         </button>
                     </div>
                 </div>
-                <div :class="windowWidth < $widthRotatePhone ? 'row mt-4' : 'd-none'">
+                <div :class="windowWidth < $widthLandscapePhone ? 'row mt-4' : 'd-none'">
                     <div v-if="isLoadingRouterResetPassword == false">
                         <div class="col-12">
                             <button @click="resetPassword" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
@@ -371,7 +371,7 @@
                         this.intervalProgressbar = setInterval(() => {
                             this.widthProgressBar += 35;
                             this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            console.log(this.widhtStyle);
+                            // console.log(this.widhtStyle);
                         }, 1000);
                         if(this.widthProgressBar == 100) {
                             clearInterval(this.intervalProgressbar);
@@ -409,7 +409,7 @@
                             this.setProgress == false;
                             // this.setProgress = false;
                         }
-                        console.log(this.widhtStyle);
+                        // console.log(this.widhtStyle);
                     }
                     setTimeout(() => this.$router.push({ name: "user.requestResetPassword" }), 4000);
                 } catch(e) {
@@ -483,6 +483,9 @@
             }
             // console.log(this.widthProgressBar);
             // this.windowWidth = window.innerWidth;
+            console.log(this.$widthLandscapePhone);
+            console.log(this.windowWidth);
+            console.log(this.windowWidth >= this.$widhRotatePhone);
             window.scrollTo(0,0);
             // console.log(localStorage.getItem('token'));
             setTimeout(() => this.isLoadingImage = false, 5000);

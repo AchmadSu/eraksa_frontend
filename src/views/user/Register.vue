@@ -3,9 +3,9 @@
     <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
         <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
-    <div :class= "windowWidth <= $widthRotatePhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
+    <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+        <div :class="windowWidth >= $widthLandscapePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+            <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
                 <center>
                     <picture class="mx-5">
                         <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
@@ -24,11 +24,11 @@
             <div class="col-sm-12 d-sm-block d-md-none text-center">
                 <picture class="mx-3">
                     <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
                 </picture>
             </div>
             <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                <div v-if="windowWidth < 760">
+                <div v-if="windowWidth < 720">
                     <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -39,7 +39,7 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <div v-else-if="windowWidth < $widthComputer">
+                <div v-else-if="windowWidth <= $widthComputer">
                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -61,7 +61,7 @@
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
-                        <div :class="windowWidth >= $widthComputer ? 'row' : 'd-none'">
+                        <div :class="windowWidth >= $widthPotraitPhone ? 'row' : 'd-none'">
                             <div class="col-6">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text bg-transparent" id="basic-addon1">
@@ -131,7 +131,7 @@
                                 />
                                 <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
                                     <p v-if="this.floatingTextPhone == true">
-                                        What'sApp. Contoh: 6289 XXX
+                                        WhatsApp. Contoh: 6289 XXX
                                     </p>
                                     <p v-else-if="this.checkPhone == false">
                                         Masukkan antara 9 s/d 14 karakter
@@ -140,12 +140,23 @@
                                         Data sesuai
                                     </p>
                                 </label>
-                                <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
+                                <label v-else-if="windowWidth <= $widthComputer && windowWidth >= $widthLandscapePhone" for="floatingInputValue">
                                     <p v-if="this.floatingTextPhone == true">
-                                        What'sApp. Contoh: 6289 XXX
+                                        <small>WhatsApp. Contoh: 6289 XXX</small>
                                     </p>
                                     <p v-else-if="this.checkPhone == false">
-                                        Masukkan antara 9 s/d 14 karakter
+                                        <small>Masukkan antara 9 s/d 14 karakter</small>
+                                    </p>
+                                    <p v-else>
+                                        Data sesuai
+                                    </p>
+                                </label>
+                                <label v-else-if="windowWidth <= $widthLandscapePhone" for="floatingInputValue">
+                                    <p v-if="this.floatingTextPhone == true">
+                                        <small>Contoh: 6289 XXX</small>
+                                    </p>
+                                    <p v-else-if="this.checkPhone == false">
+                                        <small>Masukkan antara 9 s/d 14 karakter</small>
                                     </p>
                                     <p v-else>
                                         Data sesuai
@@ -164,11 +175,11 @@
                                     aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                 />
                                 <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
-                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                    </ul>
-                                </div>
+                            </div>
+                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                </ul>
                             </div>
                             <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
                                 <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
@@ -187,11 +198,11 @@
                                     aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                 />
                                 <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
-                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                    </ul>
-                                </div>
+                            </div>
+                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                </ul>
                             </div>
                             <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
                                 <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
@@ -297,7 +308,7 @@
                         </button> -->
                     </div>
                 </form>
-                <div :class="windowWidth >= $widthRotatePhone ? 'row my-md-3 my-lg-0' : 'd-none'">
+                <div :class="windowWidth >= $widthLandscapePhone ? 'row py-3 my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-6 text-right">
                         <button class="btn btn-light w-100" disabled>Punya akun?</button>
                     </div>
@@ -314,7 +325,7 @@
                         </button>
                     </div>
                 </div>
-                <div :class="windowWidth < $widthRotatePhone ? 'row my-3' : 'd-none'">
+                <div :class="windowWidth < $widthLandscapePhone ? 'row my-3' : 'd-none'">
                     <div v-if="isLoadingRouter == false">
                         <div class="col-12">
                             <p>Atau</p>
@@ -671,6 +682,7 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+            console.log(this.windowWidth);
             window.scrollTo(0,0);
             setTimeout(() => this.isLoadingImage = false, 3000);
         }

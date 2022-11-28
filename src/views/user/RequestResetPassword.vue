@@ -5,9 +5,9 @@
     <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
         <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
     </div>    
-    <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= $widthRotatePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <div :class="windowWidth >= $widthRotatePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
+    <div :class= "windowWidth < $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+        <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+            <div :class="windowWidth >= $widthLandscapePhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
                 <center>
                     <picture class="mx-5">
                         <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
@@ -26,7 +26,7 @@
             <div class="col-sm-12 d-sm-block d-md-none text-center">
                 <picture class="mx-3">
                     <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
                 </picture>
             </div>
             <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
@@ -78,13 +78,13 @@
                             </div>
                         </div>
                         <div v-if="isLoadingResponse == false">
-                            <button :disabled="!submitEnabled" type="submit" class="btn btn-primary mt-2" style="width:100%;">
+                            <button :disabled="!submitEnabled" type="submit" class="btn btn-primary my-3" style="width:100%;">
                                 <font-awesome-icon icon="fa-solid fa-paper-plane" />
                                 Kirim Link Reset Password
                             </button>
                         </div>
                         <div v-if="isLoadingResponse == true">
-                            <button type="submit" class="btn btn-primary mt-2" style="width:100%;" :disabled="true">
+                            <button type="submit" class="btn btn-primary my-3" style="width:100%;" :disabled="true">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Memuat ...
                             </button>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
                 </form>
-                <div :class="windowWidth >= $widthRotatePhone ? 'row my-md-3 my-lg-0' : 'd-none'">
+                <div :class="windowWidth >= $widthPotraitPhone ? 'row my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-12" v-if="isLoadingRouter == false">
                         <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-arrow-left" />
@@ -113,7 +113,7 @@
                         </button>
                     </div>
                 </div>
-                <div :class="windowWidth < $widthRotatePhone ? 'row mt-4' : 'd-none'">
+                <div :class="windowWidth <= $widthPotraitPhone ? 'row my-3 mt-4' : 'd-none'">
                     <div v-if="isLoadingRouter == false">
                         <div class="col-12">
                             <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
