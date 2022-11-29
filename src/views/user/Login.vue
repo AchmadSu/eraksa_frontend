@@ -293,11 +293,15 @@
                         "email": response.data.data.user.email,
                         "status": response.data.data.user.status,
                         "phone": response.data.data.user.phone,
-                        "study_program_id": response.data.data.user.study_program_id, 
+                        "study_program_id": response.data.data.user.study_program_id
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     localStorage.setItem('loggedIn', true);
-                    // console.log(localStorage.getItem('token'));
+                    if (response.data.data.user.status === "0") {
+                        this.$router.push({ name: "user.otpPage" });
+                    } else {
+                        this.$router.push({ name: "dashboard" });
+                    }
                     this.isLoadingResponse = false;
                     // axios.get('sanctum/csrf-cookie');
                     // $cookie.set(csrf);

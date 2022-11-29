@@ -236,7 +236,7 @@
                                     </label>
                                     <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
                                         <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
+                                            <small>Re-type password</small>
                                         </p>
                                         <p v-else-if="this.checkConfirmPassword == false">
                                             Password tidak sesuai
@@ -296,7 +296,7 @@
                             </button>
                         </div>
                         <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
@@ -499,6 +499,7 @@
                                 }
                             ]
                         } else {
+                            // console.table(this.data);
                             this.errorResponse = [
                                 {
                                     'id': 1,

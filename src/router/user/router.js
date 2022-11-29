@@ -18,6 +18,11 @@ const userRouter = [
         path:'/register',
         name : 'user.register',
         component : () => import("../../views/user/Register.vue")
+    },
+    {
+        path:'/verification',
+        name : 'user.otpPage',
+        component : () => import("../../views/user/OneTimePassword.vue")
     }
 ]
 

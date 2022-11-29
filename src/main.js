@@ -48,14 +48,19 @@ import {
     faArrowLeft,
     faUserPlus,
     faPaperPlane,
-    faRightToBracket
+    faRightToBracket,
+    faMagnifyingGlass,
+    faMobileScreen,
+    faTimesSquare,
+    faStopwatch
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 // createApp(App).mount('#app')
 library.add(
     faUser, faEnvelope, faKey, faLock, faCopyright, faEye, faEyeSlash, faPhone, faTriangleExclamation,
-    faCircleCheck, faArrowLeft, faUserPlus, faPaperPlane, faRightToBracket
+    faCircleCheck, faArrowLeft, faUserPlus, faPaperPlane, faRightToBracket, faMagnifyingGlass, faMobileScreen,
+    faTimesSquare, faStopwatch
 )
 // Vue.use(ModalPlugin)
 const app = createApp(App)
@@ -65,6 +70,9 @@ app.config.globalProperties.$baseUrl = window.location.origin
 app.config.globalProperties.$widthPotraitPhone = 480
 app.config.globalProperties.$widthLandscapePhone = 720
 app.config.globalProperties.$widthComputer = 1200
+app.config.globalProperties.$session = JSON.parse(`${localStorage.getItem('sessionObject')}`)
+app.config.globalProperties.$roles = `${localStorage.getItem('roles')}`
+app.config.globalProperties.$loggedIn = `${localStorage.getItem('loggedIn')}`
 app.use(router)
 // library.add(faUser)
 // Vue.config.productionTip = false

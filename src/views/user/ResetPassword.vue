@@ -79,7 +79,7 @@
                 <form class="form needs-validation" id="app" @submit.prevent="resetPassword" novalidate>    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                         <h3 class="fw-bolder text-secondary">
-                            RESET PASSWORD
+                            Reset Password
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
@@ -215,7 +215,7 @@
                             </button>
                         </div>
                         <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">

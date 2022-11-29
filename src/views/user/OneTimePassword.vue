@@ -53,34 +53,35 @@
                 </div>
             </div>
             <div v-else class="col-md-6 col-sm-12 text-center">
-                <img :src="$baseUrl+'/src/assets/img/Data_security_28.jpg'" class="img-fluid" alt="...">
+                <img :src="$baseUrl+'/src/assets/img/otp-01.png'" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form needs-validation" id="app" @submit.prevent="resetPassword" novalidate>    
+                <form class="form needs-validation" id="app" @submit.prevent="check" novalidate>    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                         <h3 class="fw-bolder text-secondary">
-                            Reset Password
+                            Verification WhatsApp
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
+                        <p style="text-align: justify;" class="text-start">Kami mengirimkan kode OTP melalui WhatsApp ke nomor <b>{{ this.$session['phone'] }}</b>. Silakan masukkan melalui form berikut!</p>
                         <div class="input-group mb-3">
                             <span class="input-group-text bg-transparent" id="basic-addon1">
-                                <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
+                                <font-awesome-icon class="text-secondary" icon="fa-solid fa-mobile-screen" />
                             </span>
                             <input 
-                                name="email" type="email" :class="this.checkEmail == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                placeholder="Email" aria-label="Email" 
+                                name="otp" type="number" :class="this.checkOtp == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                placeholder="Nomor OTP" aria-label="otp" 
                                 aria-describedby="basic-addon1"
-                                v-model="form.email" required
+                                v-model="form.otp" required
                             />
-                            <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
-                                Masukkan data email dengan benar!
+                            <div :class="this.checkOtp == false ? 'text-start invalid-feedback' : 'd-none'">
+                                OTP hanya mengandung 6 karakter!
                             </div>
                         </div>
                         <div v-if="isLoadingResponse == false">
                             <button :disabled="!submitEnabled" type="submit" class="btn btn-primary my-3" style="width:100%;">
-                                <font-awesome-icon icon="fa-solid fa-paper-plane" />
-                                Kirim Link Reset Password
+                                Check OTP
+                                <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                             </button>
                         </div>
                         <div v-if="isLoadingResponse == true">
@@ -89,6 +90,20 @@
                                 Memuat ...
                             </button>
                         </div>
+                        <p v-if="resendTap == false">
+                            Belum mendapatkan kode? 
+                            <a style="text-align: justify; text-decoration: none;" class="text-start" @click="regenerate" href="#">Kirim ulang kode OTP</a>
+                        </p>
+                        <p v-else class="text-secondary">
+                            <div v-if="this.loadingResend == false">
+                                <font-awesome-icon icon="fa-solid fa-stopwatch" />
+                                Mohon tunggu...
+                            </div>
+                             <div v-else>
+                                <font-awesome-icon icon="fa-solid fa-stopwatch" />
+                                Sisa waktu kirim ulang otp adalah: {{ this.localCountRegenerate }} detik.
+                            </div>
+                        </p>
                         <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
                             <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -148,17 +163,12 @@
         data (){
             return {
                 windowWidth: window.innerWidth,
-
-                passwordHidden: {
-                    default: true,
-                    type: Boolean
-                },
-
-                resetPasswordButtonCount: 0,
+                countRegenerate: 0,
+                localCountRegenerate: parseInt(`${localStorage.getItem('countRegenerate')}`),
 
                 submitEnabled: false,
                 secondaryButtonDisabled: false,
-                checkEmail: false,
+                checkOtp: false,
                 checkPassword: false,
                 isLoadingResponse: false,
                 floatingTextConfirmation: true,
@@ -166,51 +176,21 @@
                 isLoadingImage: true,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
+                resendTap: false,
+                loadingResend: false,
                 widthProgressBar: 0,
                 intervalProgressbar: null,
+                intervalResend: null,
                 widhtStyle: '',
 
-                regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                // regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
                 // upper: /[A-Z]/,
                 // lower: /[a-z]/,
                 // textnumber: /[0-9]/,
                 
                 form: {
-                    password: '',
-                    confirmPassword: '',   
-                },
-
-                email: this.$route.query.email,
-                token: this.$route.query.token,
-
-                checkPasswords: [
-                    {
-                        id: 1,
-                        status: false,
-                        msg: 'Password harus mengandung huruf kapital!',
-                    },
-                    {
-                        id: 2,
-                        status: false,
-                        msg: 'Password harus mengandung huruf kecil!',
-                    },
-                    {
-                        id: 3,
-                        status: false,
-                        msg: 'Password harus mengandung angka!',
-                    },
-                    {
-                        id: 4,
-                        status: false,
-                        msg: 'Panjang password minimal 6 karakter!',
-                    },
-                ],
-
-                checkConfirmPassword: false,
-                passwordHidden: {
-                    default: true,
-                    type: Boolean
+                    otp: '',   
                 },
 
                 successResponse: [],
@@ -224,13 +204,6 @@
         },
 
         methods: {
-            hidePassword() {
-                this.passwordHidden = true;
-            },
-            showPassword() {
-                this.passwordHidden = false;
-            },
-
             login(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -261,14 +234,15 @@
                 }
             },
 
-            async resetPassword() {
+            async check() {
                 this.setAlert();
+                console.log(this.form.otp);
                 this.isLoadingResponse = true;
                 this.secondaryButtonDisabled = true;
                 const data = {
-                    "email": this.form.email,
+                    "otp": this.form.otp,
                 }
-                await axios.post('/requestResetPassword', data)
+                await axios.post('/verification/check/'+ this.$session['id'], data)
                 .then(response => {
                     // console.log(response.data);
                     this.showAlert = true;
@@ -278,8 +252,8 @@
                     this.successResponse = [
                         {
                             'id': 1,
-                            'message': response.data.message, 
-                            'detail': response.data.data.message,
+                            'message': response.data.status, 
+                            'detail': response.data.data.status,
                         }
                     ];
                 })
@@ -318,16 +292,78 @@
                     }
                 })
             },
-            
-            validateEmail(value){
-                // console.log(this.checkPasswords);
-                if (this.regexExp.test(value)) {
-                    this.checkEmail = true;
-                    return true;
-                } else {
-                    this.checkEmail = false;
-                    return false;
-                }
+
+            async regenerate() {
+                this.setAlert();
+                this.resendTap = true;
+                // this.resendTap = true;
+                this.secondaryButtonDisabled = true;
+                await axios.post('/verification/regenerate/'+ this.$session['id'])
+                .then(response => {
+                    // console.log(response.data);
+                    this.showAlert = true;
+                    this.isLoadingResponse = false;
+                    this.submitEnabled = false;
+                    this.secondaryButtonDisabled = false;
+                    this.successResponse = [
+                        {
+                            'id': 1,
+                            'message': response.data.message, 
+                            'detail': response.data.data.message,
+                        }
+                    ];
+                    this.countRegenerate = 181;
+                    localStorage.setItem('countRegenerate', this.countRegenerate);
+                    if(this.countRegenerate > 0){
+                        this.intervalResend = setInterval(()=>{
+                            this.loadingResend = true;
+                            this.countRegenerate -= 1;
+                            localStorage.setItem('countRegenerate', this.countRegenerate);
+                            this.localCountRegenerate =  `${localStorage.getItem('countRegenerate')}`
+                            if(this.countRegenerate === 0) {
+                                clearInterval(this.intervalResend)
+                                localStorage.setItem('countRegenerate', 0);
+                                this.loadingResend = false;
+                                this.resendTap = false;
+                            }
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    this.resendTap = false;
+                    this.showAlert = true;
+                    this.isLoadingResponse = false;
+                    this.secondaryButtonDisabled = false;
+                    if(!error.response){
+                        this.errorResponse = [
+                            {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error. Silakan cek koneksi anda!',
+                            }
+                        ];
+                        // console.log(!error.response);
+                    } else if (error.response) {
+                        // console.log(error.response);
+                        if (error.response.data.message == 'Error!'){
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.data.message, 
+                                    'detail': error.response.data.data.error,
+                                }
+                            ]
+                        } else {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.status +' '+ error.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ]
+                        }
+                    }
+                })
             },
 
             setAlert(){
@@ -341,16 +377,17 @@
         watch: {
             form: {
                 handler: function (val) {
-                    // console.log(val);
-                    let email = val.email;
+                    let otp = val.otp.toString();
+                    console.log(otp.length);
                     // let confirmPassword = val.confirmPassword;
-
-                    let validateEmail = this.validateEmail(email);
                     // let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
 
-                    if(validateEmail) {
+                    if(otp.length == 6) {
+                        console.log(true);
+                        this.checkOtp = true;
                         this.submitEnabled = true;
                     } else {
+                        this.checkOtp = false;
                         this.submitEnabled = false;
                     }
                 },
@@ -358,22 +395,35 @@
             },
         },
         mounted(){
-            // console.log(localStorage.getItem('loggedIn'));
-            // if(localStorage.getItem('loggedIn') === true) {
-            //     this.$router.push({ name: "user.register" });
-            // }
-            // const email = URLSearchParams.get()
-            // console.log(this.email);
-            // console.log(this.token);
-            // let retrieveSessionObject = localStorage.getItem('sessionObject');
-            // console.log(JSON.parse(retrieveSessionObject));
+            // this.countRegenerate = this.countRegenerate;
+            console.log(this.$session['id']);
+            console.log(this.$roles);
+
+            // console.log(this.localCountRegenerate);
+            if(this.localCountRegenerate > 0){
+                this.resendTap = true;
+                console.log("test");
+                this.intervalResend = setInterval(()=>{
+                    this.loadingResend = true;
+                    this.resendTap = true;
+                    this.localCountRegenerate -= 1;
+                    localStorage.setItem('countRegenerate', this.localCountRegenerate);
+                    this.localCountRegenerate = `${localStorage.getItem('countRegenerate')}`;
+                    if(this.localCountRegenerate === 0) {
+                        this.loadingResend = false;
+                        this.resendTap = false;
+                        clearInterval(this.intervalResend)
+                        localStorage.setItem('countRegenerate', 0);
+                    }
+                }, 1000);
+            }
+
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
             window.scrollTo(0,0);
             // console.log(localStorage.getItem('token'));
             setTimeout(() => this.isLoadingImage = false, 5000);
-            // console.log(document.cookie);
         }
     };
 </script>
