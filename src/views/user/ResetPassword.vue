@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div v-else class="col-md-6 col-sm-12 text-center">
-                <img :src="$baseUrl+'/src/assets/img/Data_security_28.jpg'" class="img-fluid" alt="...">
+                <img :src="$baseUrl+'/src/assets/img/resetPassword-01.png'" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
                 <form class="form needs-validation" id="app" @submit.prevent="resetPassword" novalidate>    

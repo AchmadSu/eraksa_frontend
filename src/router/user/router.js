@@ -23,6 +23,11 @@ const userRouter = [
         path:'/verification',
         name : 'user.otpPage',
         component : () => import("../../views/user/OneTimePassword.vue")
+    },
+    {
+        path:'/resetPhone',
+        name : 'user.resetPhone',
+        component : () => import("../../views/user/ResetPhone.vue")
     }
 ]
 

@@ -55,7 +55,7 @@
             <div v-else class="col-md-6 col-sm-12 text-center">
                 <img :src="$baseUrl+'/src/assets/img/otp-01.png'" class="img-fluid" alt="...">
             </div>
-            <div class="col-md-6 col-sm-12 px-lg-5 text-center">
+            <div class="col-md-6 col-sm-12 px-lg-5">
                 <form class="form needs-validation" id="app" @submit.prevent="check" novalidate>    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                         <h3 class="fw-bolder text-secondary">
@@ -90,20 +90,34 @@
                                 Memuat ...
                             </button>
                         </div>
-                        <p v-if="resendTap == false">
-                            Belum mendapatkan kode? 
-                            <a style="text-align: justify; text-decoration: none;" class="text-start" @click="regenerate" href="#">Kirim ulang kode OTP</a>
-                        </p>
-                        <p v-else class="text-secondary">
-                            <div v-if="this.loadingResend == false">
+                        <div>
+                            <p v-if="resendTap == false">
+                                Belum mendapatkan kode? 
+                                <a style="text-align: justify; text-decoration: none;" class="text-start" @click="regenerate" href="#">Kirim ulang kode OTP</a>
+                            </p>
+                            <p v-else class="text-secondary">
+                                <div v-if="this.loadingResend == false">
+                                    <font-awesome-icon icon="fa-solid fa-stopwatch" />
+                                    Mohon tunggu...
+                                </div>
+                                 <div v-else>
+                                    <font-awesome-icon icon="fa-solid fa-stopwatch" />
+                                    Sisa waktu kirim ulang otp adalah: {{ this.localCountRegenerate }} detik.
+                                </div>
+                            </p>
+                        </div>
+                        <div>
+                            <p v-if="resetPhone == false">
+                                Nomor Salah?
+                                <a style="text-align: justify; text-decoration: none;" class="text-end" @click="resetPhoneFunction" href="#">
+                                    Atur ulang Nomor
+                                </a>
+                            </p>
+                            <p v-else class="text-secondary">
                                 <font-awesome-icon icon="fa-solid fa-stopwatch" />
                                 Mohon tunggu...
-                            </div>
-                             <div v-else>
-                                <font-awesome-icon icon="fa-solid fa-stopwatch" />
-                                Sisa waktu kirim ulang otp adalah: {{ this.localCountRegenerate }} detik.
-                            </div>
-                        </p>
+                            </p>
+                        </div>
                         <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
                             <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -178,6 +192,7 @@
                 setProgress: false,
                 resendTap: false,
                 loadingResend: false,
+                resetPhone: false,
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 intervalResend: null,
@@ -234,6 +249,37 @@
                 }
             },
 
+            resetPhoneFunction(){
+                this.setProgress = true;
+                // this.isLoadingRouter = true;
+                this.submitEnabled = false;
+                this.resetPhone = true;
+                try {
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                this.widthProgressBar = 0;
+                                this.setProgress == false;
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
+                    setTimeout(() => this.$router.push({ name: "user.resetPhone" }), 4000);
+                } catch (e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+
             async check() {
                 this.setAlert();
                 console.log(this.form.otp);
@@ -252,7 +298,7 @@
                     this.successResponse = [
                         {
                             'id': 1,
-                            'message': response.data.status, 
+                            'message': response.data.message, 
                             'detail': response.data.data.status,
                         }
                     ];
@@ -396,8 +442,8 @@
         },
         mounted(){
             // this.countRegenerate = this.countRegenerate;
-            console.log(this.$session['id']);
-            console.log(this.$roles);
+            // console.log(this.$session['id']);
+            // console.log(this.$roles);
 
             // console.log(this.localCountRegenerate);
             if(this.localCountRegenerate > 0){

@@ -53,34 +53,66 @@
                 </div>
             </div>
             <div v-else class="col-md-6 col-sm-12 text-center">
-                <img :src="$baseUrl+'/src/assets/img/resetPassword-01.png'" class="img-fluid" alt="...">
+                <img :src="$baseUrl+'/src/assets/img/Data_security_28.jpg'" class="img-fluid" alt="...">
             </div>
             <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form needs-validation" id="app" @submit.prevent="resetPassword" novalidate>    
+                <form class="form needs-validation" id="app" @submit.prevent="resetPhone" novalidate>    
                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                         <h3 class="fw-bolder text-secondary">
-                            Reset Password
+                            Reset No. WhatsApp
                         </h3>
                     </div>
                     <div class="py-lg-4 py-md-0 py-sm-1">
                         <div class="input-group mb-3">
                             <span class="input-group-text bg-transparent" id="basic-addon1">
-                                <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
+                                <i class="text-secondary fa fa-whatsapp" aria-hidden="true"></i>
                             </span>
-                            <input 
-                                name="email" type="email" :class="this.checkEmail == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                placeholder="Email" aria-label="Email" 
-                                aria-describedby="basic-addon1"
-                                v-model="form.email" required
-                            />
-                            <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
-                                Masukkan data email dengan benar!
+                            <div class="form-floating">
+                                <input 
+                                    name="phone" type="number" :class="this.checkPhone == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                    placeholder="Contoh: 6289 XXX atau 895 XXX" aria-label="Phone" 
+                                    aria-describedby="basic-addon1"
+                                    v-model="form.phone"
+                                    required
+                                />
+                                <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
+                                    <p v-if="this.floatingTextPhone == true">
+                                        WhatsApp. Contoh: 6289 XXX
+                                    </p>
+                                    <p v-else-if="this.checkPhone == false">
+                                        Masukkan antara 9 s/d 14 karakter
+                                    </p>
+                                    <p v-else>
+                                        Data sesuai
+                                    </p>
+                                </label>
+                                <label v-else-if="windowWidth <= $widthComputer && windowWidth >= $widthLandscapePhone" for="floatingInputValue">
+                                    <p v-if="this.floatingTextPhone == true">
+                                        <small>WhatsApp. Contoh: 6289 XXX</small>
+                                    </p>
+                                    <p v-else-if="this.checkPhone == false">
+                                        <small>Masukkan antara 9 s/d 14 karakter</small>
+                                    </p>
+                                    <p v-else>
+                                        Data sesuai
+                                    </p>
+                                </label>
+                                <label v-else-if="windowWidth <= $widthLandscapePhone" for="floatingInputValue">
+                                    <p v-if="this.floatingTextPhone == true">
+                                        <small>Contoh: 6289 XXX</small>
+                                    </p>
+                                    <p v-else-if="this.checkPhone == false">
+                                        <small>Masukkan antara 9 s/d 14 karakter</small>
+                                    </p>
+                                    <p v-else>
+                                        Data sesuai
+                                    </p>
+                                </label>
                             </div>
                         </div>
                         <div v-if="isLoadingResponse == false">
-                            <button :disabled="!submitEnabled" type="submit" class="btn btn-primary my-3" style="width:100%;">
-                                <font-awesome-icon icon="fa-solid fa-paper-plane" />
-                                Kirim Link Reset Password
+                            <button :disabled="!submitEnabled" type="submit" class="btn btn-primary my-3" style="width:100%;">                                
+                                Ubah Nomor WhatsApp
                             </button>
                         </div>
                         <div v-if="isLoadingResponse == true">
@@ -101,9 +133,9 @@
                 </form>
                 <div :class="windowWidth >= $widthPotraitPhone ? 'row my-md-3 my-lg-0' : 'd-none'">
                     <div class="col-12" v-if="isLoadingRouter == false">
-                        <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                        <button @click="check" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                             <font-awesome-icon icon="fa-solid fa-arrow-left" />
-                            Kembali ke laman Masuk
+                            Kembali ke laman Verification WhatsApp
                         </button>
                     </div>
                     <div class="col-12" v-if="isLoadingRouter == true">
@@ -116,9 +148,9 @@
                 <div :class="windowWidth <= $widthPotraitPhone ? 'row my-3 mt-4' : 'd-none'">
                     <div v-if="isLoadingRouter == false">
                         <div class="col-12">
-                            <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                            <button @click="check" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                                 <font-awesome-icon icon="fa-solid fa-arrow-left" />
-                                Kembali ke laman Masuk
+                                Kembali ke laman Verification WhatsApp
                             </button>
                         </div>
                     </div>
@@ -148,69 +180,31 @@
         data (){
             return {
                 windowWidth: window.innerWidth,
-
-                passwordHidden: {
-                    default: true,
-                    type: Boolean
-                },
-
-                resetPasswordButtonCount: 0,
+                countRegenerate: 0,
 
                 submitEnabled: false,
                 secondaryButtonDisabled: false,
-                checkEmail: false,
-                checkPassword: false,
+                checkPhone: false,
                 isLoadingResponse: false,
                 floatingTextConfirmation: true,
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
+                floatingTextPhone: true,
                 widthProgressBar: 0,
                 intervalProgressbar: null,
+                intervalResend: null,
                 widhtStyle: '',
 
-                regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                // regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
                 // upper: /[A-Z]/,
                 // lower: /[a-z]/,
                 // textnumber: /[0-9]/,
                 
                 form: {
-                    password: '',
-                    confirmPassword: '',   
-                },
-
-                email: this.$route.query.email,
-                token: this.$route.query.token,
-
-                checkPasswords: [
-                    {
-                        id: 1,
-                        status: false,
-                        msg: 'Password harus mengandung huruf kapital!',
-                    },
-                    {
-                        id: 2,
-                        status: false,
-                        msg: 'Password harus mengandung huruf kecil!',
-                    },
-                    {
-                        id: 3,
-                        status: false,
-                        msg: 'Password harus mengandung angka!',
-                    },
-                    {
-                        id: 4,
-                        status: false,
-                        msg: 'Panjang password minimal 6 karakter!',
-                    },
-                ],
-
-                checkConfirmPassword: false,
-                passwordHidden: {
-                    default: true,
-                    type: Boolean
+                    phone: '',   
                 },
 
                 successResponse: [],
@@ -224,14 +218,7 @@
         },
 
         methods: {
-            hidePassword() {
-                this.passwordHidden = true;
-            },
-            showPassword() {
-                this.passwordHidden = false;
-            },
-
-            login(){
+            check(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.submitEnabled = false;
@@ -249,7 +236,7 @@
                             // console.log(this.widhtStyle);
                         }, 1000);
                     }
-                    setTimeout(() => this.$router.push({ name: "user.login" }), 4000);
+                    setTimeout(() => this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() }), 4000);
                 } catch (e) {
                     this.errorResponse = [
                         {
@@ -261,20 +248,32 @@
                 }
             },
 
-            async resetPassword() {
+            async resetPhone() {
                 this.setAlert();
+                // console.log(this.form.phone);
                 this.isLoadingResponse = true;
                 this.secondaryButtonDisabled = true;
                 const data = {
-                    "email": this.form.email,
+                    "phone": this.form.phone,
                 }
-                await axios.post('/requestResetPassword', data)
+                await axios.post('/resetPhone/'+ this.$session['id'], data)
                 .then(response => {
-                    // console.log(response.data);
+                    console.log(response.data.data.new_phone);
                     this.showAlert = true;
                     this.isLoadingResponse = false;
                     this.submitEnabled = false;
                     this.secondaryButtonDisabled = false;
+
+                    this.sessionData = {
+                        "id": response.data.data.user.id,
+                        "name": response.data.data.user.name,
+                        "email": response.data.data.user.email,
+                        "status": response.data.data.user.status,
+                        "phone": response.data.data.new_phone,
+                        "study_program_id": response.data.data.user.study_program_id
+                    };
+                    
+                    localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     this.successResponse = [
                         {
                             'id': 1,
@@ -318,37 +317,41 @@
                     }
                 })
             },
-            
-            validateEmail(value){
-                // console.log(this.checkPasswords);
-                if (this.regexExp.test(value)) {
-                    this.checkEmail = true;
-                    return true;
-                } else {
-                    this.checkEmail = false;
-                    return false;
-                }
-            },
 
             setAlert(){
                 // this.alertMsg = null;
                 this.showAlert = false;
                 this.successResponse = [];
                 this.errorResponse = [];
-            }
+            },
+
+            validatePhone(value){
+                if(value.length == 0){
+                    this.checkPhone = false;
+                    this.floatingTextPhone = true;
+                    return false;
+                } else if(value.length >= 9 && value.length <= 14) {
+                    // console.log('ini method phone');
+                    this.checkPhone = true;
+                    this.floatingTextPhone = false;
+                    return true;
+                } else {
+                    this.checkPhone = false;
+                    this.floatingTextPhone = false;
+                    return false;
+                }
+            },
 
         },
         watch: {
             form: {
                 handler: function (val) {
-                    // console.log(val);
-                    let email = val.email;
+                    let phone = val.phone.toString();
+                    let validatePhone = this.validatePhone(phone);
                     // let confirmPassword = val.confirmPassword;
-
-                    let validateEmail = this.validateEmail(email);
                     // let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
 
-                    if(validateEmail) {
+                    if(validatePhone) {
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -358,22 +361,22 @@
             },
         },
         mounted(){
-            // console.log(localStorage.getItem('loggedIn'));
-            // if(localStorage.getItem('loggedIn') === true) {
-            //     this.$router.push({ name: "user.register" });
-            // }
-            // const email = URLSearchParams.get()
-            // console.log(this.email);
-            // console.log(this.token);
-            // let retrieveSessionObject = localStorage.getItem('sessionObject');
-            // console.log(JSON.parse(retrieveSessionObject));
+            // this.countRegenerate = this.countRegenerate;
+            // console.log(this.$session['id']);
+            // console.log(typeof this.$session);
+
+            // const index = this.$session.findIndex(object => {
+            //     return object.id === 4;
+            // });
+
+            // console.log(index);
+
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
             window.scrollTo(0,0);
             // console.log(localStorage.getItem('token'));
             setTimeout(() => this.isLoadingImage = false, 5000);
-            // console.log(document.cookie);
         }
     };
 </script>
