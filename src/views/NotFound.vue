@@ -22,10 +22,6 @@ export default {
     }
   },
   mounted(){
-    // this.isLoading = true;
-    // console.log(this.$widthRotatePhone);
-    // console.log(this.windowWidth);
-    // console.log(this.windowWidth >= this.$widhRotatePhone);
     window.onresize = () => {
         this.windowWidth = window.innerWidth
     }

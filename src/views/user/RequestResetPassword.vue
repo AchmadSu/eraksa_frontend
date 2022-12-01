@@ -357,23 +357,23 @@
                 deep: true,
             },
         },
+        beforeMount(){
+            // console.table(this.$session != null, this.$loggedIn != 'null', this.$token != null);
+            if(this.$session != null || this.$loggedIn != 'null') {
+                this.lastPath = this.$router.options.history.state.back
+                if(this.lastPath != null) {
+                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                }
+            }
+        },
         mounted(){
-            // console.log(localStorage.getItem('loggedIn'));
-            // if(localStorage.getItem('loggedIn') === true) {
-            //     this.$router.push({ name: "user.register" });
-            // }
-            // const email = URLSearchParams.get()
-            // console.log(this.email);
-            // console.log(this.token);
-            // let retrieveSessionObject = localStorage.getItem('sessionObject');
-            // console.log(JSON.parse(retrieveSessionObject));
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
             window.scrollTo(0,0);
-            // console.log(localStorage.getItem('token'));
+            
             setTimeout(() => this.isLoadingImage = false, 5000);
-            // console.log(document.cookie);
+            
         }
     };
 </script>

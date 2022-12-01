@@ -181,7 +181,6 @@
             return {
                 windowWidth: window.innerWidth,
                 countRegenerate: 0,
-
                 submitEnabled: false,
                 secondaryButtonDisabled: false,
                 checkPhone: false,
@@ -196,23 +195,12 @@
                 intervalProgressbar: null,
                 intervalResend: null,
                 widhtStyle: '',
-
-                // regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-
-                // upper: /[A-Z]/,
-                // lower: /[a-z]/,
-                // textnumber: /[0-9]/,
-                
                 form: {
                     phone: '',   
                 },
-
                 successResponse: [],
                 errorResponse: [],
                 sessionData: [],
-
-                // alertMsg: null,
-                // detailMessage: null,
                 showAlert: false,
             }
         },
@@ -231,9 +219,7 @@
                                 clearInterval(this.intervalProgressbar);
                                 this.widthProgressBar = 0;
                                 this.setProgress == false;
-                                // this.setProgress = false;
                             }
-                            // console.log(this.widhtStyle);
                         }, 1000);
                     }
                     setTimeout(() => this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() }), 4000);
@@ -348,8 +334,6 @@
                 handler: function (val) {
                     let phone = val.phone.toString();
                     let validatePhone = this.validatePhone(phone);
-                    // let confirmPassword = val.confirmPassword;
-                    // let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
 
                     if(validatePhone) {
                         this.submitEnabled = true;
@@ -360,22 +344,21 @@
                 deep: true,
             },
         },
+        beforeMount(){
+            if(this.$session == null || this.$loggedIn == 'null') {
+                this.$router.push({ name: "user.login" }).then(() => { this.$router.go() });
+            } else if(this.$session['status'] == '1') {
+                this.lastPath = this.$router.options.history.state.back
+                if(this.lastPath != null) {
+                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                }
+            }
+        },
         mounted(){
-            // this.countRegenerate = this.countRegenerate;
-            // console.log(this.$session['id']);
-            // console.log(typeof this.$session);
-
-            // const index = this.$session.findIndex(object => {
-            //     return object.id === 4;
-            // });
-
-            // console.log(index);
-
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
             window.scrollTo(0,0);
-            // console.log(localStorage.getItem('token'));
             setTimeout(() => this.isLoadingImage = false, 5000);
         }
     };

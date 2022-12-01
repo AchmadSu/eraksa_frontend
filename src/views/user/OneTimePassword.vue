@@ -170,8 +170,9 @@
 
 <script>
     // import { ref } from 'vue'
-    import { useRouter } from 'vue-router'
+    // import { useRouter } from 'vue-router'
     import axios from 'axios'
+    // import { unwatchFile } from 'fs';
 
     export default {
         data (){
@@ -197,6 +198,7 @@
                 intervalProgressbar: null,
                 intervalResend: null,
                 widhtStyle: '',
+
 
                 // regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
@@ -417,6 +419,10 @@
                 this.showAlert = false;
                 this.successResponse = [];
                 this.errorResponse = [];
+            },
+
+            setReload(){
+                this.isReload = setTimeout(() => window.location.reload(), 2000);
             }
 
         },
@@ -440,12 +446,22 @@
                 deep: true,
             },
         },
+        beforeMount(){
+            // console.log(this.$session['status'] == '1');
+            if(this.$session == null || this.$loggedIn == 'null') {
+                this.$router.push({ name: "user.login" }).then(() => { this.$router.go() });
+            }
+            // } else if(this.$session['status'] == '1') {
+            //     this.lastPath = this.$router.options.history.state.back
+            //     if(this.lastPath != null) {
+            //         this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+            //     }
+            // }
+        },
         mounted(){
-            // this.countRegenerate = this.countRegenerate;
-            // console.log(this.$session['id']);
-            // console.log(this.$roles);
-
-            // console.log(this.localCountRegenerate);
+            // setTimeout(() => window.location.reload(), 2000);
+            // console.log(this.isReload);
+            
             if(this.localCountRegenerate > 0){
                 this.resendTap = true;
                 console.log("test");
@@ -469,7 +485,7 @@
             }
             window.scrollTo(0,0);
             // console.log(localStorage.getItem('token'));
-            setTimeout(() => this.isLoadingImage = false, 5000);
+            setTimeout(() => this.isLoadingImage = false, 3000);
         }
     };
 </script>

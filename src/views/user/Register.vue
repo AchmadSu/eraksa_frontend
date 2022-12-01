@@ -679,6 +679,15 @@
                 deep: true,
             }
         },
+        beforeMount(){
+            // console.table(this.$session != null, this.$loggedIn != 'null', this.$token != null);
+            if(this.$session != null || this.$loggedIn != 'null') {
+                this.lastPath = this.$router.options.history.state.back
+                if(this.lastPath != null) {
+                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                }
+            }
+        },
         mounted(){
             window.onresize = () => {
                 this.windowWidth = window.innerWidth

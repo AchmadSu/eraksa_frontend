@@ -541,32 +541,20 @@
                 deep: true,
             },
         },
-        mounted(){
-            // console.log(localStorage.getItem('loggedIn'));
-            // if(localStorage.getItem('loggedIn') === true) {
-            //     this.$router.push({ name: "user.register" });
-            // }
-            // const email = URLSearchParams.get()
-            // console.log(this.email);
-            // console.log(this.token);
-            // console.log(JSON.stringify(this.expiredAt));
-            // let retrieveSessionObject = localStorage.getItem('sessionObject');
-            // console.log(JSON.parse(retrieveSessionObject));
-            if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
-                // console.log(this.email);
-                // console.log(this.token);
-                // console.log(this.token.length);
+        beforeMount(){
+            if(this.$session != null || this.$loggedIn != 'null') {
+                this.lastPath = this.$router.options.history.state.back
+                if(this.lastPath != null) {
+                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                }
+            } else if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
                 this.$router.push({ name: "user.login" });
             }
-
-
+        },
+        mounted(){
             if (this.now > this.expiredAt) {
                 this.pageExpired = true;
             }
-
-            // console.log(this.now);
-            // console.log(this.expiredAt);
-            // console.log(this.now > this.expiredAt);
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }

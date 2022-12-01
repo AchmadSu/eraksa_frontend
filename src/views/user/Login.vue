@@ -249,6 +249,7 @@
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
+                lastPath: null,
 
                 regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
 
@@ -297,15 +298,12 @@
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     localStorage.setItem('loggedIn', true);
-                    if (response.data.data.user.status === "0") {
+                    // if (response.data.data.user.status === "0") {
                         this.$router.push({ name: "user.otpPage" });
-                    } else {
-                        this.$router.push({ name: "dashboard" });
-                    }
+                    // } else {
+                        // this.$router.push({ name: "dashboard" });
+                    // }
                     this.isLoadingResponse = false;
-                    // axios.get('sanctum/csrf-cookie');
-                    // $cookie.set(csrf);
-                    // console.log(csrf);
                 })
                 .catch(error => {
                     if(!error.response){
@@ -473,27 +471,30 @@
                 deep: true,
             },
         },
-        mounted(){
-            // console.log(localStorage.getItem('loggedIn'));
-            if(localStorage.getItem('loggedIn') === true) {
-                this.$router.push({ name: "user.register" });
+        beforeMount(){
+            // console.table(this.$session != null, this.$loggedIn != 'null');
+            if(this.$session != null || this.$loggedIn != 'null') {
+                // console.log(this.lastPath);
+                this.lastPath = this.$router.options.history.state.back
+                if(this.lastPath != null) {
+                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                } else {
+                    this.$router.push({ name: 'user.otpPage' }).then(() => { this.$router.go() })
+                }
             }
-            
-            // console.log(this.setProgress);
-            // let retrieveSessionObject = localStorage.getItem('sessionObject');
-            // console.log(JSON.parse(retrieveSessionObject));
+        },
+        mounted(){
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
-            // console.log(this.widthProgressBar);
-            // this.windowWidth = window.innerWidth;
+            
             console.log(this.$widthLandscapePhone);
             console.log(this.windowWidth);
             console.log(this.windowWidth >= this.$widhRotatePhone);
             window.scrollTo(0,0);
-            // console.log(localStorage.getItem('token'));
+            
             setTimeout(() => this.isLoadingImage = false, 5000);
-            // console.log(document.cookie);
+            
         }
     };
 </script>
