@@ -1,265 +1,272 @@
 <template>
-    <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
-        <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-    <div v-if="pageExpired == true" :class= "windowWidth < 720 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
-        <div class="container">
-            <div class="row alert alert-warning">
-                <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> The page is expired </strong> <br>
-                <p>Mohon maaf halaman yang anda akses telah mencapai waktu kedaluarsa. Silakan kembali ke halaman login atau reset password!</p>
-            </div>
-            <div class="row" v-if="isLoadingRouter == false">
-                <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
-                    <font-awesome-icon icon="fa-solid fa-arrow-left" />
-                    Kembali ke laman Masuk
-                </button>
-            </div>
-            <div class="row" v-if="isLoadingRouter == true">
-                <button type="submit" class="btn btn-secondary" style="width:100%;" :disabled="true">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Memuat ...
-                </button>
-            </div>
-            <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-1 py-3': 'row text-center mt-lg-1 pt-3'">
-                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
-            </div>
+    <div v-if="isLoading == true" class="min-vh-100 container-fluid bg-light position-absolute">
+        <div class="position-absolute top-50 start-50 translate-middle p-5 text-center">
+            <span class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status" aria-hidden="true"></span> <h3 class="text-primary">Processing</h3>
         </div>
-    </div>    
-    <div v-if="pageExpired == false" :class= "windowWidth < $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
-                <center>
+    </div>
+    <div v-else>
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+            <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div v-if="pageExpired == true" :class= "windowWidth < 720 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
+            <div class="container">
+                <div class="row alert alert-warning">
+                    <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> The page is expired </strong> <br>
+                    <p>Mohon maaf halaman yang anda akses telah mencapai waktu kedaluarsa. Silakan kembali ke halaman login atau reset password!</p>
+                </div>
+                <div class="row" v-if="isLoadingRouter == false">
+                    <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                        <font-awesome-icon icon="fa-solid fa-arrow-left" />
+                        Kembali ke laman Masuk
+                    </button>
+                </div>
+                <div class="row" v-if="isLoadingRouter == true">
+                    <button type="submit" class="btn btn-secondary" style="width:100%;" :disabled="true">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Memuat ...
+                    </button>
+                </div>
+                <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-1 py-3': 'row text-center mt-lg-1 pt-3'">
+                    <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                </div>
+            </div>
+        </div>    
+        <div v-if="pageExpired == false" :class= "windowWidth < $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+            <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+                <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
+                    <center>
+                        <picture class="mx-5">
+                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                        </picture>
+                    </center>
+                </div>
+                <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
                     <picture class="mx-5">
                         <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
+                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
+                    </picture>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 d-sm-block d-md-none text-center">
+                    <picture class="mx-3">
+                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
                         <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
                     </picture>
-                </center>
-            </div>
-            <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
-                <picture class="mx-5">
-                    <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
-                </picture>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 d-sm-block d-md-none text-center">
-                <picture class="mx-3">
-                    <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
-                </picture>
-            </div>
-            <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                <div v-if="windowWidth < 720">
-                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
                 </div>
-                <div v-else-if="windowWidth < $widthComputer">
-                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
-            <div v-else class="col-md-6 col-sm-12 text-center">
-                <img :src="$baseUrl+'/src/assets/img/resetPassword-01.png'" class="img-fluid" alt="...">
-            </div>
-            <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form needs-validation" id="app" @submit.prevent="resetPassword" novalidate>    
-                    <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
-                        <h3 class="fw-bolder text-secondary">
-                            Reset Password
-                        </h3>
-                    </div>
-                    <div class="py-lg-4 py-md-0 py-sm-1">
-                        <div v-if="passwordHidden">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <input 
-                                    name="password" type="password" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
-                                    v-model="form.password" placeholder="Password Baru" aria-label="Password"
-                                    aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
-                                />
-                                <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
-                            </div>
-                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
-                            <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
+                <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
+                    <div v-if="windowWidth < 720">
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                        <div v-if="!passwordHidden">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <input 
-                                    name="password" type="text" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
-                                    v-model="form.password" placeholder="Password Baru" aria-label="Password"
-                                    aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
-                                />
-                                <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
-                            </div>
-                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
-                            <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                        <div v-if="passwordHidden">
-                            <div class="input-group">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <div class="form-floating">
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else-if="windowWidth < $widthComputer">
+                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="col-md-6 col-sm-12 text-center">
+                    <img :src="$baseUrl+'/src/assets/img/resetPassword-01.png'" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-6 col-sm-12 px-lg-5 text-center">
+                    <form class="form needs-validation" id="app" @submit.prevent="resetPassword" novalidate>    
+                        <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
+                            <h3 class="fw-bolder text-secondary">
+                                Reset Password
+                            </h3>
+                        </div>
+                        <div class="py-lg-4 py-md-0 py-sm-1">
+                            <div v-if="passwordHidden">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
                                     <input 
-                                        name="confirmPassword" type="password" 
-                                        :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
-                                            : 'form-control is-valid'"
-                                        v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
+                                        name="password" type="password" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
+                                        v-model="form.password" placeholder="Password Baru" aria-label="Password"
                                         aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                     />
-                                    <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
-                                        </p>
-                                        <p v-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
-                                        </p>
-                                        <p v-else>
-                                            Password sesuai
-                                        </p>
-                                    </label>
-                                    <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
-                                        </p>
-                                        <p v-else-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
-                                        </p>
-                                        <p v-else>
-                                            Password sesuai
-                                        </p>
-                                    </label>
+                                    <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
+                                </div>
+                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
+                                </div>
+                                <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                        <div v-if="!passwordHidden">
-                            <div class="input-group">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <div class="form-floating">
+                            <div v-if="!passwordHidden">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
                                     <input 
-                                        name="confirmPassword" type="text" 
-                                        :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
-                                            : 'form-control is-valid'"
-                                        v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
+                                        name="password" type="text" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
+                                        v-model="form.password" placeholder="Password Baru" aria-label="Password"
                                         aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                     />
-                                    <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
-                                        </p>
-                                        <p v-else-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
-                                        </p>
-                                        <p v-else>
-                                            Data sesuai
-                                        </p>
-                                    </label>
-                                    <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
-                                        </p>
-                                        <p v-else-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
-                                        </p>
-                                        <p v-else>
-                                            Password sesuai
-                                        </p>
-                                    </label>
+                                    <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
+                                </div>
+                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
+                                </div>
+                                <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
                                 </div>
                             </div>
+                            <div v-if="passwordHidden">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <div class="form-floating">
+                                        <input 
+                                            name="confirmPassword" type="password" 
+                                            :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
+                                                : 'form-control is-valid'"
+                                            v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
+                                            aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                        />
+                                        <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Password sesuai
+                                            </p>
+                                        </label>
+                                        <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-else-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Password sesuai
+                                            </p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="!passwordHidden">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <div class="form-floating">
+                                        <input 
+                                            name="confirmPassword" type="text" 
+                                            :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
+                                                : 'form-control is-valid'"
+                                            v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
+                                            aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                        />
+                                        <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-else-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Data sesuai
+                                            </p>
+                                        </label>
+                                        <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-else-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Password sesuai
+                                            </p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="isLoadingResponse == false">
+                                <button :disabled="!submitEnabled" type="submit" class="btn btn-success my-3" style="width:100%;">Reset Password</button>
+                            </div>
+                            <div v-if="isLoadingResponse == true">
+                                <button type="submit" class="btn btn-success my-3" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                            <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
+                                <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                                <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
                         </div>
-                        <div v-if="isLoadingResponse == false">
-                            <button :disabled="!submitEnabled" type="submit" class="btn btn-success my-3" style="width:100%;">Reset Password</button>
-                        </div>
-                        <div v-if="isLoadingResponse == true">
-                            <button type="submit" class="btn btn-success my-3" style="width:100%;" :disabled="true">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Memuat ...
-                            </button>
-                        </div>
-                        <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
-                </form>
-                <div :class="windowWidth >= $widthPotraitPhone ? 'row my-3' : 'd-none'">
-                    <div class="col-12" v-if="isLoadingRouter == false">
-                        <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
-                            <font-awesome-icon icon="fa-solid fa-arrow-left" />
-                            Kembali ke laman Masuk
-                        </button>
-                    </div>
-                    <div class="col-12" v-if="isLoadingRouter == true">
-                        <button type="submit" class="btn btn-secondary" style="width:100%;" :disabled="true">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Memuat ...
-                        </button>
-                    </div>
-                </div>
-                <div :class="windowWidth <= $widthPotraitPhone ? 'row my-3 mt-4' : 'd-none'">
-                    <div v-if="isLoadingRouter == false">
-                        <div class="col-12">
+                    </form>
+                    <div :class="windowWidth >= $widthPotraitPhone ? 'row my-3' : 'd-none'">
+                        <div class="col-12" v-if="isLoadingRouter == false">
                             <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
                                 <font-awesome-icon icon="fa-solid fa-arrow-left" />
                                 Kembali ke laman Masuk
                             </button>
                         </div>
-                    </div>
-                    <div v-if="isLoadingRouter">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-light" style="width:100%;" :disabled="true">
+                        <div class="col-12" v-if="isLoadingRouter == true">
+                            <button type="submit" class="btn btn-secondary" style="width:100%;" :disabled="true">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Memuat ...
                             </button>
                         </div>
                     </div>
+                    <div :class="windowWidth <= $widthPotraitPhone ? 'row my-3 mt-4' : 'd-none'">
+                        <div v-if="isLoadingRouter == false">
+                            <div class="col-12">
+                                <button @click="login" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                                    <font-awesome-icon icon="fa-solid fa-arrow-left" />
+                                    Kembali ke laman Masuk
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="isLoadingRouter">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-light" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+            <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
+                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+            </div>
         </div>
     </div>
 </template>
@@ -285,6 +292,7 @@
                 secondaryButtonDisabled: false,
                 checkEmail: false,
                 checkPassword: false,
+                isLoading: true,
                 isLoadingResponse: false,
                 floatingTextConfirmation: true,
                 isLoadingRouter: false,
@@ -541,11 +549,14 @@
                 deep: true,
             },
         },
-        beforeMount(){
+        beforeCreate(){
             if(this.$session != null || this.$loggedIn != 'null') {
                 this.lastPath = this.$router.options.history.state.back
                 if(this.lastPath != null) {
                     this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                }
+                else {
+                    this.$router.push({ name: 'user.otpPage' }).then(() => { this.$router.go() });
                 }
             } else if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
                 this.$router.push({ name: "user.login" });
@@ -560,6 +571,7 @@
             }
             window.scrollTo(0,0);
             // console.log(localStorage.getItem('token'));
+            setTimeout(() => this.isLoading = false, 3000);
             setTimeout(() => this.isLoadingImage = false, 5000);
             // console.log(document.cookie);
         }

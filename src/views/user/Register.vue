@@ -1,357 +1,364 @@
 <template>    
     <!-- Body -->
-    <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
-        <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    <div v-if="isLoading == true" class="min-vh-100 container-fluid bg-light position-absolute">
+        <div class="position-absolute top-50 start-50 translate-middle p-5 text-center">
+            <span class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status" aria-hidden="true"></span> <h3 class="text-primary">Processing</h3>
+        </div>
     </div>
-    <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= $widthLandscapePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
-                <center>
+    <div v-else>
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+            <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+            <div :class="windowWidth >= $widthLandscapePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+                <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
+                    <center>
+                        <picture class="mx-5">
+                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-50" alt="...">
+                        </picture>
+                    </center>
+                </div>
+                <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
                     <picture class="mx-5">
                         <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-50" alt="...">
+                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
                     </picture>
-                </center>
-            </div>
-            <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
-                <picture class="mx-5">
-                    <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
-                </picture>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 d-sm-block d-md-none text-center">
-                <picture class="mx-3">
-                    <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                    <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
-                </picture>
-            </div>
-            <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                <div v-if="windowWidth < 720">
-                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div v-else-if="windowWidth <= $widthComputer">
-                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
                 </div>
             </div>
-            <div v-else class="col-md-6 col-sm-12 text-center">
-                <img :src="$baseUrl+'/src/assets/img/Data_security_28.jpg'" class="img-fluid" alt="...">
-            </div>
-            <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form needs-validation" id="app" @submit.prevent="register" novalidate>    
-                    <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
-                        <h3 class="fw-bolder text-secondary">
-                            REGISTER
-                        </h3>
+            <div class="row">
+                <div class="col-sm-12 d-sm-block d-md-none text-center">
+                    <picture class="mx-3">
+                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                    </picture>
+                </div>
+                <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
+                    <div v-if="windowWidth < 720">
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
-                    <div class="py-lg-4 py-md-0 py-sm-1">
-                        <div :class="windowWidth >= $widthPotraitPhone ? 'row' : 'd-none'">
-                            <div class="col-6">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text bg-transparent" id="basic-addon1">
-                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-user" />
-                                    </span>
-                                    <input 
-                                        name="firstname" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                        placeholder="Nama depan" aria-label="name" 
-                                        aria-describedby="basic-addon1"
-                                        v-model="form.firstname"
-                                    />
-                                    <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
-                                        Panjang minimal nama adalah 3 karakter
+                    <div v-else-if="windowWidth <= $widthComputer">
+                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="col-md-6 col-sm-12 text-center">
+                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.jpg'" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-6 col-sm-12 px-lg-5 text-center">
+                    <form class="form needs-validation" id="app" @submit.prevent="register" novalidate>    
+                        <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
+                            <h3 class="fw-bolder text-secondary">
+                                REGISTER
+                            </h3>
+                        </div>
+                        <div class="py-lg-4 py-md-0 py-sm-1">
+                            <div :class="windowWidth >= $widthPotraitPhone ? 'row' : 'd-none'">
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text bg-transparent" id="basic-addon1">
+                                            <font-awesome-icon class="text-secondary" icon="fa-solid fa-user" />
+                                        </span>
+                                        <input 
+                                            name="firstname" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                            placeholder="Nama depan" aria-label="name" 
+                                            aria-describedby="basic-addon1"
+                                            v-model="form.firstname"
+                                        />
+                                        <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
+                                            Panjang minimal nama adalah 3 karakter
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group mb-3">
+                                        <input 
+                                            name="lastname" type="text" class="form-control w-100"
+                                            placeholder="Nama belakang" aria-label="name" 
+                                            aria-describedby="basic-addon1"
+                                            v-model="form.lastname"
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="input-group mb-3">
-                                    <input 
-                                        name="lastname" type="text" class="form-control w-100"
-                                        placeholder="Nama belakang" aria-label="name" 
-                                        aria-describedby="basic-addon1"
-                                        v-model="form.lastname"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div :class="windowWidth <= $widthLandscapePhone ? 'input-group mb-3' : 'd-none'">
-                            <span class="input-group-text bg-transparent" id="basic-addon1">
-                                <font-awesome-icon class="text-secondary" icon="fa-solid fa-user" />
-                            </span>
-                            <input 
-                                name="firstname" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                placeholder="Nama Lengkap" aria-label="name" 
-                                aria-describedby="basic-addon1"
-                                v-model="form.firstname"
-                            />
-                            <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
-                                Panjang minimal nama adalah 3 karakter
-                            </div>
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-transparent" id="basic-addon1">
-                                <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
-                            </span>
-                            <input 
-                                name="email" type="email" class="form-control"
-                                placeholder="Email" aria-label="Email" 
-                                aria-describedby="basic-addon1"
-                                v-model="form.email" required
-                            />
-                            <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
-                                Masukkan data email dengan benar!
-                            </div>
-                        </div>
-                        <div class="input-group mb-3" tabindex="-1" id="inner">
-                            <span class="input-group-text bg-transparent" id="basic-addon1">
-                                <i class="text-secondary fa fa-whatsapp" aria-hidden="true"></i>
-                            </span>
-                            <div class="form-floating">
+                            <div :class="windowWidth <= $widthLandscapePhone ? 'input-group mb-3' : 'd-none'">
+                                <span class="input-group-text bg-transparent" id="basic-addon1">
+                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-user" />
+                                </span>
                                 <input 
-                                    name="phone" type="number" :class="this.checkPhone == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                    placeholder="Contoh: 6289 XXX atau 895 XXX" aria-label="Phone" 
+                                    name="firstname" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                    placeholder="Nama Lengkap" aria-label="name" 
                                     aria-describedby="basic-addon1"
-                                    v-model="form.phone"
-                                    required
+                                    v-model="form.firstname"
                                 />
-                                <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
-                                    <p v-if="this.floatingTextPhone == true">
-                                        WhatsApp. Contoh: 6289 XXX
-                                    </p>
-                                    <p v-else-if="this.checkPhone == false">
-                                        Masukkan antara 9 s/d 14 karakter
-                                    </p>
-                                    <p v-else>
-                                        Data sesuai
-                                    </p>
-                                </label>
-                                <label v-else-if="windowWidth <= $widthComputer && windowWidth >= $widthLandscapePhone" for="floatingInputValue">
-                                    <p v-if="this.floatingTextPhone == true">
-                                        <small>WhatsApp. Contoh: 6289 XXX</small>
-                                    </p>
-                                    <p v-else-if="this.checkPhone == false">
-                                        <small>Masukkan antara 9 s/d 14 karakter</small>
-                                    </p>
-                                    <p v-else>
-                                        Data sesuai
-                                    </p>
-                                </label>
-                                <label v-else-if="windowWidth <= $widthLandscapePhone" for="floatingInputValue">
-                                    <p v-if="this.floatingTextPhone == true">
-                                        <small>Contoh: 6289 XXX</small>
-                                    </p>
-                                    <p v-else-if="this.checkPhone == false">
-                                        <small>Masukkan antara 9 s/d 14 karakter</small>
-                                    </p>
-                                    <p v-else>
-                                        Data sesuai
-                                    </p>
-                                </label>
-                            </div>
-                        </div>
-                        <div v-if="passwordHidden">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <input 
-                                    name="password" type="password" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
-                                    v-model="form.password" placeholder="Password" aria-label="Password"
-                                    aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
-                                />
-                                <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
-                            </div>
-                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
-                            <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div v-if="!passwordHidden">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <input 
-                                    name="password" type="text" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
-                                    v-model="form.password" placeholder="Password" aria-label="Password"
-                                    aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
-                                />
-                                <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
-                            </div>
-                            <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
-                            <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
-                                    <li><small v-if="item.status == false">{{ item.msg }}</small></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div v-if="passwordHidden">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <div class="form-floating">
-                                    <input 
-                                        name="confirmPassword" type="password" 
-                                        :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
-                                            : 'form-control is-valid'"
-                                        v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
-                                        aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
-                                    />
-                                    <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
-                                        </p>
-                                        <p v-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
-                                        </p>
-                                        <p v-else>
-                                            Password sesuai
-                                        </p>
-                                    </label>
-                                    <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            <small>Re-type password</small>
-                                        </p>
-                                        <p v-else-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
-                                        </p>
-                                        <p v-else>
-                                            Password sesuai
-                                        </p>
-                                    </label>
+                                <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
+                                    Panjang minimal nama adalah 3 karakter
                                 </div>
                             </div>
-                        </div>
-                        <div v-if="!passwordHidden">
                             <div class="input-group mb-3">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
+                                </span>
+                                <input 
+                                    name="email" type="email" class="form-control"
+                                    placeholder="Email" aria-label="Email" 
+                                    aria-describedby="basic-addon1"
+                                    v-model="form.email" required
+                                />
+                                <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
+                                    Masukkan data email dengan benar!
+                                </div>
+                            </div>
+                            <div class="input-group mb-3" tabindex="-1" id="inner">
+                                <span class="input-group-text bg-transparent" id="basic-addon1">
+                                    <i class="text-secondary fa fa-whatsapp" aria-hidden="true"></i>
                                 </span>
                                 <div class="form-floating">
                                     <input 
-                                        name="confirmPassword" type="text" 
-                                        :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
-                                            : 'form-control is-valid'"
-                                        v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
-                                        aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                        name="phone" type="number" :class="this.checkPhone == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                        placeholder="Contoh: 6289 XXX atau 895 XXX" aria-label="Phone" 
+                                        aria-describedby="basic-addon1"
+                                        v-model="form.phone"
+                                        required
                                     />
                                     <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
+                                        <p v-if="this.floatingTextPhone == true">
+                                            WhatsApp. Contoh: 6289 XXX
                                         </p>
-                                        <p v-else-if="this.checkConfirmPassword == false">
+                                        <p v-else-if="this.checkPhone == false">
                                             Masukkan antara 9 s/d 14 karakter
                                         </p>
                                         <p v-else>
                                             Data sesuai
                                         </p>
                                     </label>
-                                    <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextConfirmation == true">
-                                            Ketik ulang password
+                                    <label v-else-if="windowWidth <= $widthComputer && windowWidth >= $widthLandscapePhone" for="floatingInputValue">
+                                        <p v-if="this.floatingTextPhone == true">
+                                            <small>WhatsApp. Contoh: 6289 XXX</small>
                                         </p>
-                                        <p v-else-if="this.checkConfirmPassword == false">
-                                            Password tidak sesuai
+                                        <p v-else-if="this.checkPhone == false">
+                                            <small>Masukkan antara 9 s/d 14 karakter</small>
                                         </p>
                                         <p v-else>
-                                            Password sesuai
+                                            Data sesuai
+                                        </p>
+                                    </label>
+                                    <label v-else-if="windowWidth <= $widthLandscapePhone" for="floatingInputValue">
+                                        <p v-if="this.floatingTextPhone == true">
+                                            <small>Contoh: 6289 XXX</small>
+                                        </p>
+                                        <p v-else-if="this.checkPhone == false">
+                                            <small>Masukkan antara 9 s/d 14 karakter</small>
+                                        </p>
+                                        <p v-else>
+                                            Data sesuai
                                         </p>
                                     </label>
                                 </div>
                             </div>
+                            <div v-if="passwordHidden">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <input 
+                                        name="password" type="password" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
+                                        v-model="form.password" placeholder="Password" aria-label="Password"
+                                        aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                    />
+                                    <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
+                                </div>
+                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
+                                </div>
+                                <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div v-if="!passwordHidden">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <input 
+                                        name="password" type="text" :class="this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
+                                        v-model="form.password" placeholder="Password" aria-label="Password"
+                                        aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                    />
+                                    <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
+                                </div>
+                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
+                                </div>
+                                <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <ul v-for="item in checkPasswords" :key="item.id" :class ="item.status == false ? 'mt-2 py-0 text-danger' : 'd-none'">
+                                        <li><small v-if="item.status == false">{{ item.msg }}</small></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div v-if="passwordHidden">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <div class="form-floating">
+                                        <input 
+                                            name="confirmPassword" type="password" 
+                                            :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
+                                                : 'form-control is-valid'"
+                                            v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
+                                            aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                        />
+                                        <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Password sesuai
+                                            </p>
+                                        </label>
+                                        <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                <small>Re-type password</small>
+                                            </p>
+                                            <p v-else-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Password sesuai
+                                            </p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="!passwordHidden">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <div class="form-floating">
+                                        <input 
+                                            name="confirmPassword" type="text" 
+                                            :class="this.checkConfirmPassword == false ? 'form-control is-invalid' 
+                                                : 'form-control is-valid'"
+                                            v-model="form.confirmPassword" placeholder="Konfirmasi Password" aria-label="Password"
+                                            aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                        />
+                                        <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-else-if="this.checkConfirmPassword == false">
+                                                Masukkan antara 9 s/d 14 karakter
+                                            </p>
+                                            <p v-else>
+                                                Data sesuai
+                                            </p>
+                                        </label>
+                                        <label v-else-if="windowWidth < $widthComputer" for="floatingInputValue">
+                                            <p v-if="this.floatingTextConfirmation == true">
+                                                Ketik ulang password
+                                            </p>
+                                            <p v-else-if="this.checkConfirmPassword == false">
+                                                Password tidak sesuai
+                                            </p>
+                                            <p v-else>
+                                                Password sesuai
+                                            </p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="isLoadingResponse == false">
+                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Daftar</button>
+                            </div>
+                            <div v-if="isLoadingResponse == true">
+                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                            <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
+                                <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
+                                <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#errorModal">
+                            Launch demo modal
+                            </button> -->
                         </div>
-                        <div v-if="isLoadingResponse == false">
-                            <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Daftar</button>
+                    </form>
+                    <div :class="windowWidth >= $widthLandscapePhone ? 'row py-3 my-md-3 my-lg-0' : 'd-none'">
+                        <div class="col-6 text-right">
+                            <button class="btn btn-light w-100" disabled>Punya akun?</button>
                         </div>
-                        <div v-if="isLoadingResponse == true">
-                            <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Memuat ...
-                            </button>
-                        </div>
-                        <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#errorModal">
-                        Launch demo modal
-                        </button> -->
-                    </div>
-                </form>
-                <div :class="windowWidth >= $widthLandscapePhone ? 'row py-3 my-md-3 my-lg-0' : 'd-none'">
-                    <div class="col-6 text-right">
-                        <button class="btn btn-light w-100" disabled>Punya akun?</button>
-                    </div>
-                    <div class="col-6" v-if="isLoadingRouter == false">
-                        <button @click="login" class="btn btn-primary w-100" :disabled="secondaryButtonDisabled">
-                            <font-awesome-icon icon="fa-solid fa-right-to-bracket"/>
-                            Masuk
-                        </button>
-                    </div>
-                    <div class="col-6" v-if="isLoadingRouter == true">
-                        <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Memuat ...
-                        </button>
-                    </div>
-                </div>
-                <div :class="windowWidth < $widthLandscapePhone ? 'row my-3' : 'd-none'">
-                    <div v-if="isLoadingRouter == false">
-                        <div class="col-12">
-                            <p>Atau</p>
-                        </div>
-                        <div class="col-12">
+                        <div class="col-6" v-if="isLoadingRouter == false">
                             <button @click="login" class="btn btn-primary w-100" :disabled="secondaryButtonDisabled">
+                                <font-awesome-icon icon="fa-solid fa-right-to-bracket"/>
                                 Masuk
                             </button>
                         </div>
-                    </div>
-                    <div v-if="isLoadingRouter">
-                        <div class="col-12">
-                            <p>Atau</p>
-                        </div>
-                        <div class="col-12">
+                        <div class="col-6" v-if="isLoadingRouter == true">
                             <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Memuat ...
                             </button>
                         </div>
                     </div>
+                    <div :class="windowWidth < $widthLandscapePhone ? 'row my-3' : 'd-none'">
+                        <div v-if="isLoadingRouter == false">
+                            <div class="col-12">
+                                <p>Atau</p>
+                            </div>
+                            <div class="col-12">
+                                <button @click="login" class="btn btn-primary w-100" :disabled="secondaryButtonDisabled">
+                                    Masuk
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="isLoadingRouter">
+                            <div class="col-12">
+                                <p>Atau</p>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
+            <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
+                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
+            </div>
         </div>
     </div>
 </template>
@@ -389,6 +396,7 @@
                 floatingTextEmail: true,
                 floatingTextPhone: true,
                 floatingTextConfirmation: true,
+                isLoading: true,
                 isLoadingResponse: false,
                 isLoadingImage: true,
 
@@ -679,12 +687,14 @@
                 deep: true,
             }
         },
-        beforeMount(){
+        beforeCreate(){
             // console.table(this.$session != null, this.$loggedIn != 'null', this.$token != null);
             if(this.$session != null || this.$loggedIn != 'null') {
                 this.lastPath = this.$router.options.history.state.back
                 if(this.lastPath != null) {
                     this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                } else {
+                    this.$router.push({ name: 'user.otpPage' }).then(() => { this.$router.go() });
                 }
             }
         },
@@ -694,7 +704,8 @@
             }
             console.log(this.windowWidth);
             window.scrollTo(0,0);
-            setTimeout(() => this.isLoadingImage = false, 3000);
+            setTimeout(() => this.isLoading = false, 3000);
+            setTimeout(() => this.isLoadingImage = false, 5000);
         }
     };
 </script>
