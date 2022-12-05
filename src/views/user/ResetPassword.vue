@@ -558,7 +558,10 @@
                 else {
                     this.$router.push({ name: 'user.otpPage' }).then(() => { this.$router.go() });
                 }
-            } else if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
+            }
+        },
+        beforeMount(){
+            if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
                 this.$router.push({ name: "user.login" });
             }
         },
