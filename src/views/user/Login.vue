@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <div v-if="passwordHidden">
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <span class="input-group-text bg-transparent" id="basic-addon1">
                                         <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                     </span>
@@ -95,18 +95,18 @@
                                     </button>
                                 </div>
                                 <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
                                         <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                                 <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
                                         <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                             </div>
                             <div v-if="!passwordHidden">
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <span class="input-group-text bg-transparent" id="basic-addon1">
                                         <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
                                     </span>
@@ -120,21 +120,21 @@
                                     </button>
                                 </div>
                                 <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
                                         <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                                 <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
-                                    <div :class ="checkPassword == false ? 'pb-3 text-danger' : 'd-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
                                         <small>Panjang password minimal 6 karakter!</small>
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="isLoadingResponse == false">
-                                <button :disabled="!submitEnabled" type="submit" class="btn btn-primary my-2" style="width:100%;">Masuk</button>
+                            <div v-if="isLoadingResponse == false" class="pt-4">
+                                <button :disabled="!submitEnabled" type="submit" class="btn btn-primary" style="width:100%;">Masuk</button>
                             </div>
-                            <div v-if="isLoadingResponse == true">
-                                <button type="submit" class="btn btn-primary mt-2" style="width:100%;" :disabled="true">
+                            <div v-if="isLoadingResponse == true" class="pt-4">
+                                <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     Memuat ...
                                 </button>
@@ -495,8 +495,7 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
-            
-            console.log(typeof this.$loggedIn);
+        
             window.scrollTo(0,0);
             
             setTimeout(() => this.isLoadingImage = false, 5000);

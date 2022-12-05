@@ -76,7 +76,7 @@
                                 </span>
                                 <input 
                                     name="otp" type="number" :class="this.checkOtp == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                    placeholder="Nomor OTP" aria-label="otp" 
+                                    placeholder="Kode OTP" aria-label="otp" 
                                     aria-describedby="basic-addon1"
                                     v-model="form.otp" required
                                 />
@@ -313,7 +313,7 @@
                         "name": this.$session.name,
                         "email": this.$session.email,
                         "status": "1",
-                        "phone": response.data.data.new_phone,
+                        "phone": this.$session.phone,
                         "study_program_id": this.$session.study_program_id
                     };
                     
@@ -452,12 +452,10 @@
             form: {
                 handler: function (val) {
                     let otp = val.otp.toString();
-                    console.log(otp.length);
                     // let confirmPassword = val.confirmPassword;
                     // let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
 
                     if(otp.length == 6) {
-                        console.log(true);
                         this.checkOtp = true;
                         this.submitEnabled = true;
                     } else {
@@ -483,20 +481,9 @@
         mounted(){
             // setTimeout(() => window.location.reload(), 2000);
             // console.log(this.isReload);
-            this.sessionData = {
-                "id": this.$session.id,
-                "name": this.$session.name,
-                "email": this.$session.email,
-                "status": this.$session.status,
-                "phone": this.$session.phone,
-                "study_program_id": this.$session.study_program_id
-            };
- 
-            console.log(this.sessionData);
             
             if(this.localCountRegenerate > 0){
                 this.resendTap = true;
-                console.log("test");
                 this.intervalResend = setInterval(()=>{
                     this.loadingResend = true;
                     this.resendTap = true;
