@@ -392,7 +392,7 @@
                             this.localCountRegenerate =  `${localStorage.getItem('countRegenerate')}`
                             if(this.countRegenerate === 0) {
                                 clearInterval(this.intervalResend)
-                                localStorage.setItem('countRegenerate', 0);
+                                localStorage.removeItem('countRegenerate');
                                 this.loadingResend = false;
                                 this.resendTap = false;
                             }
@@ -490,11 +490,11 @@
                     this.localCountRegenerate -= 1;
                     localStorage.setItem('countRegenerate', this.localCountRegenerate);
                     this.localCountRegenerate = `${localStorage.getItem('countRegenerate')}`;
-                    if(this.localCountRegenerate === 0) {
+                    if(this.localCountRegenerate == 0) {
+                        localStorage.removeItem('countRegenerate');
                         this.loadingResend = false;
                         this.resendTap = false;
                         clearInterval(this.intervalResend)
-                        localStorage.setItem('countRegenerate', 0);
                     }
                 }, 1000);
             }
