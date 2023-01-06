@@ -67,7 +67,7 @@
                             </h3>
                         </div>
                         <div class="py-lg-4 py-md-0 py-sm-1">
-                            <div :class="windowWidth >= $widthPotraitPhone ? 'row' : 'd-none'">
+                            <div :class="windowWidth >= $widthLandscapePhone ? 'row' : 'd-none'">
                                 <div class="col-6">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text bg-transparent" id="basic-addon1">
@@ -121,6 +121,54 @@
                                 />
                                 <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
                                     Masukkan data email dengan benar!
+                                </div>
+                            </div>
+                            <div class="row input-group mb-3 btn-group rounded-0" role="group">
+                                <input 
+                                    type="radio" 
+                                    class="btn-check" 
+                                    name="code_type"
+                                    value="0"
+                                    id="code_type0"
+                                    v-model="form.radio"
+                                    :disabled="!this.radioEnabled">
+                                <label :class="windowWidth <= $widthLandscapePhone ? 
+                                    'my-2 p-3 col-12 btn btn-outline-success rounded-0':
+                                    'p-3 col-6 btn btn-outline-success rounded-start'" 
+                                    for="code_type0"
+                                >
+                                Saya <b>MAHASISWA</b>
+                                </label>
+                                <input 
+                                    type="radio" 
+                                    class="btn-check" 
+                                    name="code_type"
+                                    value="1"
+                                    id="code_type1"
+                                    v-model="form.radio"
+                                    :disabled="!this.radioEnabled"
+                                    >
+                                <label :class="windowWidth <= $widthLandscapePhone ? 
+                                    'my-2 p-3 col-12 btn btn-outline-success rounded-0':
+                                    'p-3 col-6 btn btn-outline-success rounded-end'" 
+                                    for="code_type1"
+                                >
+                                Saya <b>DOSEN</b>
+                                </label>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-transparent" id="basic-addon1">
+                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-key" />
+                                </span>
+                                <input 
+                                    name="code" type="text" class="form-control"
+                                    :placeholder="this.codeString" aria-label="Code" 
+                                    aria-describedby="basic-addon1"
+                                    v-model="form.code" required
+                                    :disabled="!this.codeEnabled"
+                                />
+                                <div :class="this.checkCode == false ? 'text-start invalid-feedback' : 'd-none'">
+                                    Masukkan data dengan benar!
                                 </div>
                             </div>
                             <div class="input-group mb-3" tabindex="-1" id="inner">
@@ -392,6 +440,7 @@
                 secondaryButtonDisabled: false,
                 checkName: false,
                 checkEmail: false,
+                checkCode: false,
                 checkPhone: false,
                 floatingTextEmail: true,
                 floatingTextPhone: true,
@@ -399,6 +448,8 @@
                 isLoading: true,
                 isLoadingResponse: false,
                 isLoadingImage: true,
+                radioEnabled: true,
+                codeEnabled: false,
 
                 successResponse: [],
                 errorResponse: [],
@@ -408,6 +459,7 @@
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
+                codeString: '',
 
                 checkPasswords: [
                     {
@@ -441,6 +493,8 @@
                     firstname: '',
                     lastname: '',
                     email: '',
+                    radio:'',
+                    code:'',
                     password: '',
                     confirmPassword: '',
                     phone: '',   
@@ -456,6 +510,7 @@
             async register() {
                 this.setAlert();
                 this.isLoadingResponse = true;
+                this.radioEnabled = false;
                 this.secondaryButtonDisabled = true;
                 // console.log(this.fullname);
                 // if()
@@ -465,6 +520,8 @@
                     "phone": this.form.phone.toString(),
                     "password": this.form.password,
                     "confirm_pass": this.form.confirmPassword, 
+                    "code": this.form.code,
+                    "code_type": this.form.code_type
                 }
                 await axios.post('/register', data)
                 .then(response => {
@@ -486,6 +543,7 @@
                         this.showAlert = true;
                         this.isLoadingResponse = false;
                         this.secondaryButtonDisabled = false;
+                        this.radioEnabled = true;
                         this.errorResponse = [
                             {
                                 'id': 1,
@@ -498,6 +556,7 @@
                         this.showAlert = true;
                         this.isLoadingResponse = false;
                         this.secondaryButtonDisabled = false;
+                        this.radioEnabled = true;
                         if(error.response.data.message == 'Error!') {
                             this.errorResponse = [
                                 {
@@ -528,6 +587,7 @@
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.submitEnabled = false;
+                this.radioEnabled = false;
                 try {
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -546,6 +606,7 @@
                 } catch (e) {
                     this.submitEnabled = true;
                     this.secondaryButtonDisabled = false;
+                    this.radioEnabled = true;
                     this.errorResponse = [
                         {
                             'id': 1,
@@ -665,6 +726,9 @@
         watch: {
             form: {
                 handler: function (val) {
+                    // console.log(val.code);
+                    let code_type = val.radio;
+                    let code = val.code;
                     let firstname = val.firstname;
                     let lastname = val.lastname;
                     let email = val.email;
@@ -676,8 +740,16 @@
                     let validatePhone = this.validatePhone(phone);
                     let validatePassword = this.validatePassword(password);
                     let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
+                    
+                    if(code_type == "0") {
+                        this.codeEnabled = true;
+                        this.codeString = "Masukkan NIM";
+                    } else if(code_type == "1") {
+                        this.codeEnabled = true;
+                        this.codeString = "Masukkan NIDN";
+                    }
 
-                    if(email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
+                    if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
                         // console.log('Test');    
                         this.submitEnabled = true;
                     } else {
@@ -699,6 +771,7 @@
             }
         },
         mounted(){
+            console.log(this.form.code);
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }

@@ -68,7 +68,7 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 app.config.globalProperties.$baseUrl = window.location.origin
 // app.config.globalProperties.$windowWidth = window.innerWidth
 app.config.globalProperties.$widthPotraitPhone = 480
-app.config.globalProperties.$widthLandscapePhone = 720
+app.config.globalProperties.$widthLandscapePhone = 1024
 app.config.globalProperties.$widthComputer = 1200
 app.config.globalProperties.$session = JSON.parse(`${localStorage.getItem('sessionObject')}`)
 app.config.globalProperties.$roles = `${localStorage.getItem('roles')}`
