@@ -459,6 +459,7 @@
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
+                codeType: '',
                 codeString: '',
 
                 checkPasswords: [
@@ -495,6 +496,7 @@
                     email: '',
                     radio:'',
                     code:'',
+                    radio:'',
                     password: '',
                     confirmPassword: '',
                     phone: '',   
@@ -512,7 +514,8 @@
                 this.isLoadingResponse = true;
                 this.radioEnabled = false;
                 this.secondaryButtonDisabled = true;
-                // console.log(this.fullname);
+                console.log(this.form.code);
+                console.log(this.form.code_type);
                 // if()
                 const data = {
                     "name": this.fullname,
@@ -521,7 +524,7 @@
                     "password": this.form.password,
                     "confirm_pass": this.form.confirmPassword, 
                     "code": this.form.code,
-                    "code_type": this.form.code_type
+                    "code_type": this.form.radio
                 }
                 await axios.post('/register', data)
                 .then(response => {
@@ -729,6 +732,7 @@
                     // console.log(val.code);
                     let code_type = val.radio;
                     let code = val.code;
+                    console.log(code_type);
                     let firstname = val.firstname;
                     let lastname = val.lastname;
                     let email = val.email;
@@ -744,9 +748,11 @@
                     if(code_type == "0") {
                         this.codeEnabled = true;
                         this.codeString = "Masukkan NIM";
+                        this.codeType = "0";
                     } else if(code_type == "1") {
                         this.codeEnabled = true;
                         this.codeString = "Masukkan NIDN";
+                        this.codeType = "1";
                     }
 
                     if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
@@ -771,7 +777,6 @@
             }
         },
         mounted(){
-            console.log(this.form.code);
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
