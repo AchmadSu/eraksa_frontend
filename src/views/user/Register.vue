@@ -133,7 +133,7 @@
                                     v-model="form.radio"
                                     :disabled="!this.radioEnabled">
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
-                                    'my-2 p-3 col-12 btn btn-outline-success rounded-0':
+                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
                                     'p-3 col-6 btn btn-outline-success rounded-start'" 
                                     for="code_type0"
                                 >
@@ -149,7 +149,7 @@
                                     :disabled="!this.radioEnabled"
                                     >
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
-                                    'my-2 p-3 col-12 btn btn-outline-success rounded-0':
+                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
                                     'p-3 col-6 btn btn-outline-success rounded-end'" 
                                     for="code_type1"
                                 >
@@ -531,6 +531,7 @@
                     this.showAlert = true;
                     this.isLoadingResponse = false;
                     this.secondaryButtonDisabled = false;
+                    this.radioEnabled = true;
                     // this.submitEnabled = false;
                     this.successResponse = [
                         {
