@@ -3,6 +3,11 @@ import userRouter from './user/router';
 
 const routes = [
     {
+        path:'/dashboard',
+        name : 'dashboard',
+        component : () => import("../views/Dashboard.vue")
+    },
+    {
         path:'/:catchAll(.*)',
         name : '404',
         component : () => import("../views/NotFound.vue")

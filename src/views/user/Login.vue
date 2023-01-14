@@ -306,11 +306,11 @@
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     localStorage.setItem('loggedIn', true);
-                    // if (response.data.data.user.status === "0") {
+                    if (response.data.data.user.status === "0") {
                         this.$router.push({ name: "user.otpPage" });
-                    // } else {
-                        // this.$router.push({ name: "dashboard" });
-                    // }
+                    } else {
+                        this.$router.push({ name: "dashboard" });
+                    }
                     this.isLoadingResponse = false;
                 })
                 .catch(error => {
@@ -487,7 +487,7 @@
                 if(this.lastPath != null) {
                     this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
                 } else {
-                    this.$router.push({ name: 'user.otpPage' }).then(() => { this.$router.go() })
+                    this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
                 }
             }
         },

@@ -23,12 +23,22 @@ axios.defaults.withCredentials = true;
 // import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
+import './assets/vendor/jquery/jquery.min.js'
+import './assets/vendor/bootstrap/js/bootstrap.bundle.min.js'
+import './assets/vendor/jquery-easing/jquery.easing.min.js'
+import './assets/js/sb-admin-2.min.js'
+import './assets/vendor/fontawesome-free/css/all.min.css'
+import './assets/font-awesome-4.7.0/css/font-awesome.css'
+// import './assets/vendor/chart.js/Chart.min.js'
+// import './assets/js/demo/chart-area-demo.js'
+// import './assets/js/demo/chart-pie-demo.js'
 // import './assets/fontawesome-free-6.2.0-web/css/all.css'
 // import './assets/fontawesome-free-6.2.0-web/css/all.min.css'
 import './assets/fontawesome-free-6.2.0-web/css/fontawesome.css'
 import './assets/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
 import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
 import './assets/img/login.jpg'
+import './assets/css/sb-admin-2.css'
 
 // @import = url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 // import { library } from '@fortawesome/fontawesome-svg-core'
@@ -52,7 +62,8 @@ import {
     faMagnifyingGlass,
     faMobileScreen,
     faTimesSquare,
-    faStopwatch
+    faStopwatch, 
+    faGaugeHigh
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -60,7 +71,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 library.add(
     faUser, faEnvelope, faKey, faLock, faCopyright, faEye, faEyeSlash, faPhone, faTriangleExclamation,
     faCircleCheck, faArrowLeft, faUserPlus, faPaperPlane, faRightToBracket, faMagnifyingGlass, faMobileScreen,
-    faTimesSquare, faStopwatch
+    faTimesSquare, faStopwatch, faGaugeHigh
 )
 // Vue.use(ModalPlugin)
 const app = createApp(App)
