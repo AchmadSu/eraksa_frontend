@@ -23,6 +23,7 @@ axios.defaults.withCredentials = true;
 // import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
+import 'bootstrap/dist/js/bootstrap.min.js'
 import './assets/vendor/jquery/jquery.min.js'
 import './assets/vendor/bootstrap/js/bootstrap.bundle.min.js'
 import './assets/vendor/jquery-easing/jquery.easing.min.js'
@@ -39,6 +40,8 @@ import './assets/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
 import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
 import './assets/img/login.jpg'
 import './assets/css/sb-admin-2.css'
+import './assets/css/style.css'
+import 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js'
 
 // @import = url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
 // import { library } from '@fortawesome/fontawesome-svg-core'

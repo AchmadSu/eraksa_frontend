@@ -1,6 +1,24 @@
 <template>
-    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <nav :class="this.windowWidth >= this.$widthPotraitPhone ? 'navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow' : 'navbar navbar-expand navbar-light bg-white topbar py-3 mb-4 fixed-top shadow'">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+            <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <ul class="navbar-nav">
+            <!-- Sidebar Toggle (Topbar) -->
+            <li class="nav-item" v-if="this.windowWidth < this.$widthComputer">
+                <a class="nav-link btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
 
+        <ul class="navbar-nav d-sm-block d-lg-none">
+            <li class="nav-item">
+                <a @click="dashboard" class="nav-link" href="#">
+                    <img :class="this.windowWidth > this.$widthPotraitPhone ? 'w-25 img-thumbnails':'w-75 img-thumbnails'" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
+                </a>
+            </li>
+        </ul>
         <!-- Topbar Search -->
         <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
@@ -13,10 +31,9 @@
                 </div>
             </div>
         </form>
-        
+
         <!-- Topbar Navbar -->
         <ul class="navbar-nav ml-auto">
-
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
                 <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -64,14 +81,255 @@
             </li>
         </ul>
     </nav>
+    <div class="bg-primary offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header text-light">
+            <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center ml-3" href="#">
+                <img class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logoPhone-white.png'" alt="">
+            </a>
+          <a class="mr-3 btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></a>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav sidebar-dark accordion" id="accordionSidebar">
+                <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+                    <div class="bg-success progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                
+                <!-- Nav Item - Dashboard -->
+                <li class="nav-item mb-0">
+                    <a @click="dashboard" class="nav-link" href="#">
+                        <i class="fa fa-home" aria-hidden="true"></i>&ensp;
+                        <span>Home</span>
+                    </a>
+                </li>
+        
+                <!-- Divider -->
+                <hr class="sidebar-divider bg-white">
+        
+                <!-- Heading -->
+                <div v-if="this.$roles != 'Member'" class="sidebar-heading">
+                    Menu Admin
+                </div>
+        
+                <div v-else class="sidebar-heading">
+                    Menu Kelola
+                </div>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fa fa-clone" aria-hidden="true"></i>&ensp;
+                        <span>Kelola Master</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li v-if="this.$roles == 'Super-Admin'" class="list-group-item">
+                                    <a class="text-dark collapse-item" href="#">
+                                        <i class="fa fa-graduation-cap"></i>&ensp; Program Studi
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        <i class="fa fa-cubes"></i>&ensp;Kategori Aset
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                        aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        &ensp;<span>Kelola Peminjaman</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"> <i class="fa fa-plus-circle"></i>&ensp; Buat Peminjaman</a>
+                                </li>
+                                <li v-if="this.$roles != 'Member'" class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-spinner"></i>&ensp; Aktif</a>
+                                </li>
+                                <li v-if="this.$roles != 'Member'" class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru</a>
+                                </li>
+                                <li v-if="this.$roles != 'Member'" class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-check"></i>&ensp; Selesai</a>
+                                </li>
+                                <li v-if="this.$roles != 'Member'" class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-times"></i>&ensp; Permintaan Ditolak</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"> <i class="fa fa-history"></i>&ensp; Riwayat Saya</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+        
+                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenances"
+                        aria-expanded="true" aria-controls="collapseMaintenances">
+                        <i class="fa fa-recycle" aria-hidden="true"></i>&ensp;
+                        <span>Kelola Perawatan</span>
+                    </a>
+                    <div id="collapseMaintenances" class="collapse" aria-labelledby="headingMaintenances"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        <i class="fa fa-spinner"></i>&ensp; Aktif
+                                    </a>
+                                </li>
+                                <li v-if="this.$roles == 'Super-Admin'" class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        <i class="fa fa-check"></i>&ensp; Selesai
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#">
+                                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal Perawatan
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+        
+                <!-- Divider -->
+                <hr v-if="this.$roles != 'Member'" class="sidebar-divider">
+        
+                <!-- Heading -->
+                <div v-if="this.$roles != 'Member'" class="sidebar-heading">
+                    Kelola Objek
+                </div>
+        
+                <!-- Nav Item - Users -->
+                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-users"></i>&ensp;
+                        <span>Kelola Users</span>
+                    </a>
+                </li>
+        
+                <!-- Nav Item - Assets -->
+                <li v-if="this.$roles != 'Member'" class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-cube"></i>&ensp;
+                        <span>Kelola Aset</span>
+                    </a>
+                </li>
+        
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+        
+                <!-- Divider -->
+                <hr class="sidebar-divider bg-white">
+        
+                <div class="sidebar-heading">
+                    Menu Master
+                </div>
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProdi"
+                        aria-expanded="true" aria-controls="collapseProdi">
+                        <i class="fa fa-graduation-cap"></i>&ensp;
+                        <span>Program Studi</span>
+                    </a>
+                    <div id="collapseProdi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Teknik Informatika</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategory"
+                        aria-expanded="true" aria-controls="collapseCategory">
+                        <i class="fa fa-cubes"></i>&ensp;
+                        <span>Kategori Aset</span>
+                    </a>
+                    <div id="collapseCategory" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Projector</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePlacement"
+                        aria-expanded="true" aria-controls="collapsePlacement">
+                        &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp;
+                        <span>Tempat Aset</span>
+                    </a>
+                    <div id="collapsePlacement" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Nama Tempat</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseWorkshop"
+                        aria-expanded="true" aria-controls="collapseWorkshop">
+                        <i class="fa fa-briefcase"></i>&ensp;
+                        <span>Bengkel Perawatan</span>
+                    </a>
+                    <div id="collapseWorkshop" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Bengkel</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+      </div>
 </template>
 <script>
+    import Sidebar from './sidebar/Dashboard.vue';
     export default{
         data() {
             return {
                 windowWidth: window.innerWidth,
                 isLoading: true,
                 isLoading: true,
+                show: true,
                 isLoadingResponse: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
@@ -86,11 +344,52 @@
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
+        methods: {
+            toggleSideBar(){
+                this.$parent.$emit('toggleSideBar')
+            },
+            dashboard(){
+                this.setProgress = true;
+                // console.log(this.setProgress);
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            }
+        },
         mounted() {
+            // console.log(this.show);
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
+            // console.log(this.setProgress);
         },
     }
 </script>
