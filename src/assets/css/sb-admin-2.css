@@ -9011,10 +9011,12 @@ a.text-dark:hover, a.text-dark:focus {
 html {
   position: relative;
   min-height: 100%;
+  background-color: #fff;
 }
 
 body {
   height: 100%;
+  background-color: #fff;
 }
 
 a:focus {

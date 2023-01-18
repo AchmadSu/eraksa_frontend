@@ -14,29 +14,33 @@
 
         <ul class="navbar-nav d-sm-block d-lg-none">
             <li class="nav-item">
-                <a @click="dashboard" class="nav-link" href="#">
-                    <img :class="this.windowWidth > this.$widthPotraitPhone ? 'w-25 img-thumbnails':'w-75 img-thumbnails'" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
+                <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                    <img :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-75 img-thumbnails':'w-100 img-thumbnails'" :src="this.windowWidth <= this.$widthPotraitPhone ? this.$baseUrl+'/src/assets/img/logo-01.png' : this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                 </a>
             </li>
         </ul>
         <!-- Topbar Search -->
-        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-                <input type="text" class="form-control bg-light small" placeholder="Cari Aset, Kategori Aset..."
-                    aria-label="Search" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fa fa-search fa-sm"></i>
-                    </button>
-                </div>
+        <div class="row">
+            <div class="col-8">
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-lg bg-light" placeholder="Cari Aset, Kategori Aset..."
+                            aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fa fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
 
         <!-- Topbar Navbar -->
         <ul class="navbar-nav ml-auto">
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
-                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" :style="this.cursorStyle" id="searchDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-search fa-fw"></i>
                 </a>
@@ -60,7 +64,7 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                <a class="nav-link dropdown-toggle" href="#" :style="this.cursorStyle" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-success"><b>{{username}}</b></span>
                     <img class="img-profile rounded-circle" :src="this.accountIcon">
@@ -68,12 +72,12 @@
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-user mr-2 text-primary"></i>
                         Ubah Profil
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
+                    <a @click="logout" class="dropdown-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-sign-out fa-sm mr-2 text-danger"></i>
                         Logout
                     </a>
@@ -83,7 +87,7 @@
     </nav>
     <div class="bg-primary offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header text-light">
-            <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center ml-3" href="#">
+            <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center ml-3" href="#" :style="this.cursorStyle">
                 <img class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logoPhone-white.png'" alt="">
             </a>
           <a class="mr-3 btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></a>
@@ -96,7 +100,7 @@
                 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item mb-0">
-                    <a @click="dashboard" class="nav-link" href="#">
+                    <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-home" aria-hidden="true"></i>&ensp;
                         <span>Home</span>
                     </a>
@@ -115,7 +119,7 @@
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li v-if="this.$roles != 'Member'" class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseTwo"
                         aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fa fa-clone" aria-hidden="true"></i>&ensp;
                         <span>Kelola Master</span>
@@ -124,22 +128,22 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li v-if="this.$roles == 'Super-Admin'" class="list-group-item">
-                                    <a class="text-dark collapse-item" href="#">
+                                    <a class="text-dark collapse-item" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-graduation-cap"></i>&ensp; Program Studi
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-cubes"></i>&ensp;Kategori Aset
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
                                 </li>
                             </ul>
                         </div>
@@ -147,7 +151,7 @@
                 </li>
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseUtilities"
                         aria-expanded="true" aria-controls="collapseUtilities">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         &ensp;<span>Kelola Peminjaman</span>
@@ -157,22 +161,22 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"> <i class="fa fa-plus-circle"></i>&ensp; Buat Peminjaman</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"> <i class="fa fa-plus-circle"></i>&ensp; Buat Peminjaman</a>
                                 </li>
                                 <li v-if="this.$roles != 'Member'" class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-spinner"></i>&ensp; Aktif</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-spinner"></i>&ensp; Aktif</a>
                                 </li>
                                 <li v-if="this.$roles != 'Member'" class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru</a>
                                 </li>
                                 <li v-if="this.$roles != 'Member'" class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-check"></i>&ensp; Selesai</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-check"></i>&ensp; Selesai</a>
                                 </li>
                                 <li v-if="this.$roles != 'Member'" class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-times"></i>&ensp; Permintaan Ditolak</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-times"></i>&ensp; Permintaan Ditolak</a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"> <i class="fa fa-history"></i>&ensp; Riwayat Saya</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"> <i class="fa fa-history"></i>&ensp; Riwayat Saya</a>
                                 </li>
                             </ul>
                         </div>
@@ -180,7 +184,7 @@
                 </li>
         
                 <li v-if="this.$roles != 'Member'" class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenances"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseMaintenances"
                         aria-expanded="true" aria-controls="collapseMaintenances">
                         <i class="fa fa-recycle" aria-hidden="true"></i>&ensp;
                         <span>Kelola Perawatan</span>
@@ -190,27 +194,27 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-spinner"></i>&ensp; Aktif
                                     </a>
                                 </li>
                                 <li v-if="this.$roles == 'Super-Admin'" class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-check"></i>&ensp; Selesai
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal Perawatan
                                     </a>
                                 </li>
@@ -229,7 +233,7 @@
         
                 <!-- Nav Item - Users -->
                 <li v-if="this.$roles != 'Member'" class="nav-item my-2">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-users"></i>&ensp;
                         <span>Kelola Users</span>
                     </a>
@@ -237,14 +241,14 @@
         
                 <!-- Nav Item - Assets -->
                 <li v-if="this.$roles != 'Member'" class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-cube"></i>&ensp;
                         <span>Kelola Aset</span>
                     </a>
                 </li>
         
                 <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
+                <hr v-if="this.$roles != 'Member'" class="sidebar-divider d-none d-md-block">
         
                 <!-- Divider -->
                 <hr class="sidebar-divider bg-white">
@@ -254,7 +258,7 @@
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProdi"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseProdi"
                         aria-expanded="true" aria-controls="collapseProdi">
                         <i class="fa fa-graduation-cap"></i>&ensp;
                         <span>Program Studi</span>
@@ -263,14 +267,14 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Teknik Informatika</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Teknik Informatika</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </li>
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategory"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseCategory"
                         aria-expanded="true" aria-controls="collapseCategory">
                         <i class="fa fa-cubes"></i>&ensp;
                         <span>Kategori Aset</span>
@@ -279,14 +283,14 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Projector</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Projector</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </li>
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePlacement"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapsePlacement"
                         aria-expanded="true" aria-controls="collapsePlacement">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp;
                         <span>Tempat Aset</span>
@@ -295,14 +299,14 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Nama Tempat</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Nama Tempat</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </li>
                 <li v-if="this.$roles != 'Member'" class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseWorkshop"
+                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseWorkshop"
                         aria-expanded="true" aria-controls="collapseWorkshop">
                         <i class="fa fa-briefcase"></i>&ensp;
                         <span>Bengkel Perawatan</span>
@@ -311,7 +315,7 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Bengkel</a>
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Bengkel</a>
                                 </li>
                             </ul>
                         </div>
@@ -323,6 +327,7 @@
 </template>
 <script>
     import Sidebar from './sidebar/Dashboard.vue';
+    import axios from 'axios'
     export default{
         data() {
             return {
@@ -338,6 +343,7 @@
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
+                cursorStyle: '',
                 errorResponse: [],
                 sessionData: [],
                 username: this.$session.name,
@@ -351,6 +357,7 @@
             dashboard(){
                 this.setProgress = true;
                 // console.log(this.setProgress);
+                this.cursorStyle = 'cursor: not-allowed';
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
@@ -381,15 +388,53 @@
                         }
                     ];
                 }
-            }
+            },
+            async logout(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try {
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                this.widthProgressBar = 0;
+                                this.setProgress == false;
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
+                    await axios.post('/logout')
+                    localStorage.clear();
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 4000);
+                } catch (e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
         },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
+        },
+        destroyed() {
+            // window.RemoveEventListener('resize', function(event) {
+            //     // console.log('hehe')
+            //     this.windowWidth = window.innerWidth;
+            // }, true)
+        },  
         mounted() {
-            // console.log(this.show);
-            window.onresize = () => {
-                this.windowWidth = window.innerWidth
-                // window.location.reload();
-            }
-            // console.log(this.setProgress);
+            
         },
     }
 </script>

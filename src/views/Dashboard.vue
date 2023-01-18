@@ -25,105 +25,45 @@
                     <!-- End of Topbar -->
     
                     <!-- Begin Page Content -->
-                    <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
+                    <div v-if="this.windowWidth >= this.$widthComputer && isLoadingContent == true" class="h-75 d-flex align-items-center justify-content-center">
+                        <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
                         <div v-if="this.$roles != 'Member'">
                             <Dashboard></Dashboard>
                         </div>
                         <!-- Page Heading -->
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <div v-if="this.errorLoans == true" class="text-center row col-12 d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">Tidak ada Aset yang dapat dipinjam untuk saat ini</h1>
+                        </div>
+                        <div v-else class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-800">Aset yang dapat dipinjam</h1>
                         </div>
-
+                        <div class="row" v-if="this.errorLoans == true">
+                            <div class="col-3"></div>
+                            <div class="col-4 mx-5">
+                                <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                            </div>
+                            <h6 class="text-center my-3">Atau koneksi anda terganggu, silakan muat ulang!</h6>
+                        </div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 col-lg-4">
                                 <div class="card btn text-dark text-justify shadow-lg border-bottom-success p-3 mb-4">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex flex-row align-items-center">
                                             <div class="icon"> <i class="fa fa-cube"></i> </div>
                                             <div class="ms-2 c-details">
-                                                <h6 class="mb-0">Kategori Aset</h6> <span> Nama Kategori</span>
+                                                <h6 class="mb-0">Kategori Aset</h6> <span>{{item.category_name}}</span>
                                             </div>
                                         </div>
                                         <div class="badge text-success"> <span>TERSEDIA</span> </div>
                                     </div>
                                     <div class="my-2">
-                                        <h3 class="heading">Nama Aset<br>Kode Aset</h3>
-                                        <h6>Nama Program Studi</h6>
-                                        <div class=" mt-3">
-                                            <div class="mt-3"> 
-                                                <span class="text1">XXX kali Dipinjam <br>
-                                                <span v-if="this.windowWidth <= this.$widthPotraitPhone" class="text2">Ketuk untuk selengkapnya</span>
-                                                <span v-else class="text2">Klik untuk selengkapnya</span>
-                                            </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card btn text-dark text-justify shadow-lg border-bottom-success p-3 mb-4">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <div class="icon"> <i class="fa fa-cube"></i> </div>
-                                            <div class="ms-2 c-details">
-                                                <h6 class="mb-0">Kategori Aset</h6> <span> Nama Kategori</span>
-                                            </div>
-                                        </div>
-                                        <div class="badge text-success"> <span>TERSEDIA</span> </div>
-                                    </div>
-                                    <div class="my-2">
-                                        <h3 class="heading">Nama Aset<br>Kode Aset</h3>
-                                        <h6>Nama Program Studi</h6>
-                                        <div class=" mt-3">
-                                            <div class="mt-3"> 
-                                                <span class="text1">XXX kali Dipinjam <br>
-                                                <span v-if="this.windowWidth <= this.$widthPotraitPhone" class="text2">Ketuk untuk selengkapnya</span>
-                                                <span v-else class="text2">Klik untuk selengkapnya</span>
-                                            </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card btn text-dark text-justify shadow-lg border-bottom-success p-3 mb-4">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <div class="icon"> <i class="fa fa-cube"></i> </div>
-                                            <div class="ms-2 c-details">
-                                                <h6 class="mb-0">Kategori Aset</h6> <span> Nama Kategori</span>
-                                            </div>
-                                        </div>
-                                        <div class="badge text-success"> <span>TERSEDIA</span> </div>
-                                    </div>
-                                    <div class="my-2">
-                                        <h3 class="heading">Nama Aset<br>Kode Aset</h3>
-                                        <h6>Nama Program Studi</h6>
-                                        <div class=" mt-3">
-                                            <div class="mt-3"> 
-                                                <span class="text1">XXX kali Dipinjam <br>
-                                                <span v-if="this.windowWidth <= this.$widthPotraitPhone" class="text2">Ketuk untuk selengkapnya</span>
-                                                <span v-else class="text2">Klik untuk selengkapnya</span>
-                                            </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card btn text-dark text-justify shadow-lg border-bottom-success p-3 mb-4">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <div class="icon"> <i class="fa fa-cube"></i> </div>
-                                            <div class="ms-2 c-details">
-                                                <h6 class="mb-0">Kategori Aset</h6> <span> Nama Kategori</span>
-                                            </div>
-                                        </div>
-                                        <div class="badge text-success"> <span>TERSEDIA</span> </div>
-                                    </div>
-                                    <div class="my-2">
-                                        <h3 class="heading">Nama Aset<br>Kode Aset</h3>
-                                        <h6>Nama Program Studi</h6>
+                                        <h3 class="heading">{{item.name}}</h3>
+                                        <h6>{{item.code}}</h6>
+                                        <h6>{{item.study_program_name}}</h6>
                                         <div class=" mt-3">
                                             <div class="mt-3"> 
                                                 <span class="text1">XXX kali Dipinjam <br>
@@ -169,6 +109,7 @@
                 windowWidth: window.innerWidth,
                 isLoading: true,
                 isLoading: true,
+                isLoadingContent: true,
                 isLoadingResponse: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
@@ -181,7 +122,10 @@
                 widhtStyle: '',
                 errorResponse: [],
                 sessionData: [],
+                loansArray: [],
+                maintenanceArray: [],
                 username: this.$session.name,
+                errorLoans: false,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
@@ -229,6 +173,14 @@
                 }
             }
         },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
+        },
+        destroyed() {
+            window.removeEventListener("resize", this.sizeHandler);
+        },
         beforeCreate(){
             // console.table(this.$session != null, this.$loggedIn != 'null');
             if(this.$session == null || this.$loggedIn == 'null') {
@@ -236,16 +188,31 @@
                 // this.lastPath = this.$router.options.history.state.back
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             }
-        },
-        mounted(){
+        },  
+        async mounted(){
+            const dataLoans = {
+                "status": "0",
+                "condition": "0"
+            }
+            await axios.get('/assets/getAll', {params: dataLoans})
+            .then((response) => {
+                Object.keys(response.data.data).forEach((item) => {
+                    this.loansArray.push(response.data.data[item]);
+                });
+            }).catch((err) => {
+                if(!err.response || err.response){
+                    this.errorLoans = true;
+                }
+            });
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
             window.scrollTo(0,0);
+            // console.log(this.loansArray.length === 0);
             
-            setTimeout(() => this.isLoadingImage = false, 5000);
+            setTimeout(() => this.isLoadingContent = false, 8000);
             setTimeout(() => this.isLoading = false, 5000);
-        }
+        },
     }
 </script>

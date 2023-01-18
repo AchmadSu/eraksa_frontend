@@ -6,7 +6,7 @@
     </div>
     <div v-else>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
-            <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-primary" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div v-if="pageExpired == true" :class= "windowWidth < 720 ? 'position-absolute top-50 start-50 translate-middle container p-5' : 'position-absolute top-50 start-50 translate-middle container p-5 shadow-lg bg-body rounded'">
             <div class="container">
@@ -556,7 +556,7 @@
                     this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
                 }
                 else {
-                    this.$router.push({ name: 'user.otpPage' }).then(() => { this.$router.go() });
+                    this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() });
                 }
             }
         },

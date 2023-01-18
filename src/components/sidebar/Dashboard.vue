@@ -4,7 +4,7 @@
             <div class="bg-success progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <!-- Sidebar - Brand -->
-        <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center mb-lg-5" href="#">
+        <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center mb-lg-5" href="#" :style="this.cursorStyle">
             <div class="sidebar-brand-icon">
                 <img :class="windowWidth >= this.$widthComputer ? 'w-25 img-thumbnails':'w-50 img-thumbnails'" :src="this.$baseUrl+'/src/assets/img/logo-white-01.png'" alt="">
             </div>
@@ -16,7 +16,7 @@
         
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a @click="dashboard" class="nav-link" href="#">
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-home" aria-hidden="true"></i>&ensp;
                 <span>Home</span>
             </a>
@@ -35,7 +35,7 @@
         </div>
         <!-- Nav Item - Pages Collapse Menu -->
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fa fa-clone" aria-hidden="true"></i>&ensp;
                 <span>Kelola Master</span>
@@ -43,18 +43,18 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Tabel</h6>
-                    <a :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
-                    <a class="collapse-item" href="#">
+                    <a :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
+                    <a class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
-                    <a class="collapse-item" href="#"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
-                    <a class="collapse-item" href="#"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
+                    <a class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
+                    <a class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
                 </div>
             </div>
         </li>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseUtilities"
                 aria-expanded="true" aria-controls="collapseUtilities">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&ensp;
                 <span>Kelola Peminjaman</span>
@@ -63,22 +63,22 @@
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Peminjaman</h6>
-                    <a class="collapse-item" href="#"> 
+                    <a class="collapse-item" href="#" :style="this.cursorStyle"> 
                         <i class="fa fa-plus-circle"></i>&ensp; Buat Peminjaman
                     </a>
-                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#">
+                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-spinner"></i>&ensp; Aktif
                     </a>
-                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#">
+                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
                     </a>
-                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#">
+                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-check"></i>&ensp; Selesai
                     </a>
-                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#">
+                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
                     </a>
-                    <a class="collapse-item" href="#"> 
+                    <a class="collapse-item" href="#" :style="this.cursorStyle"> 
                         <i class="fa fa-history"></i>&ensp; Riwayat Saya
                     </a>
                 </div>
@@ -86,7 +86,7 @@
         </li>
 
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenances"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseMaintenances"
                 aria-expanded="true" aria-controls="collapseMaintenances">
                 <i class="fa fa-recycle" aria-hidden="true"></i>&ensp;
                 <span>Kelola Perawatan</span>
@@ -95,19 +95,19 @@
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Jadwal Perawatan</h6>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-spinner"></i>&ensp; Aktif
                     </a>
-                    <a v-if="this.$roles == 'Super-Admin'" class="collapse-item" href="#">
+                    <a v-if="this.$roles == 'Super-Admin'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
                     </a>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-check"></i>&ensp; Selesai
                     </a>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
                     </a>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal Perawatan
                     </a>
                 </div>
@@ -124,7 +124,7 @@
 
         <!-- Nav Item - Users -->
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-users"></i>&ensp;
                 <span>Kelola Users</span>
             </a>
@@ -132,7 +132,7 @@
 
         <!-- Nav Item - Assets -->
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-cube"></i>&ensp;
                 <span>Kelola Aset</span>
             </a>
@@ -149,7 +149,7 @@
         </div>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProdi"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseProdi"
                 aria-expanded="true" aria-controls="collapseProdi">
                 <i class="fa fa-graduation-cap"></i>&ensp;
                 <span>Program Studi</span>
@@ -157,14 +157,14 @@
             <div id="collapseProdi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Daftar Prodi</h6>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Teknik Informatika
                     </a>
                 </div>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategory"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseCategory"
                 aria-expanded="true" aria-controls="collapseCategory">
                 <i class="fa fa-cubes"></i>&ensp;
                 <span>Kategori Aset</span>
@@ -172,14 +172,14 @@
             <div id="collapseCategory" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Daftar Kategori</h6>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Projector
                     </a>
                 </div>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePlacement"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapsePlacement"
                 aria-expanded="true" aria-controls="collapsePlacement">
                 &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp;
                 <span>Tempat Aset</span>
@@ -187,14 +187,14 @@
             <div id="collapsePlacement" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Daftar Penempatan</h6>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Tempat
                     </a>
                 </div>
             </div>
         </li>
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseWorkshop"
+            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseWorkshop"
                 aria-expanded="true" aria-controls="collapseWorkshop">
                 <i class="fa fa-briefcase"></i>&ensp;
                 <span>Bengkel Perawatan</span>
@@ -202,7 +202,7 @@
             <div id="collapseWorkshop" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Bengkel Perawatan</h6>
-                    <a class="collapse-item" href="#">
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Bengkel
                     </a>
                 </div>
@@ -220,6 +220,7 @@
                 isLoadingResponse: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
+                cursorStyle: '',
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -235,6 +236,7 @@
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -263,6 +265,14 @@
                     ];
                 }
             }
+        },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
+        },
+        destroyed() {
+            // window.removeEventListener("resize", this.sizeHandler);
         },
         mounted(){
             window.onresize = () => {

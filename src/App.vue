@@ -1,5 +1,7 @@
 <template>
+  <div class="bg-white">
     <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -11,6 +13,19 @@ export default {
       windowWidth: window.innerWidth,
       currentYear: new Date().getFullYear(),
     }
+  },
+  methods: {
+    sizeHandler(e){
+        window.onresize = () => {
+            this.windowWidth = window.innerWidth
+        }
+    }
+  },
+  created(){
+      window.addEventListener("resize", this.sizeHandler);
+  },
+  destroyed() {
+      window.removeEventListener("resize", this.sizeHandler);
   },
   mounted(){
     // this.isLoading = true;

@@ -8,13 +8,14 @@ import App from './App.vue'
 
 import axios from 'axios'
 
-axios.defaults.withCredentials = true   
+// axios.defaults.withCredentials = true   
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
 axios.defaults.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+// const cors = require('cors');
 // axios.defaults.headers['Set-Cookie'] = document.cookie;
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
-// axios.defaults.headers.common['Access-Control-Expose-Headers'] = "Access-Token, Uid";
+axios.defaults.headers.common['Access-Control-Expose-Headers'] = "Access-Token, Uid";
 axios.defaults.headers['Access-Control-Allow-Methods'] = "DELETE, PUT, GET, POST";
 axios.defaults.headers['Access-Control-Allow-Headers'] = "Content-type, Authorization, X-Requested-With";
 axios.defaults.withCredentials = true;

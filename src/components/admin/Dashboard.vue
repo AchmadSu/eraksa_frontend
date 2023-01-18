@@ -11,7 +11,7 @@
     <div class="row">
 
         <!-- Aset yang dipinjam -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-3 col-sm-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-3 col-sm-6 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -73,7 +73,7 @@
         </div>
 
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-3 col-sm-6 mb-4">
             <div class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -103,7 +103,7 @@
         </div>
 
         <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-3 col-sm-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -211,3 +211,76 @@
         </div>
     </div>
 </template>
+<script>
+    export default{
+        data() {
+            return {
+                windowWidth: window.innerWidth,
+                isLoading: true,
+                isLoading: true,
+                isLoadingResponse: false,
+                isLoadingRouter: false,
+                isLoadingImage: true,
+                cursorStyle: '',
+                currentYear: new Date().getFullYear(),
+                setProgress: false,
+                widthProgressBar: 0,
+                intervalProgressbar: null,
+                widhtStyle: '',
+                errorResponse: [],
+                sessionData: [],
+            }
+        },
+        methods: {
+            dashboard(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            }
+        },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
+        },
+        destroyed() {
+            // window.removeEventListener("resize", this.sizeHandler);
+        },
+        mounted(){
+            window.onresize = () => {
+                this.windowWidth = window.innerWidth
+            }
+            window.scrollTo(0,0);
+        }
+    }
+    
+</script>

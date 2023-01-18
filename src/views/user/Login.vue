@@ -6,7 +6,7 @@
     </div>
     <div v-else>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
-            <div class="progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-primary" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>    
         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
             <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
@@ -306,11 +306,32 @@
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     localStorage.setItem('loggedIn', true);
-                    if (response.data.data.user.status === "0") {
-                        this.$router.push({ name: "user.otpPage" });
-                    } else {
-                        this.$router.push({ name: "dashboard" });
+                    this.setProgress = true;
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
                     }
+                    setTimeout(() => {
+                        if (response.data.data.user.status === "0") {
+                            this.$router.push({ name: "user.otpPage" });
+                        } else {
+                            this.lastPath = this.$router.options.history.state.back;
+                            if (this.lastPath) {
+                                this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });    
+                            } else {
+                                this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+                            }
+                        }                        
+                    }, 4000);
                     this.isLoadingResponse = false;
                 })
                 .catch(error => {
@@ -490,6 +511,11 @@
                     this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
                 }
             }
+        },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
         },
         mounted(){
             window.onresize = () => {
