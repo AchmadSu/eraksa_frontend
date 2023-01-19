@@ -207,7 +207,9 @@
         async mounted(){
             const dataLoans = {
                 "status": "0",
-                "condition": "0"
+                "condition": "0",
+                "skip": 0,
+                "take": 6
             }
             await axios.get('/assets/getAll', {params: dataLoans})
             .then((response) => {
