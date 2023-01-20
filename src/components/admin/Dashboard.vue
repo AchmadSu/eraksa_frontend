@@ -45,12 +45,12 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang dipinjam
+                                        Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
                                     </div>
-                                    <div v-if="this.errorLoans == true" class="row no-gutters align-items-center">
+                                    <div v-if="this.isErrorLoans" class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <h5>DATA TIDAK TERSEDIA</h5>
-                                            <span class="text2">atau mungkin anda terputus dengan jaringan kami.</span>
+                                            <h5>{{this.errorLoans.message}}</h5>
+                                            <span class="text2">{{this.errorLoans.detail}}</span>
                                         </div>
                                     </div>
                                     <div v-else class="row no-gutters align-items-center">
@@ -82,12 +82,12 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang diperbaiki
+                                        Banyak Aset <br> yang sedang diperbaiki <br> Pekan ini
                                     </div>
-                                    <div v-if="this.errorMaintenance == true" class="row no-gutters align-items-center">
+                                    <div v-if="this.isErrorMaintenance" class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <h5>DATA TIDAK TERSEDIA</h5>
-                                            <span class="text2">atau mungkin anda terputus dengan jaringan kami.</span>
+                                            <h5>{{this.errorMaintenance.message}}</h5>
+                                            <span class="text2">{{this.errorMaintenance.detail}}</span>
                                         </div>
                                     </div>
                                     <div v-else class="row no-gutters align-items-center">
@@ -119,12 +119,12 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                        Banyak Aset <br> yang rusak
+                                        Banyak Aset <br> yang rusak <br> Pekan ini
                                     </div>
-                                    <div v-if="this.errorBroken == true" class="row no-gutters align-items-center">
+                                    <div v-if="this.isErrorBroken" class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <h5>DATA TIDAK TERSEDIA</h5>
-                                            <span class="text2">atau mungkin anda terputus dengan jaringan kami.</span>
+                                            <h5>{{this.errorBroken.message}}</h5>
+                                            <span class="text2">{{this.errorBroken.detail}}</span>
                                         </div>
                                     </div>
                                     <div v-else class="row no-gutters align-items-center">
@@ -155,22 +155,22 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                        Banyak Aset <br> baru yang ditambahkan
+                                        Banyak Aset <br> baru yang ditambahkan <br> pekan ini
                                     </div>
-                                    <div v-if="this.errorLoans == true" class="row no-gutters align-items-center">
+                                    <div v-if="this.isErrorAdded" class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <h5>DATA TIDAK TERSEDIA</h5>
-                                            <span class="text2">atau mungkin anda terputus dengan jaringan kami.</span>
+                                            <h5>{{this.errorAdded.message}}</h5>
+                                            <span class="text2">{{this.errorAdded.detail}}</span>
                                         </div>
                                     </div>
                                     <div v-else class="row no-gutters align-items-center">
                                         <div class="col-auto">
-                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{addedPercentage}}%</div>
                                         </div>
                                         <div class="col">
                                             <div class="progress progress-sm mr-2">
                                                 <div class="progress-bar bg-info" role="progressbar"
-                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                    :style="this.styleAddedPercentage" aria-valuenow="50" aria-valuemin="0"
                                                     aria-valuemax="100"></div>
                                             </div>
                                         </div>
@@ -277,27 +277,35 @@
             return {
                 windowWidth: window.innerWidth,
                 isLoading: true,
-                isLoading: true,
                 isLoadingResponse: true,
                 isLoadingRouter: false,
                 isLoadingImage: true,
-                errorLoans: false,
-                errorMaintenance: false,
-                errorBroken: false,
+                isErrorLoans: false,
+                isErrorMaintenance: false,
+                isErrorBroken: false,
+                isErrorAdded: false,
                 loanPercentage: '',
                 styleLoanPercentage: '',
                 maintenancePercentage: '',
                 styleMaintenancePercentage: '',
                 brokenPercentage: '',
                 styleBrokenPercentage: '',
+                addedPercentage: '',
+                styleAddedPercentage: '',
                 isLoadingloanPercentage: false, 
                 cursorStyle: '',
                 currentYear: new Date().getFullYear(),
+                currentDate: new Date().toISOString().slice(0, 10),
+                weekAgo: '',
                 setProgress: false,
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
-                errorResponse: false,
+                errorLoans: {},
+                errorMaintenance: {},
+                errorBroken: {},
+                errorAdded: {},
+                errorResponse: [],
                 sessionData: [],
             }
         },
@@ -338,49 +346,180 @@
             },
             async percentage(){
                 try {
-                    await axios.get('/assets/percentage', {params: {"status": "1", "condition": "0"}})
+                    let weekAgo = new Date();
+                    weekAgo.setDate(weekAgo.getDate()-7);
+                    weekAgo.toISOString().slice(0, 10);
+                    this.weekAgo = weekAgo.toISOString().slice(0, 10);
+                    // console.log(this.weekAgo);
+                    // console.log(this.currentDate);
+
+                    // Banyak aset yg dipinjam
+                    await axios.get('/loans/percentage', {params: {
+                        "status": "1",
+                        "dateOne": this.weekAgo+' 00:00:00',
+                        "dateTwo": this.currentDate
+                    }})
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.loanPercentage = response.data.data.percentage.toString();
                         // console.log(this.styleLoanPercentage);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
-                        if(!err.response || err.response){
-                            this.errorLoans = true;
+                        if(err.response.data.message == 'Error!'){
+                            // console.log(err.response.data.message);
+                            this.errorLoans = {
+                                'id': 1,
+                                'message': err.response.data.message,
+                                'detail': err.response.data.data.error
+                            }
+                            this.isErrorLoans = true;
                             // this.returnLoansPercentage = true;
                             // this.isLoadingResponse = false;
-                            // this.errorLoans = true;
+                            // this.isErrorLoans = true;
                             // setTimeout(() => this.isLoadingLoans = false, 8000);
+                        } else if(!err.response){
+                            this.isErrorLoans = true;
+                            this.errorLoans = {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error. Silakan cek koneksi anda!',
+                            }
+                            // this.errorResponseMessage.push(error);
+                            // console.log(this.errorResponseMessage);
+                        } else {
+                            this.errorLoans = {
+                                'id': 1,
+                                'message': err.response.status +' '+ err.response.statusText,
+                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                            }
                         }
                     });
-                    await axios.get('/assets/percentage', {params: {"status": "2", "condition": "0"}})
+
+                    // Banyak aset yang diperbaiki
+                    await axios.get('/assets/percentage', {params: {
+                        "status": "2",
+                        "condition": "0",
+                        "dateOne": this.weekAgo,
+                        "dateTwo": this.currentDate
+                    }})
                     .then((response) => {
                         this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
                         this.maintenancePercentage = response.data.data.percentage.toString();
                         // console.log(this.styleLoanPercentage);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
-                        if(!err.response || err.response){
+                        if(err.response.data.message == 'Error!'){
+                            // console.log(err.response.data.message);
+                            this.errorMaintenance = {
+                                'id': 1,
+                                'message': err.response.data.message,
+                                'detail': err.response.data.data.error
+                            }
+                            this.isErrorLoans = true;
                             // this.returnLoansPercentage = true;
-                            this.errorMaintenance = true;
                             // this.isLoadingResponse = false;
-                            // this.errorLoans = true;
+                            // this.isErrorLoans = true;
                             // setTimeout(() => this.isLoadingLoans = false, 8000);
+                        } else if(!err.response){
+                            this.isErrorLoans = true;
+                            this.errorMaintenance = {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error. Silakan cek koneksi anda!',
+                            }
+                            // this.errorResponseMessage.push(error);
+                            // console.log(this.errorResponseMessage);
+                        } else {
+                            this.errorMaintenance = {
+                                'id': 1,
+                                'message': err.response.status +' '+ err.response.statusText,
+                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                            }
                         }
                     });
-                    await axios.get('/assets/percentage', {params: {"status": "0", "condition": "1"}})
+
+                    // Banyak aset yang dalam keadaan rusak
+                    await axios.get('/assets/percentage', {params: {
+                        "status": "0",
+                        "condition": "1",
+                        "dateOne": this.weekAgo,
+                        "dateTwo": this.currentDate
+                    }})
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.brokenPercentage = response.data.data.percentage.toString();
                         // console.log(this.styleLoanPercentage);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
-                        if(!err.response || err.response){
-                            this.errorBroken = true;
+                        if(err.response.data.message == 'Error!'){
+                            // console.log(err.response.data.message);
+                            this.errorBroken = {
+                                'id': 1,
+                                'message': err.response.data.message,
+                                'detail': err.response.data.data.error
+                            }
+                            this.isErrorLoans = true;
                             // this.returnLoansPercentage = true;
                             // this.isLoadingResponse = false;
-                            // this.errorLoans = true;
+                            // this.isErrorLoans = true;
                             // setTimeout(() => this.isLoadingLoans = false, 8000);
+                        } else if(!err.response){
+                            this.isErrorLoans = true;
+                            this.errorBroken = {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error. Silakan cek koneksi anda!',
+                            }
+                            // this.errorResponseMessage.push(error);
+                            // console.log(this.errorResponseMessage);
+                        } else {
+                            this.errorBroken = {
+                                'id': 1,
+                                'message': err.response.status +' '+ err.response.statusText,
+                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                            }
+                        }
+                    });
+
+                    // Banyak aset yang ditambahkan
+                    await axios.get('/assets/percentage', {params: {
+                        "condition": "0",
+                        "dateOne": this.weekAgo,
+                        "dateTwo": this.currentDate
+                    }})
+                    .then((response) => {
+                        this.styleAddedPercentage = 'width: '+response.data.data.percentage+'%;';
+                        this.addedPercentage = response.data.data.percentage.toString();
+                        // console.log(this.styleLoanPercentage);
+                        // setTimeout(() => this.isLoadingLoans = false, 8000);
+                    }).catch((err) => {
+                        if(err.response.data.message == 'Error!'){
+                            // console.log(err.response.data.message);
+                            this.errorAdded = {
+                                'id': 1,
+                                'message': err.response.data.message,
+                                'detail': err.response.data.data.error
+                            }
+                            this.isErrorAdded = true;
+                            // this.returnLoansPercentage = true;
+                            // this.isLoadingResponse = false;
+                            // this.isErrorLoans = true;
+                            // setTimeout(() => this.isLoadingLoans = false, 8000);
+                        } else if(!err.response){
+                            this.isErrorAdded = true;
+                            this.errorAdded = {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error. Silakan cek koneksi anda!',
+                            }
+                            // this.errorResponseMessage.push(error);
+                            // console.log(this.errorResponseMessage);
+                        } else {
+                            this.errorAdded = {
+                                'id': 1,
+                                'message': err.response.status +' '+ err.response.statusText,
+                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                            }
                         }
                     });
                 } catch (error) {
@@ -391,7 +530,7 @@
             }
         },
         beforeCreate(){
-            
+
         },
         created(){
             window.addEventListener('resize', () => {
@@ -403,11 +542,11 @@
         },
         mounted(){
             this.percentage();
-            // console.log(this.loadingResponseLoans)
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
             
+            // console.log(this.weekAgo);
             window.scrollTo(0,0);
         }
     }

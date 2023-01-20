@@ -551,12 +551,16 @@
         },
         beforeCreate(){
             if(this.$session != null || this.$loggedIn != 'null') {
-                this.lastPath = this.$router.options.history.state.back
-                if(this.lastPath != null) {
-                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
-                }
-                else {
-                    this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() });
+                if (this.$session['status'] == "0") {
+                    this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
+                } else {
+                    this.lastPath = this.$router.options.history.state.back
+                    if(this.lastPath != null) {
+                        this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                    }
+                    else {
+                        this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+                    }
                 }
             }
         },

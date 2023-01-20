@@ -3,7 +3,7 @@ import userRouter from './user/router';
 
 const routes = [
     {
-        path:'/dashboard',
+        path:'/',
         name : 'dashboard',
         component : () => import("../views/Dashboard.vue")
     },

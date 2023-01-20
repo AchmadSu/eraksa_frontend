@@ -467,13 +467,14 @@
             // console.log(this.$session['status'] == '1');
             if(this.$session == null || this.$loggedIn == 'null') {
                 this.$router.push({ name: "user.login" }).then(() => { this.$router.go() });
+            } else if(this.$session.status === "1") {
+                this.lastPath = this.$router.options.history.state.back
+                if(this.lastPath != null) {
+                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                } else {
+                    this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+                }
             }
-            // } else if(this.$session['status'] == '1') {
-            //     this.lastPath = this.$router.options.history.state.back
-            //     if(this.lastPath != null) {
-            //         this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
-            //     }
-            // }
         },
         created(){
             window.addEventListener('resize', () => {

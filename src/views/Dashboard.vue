@@ -160,6 +160,40 @@
             toTop(){
                 window.scrollTo(0,0);
             },
+            async loansList(){
+                if (this.windowWidth >= this.$widthLandscapePhone) {
+                    console.log('test1');
+                    this.dataLoans = {
+                        "status": "0",
+                        "condition": "0",
+                        "skip": 0,
+                        "take": 6
+                    }
+                } else {
+                    this.dataLoans = {
+                        "status": "0",
+                        "condition": "0",
+                        "skip": 0,
+                        "take": 4
+                    }
+                }
+                // console.table(this.dataLoans);
+                try {
+                    await axios.get('/assets/getAll', {params: this.dataLoans})
+                    .then((response) => {
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.loansArray.push(response.data.data[item]);
+                        });
+                    }).catch((err) => {
+                        if(!err.response || err.response){
+                            this.errorLoans = true;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorLoans = true;
+                }
+            },
             dashboard(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -194,43 +228,10 @@
                 }
             }
         },
-        async created(){
+        created(){
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
-            if (this.windowWidth >= this.$widthLandscapePhone) {
-                console.log('test1');
-                this.dataLoans = {
-                    "status": "0",
-                    "condition": "0",
-                    "skip": 0,
-                    "take": 6
-                }
-            } else {
-                this.dataLoans = {
-                    "status": "0",
-                    "condition": "0",
-                    "skip": 0,
-                    "take": 4
-                }
-            }
-            // console.table(this.dataLoans);
-            try {
-                await axios.get('/assets/getAll', {params: this.dataLoans})
-                .then((response) => {
-                    Object.keys(response.data.data).forEach((item) => {
-                        this.loansArray.push(response.data.data[item]);
-                    });
-                    setTimeout(() => this.isLoadingContent = false, 8000);
-                }).catch((err) => {
-                    if(!err.response || err.response){
-                        this.errorLoans = true;
-                        setTimeout(() => this.isLoadingContent = false, 8000);
-                    }
-                });
-            } catch (error) {
-                this.errorLoans = true;
-            }
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);
@@ -241,6 +242,8 @@
                 // console.log(this.lastPath);
                 // this.lastPath = this.$router.options.history.state.back
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
+            } else if (this.$session['status'] === "0") {
+                this.$router.push({ name: "user.otpPage" });
             }
         },  
         mounted(){
@@ -248,6 +251,8 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
+            console.log(this.windowWidth >= this.$widthLandscapePhone);
+            this.loansList();
             window.scrollTo(0,0);
             // console.log(this.loansArray.length === 0);
             
