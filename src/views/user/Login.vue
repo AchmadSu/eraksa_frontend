@@ -316,7 +316,7 @@
                         if(this.widthProgressBar == 100) {
                             clearInterval(this.intervalProgressbar);
                             this.widthProgressBar = 0;
-                            this.setProgress == false;
+                            // this.setProgress == false;
                             // this.setProgress = false;
                         }
                     }
@@ -332,7 +332,6 @@
                             }
                         }                        
                     }, 4000);
-                    this.isLoadingResponse = false;
                 })
                 .catch(error => {
                     if(!error.response){

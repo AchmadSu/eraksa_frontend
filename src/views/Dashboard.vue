@@ -26,10 +26,10 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <div v-if="this.$roles != 'Member'">
+                        <div v-if="this.$roles == 'Super-Admin'">
                             <Dashboard></Dashboard>
+                            <hr class="sidebar-divider bg-secondary">
                         </div>
-                        <hr class="sidebar-divider bg-secondary">
                         <!-- Page Heading -->
                         <div v-if="this.isLoadingContent == true" class="row d-flex align-items-center justify-content-center">
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
