@@ -15,7 +15,7 @@
         <hr class="sidebar-divider bg-white my-0">
         
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item">
             <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-home" aria-hidden="true"></i>&ensp;
                 <span>Home</span>
@@ -157,9 +157,21 @@
             <div id="collapseProdi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Daftar Prodi</h6>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Teknik Informatika
-                    </a>
+                    <div v-if="this.isLoadingContent1" class="d-flex align-items-center justify-content-center">
+                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </a>
+                    </div>
+                    <div v-else>
+                        <div v-if="this.errorStudyPrograms">
+                            <a v-for="item in this.studyProgramsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
+                            </a>
+                        </div>
+                        <a v-else v-for="item in this.studyProgramsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
+                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </li>
@@ -172,9 +184,21 @@
             <div id="collapseCategory" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Daftar Kategori</h6>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Projector
-                    </a>
+                    <div v-if="this.isLoadingContent2" class="d-flex align-items-center justify-content-center">
+                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </a>
+                    </div>
+                    <div v-else>
+                        <div v-if="this.errorCategoryAssets">
+                            <a class="collapse-item" href="#" :style="this.cursorStyle">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
+                            </a>
+                        </div>
+                        <a v-else v-for="item in this.categoryAssetsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
+                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </li>
@@ -187,9 +211,21 @@
             <div id="collapsePlacement" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Daftar Penempatan</h6>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Tempat
-                    </a>
+                    <div v-if="this.isLoadingContent3" class="d-flex align-items-center justify-content-center">
+                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </a>
+                    </div>
+                    <div v-else>
+                        <div v-if="this.errorPlacements">
+                            <a class="collapse-item" href="#" :style="this.cursorStyle">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
+                            </a>
+                        </div>
+                        <a v-else v-for="item in this.placementsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
+                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </li>
@@ -202,15 +238,28 @@
             <div id="collapseWorkshop" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Bengkel Perawatan</h6>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Bengkel
-                    </a>
+                    <div v-if="this.isLoadingContent4" class="d-flex align-items-center justify-content-center">
+                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </a>
+                    </div>
+                    <div v-else>
+                        <div v-if="this.errorWorkshops">
+                            <a class="collapse-item" href="#" :style="this.cursorStyle">
+                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
+                            </a>
+                        </div>
+                        <a v-else v-for="item in this.workshopsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
+                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </li>
     </ul>
 </template>
 <script>
+    import axios from 'axios';
     export default{
         data() {
             return {
@@ -218,6 +267,10 @@
                 isLoading: true,
                 isLoading: true,
                 isLoadingResponse: false,
+                isLoadingContent1: true,
+                isLoadingContent2: true,
+                isLoadingContent3: true,
+                isLoadingContent4: true,
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 cursorStyle: '',
@@ -226,11 +279,116 @@
                 widthProgressBar: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
+                studyProgramsArray: [],
+                errorStudyPrograms: false,
+                errorResponse: [],
+                categoryAssetsArray: [],
+                errorCategoryAssets: false,
+                workshopsArray: [],
+                errorWorkshops: false,
+                placementsArray: [],
+                errorPlacements: false,
                 errorResponse: [],
                 sessionData: [],
             }
         },
         methods: {
+            async studyProgramList(){
+                    // console.log('test1');
+                this.dataStudyPrograms = {
+                    "skip": 0,
+                    "take": 10
+                }
+                // console.table(this.dataStudyPrograms);
+                try {
+                    await axios.get('/studyPrograms/getAll', {params: this.dataStudyPrograms})
+                    .then((response) => {
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.studyProgramsArray.push(response.data.data[item]);
+                        });
+                    }).catch((err) => {
+                        if(!err.response || err.response){
+                            this.errorStudyPrograms = true;
+                        }
+                    });
+                    this.isLoadingContent1 = false;
+                } catch (error) {
+                    this.isLoadingContent1 = false;
+                    this.errorStudyPrograms = true;
+                }
+            },
+            async categoryAssetsList(){
+                    // console.log('test1');
+                this.dataCategoryAssets = {
+                    "skip": 0,
+                    "take": 10
+                }
+                // console.table(this.dataStudyPrograms);
+                try {
+                    await axios.get('/categoryAssets/getAll', {params: this.dataCategoryAssets})
+                    .then((response) => {
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.categoryAssetsArray.push(response.data.data[item]);
+                        });
+                    }).catch((err) => {
+                        if(!err.response || err.response){
+                            this.errorCategoryAssets = true;
+                        }
+                    });
+                    this.isLoadingContent2 = false;
+                } catch (error) {
+                    this.isLoadingContent2 = false;
+                    this.errorCategoryAssets = true;
+                }
+            },
+            async placementsList(){
+                    // console.log('test1');
+                this.dataPlacements = {
+                    "skip": 0,
+                    "take": 10
+                }
+                // console.table(this.dataStudyPrograms);
+                try {
+                    await axios.get('/placements/getAll', {params: this.dataPlacements})
+                    .then((response) => {
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.placementsArray.push(response.data.data[item]);
+                        });
+                    }).catch((err) => {
+                        if(!err.response || err.response){
+                            this.errorPlacements = true;
+                        }
+                    });
+                    this.isLoadingContent3 = false;
+                } catch (error) {
+                    this.isLoadingContent3 = false;
+                    this.errorPlacements = true;
+                }
+            },
+            async workshopsList(){
+                    // console.log('test1');
+                this.dataWorkshops = {
+                    "skip": 0,
+                    "take": 10
+                }
+                // console.table(this.dataStudyPrograms);
+                try {
+                    await axios.get('/workshops/getAll', {params: this.dataWorkshops})
+                    .then((response) => {
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.workshopsArray.push(response.data.data[item]);
+                        });
+                    }).catch((err) => {
+                        if(!err.response || err.response){
+                            this.errorWorkshops = true;
+                        }
+                    });
+                    this.isLoadingContent4 = false;
+                } catch (error) {
+                    this.isLoadingContent4 = false;
+                    this.errorWorkshops = true;
+                }
+            },
             dashboard(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -278,6 +436,10 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+            this.studyProgramList();
+            this.categoryAssetsList();
+            this.workshopsList();
+            this.placementsList();
             window.scrollTo(0,0);
         }
     }
