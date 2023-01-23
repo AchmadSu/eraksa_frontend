@@ -525,8 +525,9 @@
                 } catch (error) {
                     this.errorResponse = true;
                 }
-                // console.log('test');
                 this.isLoadingResponse = false;
+                // setTimeout(() => this.isLoadingResponse = false, 20000);
+                // console.log('test');
             }
         },
         beforeCreate(){
