@@ -52,17 +52,15 @@
                         <h6>{{item.study_program_name}}</h6>
                         <div class=" mt-3">
                             <div class="mt-3"> 
-                                <span class="text1">XXX kali Dirawat <br>
                                 <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
                                 <span v-else class="text2">Klik untuk selengkapnya</span>
-                            </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-12 mb-5">
-                <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 d-md-none btn btn-sm btn-success shadow-sm' : 'd-none'">
+                <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 p-2 d-md-none btn btn-sm btn-success shadow-sm' : 'd-none'">
                     <i class="fa fa-paper-plane"></i>&ensp;Ajukan Perawatan
                 </a>
             </div>
@@ -76,7 +74,7 @@
             return {
                 windowWidth: window.innerWidth,
                 isLoading: true,
-                isLoadingContent: true,
+                isLoadingContent: false,
                 isLoadingResponse: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
@@ -90,14 +88,15 @@
                 errorResponse: [],
                 maintenanceArray: [],
                 errorMaintenance: false,
-                accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
         methods: {
             async maintenanceList(){
+                this.isLoadingContent = true;
                 if (this.windowWidth >= this.$widthLandscapePhone) {
                     // console.log('test1');
                     this.dataMaintenance = {
+                        "sleep": 0,
                         "status": "2",
                         "condition": "0",
                         "skip": 0,
@@ -105,6 +104,7 @@
                     }
                 } else {
                     this.dataMaintenance = {
+                        "sleep": 0,
                         "status": "2",
                         "condition": "0",
                         "skip": 0,
@@ -118,13 +118,17 @@
                         Object.keys(response.data.data).forEach((item) => {
                             this.maintenanceArray.push(response.data.data[item]);
                         });
+                        this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response || err.response){
+                            // this.isLoadingContent = false;
                             this.errorMaintenance = true;
                         }
                     });
+                    this.isLoadingContent = false;
                     // this.isLoadingContent = false;
                 } catch (error) {
+                    this.isLoadingContent = false;
                     this.errorMaintenance = true;
                 }
                 this.isLoadingContent = false;
@@ -136,17 +140,18 @@
             });
         },
         mounted(){
+            this.maintenanceList();
+            // console.log(this.maintenanceArray)
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
             // console.log(this.windowWidth >= this.$widthLandscapePhone);
-            this.maintenanceList();
             window.scrollTo(0,0);
             // console.log(this.loansArray.length === 0);
             
             // setTimeout(() => this.isLoadingContent = false, 8000);
-            setTimeout(() => this.isLoading = false, 5000);
+            // setTimeout(() => this.isLoading = false, 5000);
         },
     }
 </script>

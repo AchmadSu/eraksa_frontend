@@ -43,7 +43,7 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Tabel</h6>
-                    <a :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
+                    <a @click="manageStudyPrograms" :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
                     <a class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
@@ -149,112 +149,28 @@
         </div>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseProdi"
-                aria-expanded="true" aria-controls="collapseProdi">
+            <a class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-graduation-cap"></i>&ensp;
                 <span>Program Studi</span>
             </a>
-            <div id="collapseProdi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Daftar Prodi</h6>
-                    <div v-if="this.isLoadingContent1" class="d-flex align-items-center justify-content-center">
-                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </a>
-                    </div>
-                    <div v-else>
-                        <div v-if="this.errorStudyPrograms">
-                            <a v-for="item in this.studyProgramsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
-                            </a>
-                        </div>
-                        <a v-else v-for="item in this.studyProgramsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
-                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
-                        </a>
-                    </div>
-                </div>
-            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseCategory"
-                aria-expanded="true" aria-controls="collapseCategory">
+            <a class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-cubes"></i>&ensp;
                 <span>Kategori Aset</span>
             </a>
-            <div id="collapseCategory" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Daftar Kategori</h6>
-                    <div v-if="this.isLoadingContent2" class="d-flex align-items-center justify-content-center">
-                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </a>
-                    </div>
-                    <div v-else>
-                        <div v-if="this.errorCategoryAssets">
-                            <a class="collapse-item" href="#" :style="this.cursorStyle">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
-                            </a>
-                        </div>
-                        <a v-else v-for="item in this.categoryAssetsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
-                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
-                        </a>
-                    </div>
-                </div>
-            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapsePlacement"
-                aria-expanded="true" aria-controls="collapsePlacement">
-                &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp;
+            <a class="nav-link" href="#" :style="this.cursorStyle">
+                &nbsp;<i class="fa fa-map-marker"></i>&nbsp;&ensp;
                 <span>Tempat Aset</span>
             </a>
-            <div id="collapsePlacement" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Daftar Penempatan</h6>
-                    <div v-if="this.isLoadingContent3" class="d-flex align-items-center justify-content-center">
-                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </a>
-                    </div>
-                    <div v-else>
-                        <div v-if="this.errorPlacements">
-                            <a class="collapse-item" href="#" :style="this.cursorStyle">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
-                            </a>
-                        </div>
-                        <a v-else v-for="item in this.placementsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
-                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
-                        </a>
-                    </div>
-                </div>
-            </div>
         </li>
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseWorkshop"
-                aria-expanded="true" aria-controls="collapseWorkshop">
+            <a class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-briefcase"></i>&ensp;
-                <span>Bengkel Perawatan</span>
+                <span>Bengkel</span>
             </a>
-            <div id="collapseWorkshop" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Bengkel Perawatan</h6>
-                    <div v-if="this.isLoadingContent4" class="d-flex align-items-center justify-content-center">
-                        <a class="my-5 spinner-border text-primary" style="width: 2rem; height: 2rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </a>
-                    </div>
-                    <div v-else>
-                        <div v-if="this.errorWorkshops">
-                            <a class="collapse-item" href="#" :style="this.cursorStyle">
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ensp; Data tidak ada
-                            </a>
-                        </div>
-                        <a v-else v-for="item in this.workshopsArray" :key="item.id" class="collapse-item" href="#" :style="this.cursorStyle">
-                            <i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; {{item.name}}
-                        </a>
-                    </div>
-                </div>
-            </div>
         </li>
     </ul>
 </template>
@@ -266,11 +182,6 @@
                 windowWidth: window.innerWidth,
                 isLoading: true,
                 isLoading: true,
-                isLoadingResponse: false,
-                isLoadingContent1: true,
-                isLoadingContent2: true,
-                isLoadingContent3: true,
-                isLoadingContent4: true,
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 cursorStyle: '',
@@ -293,102 +204,6 @@
             }
         },
         methods: {
-            async studyProgramList(){
-                    // console.log('test1');
-                this.dataStudyPrograms = {
-                    "skip": 0,
-                    "take": 10
-                }
-                // console.table(this.dataStudyPrograms);
-                try {
-                    await axios.get('/studyPrograms/getAll', {params: this.dataStudyPrograms})
-                    .then((response) => {
-                        Object.keys(response.data.data).forEach((item) => {
-                            this.studyProgramsArray.push(response.data.data[item]);
-                        });
-                    }).catch((err) => {
-                        if(!err.response || err.response){
-                            this.errorStudyPrograms = true;
-                        }
-                    });
-                    this.isLoadingContent1 = false;
-                } catch (error) {
-                    this.isLoadingContent1 = false;
-                    this.errorStudyPrograms = true;
-                }
-            },
-            async categoryAssetsList(){
-                    // console.log('test1');
-                this.dataCategoryAssets = {
-                    "skip": 0,
-                    "take": 10
-                }
-                // console.table(this.dataStudyPrograms);
-                try {
-                    await axios.get('/categoryAssets/getAll', {params: this.dataCategoryAssets})
-                    .then((response) => {
-                        Object.keys(response.data.data).forEach((item) => {
-                            this.categoryAssetsArray.push(response.data.data[item]);
-                        });
-                    }).catch((err) => {
-                        if(!err.response || err.response){
-                            this.errorCategoryAssets = true;
-                        }
-                    });
-                    this.isLoadingContent2 = false;
-                } catch (error) {
-                    this.isLoadingContent2 = false;
-                    this.errorCategoryAssets = true;
-                }
-            },
-            async placementsList(){
-                    // console.log('test1');
-                this.dataPlacements = {
-                    "skip": 0,
-                    "take": 10
-                }
-                // console.table(this.dataStudyPrograms);
-                try {
-                    await axios.get('/placements/getAll', {params: this.dataPlacements})
-                    .then((response) => {
-                        Object.keys(response.data.data).forEach((item) => {
-                            this.placementsArray.push(response.data.data[item]);
-                        });
-                    }).catch((err) => {
-                        if(!err.response || err.response){
-                            this.errorPlacements = true;
-                        }
-                    });
-                    this.isLoadingContent3 = false;
-                } catch (error) {
-                    this.isLoadingContent3 = false;
-                    this.errorPlacements = true;
-                }
-            },
-            async workshopsList(){
-                    // console.log('test1');
-                this.dataWorkshops = {
-                    "skip": 0,
-                    "take": 10
-                }
-                // console.table(this.dataStudyPrograms);
-                try {
-                    await axios.get('/workshops/getAll', {params: this.dataWorkshops})
-                    .then((response) => {
-                        Object.keys(response.data.data).forEach((item) => {
-                            this.workshopsArray.push(response.data.data[item]);
-                        });
-                    }).catch((err) => {
-                        if(!err.response || err.response){
-                            this.errorWorkshops = true;
-                        }
-                    });
-                    this.isLoadingContent4 = false;
-                } catch (error) {
-                    this.isLoadingContent4 = false;
-                    this.errorWorkshops = true;
-                }
-            },
             dashboard(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -422,6 +237,40 @@
                         }
                     ];
                 }
+            },
+            manageStudyPrograms(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
             }
         },
         created(){
@@ -436,10 +285,6 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
-            this.studyProgramList();
-            this.categoryAssetsList();
-            this.workshopsList();
-            this.placementsList();
             window.scrollTo(0,0);
         }
     }

@@ -42,9 +42,6 @@
                         <div v-else>
                             <div v-if="this.errorLoans == true" class="text-lg-center text-sm-justify d-sm-flex align-items-center justify-content-between mb-3">
                                 <h3 class="h4 mb-0 text-gray-800">Tidak ada Aset yang dapat dipinjam untuk saat ini</h3>
-                                <a href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                                    <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
-                                </a>
                             </div>
                             <div v-else class="d-sm-flex align-items-center justify-content-between mb-4">
                                 <h1 class="h4 mb-0 text-gray-800">Aset yang dapat dipinjam</h1>
@@ -84,16 +81,14 @@
                                             <h6>{{item.study_program_name}}</h6>
                                             <div class=" mt-3">
                                                 <div class="mt-3"> 
-                                                    <span class="text1">XXX kali Dipinjam <br>
                                                     <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
                                                     <span v-else class="text2">Klik untuk selengkapnya</span>
-                                                </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 mb-5">
+                                <div v-if="this.errorLoans == false" class="col-12 mb-5">
                                     <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
                                         <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
                                     </a>
@@ -124,7 +119,7 @@
     </div>
 </template>
 <script>
-    import Sidebar from '../components/sidebar/Dashboard.vue';
+    import Sidebar from '../components/Sidebar.vue';
     import Navbar from '../components/Navbar.vue'
     import Dashboard from '../components/admin/Dashboard.vue';
     import Maintenance from '../components/admin/Maintenance.vue';
@@ -176,23 +171,27 @@
                         "status": "0",
                         "condition": "0",
                         "skip": 0,
-                        "take": 6
+                        "take": 6,
+                        "random": 1
                     }
                 } else {
                     this.dataLoans = {
                         "status": "0",
                         "condition": "0",
                         "skip": 0,
-                        "take": 4
+                        "take": 4,
+                        "random": 1
                     }
                 }
-                // console.table(this.dataLoans);
                 try {
                     await axios.get('/assets/getAll', {params: this.dataLoans})
                     .then((response) => {
+                        console.table(this.dataLoans);
                         Object.keys(response.data.data).forEach((item) => {
                             this.loansArray.push(response.data.data[item]);
                         });
+                        console.log(response);
+                        this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response || err.response){
                             this.errorLoans = true;

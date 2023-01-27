@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import studyProgramRouter from './studyProgram/router';
 import userRouter from './user/router';
 
 const routes = [
@@ -18,7 +19,11 @@ Object.keys(userRouter).forEach((item) => {
     routes.push(userRouter[item]);
 })
 
-// console.table(routes);
+Object.keys(studyProgramRouter).forEach((item) => {
+    routes.push(studyProgramRouter[item]);
+})
+
+console.table(routes);
 
 const router = createRouter({
     history: createWebHistory(),

@@ -321,15 +321,15 @@
                         }
                     }
                     setTimeout(() => {
-                        if (response.data.data.user.status === "0") {
-                            this.$router.push({ name: "user.otpPage" });
-                        } else {
+                        if (response.data.data.user.status === "1") {
                             this.lastPath = this.$router.options.history.state.back;
                             if (this.lastPath) {
                                 this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });    
                             } else {
                                 this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
                             }
+                        } else {
+                            this.$router.push({ name: "user.otpPage" });
                         }                        
                     }, 4000);
                 })
@@ -502,9 +502,7 @@
         beforeCreate(){
             // console.table(this.$session != null, this.$loggedIn != 'null');
             if(this.$session != null || this.$loggedIn != 'null') {
-                if (this.$session['status'] == "0") {
-                    this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
-                } else {
+                if (this.$session['status'] == "1") {
                     this.lastPath = this.$router.options.history.state.back
                     if(this.lastPath != null) {
                         this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
@@ -512,6 +510,9 @@
                     else {
                         this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
                     }
+                }
+                else {
+                    this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
                 }
             }
         },

@@ -12,10 +12,12 @@
             </li>
         </ul>
 
-        <ul class="navbar-nav d-sm-block d-lg-none">
+        <ul class="navbar-nav d-sm-block d-md-none">
             <li class="nav-item">
                 <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
-                    <img :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-75 img-thumbnails':'w-100 img-thumbnails'" :src="this.windowWidth <= this.$widthPotraitPhone ? this.$baseUrl+'/src/assets/img/logo-01.png' : this.$baseUrl+'/src/assets/img/logo.png'" alt="">
+                    <img v-if="this.windowWidth <= this.$widthPotraitPhone" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
+                    <img v-else-if="this.windowWidth > this.$widthPotraitPhone && this.windowWidth <= 640" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
+                    <img v-else-if="this.windowWidth <= this.$widthComputer" class="w-25 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                 </a>
             </li>
         </ul>
@@ -240,7 +242,7 @@
                 </li>
         
                 <!-- Nav Item - Assets -->
-                <li v-if="this.$roles != 'Member'" class="nav-item">
+                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-cube"></i>&ensp;
                         <span>Kelola Aset</span>
@@ -258,75 +260,34 @@
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseProdi"
-                        aria-expanded="true" aria-controls="collapseProdi">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-graduation-cap"></i>&ensp;
                         <span>Program Studi</span>
                     </a>
-                    <div id="collapseProdi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Teknik Informatika</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseCategory"
-                        aria-expanded="true" aria-controls="collapseCategory">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-cubes"></i>&ensp;
                         <span>Kategori Aset</span>
                     </a>
-                    <div id="collapseCategory" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Projector</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
                 <li class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapsePlacement"
-                        aria-expanded="true" aria-controls="collapsePlacement">
-                        &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp;
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
+                        &nbsp;<i class="fa fa-map-marker"></i>&nbsp;&ensp;
                         <span>Tempat Aset</span>
                     </a>
-                    <div id="collapsePlacement" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i> Nama Tempat</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
                 <li v-if="this.$roles != 'Member'" class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseWorkshop"
-                        aria-expanded="true" aria-controls="collapseWorkshop">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-briefcase"></i>&ensp;
-                        <span>Bengkel Perawatan</span>
+                        <span>Bengkel</span>
                     </a>
-                    <div id="collapseWorkshop" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-thumb-tack" aria-hidden="true"></i>&ensp; Nama Bengkel</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
             </ul>
         </div>
       </div>
 </template>
 <script>
-    import Sidebar from './sidebar/Dashboard.vue';
     import axios from 'axios'
     export default{
         data() {
@@ -428,13 +389,15 @@
             });
         },
         destroyed() {
-            // window.RemoveEventListener('resize', function(event) {
-            //     // console.log('hehe')
-            //     this.windowWidth = window.innerWidth;
-            // }, true)
+            window.RemoveEventListener('resize', function(event) {
+                // console.log('hehe')
+                this.windowWidth = window.innerWidth;
+            }, true)
         },  
         mounted() {
-            
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
         },
     }
 </script>

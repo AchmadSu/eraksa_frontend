@@ -9,8 +9,8 @@
         </div>
     </div>
     <div v-else>
-        <div v-if="this.errorResponse == true">
-            <div class="text-lg-center text-sm-justify row col-12 d-sm-flex align-items-center justify-content-center mb-3">
+        <!-- <div v-if="this.errorResponse == true">
+            <div class="text-sm-justify row col-12 d-sm-flex align-items-center justify-content-center mb-3">
                 <h3 class="h4 mb-0 text-gray-800">Tidak ada data statistik untuk saat ini</h3>
             </div>
             <div class="row">
@@ -27,8 +27,8 @@
                 </div>
                 <h6 class="text-center my-3">Atau mungkin koneksi anda terganggu, silakan muat ulang!</h6>
             </div>
-        </div>
-        <div v-else>
+        </div> -->
+        <div>
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                 <a href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -39,7 +39,21 @@
             <!-- Content Row -->
             <div class="row">
                 <!-- Aset yang dipinjam -->
-                <div class="col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
+                                </div>
+                                <div class="ml-2 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -75,8 +89,23 @@
                     </div>
                 </div>
         
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-sm-6 mb-4">
+                <!-- Aset yang diperbaiki -->
+                <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Banyak Aset <br> yang sedang diperbaiki <br> Pekan ini
+                                </div>
+                                <div class="ml-2 spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div v-else class="col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -112,8 +141,22 @@
                     </div>
                 </div>
         
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-sm-6 mb-4">
+                <!-- Aset yang rusak -->
+                <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                    <div class="card border-left-danger shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                    Banyak Aset <br> yang rusak <br> Pekan ini
+                                </div>
+                                <div class="ml-2 spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-danger shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -148,8 +191,23 @@
                     </div>
                 </div>
         
-                <!-- Pending Requests Card Example -->
-                <div class="col-xl-3 col-sm-6 mb-4">
+                <!-- Aset baru -->
+                <div v-if="this.isLoadingAdded == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Banyak Aset <br> baru yang ditambahkan <br> Pekan ini
+                                </div>
+                                <div class="ml-2 spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-else class="col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -261,8 +319,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 mb-5">
-                    <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
+                <div v-if="this.errorResponse == false" class="col-12 mb-5">
+                    <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 p-2 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
                         <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
                     </a>
                 </div>
@@ -277,7 +335,11 @@
             return {
                 windowWidth: window.innerWidth,
                 isLoading: true,
-                isLoadingResponse: true,
+                isLoadingResponse: false,
+                isLoadingLoans: false,
+                isLoadingMaintenance: false,
+                isLoadingBroken: false,
+                isLoadingAdded: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 isErrorLoans: false,
@@ -344,25 +406,27 @@
                     // ];
                 }
             },
-            async percentage(){
+            async loans(){
                 try {
+                    this.isLoadingLoans = true;
                     let weekAgo = new Date();
                     weekAgo.setDate(weekAgo.getDate()-7);
                     weekAgo.toISOString().slice(0, 10);
                     this.weekAgo = weekAgo.toISOString().slice(0, 10);
-                    // console.log(this.weekAgo);
+                    console.log("test");
                     // console.log(this.currentDate);
-
+                    
                     // Banyak aset yg dipinjam
                     await axios.get('/loans/percentage', {params: {
+                        "sleep": 0,
                         "status": "1",
                         "dateOne": this.weekAgo+' 00:00:00',
-                        "dateTwo": this.currentDate
+                        "dateTwo": this.currentDate+' 23:59:59'
                     }})
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.loanPercentage = response.data.data.percentage.toString();
-                        // console.log(this.styleLoanPercentage);
+                        console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
                         if(err.response.data.message == 'Error!'){
@@ -372,18 +436,20 @@
                                 'message': err.response.data.message,
                                 'detail': err.response.data.data.error
                             }
+                            this.isLoadingLoans = false;
                             this.isErrorLoans = true;
                             // this.returnLoansPercentage = true;
                             // this.isLoadingResponse = false;
                             // this.isErrorLoans = true;
                             // setTimeout(() => this.isLoadingLoans = false, 8000);
                         } else if(!err.response){
-                            this.isErrorLoans = true;
                             this.errorLoans = {
                                 'id': 1,
                                 'message': 'Error!', 
                                 'detail': 'Network Error. Silakan cek koneksi anda!',
                             }
+                            this.isLoadingLoans = false;
+                            this.isErrorLoans = true;
                             // this.errorResponseMessage.push(error);
                             // console.log(this.errorResponseMessage);
                         } else {
@@ -392,15 +458,30 @@
                                 'message': err.response.status +' '+ err.response.statusText,
                                 'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
                             }
+                            this.isErrorLoans = true;
+                            this.isLoadingLoans = false;
                         }
                     });
-
+                    this.isLoadingLoans = false;
+                    this.isLoadingResponse = false;
+                } catch (error) {
+                    this.isErrorLoans = true;
+                }
+                // this.isLoadingResponse = false;
+                // setTimeout(() => this.isLoadingResponse = false, 20000);
+                // console.log('test');
+            },
+            async maintenance(){
+                try {
+                    this.isLoadingMaintenance = true;
+                    
                     // Banyak aset yang diperbaiki
                     await axios.get('/assets/percentage', {params: {
+                        "sleep": 0,
                         "status": "2",
                         "condition": "0",
                         "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate
+                        "dateTwo": this.currentDate+' 23:59:59'
                     }})
                     .then((response) => {
                         this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
@@ -415,18 +496,18 @@
                                 'message': err.response.data.message,
                                 'detail': err.response.data.data.error
                             }
-                            this.isErrorLoans = true;
-                            // this.returnLoansPercentage = true;
+                            this.isErrorMaintenance = true;
+                            // this.returnMainisErrorMaintenancePercentage = true;
                             // this.isLoadingResponse = false;
-                            // this.isErrorLoans = true;
-                            // setTimeout(() => this.isLoadingLoans = false, 8000);
+                            // this.isErrorMaintenance = true;
+                            // setTimeout(() => this.isLoadingMainisErrorMaintenance = false, 8000);
                         } else if(!err.response){
-                            this.isErrorLoans = true;
                             this.errorMaintenance = {
                                 'id': 1,
                                 'message': 'Error!', 
                                 'detail': 'Network Error. Silakan cek koneksi anda!',
                             }
+                            this.isErrorMaintenance = true;
                             // this.errorResponseMessage.push(error);
                             // console.log(this.errorResponseMessage);
                         } else {
@@ -435,20 +516,30 @@
                                 'message': err.response.status +' '+ err.response.statusText,
                                 'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
                             }
+                            this.isErrorMaintenance = true;
                         }
                     });
-
-                    // Banyak aset yang dalam keadaan rusak
+                    this.isLoadingMaintenance = false;
+                } catch (error) {
+                    this.errorMaintenance = true;
+                    this.isLoadingMaintenance = false;
+                }
+            },
+            async broken(){
+                // Banyak aset yang dalam keadaan rusak
+                try {
+                    this.isLoadingBroken = true;
                     await axios.get('/assets/percentage', {params: {
+                        "sleep": 0,
                         "status": "0",
                         "condition": "1",
                         "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate
+                        "dateTwo": this.currentDate+' 23:59:59'
                     }})
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.brokenPercentage = response.data.data.percentage.toString();
-                        // console.log(this.styleLoanPercentage);
+                        // console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
                         if(err.response.data.message == 'Error!'){
@@ -464,12 +555,12 @@
                             // this.isErrorLoans = true;
                             // setTimeout(() => this.isLoadingLoans = false, 8000);
                         } else if(!err.response){
-                            this.isErrorLoans = true;
                             this.errorBroken = {
                                 'id': 1,
                                 'message': 'Error!', 
                                 'detail': 'Network Error. Silakan cek koneksi anda!',
                             }
+                            this.isErrorLoans = true;
                             // this.errorResponseMessage.push(error);
                             // console.log(this.errorResponseMessage);
                         } else {
@@ -478,14 +569,24 @@
                                 'message': err.response.status +' '+ err.response.statusText,
                                 'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
                             }
+                            this.isErrorLoans = true;
                         }
                     });
-
+                    this.isLoadingBroken = false;
+                } catch (error) {
+                    this.isErrorBroken = true;
+                    this.isLoadingBroken = false;
+                }
+            },
+            async added(){
+                try {
                     // Banyak aset yang ditambahkan
+                    this.isLoadingAdded = true;
                     await axios.get('/assets/percentage', {params: {
+                        "sleep": 0,
                         "condition": "0",
                         "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate
+                        "dateTwo": this.currentDate+' 23:59:59'
                     }})
                     .then((response) => {
                         this.styleAddedPercentage = 'width: '+response.data.data.percentage+'%;';
@@ -515,6 +616,7 @@
                             // this.errorResponseMessage.push(error);
                             // console.log(this.errorResponseMessage);
                         } else {
+                            this.isErrorAdded = true;
                             this.errorAdded = {
                                 'id': 1,
                                 'message': err.response.status +' '+ err.response.statusText,
@@ -522,12 +624,11 @@
                             }
                         }
                     });
+                    this.isLoadingAdded = false;
                 } catch (error) {
-                    this.errorResponse = true;
+                    this.isErrorAdded = true;
+                    this.isLoadingAdded = false;
                 }
-                this.isLoadingResponse = false;
-                // setTimeout(() => this.isLoadingResponse = false, 20000);
-                // console.log('test');
             }
         },
         beforeCreate(){
@@ -542,7 +643,11 @@
             // window.removeEventListener("resize", this.sizeHandler);
         },
         mounted(){
-            this.percentage();
+            setTimeout(() => this.isLoadingResponse = false, 3000);
+            this.loans();
+            this.maintenance();
+            this.broken();
+            this.added();
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
