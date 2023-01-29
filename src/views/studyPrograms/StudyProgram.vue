@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <div class="">
                                     <div v-if="this.isLoadingContent == true" class="row d-flex align-items-center justify-content-center">
                                         <div class="my-5 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                             <span class="visually-hidden">Loading...</span>
@@ -66,7 +66,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr class="text-center">
                                                     <th class="align-middle">No</th>
@@ -107,8 +107,42 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="row mb-3">
-                                            <div v-if="this.next < this.dataCount && this.isLoadingResponse == false" class="col-12 text-center">
+                                        <div v-else class="row">
+                                            <div v-for="item in this.studyProgramArray" :key="item.id" class="col-sm-6 col-lg-4">
+                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="d-flex flex-row align-items-center">
+                                                            <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
+                                                            <div class="ms-2 c-details">
+                                                                <h6 class="mb-0">Data Prodi</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="my-2">
+                                                        <h3 class="heading">{{item.name}}</h3>
+                                                        <div class="mt-3">
+                                                            <div class="row my-3 py-2">
+                                                                <div class="col-12 py-2">
+                                                                    <button :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                        <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                    </button>
+                                                                </div>
+                                                                <div class="col-12 w-100 text-center py-2">
+                                                                   ATAU
+                                                                </div>
+                                                                <div class="col-12 py-2">
+                                                                    <button :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                                        <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="this.next != 0 && this.next < this.dataCount && this.isLoadingResponse == false" class="row my-lg-3 my-5">
+                                            <div class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat lebih banyak
                                                 </button>
@@ -120,7 +154,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row mb-3">
+                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
                                             <div v-if="this.isLoadingResponse == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat seluruh data
@@ -185,7 +219,7 @@
                 dataCount: 0,
                 no: 0,
                 prev: 0,
-                next: 10,
+                next: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -229,8 +263,12 @@
             nextFunction(){
                 this.isLoadingResponse = true;
                 this.buttonDisabled = true;
-                this.next = this.next+10;
-                this.studyProgramList(this.next, 10)
+                if(this.windowWidth >= this.$widthComputer){
+                    this.next = this.next+10;
+                } else {
+                    this.next = this.next+4;
+                }
+                this.studyProgramList(this.next, this.next)
             },
             backFunction(){
                 this.setProgress = true;
@@ -455,7 +493,11 @@
             }
             // console.log(this.$route.query.search);
             // this.loansList();
-            this.studyProgramList(0, 10);
+            if(this.windowWidth >= this.$widthComputer){
+                this.studyProgramList(0, 10);
+            } else {
+                this.studyProgramList(0, 4);
+            } 
             // console.table(this.studyProgramArray)
             window.scrollTo(0,0);
             // console.log(this.studyProgramArray.length === 0);

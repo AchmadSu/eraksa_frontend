@@ -1510,12 +1510,12 @@ pre code {
 }
 
 .table-bordered {
-  border: 1px solid #e3e6f0;
+  border: 1px solid rgb(161, 161, 161)!important;
 }
 
 .table-bordered th,
 .table-bordered td {
-  border: 1px solid #e3e6f0;
+  border: 1px solid rgb(161, 161, 161)!important;
 }
 
 .table-bordered thead th,
