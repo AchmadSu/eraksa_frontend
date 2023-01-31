@@ -47,7 +47,7 @@
                                         <div v-else class="col-12">
                                             <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                         </div>
-                                        <h6 class="text-center my-3">{{this.detailObject.message}}</h6>
+                                        <h3 class="text-center my-3">{{this.detailObject.message}}</h3>
                                         <p class="text-center my-3">{{this.detailObject.detail}}</p>
                                     </div>
                                 </div>
@@ -80,11 +80,15 @@
                                             <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
                                         </div>
                                         <div class="col-md-6 col-12 px-lg-5 text-center">
-                                            <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
+                                            <div class="input-group py-md-0 py-lg-1">
                                                 <h3 class="fw-bolder text-secondary">
                                                     EDIT PROGRAM STUDI
                                                 </h3>
-                                                <h6>{{this.detailObject.name}}</h6>
+                                            </div>
+                                            <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
+                                                <h5 class="text-secondary">
+                                                    {{this.detailObject.name}}
+                                                </h5>
                                             </div>
                                             <form class="form needs-validation" id="app" @submit.prevent="updateFunction" novalidate>
                                                 <div class="py-lg-4 py-md-0 py-sm-1">
@@ -171,6 +175,7 @@
                 isLoading: true,
                 isLoading: true,
                 checkName: false,
+                errorDetail: false,
                 buttonDisabled: false,
                 isLoadingContent: true,
                 isLoadingResponse: false,
@@ -181,7 +186,7 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: this.$route.query.search,
+                name: '',
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -226,6 +231,7 @@
                     } else {
                         this.submitEnabled = false;
                     }
+                    // console.log(name)
                 },
                 deep: true,
             },
@@ -326,9 +332,11 @@
                     .then((response) => {
                         // console.log(response.data.data)
                         this.detailObject = {"id": response.data.data.id, "name": response.data.data.name};
+                        this.form.name = this.detailObject.name;
                         this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response) {
+                            this.errorDetail = true;
                             this.showAlert = true;
                             this.detailObject = 
                                 {
@@ -341,6 +349,7 @@
                         this.isLoadingContent = false;
                         // console.log(err.response);
                         } else if (err.response.data.message == 'Error!'){
+                            this.errorDetail = true;
                             // console.log(err.response.data);
                             this.showAlert = true;
                             this.detailObject =
@@ -353,6 +362,7 @@
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         } else {
+                            this.errorDetail = true;
                             this.showAlert = true;
                             this.detailObject =
                                 {
@@ -367,12 +377,8 @@
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    this.detailObject =
-                        {
-                            'id': 1,
-                            'message': error.code, 
-                            'detail': error.message,
-                        };
+                    console.log(error);
+                    this.detailObject = {'id': 1, 'message': error.code, 'detail': error.message,};
                     this.isLoadingResponse = false;
                     this.isLoadingContent = false;
                     this.isLoadingContent = false;
@@ -545,6 +551,7 @@
             // console.log(window.atob(this.id));
             this.detailFunction(this.id);
             // this.loansList();
+            console.log(this.detailObject);
             // this.studyProgramArray.filter((index) => index !== 1 )
 
             

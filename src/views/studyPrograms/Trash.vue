@@ -5,7 +5,7 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in studyProgramArray" :key="item.id" class="modal fade" :id="'restoreModal'+item.id" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div v-for="item, index in studyProgramArray" :key="item.id" class="modal fade" :id="'restoreModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="restoreModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
                 <div v-if="successRestore == false" class="modal-content">
                     <div class="modal-header">
@@ -31,7 +31,7 @@
                 <div v-if="successRestore" class="modal-content">
                     <div class="modal-header">
                         <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
-                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
                         <div class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
