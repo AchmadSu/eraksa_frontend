@@ -14,6 +14,11 @@ const studyProgramRouter = [
         name : 'manageStudyPrograms.create',
         component : () => import("../../views/studyPrograms/Create.vue")
     },
+    {
+        path:'/manage/studyPrograms/edit',
+        name : 'manageStudyPrograms.update',
+        component : () => import("../../views/studyPrograms/Update.vue")
+    },
     // {
     //     path:'/register',
     //     name : 'user.register',

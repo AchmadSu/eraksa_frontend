@@ -65,7 +65,7 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-gray-800">Kelola Data Sampah Program Studi</h1>
+                        <h1 class="h3 mb-3 text-center text-gray-800">Kelola Data Sampah Program Studi</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">

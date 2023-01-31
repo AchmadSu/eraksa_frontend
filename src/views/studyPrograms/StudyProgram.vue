@@ -65,7 +65,7 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-gray-800">Kelola Data Program Studi</h1>
+                        <h1 class="h3 mb-3 text-center text-gray-800">Kelola Data Program Studi</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
@@ -124,7 +124,7 @@
                                                     <td class="text-center">{{index+1}}</td>
                                                     <td><b>{{item.name}}</b></td>
                                                     <td class="text-center">
-                                                        <button :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
                                                             <i class="fa fa-pencil"></i> &ensp; Ubah data
                                                         </button>
                                                     </td>
@@ -379,6 +379,42 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'manageStudyPrograms.create' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            updateRouter(id){
+                // console.log("Teset")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageStudyPrograms.update', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
