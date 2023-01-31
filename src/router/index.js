@@ -23,8 +23,6 @@ Object.keys(studyProgramRouter).forEach((item) => {
     routes.push(studyProgramRouter[item]);
 })
 
-console.table(routes);
-
 const router = createRouter({
     history: createWebHistory(),
     routes

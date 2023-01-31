@@ -5,35 +5,35 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in studyProgramArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" aria-labelledby="eraseModalLabel" aria-hidden="true">
+        <div v-for="item, index in studyProgramArray" :key="item.id" class="modal fade" :id="'restoreModal'+item.id" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
-                <div v-if="successDelete == false" class="modal-content">
+                <div v-if="successRestore == false" class="modal-content">
                     <div class="modal-header">
-                        <h5 class="text-dark modal-title" id="eraseModalLabel">Konfirmasi penghapusan</h5>
+                        <h5 class="text-dark modal-title" id="restoreModalLabel">Konfirmasi pemulihan</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
-                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                        Apakah anda yakin akan memulihkan <b>{{ item.name }}</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
                             <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                        <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
-                        <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                        <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restore(item.id)" type="button" class="btn btn-primary">Pulihkan</button>
+                        <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Memuat...
                         </button>
                     </div>
                 </div>
-                <div v-if="successDelete" class="modal-content">
+                <div v-if="successRestore" class="modal-content">
                     <div class="modal-header">
                         <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
                         <div class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
                             <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                         </div>
@@ -65,17 +65,17 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-gray-800">Kelola Data Program Studi</h1>
+                        <h1 class="h3 mb-5 text-gray-800">Kelola Data Sampah Program Studi</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Program Studi</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Sampah Program Studi</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data Keseluruhan: {{this.dataCount}}</h6>
+                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -89,8 +89,8 @@
                                     <div v-else>
                                         <div class="row">
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
-                                                <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
-                                                    <i class="fa fa-trash-o"></i> &ensp;Data Sampah
+                                                <button :disabled="buttonDisabled" @click="indexRouter" class="btn w-100 btn-secondary rounded-0">
+                                                    <i class="fa fa-arrow-left"></i> &ensp;Kembali
                                                 </button>
                                             </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
@@ -112,10 +112,8 @@
                                                 <tr class="text-center">
                                                     <th class="align-middle">No</th>
                                                     <th class="align-middle">Nama</th>
-                                                    <th class="align-middle" colspan="2">
-                                                        <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
-                                                            <i class="fa fa-plus"></i> &ensp; Tambah Data
-                                                        </button>
+                                                    <th class="align-middle">
+                                                        Aksi
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -124,13 +122,8 @@
                                                     <td class="text-center">{{index+1}}</td>
                                                     <td><b>{{item.name}}</b></td>
                                                     <td class="text-center">
-                                                        <button :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                        </button>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
-                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus data
+                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan data
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -158,39 +151,9 @@
                                                         <div class="mt-3">
                                                             <div class="row my-3 py-2">
                                                                 <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                        <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
+                                                                        <i class="fa fa-undo"></i> &ensp; Pulihkan
                                                                     </button>
-                                                                </div>
-                                                                <div class="col-12 w-100 text-center py-2">
-                                                                   ATAU
-                                                                </div>
-                                                                <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                        <i class="fa fa-trash-o"></i> &ensp; Hapus
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'col-12':'d-none'">
-                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row align-items-center">
-                                                            <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
-                                                            <div class="ms-2 c-details">
-                                                                <h6 class="mb-0">Data Prodi</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="my-2">
-                                                        <h3 class="heading">{{item.message}}</h3>
-                                                        <div class="mt-3">
-                                                            <div class="row my-3 py-2">
-                                                                <div class="col-12 py-2">
-                                                                    <p>{{item.detail}}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -268,7 +231,7 @@
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
-                isLoadingDelete: false,
+                isLoadingRestore: false,
                 sidebarShow: true,
                 imageLogo: false,
                 name: this.$route.query.search,
@@ -285,9 +248,9 @@
                 },
                 search: '',
                 errorResponse: [],
-                errorDelete: [],
+                errorRestore: [],
                 successResponse: [],
-                successDeleteResponse: [],
+                successRestoreResponse: [],
                 sessionData: [],
                 studyProgramArray: [],
                 deleteArray: [],
@@ -297,7 +260,7 @@
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
-                successDelete: false,
+                successRestore: false,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
@@ -323,91 +286,7 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
-            trashRouter(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.trash' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            createRouter(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.create' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            setSuccessClose(id){
-                this.successDelete = false;
-                this.studyProgramArray = this.studyProgramArray.filter((item) => item.id !== id );
-                this.dataCount--;
-                this.successDeleteResponse = [];
-            },
-            nextFunction(){
-                this.isLoadingResponse1 = true;
-                this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.next = this.next+10;
-                } else {
-                    this.next = this.next+4;
-                }
-                this.studyProgramList(this.next, this.next)
-            },
-            backFunction(){
+            indexRouter(){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -442,6 +321,57 @@
                     ];
                 }
             },
+            setSuccessClose(id){
+                this.successRestore = false;
+                this.studyProgramArray = this.studyProgramArray.filter((item) => item.id !== id );
+                this.dataCount--;
+                this.successRestoreResponse = [];
+            },
+            nextFunction(){
+                this.isLoadingResponse1 = true;
+                this.buttonDisabled = true;
+                if(this.windowWidth > this.$widthLandscapePhone){
+                    this.next = this.next+10;
+                } else {
+                    this.next = this.next+4;
+                }
+                this.studyProgramList(this.next, this.next)
+            },
+            backFunction(){
+                this.isLoadingResponse2 = true;
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageStudyPrograms.trash' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
             searchFunction(search){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -463,7 +393,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageStudyPrograms.trash', query: {search: search} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -476,19 +406,20 @@
                     ];
                 }
             },
-            async delete(id){
-                this.isLoadingDelete = true;
+            async restore(id){
+                this.isLoadingRestore = true;
                 this.buttonDisabled = true;
                 this.dataStudyProgram = {
                     "ids": [id]
                 };
+                console.log(this.dataStudyProgram)
                 // this.studyProgramArray = this.studyProgramArray.filter((e) => e.id !== id);
                 try {
-                    await axios.delete('/studyPrograms/delete', {params: this.dataStudyProgram})
+                    await axios.put('/studyPrograms/restore', this.dataStudyProgram)
                     .then((response) => {
                         console.log(response.data.data);
                         // this.studyProgramArray = this.studyProgramArray.filter((item) => item.id !== id );
-                        this.successDeleteResponse = [
+                        this.successRestoreResponse = [
                             {
                                 "id": 1,
                                 "message": response.data.message,
@@ -496,12 +427,12 @@
                             }
                         ];
                         this.showAlertSuccess = true;
-                        this.isLoadingDelete = false;
-                        this.successDelete = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
                         this.buttonDisabled = false;
                     }).catch((err) => {
                         if(!err.response) {
-                            this.errorDelete = [
+                            this.errorRestore = [
                                 {
                                     'id': 1,
                                     'message': "Network Error", 
@@ -511,12 +442,12 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
+                            this.isLoadingRestore = false;
                         // console.log(err.response);
                         } else if (err.response.data.message == 'Error!'){
                             // console.log(err.response.data);
                             // this.showAlert = true;
-                            this.errorDelete = [
+                            this.errorRestore = [
                                 {
                                     'id': 1,
                                     'message': err.response.status +' '+ err.response.data.message,
@@ -526,10 +457,10 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
+                            this.isLoadingRestore = false;
                         } else {
                             this.showAlert = true;
-                            this.errorDelete = [
+                            this.errorRestore = [
                                 {
                                     'id': 1,
                                     'message': err.response.status +' '+ err.response.statusText,
@@ -539,12 +470,12 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
+                            this.isLoadingRestore = false;
                         }
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    this.errorDelete = [
+                    this.errorRestore = [
                         {
                             'id': 1,
                             'message': error.code, 
@@ -554,7 +485,7 @@
                     this.showAlertError = true;
                     this.isLoadingResponse = false;
                     this.buttonDisabled = false;
-                    this.isLoadingDelete = false;
+                    this.isLoadingRestore = false;
                 }
             },
             async studyProgramList(skip, take){
@@ -563,6 +494,7 @@
                 this.dataStudyProgram = {
                     "skip": skip,
                     "take": take,
+                    "trash": 1,
                     "sleep": 3,
                     "name": this.name
                 }
@@ -580,7 +512,7 @@
                             );
                         });
                         // this.studyProgramArray.filter((index) => index != 2)
-                        this.dataCount = response.data.data.count;
+                        this.dataCount = response.data.data.countDelete;
                         this.isLoadingResponse = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
@@ -680,7 +612,6 @@
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
-            // console.table(this.studyProgramArray)
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);

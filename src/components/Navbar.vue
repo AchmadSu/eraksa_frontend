@@ -385,6 +385,7 @@
                 }
             },
             async logout(){
+                console.log("Test")
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.submitEnabled = false;

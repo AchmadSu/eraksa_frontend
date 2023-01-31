@@ -186,11 +186,11 @@
                 try {
                     await axios.get('/assets/getAll', {params: this.dataLoans})
                     .then((response) => {
-                        console.table(this.dataLoans);
+                        // console.table(this.dataLoans);
                         Object.keys(response.data.data).forEach((item) => {
                             this.loansArray.push(response.data.data[item]);
                         });
-                        console.log(response);
+                        // console.log(response);
                         this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response || err.response){

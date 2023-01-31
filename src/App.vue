@@ -4,6 +4,7 @@
 
 <script>
 // import LoadingPage from './components/LoadingPage';
+import { useRouter } from 'vue-router'
 export default {
   // name: 'App',
   data(){
@@ -30,6 +31,9 @@ export default {
     window.onresize = () => {
         this.windowWidth = window.innerWidth
     }
+    // window.onpopstate =  ((e)=>{
+    //   history.go(e)
+    // });
     // window.scrollTo(0,0);
     setTimeout(() => this.isLoading = false, 2000);
   }

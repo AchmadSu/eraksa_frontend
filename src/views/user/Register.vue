@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div v-else class="col-md-6 col-sm-12 text-center">
-                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.jpg'" class="img-fluid" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
                 </div>
                 <div class="col-md-6 col-sm-12 px-lg-5 text-center">
                     <form class="form needs-validation" id="app" @submit.prevent="register" novalidate>    
@@ -114,16 +114,16 @@
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
                                 </span>
                                 <input 
-                                    name="email" type="email" class="form-control"
-                                    placeholder="Email" aria-label="Email" 
-                                    aria-describedby="basic-addon1"
-                                    v-model="form.email" required
+                                name="email" type="email" class="form-control"
+                                placeholder="Email" aria-label="Email" 
+                                aria-describedby="basic-addon1"
+                                v-model="form.email" required
                                 />
                                 <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
                                     Masukkan data email dengan benar!
                                 </div>
                             </div>
-                            <div class="row input-group mb-3 btn-group rounded-0" role="group">
+                            <div class="row ml-1 input-group mb-3 btn-group rounded-0" role="group">
                                 <input 
                                     type="radio" 
                                     class="btn-check" 
@@ -134,7 +134,7 @@
                                     :disabled="!this.radioEnabled">
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
                                     'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 col-6 btn btn-outline-success rounded-start'" 
+                                    'p-3 w-100 col-6 btn btn-outline-success rounded-start'" 
                                     for="code_type0"
                                 >
                                 Saya <b>MAHASISWA</b>

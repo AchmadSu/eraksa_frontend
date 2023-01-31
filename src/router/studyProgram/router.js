@@ -4,16 +4,16 @@ const studyProgramRouter = [
         name : 'manageStudyPrograms',
         component : () => import("../../views/studyPrograms/StudyProgram.vue")
     },
-    // {
-    //     path:'/resetPassword',
-    //     name : 'user.requestResetPassword',
-    //     component : () => import("../../views/user/RequestResetPassword.vue")
-    // },
-    // {
-    //     path:'/resetPassword/:data',
-    //     name : 'user.resetPassword',
-    //     component : () => import("../../views/user/ResetPassword.vue")
-    // },
+    {
+        path:'/manage/studyPrograms/trash',
+        name : 'manageStudyPrograms.trash',
+        component : () => import("../../views/studyPrograms/Trash.vue")
+    },
+    {
+        path:'/manage/studyPrograms/create',
+        name : 'manageStudyPrograms.create',
+        component : () => import("../../views/studyPrograms/Create.vue")
+    },
     // {
     //     path:'/register',
     //     name : 'user.register',
