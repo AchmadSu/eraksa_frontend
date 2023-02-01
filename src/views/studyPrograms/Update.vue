@@ -5,7 +5,7 @@
         </div>
     </div>
     <div v-else>
-        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -107,7 +107,7 @@
                                                         </div>
                                                     </div>
                                                     <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                                                        <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                                        <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }}. Tekan tombol kembali di bawah ini untuk melihat perubahan data 
                                                         <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                     </div>
                                                     <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
@@ -147,7 +147,7 @@
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
-                <Footer></Footer>
+                <Footer class="bottom-0"></Footer>
                 <!-- End of Footer -->
                 
             </div>
@@ -203,7 +203,7 @@
                 successResponse: [],
                 successDeleteResponse: [],
                 sessionData: [],
-                studyProgramArray: [],
+                dataArray: [],
                 detailObject: {},
                 deleteArray: [],
                 username: this.$session.name,
@@ -257,7 +257,7 @@
                 }
             },
             backFunction(){
-                this.isLoadingResponse2 = true;
+                // this.isLoadingResponse2 = true;
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -333,7 +333,6 @@
                         // console.log(response.data.data)
                         this.detailObject = {"id": response.data.data.id, "name": response.data.data.name};
                         this.form.name = this.detailObject.name;
-                        this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response) {
                             this.errorDetail = true;
@@ -412,7 +411,7 @@
                                 'detail': response.data.data.message,
                             }
                         ];
-                        // this.studyProgramArray.filter((index) => index != 2)
+                        // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         this.isLoadingResponse = false;
                         this.isLoadingContent = false;
@@ -519,7 +518,7 @@
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
-            // console.table(this.studyProgramArray)
+            // console.table(this.dataArray)
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);
@@ -552,11 +551,11 @@
             this.detailFunction(this.id);
             // this.loansList();
             console.log(this.detailObject);
-            // this.studyProgramArray.filter((index) => index !== 1 )
+            // this.dataArray.filter((index) => index !== 1 )
 
             
             window.scrollTo(0,0);
-            // console.log(this.studyProgramArray.length === 0);
+            // console.log(this.dataArray.length === 0);
             
             // setTimeout(() => this.isLoadingContent = false, 8000);
             setTimeout(() => this.isLoading = false, 3000);

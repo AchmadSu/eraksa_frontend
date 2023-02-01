@@ -5,7 +5,7 @@
         </div>
     </div>
     <div v-else>
-        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -64,8 +64,8 @@
                                 <h6 class="text-center my-3">Atau mungkin koneksi anda terganggu, silakan muat ulang!</h6>
                             </div>
                             <div class="row">
-                                <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 col-lg-4">
-                                    <div class="card btn text-dark text-justify shadow-lg border-bottom-primary p-3 mb-4">
+                                <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
+                                    <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
@@ -187,10 +187,10 @@
                     await axios.get('/assets/getAll', {params: this.dataLoans})
                     .then((response) => {
                         // console.table(this.dataLoans);
-                        Object.keys(response.data.data).forEach((item) => {
-                            this.loansArray.push(response.data.data[item]);
+                        Object.keys(response.data.data.assets).forEach((item) => {
+                            this.loansArray.push(response.data.data.assets[item]);
                         });
-                        // console.log(response);
+                        // console.log(this.loansArray);
                         this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response || err.response){

@@ -5,7 +5,7 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in studyProgramArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
                 <div v-if="successDelete == false" class="modal-content">
                     <div class="modal-header">
@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -65,7 +65,7 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-3 text-center text-gray-800">Kelola Data Program Studi</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Program Studi</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
@@ -75,7 +75,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Program Studi</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data Keseluruhan: {{this.dataCount}}</h6>
+                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -99,12 +99,17 @@
                                                         <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Program Studi"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
-                                                            <button @click="searchFunction(this.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
+                                                            <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </form>
+                                            </div>
+                                            <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
+                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                    <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                </button>
                                             </div>
                                         </div>
                                         <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
@@ -120,7 +125,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="item, index in this.studyProgramArray" :key="item.id">
+                                                <tr v-for="item, index in this.dataArray" :key="item.id">
                                                     <td class="text-center">{{index+1}}</td>
                                                     <td><b>{{item.name}}</b></td>
                                                     <td class="text-center">
@@ -143,8 +148,8 @@
                                             </tbody>
                                         </table>
                                         <div v-else class="row">
-                                            <div v-for="item in this.studyProgramArray" :key="item.id" class="col-sm-6 col-lg-4">
-                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                            <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
+                                                <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex flex-row align-items-center">
                                                             <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
@@ -158,7 +163,7 @@
                                                         <div class="mt-3">
                                                             <div class="row my-3 py-2">
                                                                 <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                    <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                         <i class="fa fa-pencil"></i> &ensp; Ubah data
                                                                     </button>
                                                                 </div>
@@ -198,14 +203,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.next != 0 && this.next < this.dataCount && this.isLoadingResponse1 == false" class="row my-lg-3 my-5">
-                                            <div class="col-12 text-center">
+                                        <div class="row my-lg-3 my-5">
+                                            <div :class="this.take < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
                                                 <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat lebih banyak
                                                 </button>
                                             </div>
                                             <div class="col-12 text-center">
-                                                <button :disabled="buttonDisabled" v-if="this.isLoadingResponse1 == true" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Memuat...
                                                 </button>
@@ -217,8 +222,8 @@
                                                     Muat seluruh data
                                                 </button>
                                             </div>
-                                            <div class="col-12 text-center">
-                                                <button :disabled="buttonDisabled" v-if="this.isLoadingResponse2 == true" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                            <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
+                                                <button :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Memuat...
                                                 </button>
@@ -235,7 +240,7 @@
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
-                <Footer></Footer>
+                <Footer class="bottom-0"></Footer>
                 <!-- End of Footer -->
                 
             </div>
@@ -276,8 +281,8 @@
                 setProgress: false,
                 widthProgressBar: 0,
                 dataCount: 0,
-                prev: 0,
-                next: 0,
+                skip: 0,
+                take: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -289,7 +294,7 @@
                 successResponse: [],
                 successDeleteResponse: [],
                 sessionData: [],
-                studyProgramArray: [],
+                dataArray: [],
                 deleteArray: [],
                 username: this.$session.name,
                 errorLoans: false,
@@ -429,7 +434,7 @@
             },
             setSuccessClose(id){
                 this.successDelete = false;
-                this.studyProgramArray = this.studyProgramArray.filter((item) => item.id !== id );
+                this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successDeleteResponse = [];
             },
@@ -437,11 +442,13 @@
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
                 if(this.windowWidth > this.$widthLandscapePhone){
-                    this.next = this.next+10;
+                    this.skip = this.take;
+                    this.take = this.take+10;
                 } else {
-                    this.next = this.next+4;
+                    this.skip = this.take;
+                    this.take = this.take+4;
                 }
-                this.studyProgramList(this.next, this.next)
+                this.getStudyProgram(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -466,7 +473,7 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
-                        }, 4000);
+                        }, 3000);
                     }
                 } catch(e) {
                     this.errorResponse = [
@@ -518,12 +525,12 @@
                 this.dataStudyProgram = {
                     "ids": [id]
                 };
-                // this.studyProgramArray = this.studyProgramArray.filter((e) => e.id !== id);
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
                     await axios.delete('/studyPrograms/delete', {params: this.dataStudyProgram})
                     .then((response) => {
                         console.log(response.data.data);
-                        // this.studyProgramArray = this.studyProgramArray.filter((item) => item.id !== id );
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
                         this.successDeleteResponse = [
                             {
                                 "id": 1,
@@ -593,7 +600,7 @@
                     this.isLoadingDelete = false;
                 }
             },
-            async studyProgramList(skip, take){
+            async getStudyProgram(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
                 this.dataStudyProgram = {
@@ -607,7 +614,7 @@
                     .then((response) => {
                         // console.table(response.data.data.count);
                         Object.keys(response.data.data.study_programs).forEach((item) => {
-                            this.studyProgramArray.push(
+                            this.dataArray.push(
                                 {
                                     "id": response.data.data.study_programs[item].id,
                                     "row": this.index++,
@@ -615,9 +622,13 @@
                                 }
                             );
                         });
-                        // this.studyProgramArray.filter((index) => index != 2)
+                        // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
+                        // if (this.windowWidth < ) {
+                            
+                        // }
                         this.isLoadingResponse = false;
+                        this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                     }).catch((err) => {
@@ -631,6 +642,7 @@
                                 }
                             ];
                         this.isLoadingResponse = false;
+                        this.isLoadingResponse1 = false;
                         this.buttonDisabled = false;
                         this.isLoadingContent = false;
                         // console.log(err.response);
@@ -645,6 +657,7 @@
                                 }
                             ];
                             this.isLoadingResponse = false;
+                            this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         } else {
@@ -657,11 +670,13 @@
                                 }
                             ];
                             this.isLoadingResponse = false;
+                            this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         }
                     });
                     this.isLoadingContent = false;
+                    this.isLoading = false;
                 } catch (error) {
                     this.errorResponse = [
                         {
@@ -671,6 +686,8 @@
                         }
                     ];
                     this.isLoadingResponse = false;
+                    this.isLoading = false;
+                    this.isLoadingResponse1 = false;
                     this.isLoadingContent = false;
                     this.isLoadingContent = false;
                     this.showAlert = true;
@@ -716,7 +733,7 @@
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
-            // console.table(this.studyProgramArray)
+            // console.table(this.dataArray)
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);
@@ -745,18 +762,20 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            // console.log(this.$route.query.search);
+            // console.log(this.take);
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
-                this.studyProgramList(0, 10);
+                this.take = 10;
+                this.getStudyProgram(this.skip, this.take);
             } else {
-                this.studyProgramList(0, 4);
+                this.take = 4;
+                this.getStudyProgram(this.skip, this.take);
             } 
-            // this.studyProgramArray.filter((index) => index !== 1 )
+            // this.dataArray.filter((index) => index !== 1 )
 
             
             window.scrollTo(0,0);
-            // console.log(this.studyProgramArray.length === 0);
+            // console.log(this.dataArray.length === 0);
             
             // setTimeout(() => this.isLoadingContent = false, 8000);
             setTimeout(() => this.isLoading = false, 3000);

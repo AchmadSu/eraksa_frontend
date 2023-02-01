@@ -35,8 +35,8 @@
             <h6 class="text-center my-3">Atau mungkin koneksi anda terganggu, silakan muat ulang!</h6>
         </div>
         <div class="row">
-            <div v-for="item in this.maintenanceArray" :key="item.id" class="col-sm-6 col-lg-4">
-                <div class="card btn text-dark text-justify shadow-lg border-bottom-success p-3 mb-4">
+            <div v-for="item in this.maintenanceArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
+                <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-success p-3">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                             <div class="icon"> <i class="fa fa-cube"></i> </div>
@@ -115,8 +115,8 @@
                 try {
                     await axios.get('/assets/getAll', {params: this.dataMaintenance})
                     .then((response) => {
-                        Object.keys(response.data.data).forEach((item) => {
-                            this.maintenanceArray.push(response.data.data[item]);
+                        Object.keys(response.data.data.assets).forEach((item) => {
+                            this.maintenanceArray.push(response.data.data.assets[item]);
                         });
                         this.isLoadingContent = false;
                     }).catch((err) => {

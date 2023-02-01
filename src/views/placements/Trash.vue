@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -306,7 +306,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -359,7 +359,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.trash' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements.trash' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -393,7 +393,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.trash', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements.trash', query: {search: search} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -409,13 +409,13 @@
             async restore(id){
                 this.isLoadingRestore = true;
                 this.buttonDisabled = true;
-                this.dataStudyProgram = {
+                this.dataPlacements = {
                     "ids": [id]
                 };
-                // console.log(this.dataStudyProgram)
+                // console.log(this.dataPlacements)
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.put('/studyPrograms/restore', this.dataStudyProgram)
+                    await axios.put('/studyPrograms/restore', this.dataPlacements)
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -491,7 +491,7 @@
             async getStudyProgram(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
-                this.dataStudyProgram = {
+                this.dataPlacements = {
                     "skip": skip,
                     "take": take,
                     "trash": 1,
@@ -499,7 +499,7 @@
                     "name": this.name
                 }
                 try {
-                    await axios.get('/studyPrograms/getAll', {params: this.dataStudyProgram})
+                    await axios.get('/studyPrograms/getAll', {params: this.dataPlacements})
                     .then((response) => {
                         // console.table(response.data.data.count);
                         Object.keys(response.data.data.study_programs).forEach((item) => {
@@ -626,7 +626,7 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles !== "Super-Admin"){
+            } else if (this.$roles === "Member"){
                 // this.lastPath = this.$router.options.history.state.back
                 this.lastPath = this.$router.options.history.state.back
                 if(this.lastPath != null) {

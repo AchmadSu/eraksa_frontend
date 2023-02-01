@@ -5,35 +5,35 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'restoreModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
-                <div v-if="successRestore == false" class="modal-content">
+                <div v-if="successDelete == false" class="modal-content">
                     <div class="modal-header">
-                        <h5 class="text-dark modal-title" id="restoreModalLabel">Konfirmasi pemulihan</h5>
+                        <h5 class="text-dark modal-title" id="eraseModalLabel">Konfirmasi penghapusan</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Apakah anda yakin akan memulihkan <b>{{ item.name }}</b>?
-                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
                             <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                        <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restore(item.id)" type="button" class="btn btn-primary">Pulihkan</button>
-                        <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
+                        <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                        <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             Memuat...
                         </button>
                     </div>
                 </div>
-                <div v-if="successRestore" class="modal-content">
+                <div v-if="successDelete" class="modal-content">
                     <div class="modal-header">
                         <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
                         <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                    <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
                         <div class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
                             <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                         </div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -65,14 +65,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data Sampah <br> Program Studi</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Penempatan</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Sampah Program Studi</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Penempatan</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -89,8 +89,8 @@
                                     <div v-else>
                                         <div class="row">
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
-                                                <button :disabled="buttonDisabled" @click="indexRouter" class="btn w-100 btn-secondary rounded-0">
-                                                    <i class="fa fa-arrow-left"></i> &ensp;Kembali
+                                                <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
+                                                    <i class="fa fa-trash-o"></i> &ensp;Data Sampah
                                                 </button>
                                             </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
@@ -106,14 +106,21 @@
                                                     </div>
                                                 </form>
                                             </div>
+                                            <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
+                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                    <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                </button>
+                                            </div>
                                         </div>
                                         <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr class="text-center">
                                                     <th class="align-middle">No</th>
                                                     <th class="align-middle">Nama</th>
-                                                    <th class="align-middle">
-                                                        Aksi
+                                                    <th class="align-middle" colspan="2">
+                                                        <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
+                                                            <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                        </button>
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -122,8 +129,13 @@
                                                     <td class="text-center">{{index+1}}</td>
                                                     <td><b>{{item.name}}</b></td>
                                                     <td class="text-center">
-                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan data
+                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                        </button>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
+                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus data
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -136,13 +148,13 @@
                                             </tbody>
                                         </table>
                                         <div v-else class="row">
-                                            <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4">
-                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                            <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
+                                                <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                     <div class="d-flex justify-content-between">
                                                         <div class="d-flex flex-row align-items-center">
                                                             <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
                                                             <div class="ms-2 c-details">
-                                                                <h6 class="mb-0">Data Prodi</h6>
+                                                                <h6 class="mb-0">Data Penempatan</h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -151,9 +163,39 @@
                                                         <div class="mt-3">
                                                             <div class="row my-3 py-2">
                                                                 <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
-                                                                        <i class="fa fa-undo"></i> &ensp; Pulihkan
+                                                                    <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                        <i class="fa fa-pencil"></i> &ensp; Ubah data
                                                                     </button>
+                                                                </div>
+                                                                <div class="col-12 w-100 text-center py-2">
+                                                                   ATAU
+                                                                </div>
+                                                                <div class="col-12 py-2">
+                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                        <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'col-12':'d-none'">
+                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="d-flex flex-row align-items-center">
+                                                            <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
+                                                            <div class="ms-2 c-details">
+                                                                <h6 class="mb-0">Data Penempatan</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="my-2">
+                                                        <h3 class="heading">{{item.message}}</h3>
+                                                        <div class="mt-3">
+                                                            <div class="row my-3 py-2">
+                                                                <div class="col-12 py-2">
+                                                                    <p>{{item.detail}}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -180,8 +222,8 @@
                                                     Muat seluruh data
                                                 </button>
                                             </div>
-                                            <div class="col-12 text-center">
-                                                <button :disabled="buttonDisabled" v-if="this.isLoadingResponse2 == true" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                            <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
+                                                <button :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Memuat...
                                                 </button>
@@ -231,7 +273,7 @@
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
-                isLoadingRestore: false,
+                isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
                 name: this.$route.query.search,
@@ -248,17 +290,19 @@
                 },
                 search: '',
                 errorResponse: [],
-                errorRestore: [],
+                errorDelete: [],
                 successResponse: [],
-                successRestoreResponse: [],
+                successDeleteResponse: [],
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
                 username: this.$session.name,
+                errorLoans: false,
+                errorMaintenance: false,
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
-                successRestore: false,
+                successDelete: false,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
@@ -284,8 +328,7 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
-            indexRouter(){
-                // this.isLoadingResponse2 = true;
+            trashRouter(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -306,7 +349,77 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements.trash' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            createRouter(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'managePlacements.create' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            updateRouter(id){
+                // console.log("Teset")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'managePlacements.update', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -320,10 +433,10 @@
                 }
             },
             setSuccessClose(id){
-                this.successRestore = false;
+                this.successDelete = false;
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
-                this.successRestoreResponse = [];
+                this.successDeleteResponse = [];
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -335,7 +448,7 @@
                     this.skip = this.take;
                     this.take = this.take+4;
                 }
-                this.getStudyProgram(this.skip, this.take)
+                this.getPlacements(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -359,8 +472,8 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.trash' }).then(() => { this.$router.go() })
-                        }, 4000);
+                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                        }, 3000);
                     }
                 } catch(e) {
                     this.errorResponse = [
@@ -393,7 +506,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.trash', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements', query: {search: search} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -406,20 +519,19 @@
                     ];
                 }
             },
-            async restore(id){
-                this.isLoadingRestore = true;
+            async delete(id){
+                this.isLoadingDelete = true;
                 this.buttonDisabled = true;
-                this.dataStudyProgram = {
+                this.dataPlacements = {
                     "ids": [id]
                 };
-                // console.log(this.dataStudyProgram)
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.put('/studyPrograms/restore', this.dataStudyProgram)
+                    await axios.delete('/placements/delete', {params: this.dataPlacements})
                     .then((response) => {
-                        // console.log(response.data.data);
+                        console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
-                        this.successRestoreResponse = [
+                        this.successDeleteResponse = [
                             {
                                 "id": 1,
                                 "message": response.data.message,
@@ -427,12 +539,12 @@
                             }
                         ];
                         this.showAlertSuccess = true;
-                        this.isLoadingRestore = false;
-                        this.successRestore = true;
+                        this.isLoadingDelete = false;
+                        this.successDelete = true;
                         this.buttonDisabled = false;
                     }).catch((err) => {
                         if(!err.response) {
-                            this.errorRestore = [
+                            this.errorDelete = [
                                 {
                                     'id': 1,
                                     'message': "Network Error", 
@@ -442,12 +554,12 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingRestore = false;
+                            this.isLoadingDelete = false;
                         // console.log(err.response);
                         } else if (err.response.data.message == 'Error!'){
                             // console.log(err.response.data);
                             // this.showAlert = true;
-                            this.errorRestore = [
+                            this.errorDelete = [
                                 {
                                     'id': 1,
                                     'message': err.response.status +' '+ err.response.data.message,
@@ -457,10 +569,10 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingRestore = false;
+                            this.isLoadingDelete = false;
                         } else {
                             this.showAlert = true;
-                            this.errorRestore = [
+                            this.errorDelete = [
                                 {
                                     'id': 1,
                                     'message': err.response.status +' '+ err.response.statusText,
@@ -470,12 +582,12 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingRestore = false;
+                            this.isLoadingDelete = false;
                         }
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    this.errorRestore = [
+                    this.errorDelete = [
                         {
                             'id': 1,
                             'message': error.code, 
@@ -485,35 +597,38 @@
                     this.showAlertError = true;
                     this.isLoadingResponse = false;
                     this.buttonDisabled = false;
-                    this.isLoadingRestore = false;
+                    this.isLoadingDelete = false;
                 }
             },
-            async getStudyProgram(skip, take){
+            async getPlacements(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
-                this.dataStudyProgram = {
+                this.dataPlacements = {
                     "skip": skip,
                     "take": take,
-                    "trash": 1,
                     "sleep": 3,
                     "name": this.name
                 }
                 try {
-                    await axios.get('/studyPrograms/getAll', {params: this.dataStudyProgram})
+                    await axios.get('/placements/getAll', {params: this.dataPlacements})
                     .then((response) => {
-                        // console.table(response.data.data.count);
-                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                        console.log(response.data.data);
+                        Object.keys(response.data.data.placements).forEach((item) => {
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.study_programs[item].id,
+                                    "id": response.data.data.placements[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.study_programs[item].name,
+                                    "name": response.data.data.placements[item].name,
                                 }
                             );
                         });
                         // this.dataArray.filter((index) => index != 2)
-                        this.dataCount = response.data.data.countDelete;
+                        this.dataCount = response.data.data.count;
+                        // if (this.windowWidth < ) {
+                            
+                        // }
                         this.isLoadingResponse = false;
+                        this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                     }).catch((err) => {
@@ -527,6 +642,7 @@
                                 }
                             ];
                         this.isLoadingResponse = false;
+                        this.isLoadingResponse1 = false;
                         this.buttonDisabled = false;
                         this.isLoadingContent = false;
                         // console.log(err.response);
@@ -541,6 +657,7 @@
                                 }
                             ];
                             this.isLoadingResponse = false;
+                            this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         } else {
@@ -553,6 +670,7 @@
                                 }
                             ];
                             this.isLoadingResponse = false;
+                            this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         }
@@ -569,6 +687,7 @@
                     ];
                     this.isLoadingResponse = false;
                     this.isLoading = false;
+                    this.isLoadingResponse1 = false;
                     this.isLoadingContent = false;
                     this.isLoadingContent = false;
                     this.showAlert = true;
@@ -614,6 +733,7 @@
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
+            // console.table(this.dataArray)
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);
@@ -626,7 +746,7 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles !== "Super-Admin"){
+            } else if (this.$roles === "Member"){
                 // this.lastPath = this.$router.options.history.state.back
                 this.lastPath = this.$router.options.history.state.back
                 if(this.lastPath != null) {
@@ -642,14 +762,14 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            // console.log(this.$route.query.search);
+            // console.log(this.take);
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getStudyProgram(this.skip, this.take);
+                this.getPlacements(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getStudyProgram(this.skip, this.take);
+                this.getPlacements(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
 

@@ -135,7 +135,7 @@
                                         <i class="fa fa-graduation-cap"></i>&ensp; Program Studi
                                     </a>
                                 </li>
-                                <li class="list-group-item">
+                                <li class="list-group-item" @click="managePlacements">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                                     </a>
@@ -385,6 +385,40 @@
                     ];
                 }
             },
+            managePlacements(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
             async logout(){
                 console.log("Test")
                 this.setProgress = true;
@@ -407,7 +441,7 @@
                     }
                     await axios.post('/logout')
                     localStorage.clear();
-                    setTimeout(() => this.$router.push({ name: "user.login" }), 4000);
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 3000);
                 } catch (e) {
                     this.errorResponse = [
                         {

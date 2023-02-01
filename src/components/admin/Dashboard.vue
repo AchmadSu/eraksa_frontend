@@ -40,7 +40,7 @@
             <div class="row">
                 <!-- Aset yang dipinjam -->
                 <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card border-left-primary shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div v-else class="col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card border-left-primary shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -91,7 +91,7 @@
         
                 <!-- Aset yang diperbaiki -->
                 <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
@@ -106,7 +106,7 @@
                 </div>
                 
                 <div v-else class="col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -143,7 +143,7 @@
         
                 <!-- Aset yang rusak -->
                 <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card border-left-danger shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <div v-else class="col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card border-left-danger shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -193,7 +193,7 @@
         
                 <!-- Aset baru -->
                 <div v-if="this.isLoadingAdded == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card border-left-info shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
@@ -208,7 +208,7 @@
                 </div>
 
                 <div v-else class="col-xl-3 col-sm-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card border-left-info shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -413,7 +413,7 @@
                     weekAgo.setDate(weekAgo.getDate()-7);
                     weekAgo.toISOString().slice(0, 10);
                     this.weekAgo = weekAgo.toISOString().slice(0, 10);
-                    console.log("test");
+                    // console.log("test");
                     // console.log(this.currentDate);
                     
                     // Banyak aset yg dipinjam
@@ -426,7 +426,7 @@
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.loanPercentage = response.data.data.percentage.toString();
-                        console.log(response);
+                        // console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
                         if(err.response.data.message == 'Error!'){

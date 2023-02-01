@@ -28,74 +28,105 @@
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
                         <!-- DataTales Example -->
                         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-                            <div class="row">
-                                <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                                    <div v-if="windowWidth < 720">
-                                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                            <div v-if="this.isLoadingContent == true" class="row d-flex align-items-center justify-content-center">
+                                <div class="my-5 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div v-if="errorDetail == true">
+                                    <div class="row">
+                                        <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
                                         </div>
-                                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                                        <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
+                                            <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                         </div>
-                                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                                        <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
+                                            <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                         </div>
-                                    </div>
-                                    <div v-else-if="windowWidth <= $widthComputer">
-                                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                                        <div v-else class="col-12">
+                                            <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                         </div>
-                                    </div>
-                                    <div v-else>
-                                        <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
+                                        <h3 class="text-center my-3">{{this.detailObject.message}}</h3>
+                                        <p class="text-center my-3">{{this.detailObject.detail}}</p>
                                     </div>
                                 </div>
-                                <div v-else class="col-md-6 col-sm-12 text-center">
-                                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
-                                </div>
-                                <div class="col-md-6 col-12 px-lg-5 text-center">
-                                    <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
-                                        <h3 class="fw-bolder text-secondary">
-                                            TAMBAH TEMPAT
-                                        </h3>
-                                    </div>
-                                    <form class="form needs-validation" id="app" @submit.prevent="createFunction" novalidate>
-                                        <div class="py-lg-4 py-md-0 py-sm-1">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                    <i class="text secondary fa fa-graduation-cap"></i>
-                                                </span>
-                                                <input 
-                                                    name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                    placeholder="Nama Program Studi" aria-label="name" 
-                                                    aria-describedby="basic-addon1"
-                                                    v-model="form.name"
-                                                />
-                                                <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
-                                                    Panjang minimal nama adalah 3 karakter
+                                <div v-else>
+                                <div class="row">
+                                    <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
+                                        <div v-if="windowWidth < 720">
+                                            <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
                                                 </div>
                                             </div>
-                                            <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                                                <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }}Tekan tombol kembali di bawah ini untuk melihat perubahan data 
-                                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <div v-else-if="windowWidth <= $widthComputer">
+                                                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
                                             </div>
-                                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
-                                                <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                            <div v-if="isLoadingResponse == false">
-                                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Tambah</button>
-                                            </div>
-                                            <div v-if="isLoadingResponse == true">
-                                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Memuat ...
-                                                </button>
+                                            <div v-else>
+                                                <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </form>
+                                        <div v-else class="col-md-6 col-sm-12 text-center">
+                                            <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
+                                        </div>
+                                        <div class="col-md-6 col-12 px-lg-5 text-center">
+                                            <div class="input-group py-md-0 py-lg-1">
+                                                <h3 class="fw-bolder text-secondary">
+                                                    EDIT PROGRAM STUDI
+                                                </h3>
+                                            </div>
+                                            <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
+                                                <h5 class="text-secondary">
+                                                    {{this.detailObject.name}}
+                                                </h5>
+                                            </div>
+                                            <form class="form needs-validation" id="app" @submit.prevent="updateFunction" novalidate>
+                                                <div class="py-lg-4 py-md-0 py-sm-1">
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                            <i class="text secondary fa fa-graduation-cap"></i>
+                                                        </span>
+                                                        <input 
+                                                            name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                                            placeholder="Nama Program Studi Baru" aria-label="name" 
+                                                            aria-describedby="basic-addon1"
+                                                            v-model="form.name"
+                                                        />
+                                                        <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                            Panjang minimal nama adalah 3 karakter
+                                                        </div>
+                                                    </div>
+                                                    <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
+                                                        <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} Tekan tombol kembali di bawah ini untuk melihat perubahan data 
+                                                        <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                    <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
+                                                        <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                                        <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                    <div v-if="isLoadingResponse == false">
+                                                        <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="!submitEnabled">Update</button>
+                                                    </div>
+                                                    <div v-if="isLoadingResponse == true">
+                                                        <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
+                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                            Memuat ...
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row my-4">
@@ -144,6 +175,7 @@
                 isLoading: true,
                 isLoading: true,
                 checkName: false,
+                errorDetail: false,
                 buttonDisabled: false,
                 isLoadingContent: true,
                 isLoadingResponse: false,
@@ -154,7 +186,7 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: this.$route.query.search,
+                name: '',
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -172,10 +204,11 @@
                 successDeleteResponse: [],
                 sessionData: [],
                 dataArray: [],
+                detailObject: {},
                 deleteArray: [],
                 username: this.$session.name,
-                errorLoans: false,
-                errorMaintenance: false,
+                id: this.$route.query.data,
+                errorDetail: false,
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
@@ -198,6 +231,7 @@
                     } else {
                         this.submitEnabled = false;
                     }
+                    // console.log(name)
                 },
                 deep: true,
             },
@@ -223,7 +257,7 @@
                 }
             },
             backFunction(){
-                this.isLoadingResponse2 = true;
+                // this.isLoadingResponse2 = true;
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -244,7 +278,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -278,7 +312,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacement', query: {search: search} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -291,17 +325,79 @@
                     ];
                 }
             },
-            async createFunction(){
+            async detailFunction(id){
+                try {
+                    let data = window.atob(id)
+                    await axios.get('/placements/detail/'+data)
+                    .then((response) => {
+                        // console.log(response.data.data)
+                        this.detailObject = {"id": response.data.data.id, "name": response.data.data.name};
+                        this.form.name = this.detailObject.name;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorDetail = true;
+                            this.showAlert = true;
+                            this.detailObject = 
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                };
+                        this.isLoadingResponse = false;
+                        this.buttonDisabled = false;
+                        this.isLoadingContent = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            this.errorDetail = true;
+                            // console.log(err.response.data);
+                            this.showAlert = true;
+                            this.detailObject =
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                };
+                            this.isLoadingResponse = false;
+                            this.isLoadingContent = false;
+                            this.buttonDisabled = false;
+                        } else {
+                            this.errorDetail = true;
+                            this.showAlert = true;
+                            this.detailObject =
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                };
+                            this.isLoadingResponse = false;
+                            this.isLoadingContent = false;
+                            this.buttonDisabled = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    console.log(error);
+                    this.detailObject = {'id': 1, 'message': error.code, 'detail': error.message,};
+                    this.isLoadingResponse = false;
+                    this.isLoadingContent = false;
+                    this.isLoadingContent = false;
+                    this.showAlert = true;
+                    this.buttonDisabled = false;
+                }
+            },
+            async updateFunction(){
                 this.setAlert();
                 this.isLoadingResponse = true;
                 this.buttonDisabled = true;
-                this.cursorStyle = 'cursor: not-allowed';
+                let data = window.atob(this.id)
+                // this.cursorStyle = 'cursor: not-allowed';
                 this.dataStudyProgram = {
+                    "id": data,
                     "name": this.form.name,
                 }
                 // console.log(this.dataStudyProgram);
                 try {
-                    await axios.post('/studyPrograms/create', this.dataStudyProgram)
+                    await axios.put('/placements/update', this.dataStudyProgram)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -435,7 +531,7 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles !== "Super-Admin"){
+            } else if (this.$roles === "Member"){
                 // this.lastPath = this.$router.options.history.state.back
                 this.lastPath = this.$router.options.history.state.back
                 if(this.lastPath != null) {
@@ -451,8 +547,10 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            // console.log(this.$route.query.search);
+            // console.log(window.atob(this.id));
+            this.detailFunction(this.id);
             // this.loansList();
+            console.log(this.detailObject);
             // this.dataArray.filter((index) => index !== 1 )
 
             

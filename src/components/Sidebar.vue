@@ -1,7 +1,7 @@
 <template>
     <ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
-            <div class="bg-success progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <!-- Sidebar - Brand -->
         <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center mb-lg-5" href="#" :style="this.cursorStyle">
@@ -44,7 +44,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Tabel</h6>
                     <a @click="manageStudyPrograms" :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
+                    <a @click="managePlacements" class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
                     <a class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
@@ -260,6 +260,40 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            managePlacements(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

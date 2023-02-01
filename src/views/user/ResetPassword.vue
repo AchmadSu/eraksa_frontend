@@ -432,7 +432,7 @@
                             {
                                 'id': 1,
                                 'message': 'Error!', 
-                                'detail': 'Network Error. Silakan cek koneksi anda!',
+                                'detail': 'Network Error. Anda terputus dengan jaringan kami!',
                             }
                         ];
                         // console.log(!error.response);

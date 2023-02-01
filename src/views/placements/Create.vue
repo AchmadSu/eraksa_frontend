@@ -5,7 +5,7 @@
         </div>
     </div>
     <div v-else>
-        <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -25,6 +25,24 @@
                     <!-- End of Topbar -->
     
                     <!-- Begin Page Content -->
+                    <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
+                                    <button @click="backFunction()" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div v-for="item, index in successResponse" :key="item.id" class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
+                                        <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button @click="backFunction" type="button" class="mr-4 mr-lg-3 btn btn-light">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
                         <!-- DataTales Example -->
                         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
@@ -69,17 +87,13 @@
                                                 </span>
                                                 <input 
                                                     name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                    placeholder="Nama Program Studi" aria-label="name" 
+                                                    placeholder="Nama Tempat" aria-label="name" 
                                                     aria-describedby="basic-addon1"
                                                     v-model="form.name"
                                                 />
                                                 <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
                                                     Panjang minimal nama adalah 3 karakter
                                                 </div>
-                                            </div>
-                                            <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                                                <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }}Tekan tombol kembali di bawah ini untuk melihat perubahan data 
-                                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                             <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
                                                 <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
@@ -211,6 +225,10 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
+            openModal () {
+                // console.log("test")
+                $('#successModal').modal('show')
+            },
             validateName(value){
                 // console.log(value1);
                 if(value.length >= 3) {
@@ -244,7 +262,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -278,7 +296,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements', query: {search: search} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -296,12 +314,13 @@
                 this.isLoadingResponse = true;
                 this.buttonDisabled = true;
                 this.cursorStyle = 'cursor: not-allowed';
-                this.dataStudyProgram = {
+                this.dataPlacements = {
                     "name": this.form.name,
                 }
-                // console.log(this.dataStudyProgram);
+                // this.openModal();
+                // console.log(this.dataPlacements);
                 try {
-                    await axios.post('/studyPrograms/create', this.dataStudyProgram)
+                    await axios.post('/placements/create', this.dataPlacements)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -316,10 +335,12 @@
                             }
                         ];
                         // this.dataArray.filter((index) => index != 2)
-                        this.dataCount = response.data.data.count;
                         this.isLoadingResponse = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
+                        console.log(this.successResponse)
+                        this.openModal();
+                        this.backFunction();
                     }).catch((err) => {
                         if(!err.response) {
                             this.showAlert = true;
@@ -435,7 +456,7 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles !== "Super-Admin"){
+            } else if (this.$roles === "Member"){
                 // this.lastPath = this.$router.options.history.state.back
                 this.lastPath = this.$router.options.history.state.back
                 if(this.lastPath != null) {
