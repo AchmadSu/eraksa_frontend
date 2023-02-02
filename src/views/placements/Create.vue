@@ -28,17 +28,15 @@
                     <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
-                                    <button @click="backFunction()" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
+                                <div class="modal-header bg-success">
+                                    <h5 class="text-white modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                                    <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div v-for="item, index in successResponse" :key="item.id" class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
-                                        <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                    <div v-for="item, index in successResponse" :key="item.id" class="text-start text-success ml-3 alert alert-dismissible" role="alert">
+                                        <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button @click="backFunction" type="button" class="mr-4 mr-lg-3 btn btn-light">Tutup</button>
+                                    <button @click="backFunction" type="button" class="float-end btn btn-success">Tutup</button>
                                 </div>
                             </div>
                         </div>
@@ -229,6 +227,10 @@
                 // console.log("test")
                 $('#successModal').modal('show')
             },
+            closeModal () {
+                // console.log("test")
+                $('#successModal').modal('hide')
+            },
             validateName(value){
                 // console.log(value1);
                 if(value.length >= 3) {
@@ -247,6 +249,7 @@
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
+                this.closeModal();
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -340,7 +343,7 @@
                         this.buttonDisabled = false;
                         console.log(this.successResponse)
                         this.openModal();
-                        this.backFunction();
+                        // this.backFunction();
                     }).catch((err) => {
                         if(!err.response) {
                             this.showAlert = true;

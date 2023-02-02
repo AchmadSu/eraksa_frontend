@@ -8,43 +8,43 @@
         <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'restoreModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="restoreModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
                 <div v-if="successRestore == false" class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="text-dark modal-title" id="restoreModalLabel">Konfirmasi pemulihan</h5>
+                    <div class="modal-header bg-primary">
+                        <h5 class="text-light dark modal-title" id="restoreModalLabel"><i class="fa fa-undo"></i> &ensp;Konfirmasi pemulihan</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-primary">
                         Apakah anda yakin akan memulihkan <b>{{ item.name }}</b>?
                         <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                        <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restore(item.id)" type="button" class="btn btn-primary">Pulihkan</button>
-                        <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Memuat...
-                        </button>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restore(item.id)" type="button" class="btn btn-primary">Pulihkan</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div v-if="successRestore" class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
                         <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
-                        <div class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index:10000;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -65,14 +65,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data Sampah <br> Program Studi</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data Sampah <br> Penempatan</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Sampah Program Studi</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Tempat</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -107,53 +107,74 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr class="text-center">
-                                                    <th class="align-middle">No</th>
-                                                    <th class="align-middle">Nama</th>
-                                                    <th class="align-middle">
-                                                        Aksi
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                    <td class="text-center">{{index+1}}</td>
-                                                    <td><b>{{item.name}}</b></td>
-                                                    <td class="text-center">
-                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan data
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                    <td class="text-center" colspan="4">
-                                                        <b>{{item.message}}</b>
-                                                        <p>{{item.detail}}</p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div v-else class="row">
-                                            <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4">
-                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row align-items-center">
-                                                            <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
-                                                            <div class="ms-2 c-details">
-                                                                <h6 class="mb-0">Data Prodi</h6>
+                                        <div v-if="this.dataArray.length == 0">
+                                            <div v-for="item in errorResponse" :key="item.id" class="row">
+                                                <div class="text-center mb-3">
+                                                    <h3 class="mt-2 text-gray-800">{{item.message}}</h3>
+                                                </div>
+                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
+                                                </div>
+                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
+                                                    <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
+                                                    <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div v-else class="col-12">
+                                                    <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <h6 class="text-center my-3">{{item.detail}}</h6>
+                                            </div>
+                                        </div>
+                                        <div v-if="this.dataArray.length != 0">
+                                            <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th class="align-middle">No</th>
+                                                        <th class="align-middle">Nama</th>
+                                                        <th class="align-middle">
+                                                            Aksi
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item, index in this.dataArray" :key="item.id">
+                                                        <td class="text-center">{{index+1}}</td>
+                                                        <td><b>{{item.name}}</b></td>
+                                                        <td class="text-center">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                                <i class="fa fa-undo"></i> &ensp; Pulihkan data
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
+                                                        <td class="text-center" colspan="4">
+                                                            <b>{{item.message}}</b>
+                                                            <p>{{item.detail}}</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div v-else class="row">
+                                                <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4">
+                                                    <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
+                                                                <div class="ms-2 c-details">
+                                                                    <h6 class="mb-0">Data Prodi</h6>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="my-2">
-                                                        <h3 class="heading">{{item.name}}</h3>
-                                                        <div class="mt-3">
-                                                            <div class="row my-3 py-2">
-                                                                <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
-                                                                        <i class="fa fa-undo"></i> &ensp; Pulihkan
-                                                                    </button>
+                                                        <div class="my-2">
+                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <div class="mt-3">
+                                                                <div class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
+                                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -162,7 +183,7 @@
                                             </div>
                                         </div>
                                         <div class="row my-lg-3 my-5">
-                                            <div :class="this.take < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
+                                            <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
                                                 <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat lebih banyak
                                                 </button>
@@ -284,6 +305,10 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
+            closeModal(id){
+                let modal = '#restoreModal'+id;
+                $(modal).modal('hide');
+            },  
             indexRouter(){
                 // this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -291,6 +316,8 @@
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
+                this.isLoadingRestore = true;
+                // this.closeModal();
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -324,18 +351,22 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successRestoreResponse = [];
+                // this.closeModal(id);
+                if (this.dataCount <= 0) {
+                    this.indexRouter();
+                }
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
                 if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.take;
-                    this.take = this.take+10;
+                    this.skip = this.skip+10;
+                    this.take = 10;
                 } else {
-                    this.skip = this.take;
-                    this.take = this.take+4;
+                    this.skip = this.skip+4;
+                    this.take = 4;
                 }
-                this.getStudyProgram(this.skip, this.take)
+                this.getPlacements(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -415,7 +446,7 @@
                 // console.log(this.dataPlacements)
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.put('/studyPrograms/restore', this.dataPlacements)
+                    await axios.put('/placements/restore', this.dataPlacements)
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -488,7 +519,7 @@
                     this.isLoadingRestore = false;
                 }
             },
-            async getStudyProgram(skip, take){
+            async getPlacements(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
                 this.dataPlacements = {
@@ -499,15 +530,15 @@
                     "name": this.name
                 }
                 try {
-                    await axios.get('/studyPrograms/getAll', {params: this.dataPlacements})
+                    await axios.get('/placements/getAll', {params: this.dataPlacements})
                     .then((response) => {
                         // console.table(response.data.data.count);
-                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                        Object.keys(response.data.data.placements).forEach((item) => {
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.study_programs[item].id,
+                                    "id": response.data.data.placements[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.study_programs[item].name,
+                                    "name": response.data.data.placements[item].name,
                                 }
                             );
                         });
@@ -646,10 +677,10 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getStudyProgram(this.skip, this.take);
+                this.getPlacements(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getStudyProgram(this.skip, this.take);
+                this.getPlacements(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
 

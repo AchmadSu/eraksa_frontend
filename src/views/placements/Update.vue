@@ -52,7 +52,23 @@
                                     </div>
                                 </div>
                                 <div v-else>
-                                <div class="row">
+                                    <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-success">
+                                                    <h5 class="text-white modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                                                    <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div v-for="item, index in successResponse" :key="item.id" class="text-start text-success ml-3 alert alert-dismissible" role="alert">
+                                                        <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                                    </div>
+                                                    <button @click="backFunction" type="button" class="float-end btn btn-success">Tutup</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                     <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
                                         <div v-if="windowWidth < 720">
                                             <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
@@ -245,6 +261,14 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
+            openModal () {
+                // console.log("test")
+                $('#successModal').modal('show')
+            },
+            closeModal () {
+                // console.log("test")
+                $('#successModal').modal('hide')
+            },
             validateName(value){
                 // console.log(value1);
                 if(value.length >= 3) {
@@ -263,6 +287,7 @@
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
+                this.closeModal();
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -399,7 +424,7 @@
                 try {
                     await axios.put('/placements/update', this.dataStudyProgram)
                     .then((response) => {
-                        this.showAlert = true;
+                        // this.showAlert = true;
                         this.isLoadingResponse = false;
                         this.secondaryButtonDisabled = false;
                         this.radioEnabled = true;
@@ -411,6 +436,7 @@
                                 'detail': response.data.data.message,
                             }
                         ];
+                        this.openModal();
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         this.isLoadingResponse = false;

@@ -8,38 +8,40 @@
         <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
                 <div v-if="successDelete == false" class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="text-dark modal-title" id="eraseModalLabel">Konfirmasi penghapusan</h5>
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-dark">
                         Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
-                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                        <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
-                        <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Memuat...
-                        </button>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div v-if="successDelete" class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="text-dark modal-title" id="eraseModalLabel">Permintaan berhasil!</h5>
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
                         <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
-                        <div class="text-start mt-3 alert alert-success alert-dismissible" role="alert">
-                            <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
                     </div>
                 </div>
             </div>
@@ -75,7 +77,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Penempatan</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +98,7 @@
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
                                                     <div class="input-group">
-                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Program Studi"
+                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Tempat"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
@@ -110,6 +112,25 @@
                                                 <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                     <i class="fa fa-plus"></i> &ensp; Tambah Data
                                                 </button>
+                                            </div>
+                                        </div>
+                                        <div v-if="this.dataArray.length == 0">
+                                            <div v-for="item in errorResponse" :key="item.id" class="row">
+                                                <div class="text-lg-center text-sm-justify d-sm-flex align-items-center justify-content-between mb-3">
+                                                    <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
+                                                </div>
+                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
+                                                </div>
+                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
+                                                    <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
+                                                    <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div v-else class="col-12">
+                                                    <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <h6 class="text-center my-3">{{item.detail}}</h6>
                                             </div>
                                         </div>
                                         <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
@@ -204,7 +225,7 @@
                                             </div>
                                         </div>
                                         <div class="row my-lg-3 my-5">
-                                            <div :class="this.take < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
+                                            <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
                                                 <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat lebih banyak
                                                 </button>
@@ -433,6 +454,7 @@
                 }
             },
             setSuccessClose(id){
+                // console.log(id);
                 this.successDelete = false;
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
@@ -442,12 +464,13 @@
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
                 if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.take;
-                    this.take = this.take+10;
+                    this.skip = this.skip+10;
+                    this.take = 10;
                 } else {
-                    this.skip = this.take;
-                    this.take = this.take+4;
+                    this.skip = this.skip+4;
+                    this.take = 4;
                 }
+                // console.log(this.skip)
                 this.getPlacements(this.skip, this.take)
             },
             backFunction(){
@@ -772,6 +795,7 @@
                 this.getPlacements(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
+            console.log(this.dataArray.length)
 
             
             window.scrollTo(0,0);
