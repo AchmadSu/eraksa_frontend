@@ -9,6 +9,24 @@
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
             <div class="progress-bar bg-primary" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
+        <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="login" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-success">
+                        <div v-for="item, index in successResponse" :key="item.id" class="text-start mt-3 alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="login" type="button" class="mr-4 mr-lg-3 btn btn-success">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
             <div :class="windowWidth >= $widthLandscapePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
                 <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
@@ -509,6 +527,14 @@
         },
 
         methods: {
+            openModal () {
+                // console.log("test")
+                $('#successModal').modal('show')
+            },
+            closeModal () {
+                // console.log("test")
+                $('#successModal').modal('hide')
+            },
             async register() {
                 this.setAlert();
                 this.isLoadingResponse = true;
@@ -528,7 +554,6 @@
                 }
                 await axios.post('/register', data)
                 .then(response => {
-                    this.showAlert = true;
                     this.isLoadingResponse = false;
                     this.secondaryButtonDisabled = false;
                     this.radioEnabled = true;
@@ -540,6 +565,7 @@
                             'detail': response.data.data.message,
                         }
                     ];
+                    this.openModal();
                 })
                 .catch(error => {
                     if (!error.response) {
@@ -592,6 +618,7 @@
                 this.isLoadingRouter = true;
                 this.submitEnabled = false;
                 this.radioEnabled = false;
+                this.closeModal();
                 try {
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -791,7 +818,6 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
-            console.log(this.windowWidth);
             window.scrollTo(0,0);
             setTimeout(() => this.isLoading = false, 3000);
             setTimeout(() => this.isLoadingImage = false, 5000);

@@ -549,10 +549,10 @@
                                 'message': err.response.data.message,
                                 'detail': err.response.data.data.error
                             }
-                            this.isErrorLoans = true;
+                            this.isErrorBroken = true;
                             // this.returnLoansPercentage = true;
                             // this.isLoadingResponse = false;
-                            // this.isErrorLoans = true;
+                            // this.isErrorBroken = true;
                             // setTimeout(() => this.isLoadingLoans = false, 8000);
                         } else if(!err.response){
                             this.errorBroken = {
@@ -560,7 +560,7 @@
                                 'message': 'Error!', 
                                 'detail': 'Network Error. Silakan cek koneksi anda!',
                             }
-                            this.isErrorLoans = true;
+                            this.isErrorBroken = true;
                             // this.errorResponseMessage.push(error);
                             // console.log(this.errorResponseMessage);
                         } else {
@@ -569,7 +569,7 @@
                                 'message': err.response.status +' '+ err.response.statusText,
                                 'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
                             }
-                            this.isErrorLoans = true;
+                            this.isErrorBroken = true;
                         }
                     });
                     this.isLoadingBroken = false;

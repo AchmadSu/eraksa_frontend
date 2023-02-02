@@ -260,7 +260,7 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            // console.log(this.windowWidth >= this.$widthLandscapePhone);
+            // console.log(this.$router.options.history.state.back === '/login');
             this.loansList();
             window.scrollTo(0,0);
             // console.log(this.loansArray.length === 0);

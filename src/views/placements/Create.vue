@@ -223,11 +223,11 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
-            openModal () {
+            openModal() {
                 // console.log("test")
                 $('#successModal').modal('show')
             },
-            closeModal () {
+            closeModal() {
                 // console.log("test")
                 $('#successModal').modal('hide')
             },
@@ -341,7 +341,7 @@
                         this.isLoadingResponse = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
-                        console.log(this.successResponse)
+                        // console.log(this.successResponse)
                         this.openModal();
                         // this.backFunction();
                     }).catch((err) => {

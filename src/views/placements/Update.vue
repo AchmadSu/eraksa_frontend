@@ -98,7 +98,7 @@
                                         <div class="col-md-6 col-12 px-lg-5 text-center">
                                             <div class="input-group py-md-0 py-lg-1">
                                                 <h3 class="fw-bolder text-secondary">
-                                                    EDIT PROGRAM STUDI
+                                                    EDIT TEMPAT
                                                 </h3>
                                             </div>
                                             <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">

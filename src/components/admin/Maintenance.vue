@@ -21,6 +21,7 @@
             </a>
         </div>
         <div class="row" v-if="this.errorMaintenance == true">
+            <!-- <h3>{{item.messa}}</h3> -->
             <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
             </div>
             <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">

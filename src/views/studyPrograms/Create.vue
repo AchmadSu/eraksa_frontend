@@ -25,7 +25,23 @@
                     <!-- End of Topbar -->
     
                     <!-- Begin Page Content -->
-                    <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
+                    <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-success">
+                                    <h5 class="text-white modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                                    <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div v-for="item, index in successResponse" :key="item.id" class="text-start text-success ml-3 alert alert-dismissible" role="alert">
+                                        <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                    </div>
+                                    <button @click="backFunction" type="button" class="float-end btn btn-success">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
                         <!-- DataTales Example -->
                         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
                             <div class="row">
@@ -58,7 +74,7 @@
                                 <div class="col-md-6 col-12 px-lg-5 text-center">
                                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                                         <h3 class="fw-bolder text-secondary">
-                                            TAMBAH TEMPAT
+                                            TAMBAH PROGRAM STUDI
                                         </h3>
                                     </div>
                                     <form class="form needs-validation" id="app" @submit.prevent="createFunction" novalidate>
@@ -76,10 +92,6 @@
                                                 <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
                                                     Panjang minimal nama adalah 3 karakter
                                                 </div>
-                                            </div>
-                                            <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                                                <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }}Tekan tombol kembali di bawah ini untuk melihat perubahan data 
-                                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                             <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
                                                 <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
@@ -211,6 +223,14 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
+            openModal() {
+                // console.log("test")
+                $('#successModal').modal('show')
+            },
+            closeModal() {
+                // console.log("test")
+                $('#successModal').modal('hide')
+            },
             validateName(value){
                 // console.log(value1);
                 if(value.length >= 3) {
@@ -229,6 +249,7 @@
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
+                this.closeModal();
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -303,7 +324,7 @@
                 try {
                     await axios.post('/studyPrograms/create', this.dataStudyProgram)
                     .then((response) => {
-                        this.showAlert = true;
+                        // this.showAlert = true;
                         this.isLoadingResponse = false;
                         this.secondaryButtonDisabled = false;
                         this.radioEnabled = true;
@@ -320,6 +341,7 @@
                         this.isLoadingResponse = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
+                        this.openModal();
                     }).catch((err) => {
                         if(!err.response) {
                             this.showAlert = true;
