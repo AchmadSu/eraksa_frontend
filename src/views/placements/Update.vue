@@ -25,7 +25,7 @@
                     <!-- End of Topbar -->
     
                     <!-- Begin Page Content -->
-                    <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
+                    <div class="container-fluid">
                         <!-- DataTales Example -->
                         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
                             <div v-if="this.isLoadingContent == true" class="row d-flex align-items-center justify-content-center">
@@ -114,7 +114,7 @@
                                                         </span>
                                                         <input 
                                                             name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                            placeholder="Nama Program Studi Baru" aria-label="name" 
+                                                            placeholder="Nama Tempat Baru" aria-label="name" 
                                                             aria-describedby="basic-addon1"
                                                             v-model="form.name"
                                                         />
@@ -416,13 +416,13 @@
                 this.buttonDisabled = true;
                 let data = window.atob(this.id)
                 // this.cursorStyle = 'cursor: not-allowed';
-                this.dataStudyProgram = {
+                this.dataPlacements = {
                     "id": data,
                     "name": this.form.name,
                 }
-                // console.log(this.dataStudyProgram);
+                // console.log(this.dataPlacements);
                 try {
-                    await axios.put('/placements/update', this.dataStudyProgram)
+                    await axios.put('/placements/update', this.dataPlacements)
                     .then((response) => {
                         // this.showAlert = true;
                         this.isLoadingResponse = false;

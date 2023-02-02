@@ -96,7 +96,7 @@
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
                                                     <div class="input-group">
-                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Program Studi"
+                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Tempat"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
@@ -162,7 +162,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Prodi</h6>
+                                                                    <h6 class="mb-0">Data Tempat</h6>
                                                                 </div>
                                                             </div>
                                                         </div>

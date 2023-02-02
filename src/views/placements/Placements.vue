@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
