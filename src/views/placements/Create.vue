@@ -81,7 +81,7 @@
                                         <div class="py-lg-4 py-md-0 py-sm-1">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                    <i class="text secondary fa fa-graduation-cap"></i>
+                                                    <i class="fa fa-map-marker"></i>
                                                 </span>
                                                 <input 
                                                     name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
