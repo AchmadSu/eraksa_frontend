@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import studyProgramRouter from './studyProgram/router';
 import placementsRouter from './placements/router';
 import userRouter from './user/router';
+import categoryAssetsRouter from './categoryAssets/router';
 
 const routes = [
     {
@@ -26,6 +27,10 @@ Object.keys(studyProgramRouter).forEach((item) => {
 
 Object.keys(placementsRouter).forEach((item) => {
     routes.push(placementsRouter[item]);
+})
+
+Object.keys(categoryAssetsRouter).forEach((item) => {
+    routes.push(categoryAssetsRouter[item]);
 })
 
 const router = createRouter({

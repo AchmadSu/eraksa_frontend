@@ -128,7 +128,8 @@
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
-                <Footer class="bottom-0"></Footer>
+                <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="bottom-0"></Footer>
+                <Footer v-else class="w-100 position-absolute bottom-0"></Footer>
                 <!-- End of Footer -->
                 
             </div>

@@ -47,7 +47,7 @@
                     <a @click="managePlacements" class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
+                    <a @click="manageCategoryAssets" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
                     <a class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
                 </div>
             </div>
@@ -294,6 +294,40 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            manageCategoryAssets(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

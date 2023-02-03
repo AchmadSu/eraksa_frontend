@@ -5,46 +5,48 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'restoreModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-dialog-centered">
-                <div v-if="successRestore == false" class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <h5 class="text-light dark modal-title" id="restoreModalLabel"><i class="fa fa-undo"></i> &ensp;Konfirmasi pemulihan</h5>
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body text-primary">
-                        Apakah anda yakin akan memulihkan <b>{{ item.name }}</b>?
-                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
                             <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                         <div class="mt-3 float-end">
                             <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restore(item.id)" type="button" class="btn btn-primary">Pulihkan</button>
-                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Memuat...
                             </button>
                         </div>
                     </div>
                 </div>
-                <div v-if="successRestore" class="modal-content">
+                <div v-if="successDelete" class="modal-content">
                     <div class="modal-header bg-success">
-                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
                         <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
-                        <div class="text-success alert alert-dismissible" role="alert">
-                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index:10000;">
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div id="wrapper">
@@ -65,14 +67,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data Sampah <br> Penempatan</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Kategori Aset</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Tempat</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Kategori Aset</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -89,22 +91,27 @@
                                     <div v-else>
                                         <div class="row">
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
-                                                <button :disabled="buttonDisabled" @click="indexRouter" class="btn w-100 btn-secondary rounded-0">
-                                                    <i class="fa fa-arrow-left"></i> &ensp;Kembali
+                                                <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
+                                                    <i class="fa fa-trash-o"></i> &ensp;Data Sampah
                                                 </button>
                                             </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
-                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
+                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search">
                                                     <div class="input-group">
-                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Tempat"
+                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Nama atau Deskripsi"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
-                                                            <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
+                                                            <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </form>
+                                            </div>
+                                            <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
+                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                    <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                </button>
                                             </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
@@ -119,6 +126,11 @@
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
                                                 </div>
                                                 <h6 class="text-center my-3">{{item.detail}}</h6>
+                                                <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'd-none':'col-12 py-2 d-sm-flex justify-content-center'">
+                                                    <button @click="createRouter" :disabled="buttonDisabled" class="btn w-25 btn-success">
+                                                        <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div v-else>
@@ -127,8 +139,11 @@
                                                     <tr class="text-center">
                                                         <th class="align-middle">No</th>
                                                         <th class="align-middle">Nama</th>
-                                                        <th class="align-middle">
-                                                            Aksi
+                                                        <th class="align-middle">Deskripsi</th>
+                                                        <th class="align-middle" colspan="2">
+                                                            <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
+                                                                <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                            </button>
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -136,9 +151,15 @@
                                                     <tr v-for="item, index in this.dataArray" :key="item.id">
                                                         <td class="text-center">{{index+1}}</td>
                                                         <td><b>{{item.name}}</b></td>
+                                                        <td>{{item.description}}</td>
                                                         <td class="text-center">
-                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                                <i class="fa fa-undo"></i> &ensp; Pulihkan data
+                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                                <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                            </button>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
+                                                                <i class="fa fa-trash-o"></i> &ensp; Hapus data
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -151,24 +172,55 @@
                                                 </tbody>
                                             </table>
                                             <div v-else class="row">
-                                                <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4">
-                                                    <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
+                                                    <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-cubes"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Tempat</h6>
+                                                                    <h6 class="mb-0">Data Kategori Aset</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="my-2">
                                                             <h3 class="heading">{{item.name}}</h3>
+                                                            <p>{{item.description}}</p>
                                                             <div class="mt-3">
                                                                 <div class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
-                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan
+                                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
                                                                         </button>
+                                                                    </div>
+                                                                    <div class="col-12 w-100 text-center py-2">
+                                                                       ATAU
+                                                                    </div>
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'col-12':'d-none'">
+                                                    <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="ms-2 c-details">
+                                                                    <h6 class="mb-0">Data Kategori Aset</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="my-2">
+                                                            <h3 class="heading">{{item.message}}</h3>
+                                                            <div class="mt-3">
+                                                                <div class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <p>{{item.detail}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -196,8 +248,8 @@
                                                     Muat seluruh data
                                                 </button>
                                             </div>
-                                            <div class="col-12 text-center">
-                                                <button :disabled="buttonDisabled" v-if="this.isLoadingResponse2 == true" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                            <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
+                                                <button :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Memuat...
                                                 </button>
@@ -214,7 +266,7 @@
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
-                <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="bottom-0"></Footer>
+                <Footer v-if="this.windowWidth >= this.$widthLandscapePhone" class="bottom-0"></Footer>
                 <Footer v-else class="w-100 position-absolute bottom-0"></Footer>
                 <!-- End of Footer -->
                 
@@ -248,10 +300,10 @@
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
-                isLoadingRestore: false,
+                isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: this.$route.query.search,
+                keyWords: this.$route.query.search,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -263,19 +315,21 @@
                 form: {
                     search: '',
                 },
-                search: '',
+                searchParams: '',
                 errorResponse: [],
-                errorRestore: [],
+                errorDelete: [],
                 successResponse: [],
-                successRestoreResponse: [],
+                successDeleteResponse: [],
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
                 username: this.$session.name,
+                errorLoans: false,
+                errorMaintenance: false,
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
-                successRestore: false,
+                successDelete: false,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
@@ -287,7 +341,7 @@
         watch: {
             form: {
                 handler: function (val) {
-                    this.search = val.search;
+                    this.searchParams = val.search;
                 },
                 deep: true,
             },
@@ -301,19 +355,12 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
-            closeModal(id){
-                let modal = '#restoreModal'+id;
-                $(modal).modal('hide');
-            },  
-            indexRouter(){
-                // this.isLoadingResponse2 = true;
+            trashRouter(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
-                this.isLoadingRestore = true;
-                // this.closeModal();
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -329,7 +376,77 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets.trash' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            createRouter(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageCategoryAssets.create' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            updateRouter(id){
+                // console.log("Teset")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageCategoryAssets.update', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -343,14 +460,11 @@
                 }
             },
             setSuccessClose(id){
-                this.successRestore = false;
+                // console.log(id);
+                this.successDelete = false;
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
-                this.successRestoreResponse = [];
-                // this.closeModal(id);
-                if (this.dataCount <= 0) {
-                    this.indexRouter();
-                }
+                this.successDeleteResponse = [];
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -362,7 +476,8 @@
                     this.skip = this.skip+4;
                     this.take = 4;
                 }
-                this.getPlacements(this.skip, this.take)
+                // console.log(this.skip)
+                this.getCategoryAssets(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -386,8 +501,8 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.trash' }).then(() => { this.$router.go() })
-                        }, 4000);
+                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
+                        }, 3000);
                     }
                 } catch(e) {
                     this.errorResponse = [
@@ -399,7 +514,7 @@
                     ];
                 }
             },
-            searchFunction(search){
+            searchFunction(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -420,7 +535,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.trash', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets', query: {search: this.searchParams} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -433,20 +548,19 @@
                     ];
                 }
             },
-            async restore(id){
-                this.isLoadingRestore = true;
+            async delete(id){
+                this.isLoadingDelete = true;
                 this.buttonDisabled = true;
-                this.dataPlacements = {
+                this.dataObject = {
                     "ids": [id]
                 };
-                // console.log(this.dataPlacements)
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.put('/placements/restore', this.dataPlacements)
+                    await axios.delete('/categoryAssets/delete', {params: this.dataObject})
                     .then((response) => {
-                        // console.log(response.data.data);
+                        console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
-                        this.successRestoreResponse = [
+                        this.successDeleteResponse = [
                             {
                                 "id": 1,
                                 "message": response.data.message,
@@ -454,12 +568,12 @@
                             }
                         ];
                         this.showAlertSuccess = true;
-                        this.isLoadingRestore = false;
-                        this.successRestore = true;
+                        this.isLoadingDelete = false;
+                        this.successDelete = true;
                         this.buttonDisabled = false;
                     }).catch((err) => {
                         if(!err.response) {
-                            this.errorRestore = [
+                            this.errorDelete = [
                                 {
                                     'id': 1,
                                     'message': "Network Error", 
@@ -469,12 +583,12 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingRestore = false;
+                            this.isLoadingDelete = false;
                         // console.log(err.response);
                         } else if (err.response.data.message == 'Error!'){
                             // console.log(err.response.data);
                             // this.showAlert = true;
-                            this.errorRestore = [
+                            this.errorDelete = [
                                 {
                                     'id': 1,
                                     'message': err.response.status +' '+ err.response.data.message,
@@ -484,10 +598,10 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingRestore = false;
+                            this.isLoadingDelete = false;
                         } else {
                             this.showAlert = true;
-                            this.errorRestore = [
+                            this.errorDelete = [
                                 {
                                     'id': 1,
                                     'message': err.response.status +' '+ err.response.statusText,
@@ -497,12 +611,12 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingRestore = false;
+                            this.isLoadingDelete = false;
                         }
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    this.errorRestore = [
+                    this.errorDelete = [
                         {
                             'id': 1,
                             'message': error.code, 
@@ -512,35 +626,40 @@
                     this.showAlertError = true;
                     this.isLoadingResponse = false;
                     this.buttonDisabled = false;
-                    this.isLoadingRestore = false;
+                    this.isLoadingDelete = false;
                 }
             },
-            async getPlacements(skip, take){
+            async getCategoryAssets(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
-                this.dataPlacements = {
+                this.dataObject = {
                     "skip": skip,
                     "take": take,
-                    "trash": 1,
                     "sleep": 3,
-                    "name": this.name
+                    "keyWords": this.keyWords,
+                    "order": "name"
                 }
                 try {
-                    await axios.get('/placements/getAll', {params: this.dataPlacements})
+                    await axios.get('/categoryAssets/getAll', {params: this.dataObject})
                     .then((response) => {
-                        // console.table(response.data.data.count);
-                        Object.keys(response.data.data.placements).forEach((item) => {
+                        // console.log(response.data.data);
+                        Object.keys(response.data.data.category_assets).forEach((item) => {
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.placements[item].id,
+                                    "id": response.data.data.category_assets[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.placements[item].name,
+                                    "name": response.data.data.category_assets[item].name,
+                                    "description": response.data.data.category_assets[item].description,
                                 }
                             );
                         });
                         // this.dataArray.filter((index) => index != 2)
-                        this.dataCount = response.data.data.countDelete;
+                        this.dataCount = response.data.data.count;
+                        // if (this.windowWidth < ) {
+                            
+                        // }
                         this.isLoadingResponse = false;
+                        this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                     }).catch((err) => {
@@ -554,6 +673,7 @@
                                 }
                             ];
                         this.isLoadingResponse = false;
+                        this.isLoadingResponse1 = false;
                         this.buttonDisabled = false;
                         this.isLoadingContent = false;
                         // console.log(err.response);
@@ -568,6 +688,7 @@
                                 }
                             ];
                             this.isLoadingResponse = false;
+                            this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         } else {
@@ -580,6 +701,7 @@
                                 }
                             ];
                             this.isLoadingResponse = false;
+                            this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         }
@@ -596,6 +718,7 @@
                     ];
                     this.isLoadingResponse = false;
                     this.isLoading = false;
+                    this.isLoadingResponse1 = false;
                     this.isLoadingContent = false;
                     this.isLoadingContent = false;
                     this.showAlert = true;
@@ -641,6 +764,7 @@
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
+            // console.table(this.dataArray)
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);
@@ -669,16 +793,17 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            // console.log(this.$route.query.search);
+            // console.log(this.take);
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getPlacements(this.skip, this.take);
+                this.getCategoryAssets(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getPlacements(this.skip, this.take);
+                this.getCategoryAssets(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
+            // console.log(this.dataArray.length)
 
             
             window.scrollTo(0,0);

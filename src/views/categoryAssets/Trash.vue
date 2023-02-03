@@ -65,14 +65,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data Sampah <br> Penempatan</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data Sampah <br> Kategori Aset</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Tempat</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Kategori Aset</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -96,10 +96,10 @@
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
                                                     <div class="input-group">
-                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Tempat"
+                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Nama atau Deskripsi"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
-                                                            <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
+                                                            <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
                                                             </button>
                                                         </div>
@@ -127,6 +127,7 @@
                                                     <tr class="text-center">
                                                         <th class="align-middle">No</th>
                                                         <th class="align-middle">Nama</th>
+                                                        <th class="align-middle">Deskripsi</th>
                                                         <th class="align-middle">
                                                             Aksi
                                                         </th>
@@ -136,6 +137,7 @@
                                                     <tr v-for="item, index in this.dataArray" :key="item.id">
                                                         <td class="text-center">{{index+1}}</td>
                                                         <td><b>{{item.name}}</b></td>
+                                                        <td>{{item.description}}</td>
                                                         <td class="text-center">
                                                             <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
                                                                 <i class="fa fa-undo"></i> &ensp; Pulihkan data
@@ -157,12 +159,13 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Tempat</h6>
+                                                                    <h6 class="mb-0">Data Kategori Aset</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="my-2">
                                                             <h3 class="heading">{{item.name}}</h3>
+                                                            <p>{{item.description}}</p>
                                                             <div class="mt-3">
                                                                 <div class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
@@ -251,7 +254,7 @@
                 isLoadingRestore: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: this.$route.query.search,
+                keyWords: this.$route.query.search,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -263,7 +266,7 @@
                 form: {
                     search: '',
                 },
-                search: '',
+                searchParams: '',
                 errorResponse: [],
                 errorRestore: [],
                 successResponse: [],
@@ -287,7 +290,7 @@
         watch: {
             form: {
                 handler: function (val) {
-                    this.search = val.search;
+                    this.searchParams = val.search;
                 },
                 deep: true,
             },
@@ -329,7 +332,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -362,7 +365,7 @@
                     this.skip = this.skip+4;
                     this.take = 4;
                 }
-                this.getPlacements(this.skip, this.take)
+                this.getCategoryAssets(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -386,7 +389,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.trash' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets.trash' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -399,7 +402,7 @@
                     ];
                 }
             },
-            searchFunction(search){
+            searchFunction(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -420,7 +423,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.trash', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets.trash', query: {search: this.searchParams} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -436,13 +439,13 @@
             async restore(id){
                 this.isLoadingRestore = true;
                 this.buttonDisabled = true;
-                this.dataPlacements = {
+                this.dataObject = {
                     "ids": [id]
                 };
-                // console.log(this.dataPlacements)
+                // console.log(this.dataObject)
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.put('/placements/restore', this.dataPlacements)
+                    await axios.put('/categoryAssets/restore', this.dataObject)
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -515,26 +518,27 @@
                     this.isLoadingRestore = false;
                 }
             },
-            async getPlacements(skip, take){
+            async getCategoryAssets(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
-                this.dataPlacements = {
+                this.dataObject = {
                     "skip": skip,
                     "take": take,
                     "trash": 1,
                     "sleep": 3,
-                    "name": this.name
+                    "keyWords": this.keyWords
                 }
                 try {
-                    await axios.get('/placements/getAll', {params: this.dataPlacements})
+                    await axios.get('/categoryAssets/getAll', {params: this.dataObject})
                     .then((response) => {
                         // console.table(response.data.data.count);
-                        Object.keys(response.data.data.placements).forEach((item) => {
+                        Object.keys(response.data.data.category_assets).forEach((item) => {
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.placements[item].id,
+                                    "id": response.data.data.category_assets[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.placements[item].name,
+                                    "name": response.data.data.category_assets[item].name,
+                                    "description": response.data.data.category_assets[item].description
                                 }
                             );
                         });
@@ -673,10 +677,10 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getPlacements(this.skip, this.take);
+                this.getCategoryAssets(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getPlacements(this.skip, this.take);
+                this.getCategoryAssets(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
 
