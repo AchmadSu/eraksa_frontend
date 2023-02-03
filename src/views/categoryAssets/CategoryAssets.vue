@@ -134,43 +134,45 @@
                                             </div>
                                         </div>
                                         <div v-else>
-                                            <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
-                                                <thead>
-                                                    <tr class="text-center">
-                                                        <th class="align-middle">No</th>
-                                                        <th class="align-middle">Nama</th>
-                                                        <th class="align-middle">Deskripsi</th>
-                                                        <th class="align-middle" colspan="2">
-                                                            <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
-                                                                <i class="fa fa-plus"></i> &ensp; Tambah Data
-                                                            </button>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                        <td class="text-center">{{index+1}}</td>
-                                                        <td><b>{{item.name}}</b></td>
-                                                        <td>{{item.description}}</td>
-                                                        <td class="text-center">
-                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                                <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                            </button>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
-                                                                <i class="fa fa-trash-o"></i> &ensp; Hapus data
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                        <td class="text-center" colspan="4">
-                                                            <b>{{item.message}}</b>
-                                                            <p>{{item.detail}}</p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div v-if="this.windowWidth > this.$widthLandscapePhone" class="table-responsive">
+                                                <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th class="align-middle">No</th>
+                                                            <th class="align-middle">Nama</th>
+                                                            <th class="align-middle">Deskripsi</th>
+                                                            <th class="align-middle" colspan="2">
+                                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
+                                                                    <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="item, index in this.dataArray" :key="item.id">
+                                                            <td class="text-center">{{index+1}}</td>
+                                                            <td><b>{{item.name}}</b></td>
+                                                            <td>{{item.description}}</td>
+                                                            <td class="text-center">
+                                                                <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                                    <i class="fa fa-pencil"></i> <br> Ubah data
+                                                                </button>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
+                                                                    <i class="fa fa-trash-o"></i> <br> Hapus data
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
+                                                            <td class="text-center" colspan="4">
+                                                                <b>{{item.message}}</b>
+                                                                <p>{{item.detail}}</p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <div v-else class="row">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
@@ -725,40 +727,6 @@
                     this.buttonDisabled = false;
                 }
             },
-            dashboard(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            }
         },
         created(){
             window.addEventListener('resize', () => {

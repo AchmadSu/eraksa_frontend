@@ -317,40 +317,6 @@
                     ];
                 }
             },
-            searchFunction(search){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'managePlacement', query: {search: search} }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
             async detailFunction(id){
                 try {
                     let data = window.atob(id)
@@ -506,40 +472,6 @@
                 this.successResponse = [];
                 this.errorResponse = [];
             },
-            dashboard(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            }
         },
         created(){
             window.addEventListener('resize', () => {

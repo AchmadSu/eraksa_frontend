@@ -93,6 +93,20 @@
                                                     Panjang minimal nama adalah 3 karakter
                                                 </div>
                                             </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                    <i class="fa fa-sticky-note-o"></i>
+                                                </span>
+                                                <input 
+                                                    name="description" type="text" :class="this.checkDescription == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                                    placeholder="Deskripsi Kategori" aria-label="name" 
+                                                    aria-describedby="basic-addon1"
+                                                    v-model="form.description"
+                                                />
+                                                <div :class="this.checkDescription == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                    Panjang minimal deskripsi adalah 5 karakter
+                                                </div>
+                                            </div>
                                             <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
                                                 <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                 <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -157,6 +171,7 @@
                 isLoading: true,
                 isLoading: true,
                 checkName: false,
+                checkDescription: false,
                 buttonDisabled: false,
                 isLoadingContent: true,
                 isLoadingResponse: false,
@@ -167,7 +182,6 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: this.$route.query.search,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -178,6 +192,7 @@
                 widhtStyle: '',
                 form: {
                     name: '',
+                    description: ''
                 },
                 errorResponse: [],
                 errorDelete: [],
@@ -206,7 +221,9 @@
                 handler: function (val) {
                     let name = val.name;
                     let validateName = this.validateName(name);
-                    if(validateName){
+                    let description = val.description;
+                    let validateDescription = this.validateDescription(description);
+                    if(validateName && validateDescription){
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -243,6 +260,17 @@
                     return false;
                 }
             },
+            validateDescription(value){
+                // console.log(value1);
+                if(value.length >= 5) {
+                    this.checkDescription = true;
+                    // console.log(this.fullname);
+                    return true;
+                } else {
+                    this.checkDescription = false;
+                    return false;
+                }
+            },
             backFunction(){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -266,41 +294,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            searchFunction(search){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -318,13 +312,14 @@
                 this.isLoadingResponse = true;
                 this.buttonDisabled = true;
                 this.cursorStyle = 'cursor: not-allowed';
-                this.dataPlacements = {
+                this.dataObject = {
                     "name": this.form.name,
+                    "description": this.form.description,
                 }
                 // this.openModal();
-                // console.log(this.dataPlacements);
+                // console.log(this.dataObject);
                 try {
-                    await axios.post('/placements/create', this.dataPlacements)
+                    await axios.post('/categoryAssets/create', this.dataObject)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -408,40 +403,6 @@
                 this.successResponse = [];
                 this.errorResponse = [];
             },
-            dashboard(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            }
         },
         created(){
             window.addEventListener('resize', () => {
