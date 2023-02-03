@@ -96,12 +96,12 @@
                                                 </button>
                                             </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
-                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
+                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search">
                                                     <div class="input-group">
                                                         <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Tempat"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
-                                                            <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
+                                                            <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
                                                             </button>
                                                         </div>
@@ -115,126 +115,128 @@
                                             </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
-                                            <div v-for="item in errorResponse" :key="item.id" class="row">
-                                                <div class="text-lg-center text-sm-justify d-sm-flex align-items-center justify-content-between mb-3">
+                                            <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
+                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-center">
+                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div v-else class="col-12 d-flex justify-content-center">
+                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div class="text-center text-sm-justify mt-3">
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
                                                 </div>
-                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
-                                                </div>
-                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
-                                                    <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                                </div>
-                                                <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
-                                                    <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                                </div>
-                                                <div v-else class="col-12">
-                                                    <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                                </div>
                                                 <h6 class="text-center my-3">{{item.detail}}</h6>
+                                                <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'd-none':'col-12 py-2 d-sm-flex justify-content-center'">
+                                                    <button @click="createRouter" :disabled="buttonDisabled" class="btn w-25 btn-success">
+                                                        <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr class="text-center">
-                                                    <th class="align-middle">No</th>
-                                                    <th class="align-middle">Nama</th>
-                                                    <th class="align-middle" colspan="2">
-                                                        <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
-                                                            <i class="fa fa-plus"></i> &ensp; Tambah Data
-                                                        </button>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                    <td class="text-center">{{index+1}}</td>
-                                                    <td><b>{{item.name}}</b></td>
-                                                    <td class="text-center">
-                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                        </button>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
-                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus data
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                    <td class="text-center" colspan="4">
-                                                        <b>{{item.message}}</b>
-                                                        <p>{{item.detail}}</p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div v-else class="row">
-                                            <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
-                                                <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row align-items-center">
-                                                            <div class="icon"> <i class="fa fa-map-marker"></i> </div>
-                                                            <div class="ms-2 c-details">
-                                                                <h6 class="mb-0">Data Penempatan</h6>
+                                        <div v-else>
+                                            <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th class="align-middle">No</th>
+                                                        <th class="align-middle">Nama</th>
+                                                        <th class="align-middle" colspan="2">
+                                                            <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
+                                                                <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                            </button>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item, index in this.dataArray" :key="item.id">
+                                                        <td class="text-center">{{index+1}}</td>
+                                                        <td><b>{{item.name}}</b></td>
+                                                        <td class="text-center">
+                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                                <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                            </button>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
+                                                                <i class="fa fa-trash-o"></i> &ensp; Hapus data
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
+                                                        <td class="text-center" colspan="4">
+                                                            <b>{{item.message}}</b>
+                                                            <p>{{item.detail}}</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div v-else class="row">
+                                                <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
+                                                    <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="ms-2 c-details">
+                                                                    <h6 class="mb-0">Data Penempatan</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="my-2">
+                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <div class="mt-3">
+                                                                <div class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-12 w-100 text-center py-2">
+                                                                       ATAU
+                                                                    </div>
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="my-2">
-                                                        <h3 class="heading">{{item.name}}</h3>
-                                                        <div class="mt-3">
-                                                            <div class="row my-3 py-2">
-                                                                <div class="col-12 py-2">
-                                                                    <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                        <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                                    </button>
+                                                </div>
+                                                <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'col-12':'d-none'">
+                                                    <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="ms-2 c-details">
+                                                                    <h6 class="mb-0">Data Penempatan</h6>
                                                                 </div>
-                                                                <div class="col-12 w-100 text-center py-2">
-                                                                   ATAU
-                                                                </div>
-                                                                <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                        <i class="fa fa-trash-o"></i> &ensp; Hapus
-                                                                    </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="my-2">
+                                                            <h3 class="heading">{{item.message}}</h3>
+                                                            <div class="mt-3">
+                                                                <div class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <p>{{item.detail}}</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'col-12':'d-none'">
-                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row align-items-center">
-                                                            <div class="icon"> <i class="fa fa-map-marker"></i> </div>
-                                                            <div class="ms-2 c-details">
-                                                                <h6 class="mb-0">Data Penempatan</h6>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="my-2">
-                                                        <h3 class="heading">{{item.message}}</h3>
-                                                        <div class="mt-3">
-                                                            <div class="row my-3 py-2">
-                                                                <div class="col-12 py-2">
-                                                                    <p>{{item.detail}}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                            <div class="row my-lg-3 my-5">
+                                                <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
+                                                    <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                        Muat lebih banyak
+                                                    </button>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row my-lg-3 my-5">
-                                            <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
-                                                <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat lebih banyak
-                                                </button>
-                                            </div>
-                                            <div class="col-12 text-center">
-                                                <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Memuat...
-                                                </button>
+                                                <div class="col-12 text-center">
+                                                    <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Memuat...
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
@@ -309,7 +311,7 @@
                 form: {
                     search: '',
                 },
-                search: '',
+                searchParams: '',
                 errorResponse: [],
                 errorDelete: [],
                 successResponse: [],
@@ -335,7 +337,7 @@
         watch: {
             form: {
                 handler: function (val) {
-                    this.search = val.search;
+                    this.searchParams = val.search;
                 },
                 deep: true,
             },
@@ -508,7 +510,7 @@
                     ];
                 }
             },
-            searchFunction(search){
+            searchFunction(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -529,7 +531,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'managePlacements', query: {search: this.searchParams} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

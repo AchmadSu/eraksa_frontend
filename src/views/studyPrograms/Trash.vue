@@ -75,7 +75,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Sampah Program Studi</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                                         <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Program Studi"
                                                             aria-label="Search" aria-describedby="basic-addon2">
                                                         <div class="input-group-append">
-                                                            <button @click="searchFunction(this.form.search)" :disabled="buttonDisabled" class="btn btn-primary" type="button">
+                                                            <button @click="searchFunction()" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
                                                             </button>
                                                         </div>
@@ -107,71 +107,87 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr class="text-center">
-                                                    <th class="align-middle">No</th>
-                                                    <th class="align-middle">Nama</th>
-                                                    <th class="align-middle">
-                                                        Aksi
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                    <td class="text-center">{{index+1}}</td>
-                                                    <td><b>{{item.name}}</b></td>
-                                                    <td class="text-center">
-                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
-                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan data
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                    <td class="text-center" colspan="4">
-                                                        <b>{{item.message}}</b>
-                                                        <p>{{item.detail}}</p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div v-else class="row">
-                                            <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4">
-                                                <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="d-flex flex-row align-items-center">
-                                                            <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
-                                                            <div class="ms-2 c-details">
-                                                                <h6 class="mb-0">Data Prodi</h6>
+                                        <div v-if="this.dataArray.length == 0">
+                                            <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
+                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-center">
+                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div v-else class="col-12 d-flex justify-content-center">
+                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                </div>
+                                                <div class="text-center text-sm-justify mt-3">
+                                                    <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
+                                                </div>
+                                                <h6 class="text-center my-3">{{item.detail}}</h6>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th class="align-middle">No</th>
+                                                        <th class="align-middle">Nama</th>
+                                                        <th class="align-middle">
+                                                            Aksi
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="item, index in this.dataArray" :key="item.id">
+                                                        <td class="text-center">{{index+1}}</td>
+                                                        <td><b>{{item.name}}</b></td>
+                                                        <td class="text-center">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                                <i class="fa fa-undo"></i> &ensp; Pulihkan data
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
+                                                        <td class="text-center" colspan="4">
+                                                            <b>{{item.message}}</b>
+                                                            <p>{{item.detail}}</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div v-else class="row">
+                                                <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4">
+                                                    <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
+                                                                <div class="ms-2 c-details">
+                                                                    <h6 class="mb-0">Data Prodi</h6>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="my-2">
-                                                        <h3 class="heading">{{item.name}}</h3>
-                                                        <div class="mt-3">
-                                                            <div class="row my-3 py-2">
-                                                                <div class="col-12 py-2">
-                                                                    <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
-                                                                        <i class="fa fa-undo"></i> &ensp; Pulihkan
-                                                                    </button>
+                                                        <div class="my-2">
+                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <div class="mt-3">
+                                                                <div class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
+                                                                            <i class="fa fa-undo"></i> &ensp; Pulihkan
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row my-lg-3 my-5">
-                                            <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
-                                                <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat lebih banyak
-                                                </button>
-                                            </div>
-                                            <div class="col-12 text-center">
-                                                <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Memuat...
-                                                </button>
+                                            <div class="row my-lg-3 my-5">
+                                                <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
+                                                    <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                        Muat lebih banyak
+                                                    </button>
+                                                </div>
+                                                <div class="col-12 text-center">
+                                                    <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Memuat...
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
@@ -246,7 +262,7 @@
                 form: {
                     search: '',
                 },
-                search: '',
+                searchParams: '',
                 errorResponse: [],
                 errorRestore: [],
                 successResponse: [],
@@ -270,7 +286,7 @@
         watch: {
             form: {
                 handler: function (val) {
-                    this.search = val.search;
+                    this.searchParams = val.search;
                 },
                 deep: true,
             },
@@ -375,7 +391,7 @@
                     ];
                 }
             },
-            searchFunction(search){
+            searchFunction(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -396,7 +412,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms.trash', query: {search: search} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageStudyPrograms.trash', query: {search: this.searchParams} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

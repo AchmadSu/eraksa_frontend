@@ -75,7 +75,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Tempat</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 v-if="this.dataCount != 0" class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -108,25 +108,20 @@
                                             </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
-                                            <div v-for="item in errorResponse" :key="item.id" class="row">
-                                                <div class="text-center mb-3">
-                                                    <h3 class="mt-2 text-gray-800">{{item.message}}</h3>
+                                            <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
+                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-center">
+                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
-                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
+                                                <div v-else class="col-12 d-flex justify-content-center">
+                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
-                                                <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
-                                                    <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                                </div>
-                                                <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
-                                                    <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                                </div>
-                                                <div v-else class="col-12">
-                                                    <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                <div class="text-center text-sm-justify mt-3">
+                                                    <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
                                                 </div>
                                                 <h6 class="text-center my-3">{{item.detail}}</h6>
                                             </div>
                                         </div>
-                                        <div v-if="this.dataArray.length != 0">
+                                        <div v-else>
                                             <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr class="text-center">
@@ -160,7 +155,7 @@
                                                     <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Tempat</h6>
                                                                 </div>
@@ -181,18 +176,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row my-lg-3 my-5">
-                                            <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
-                                                <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat lebih banyak
-                                                </button>
-                                            </div>
-                                            <div class="col-12 text-center">
-                                                <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Memuat...
-                                                </button>
+                                            <div class="row my-lg-3 my-5">
+                                                <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
+                                                    <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                        Muat lebih banyak
+                                                    </button>
+                                                </div>
+                                                <div class="col-12 text-center">
+                                                    <button v-if="this.isLoadingResponse1 == true" :disabled="buttonDisabled" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Memuat...
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
