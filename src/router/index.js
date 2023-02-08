@@ -3,6 +3,7 @@ import studyProgramRouter from './studyProgram/router';
 import placementsRouter from './placements/router';
 import userRouter from './user/router';
 import categoryAssetsRouter from './categoryAssets/router';
+import workshopsRouter from './workshops/router';
 
 const routes = [
     {
@@ -31,6 +32,10 @@ Object.keys(placementsRouter).forEach((item) => {
 
 Object.keys(categoryAssetsRouter).forEach((item) => {
     routes.push(categoryAssetsRouter[item]);
+})
+
+Object.keys(workshopsRouter).forEach((item) => {
+    routes.push(workshopsRouter[item]);
 })
 
 const router = createRouter({

@@ -760,7 +760,7 @@
                     // console.log(val.code);
                     let code_type = val.radio;
                     let code = val.code;
-                    console.log(code_type);
+                    // console.log(code_type);
                     let firstname = val.firstname;
                     let lastname = val.lastname;
                     let email = val.email;
