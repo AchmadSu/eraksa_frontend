@@ -364,7 +364,7 @@
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
                     this.detailObject = {'id': 1, 'message': error.code, 'detail': error.message,};
                     this.isLoadingResponse = false;
                     this.isLoadingContent = false;

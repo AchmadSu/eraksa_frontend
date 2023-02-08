@@ -555,7 +555,7 @@
                 try {
                     await axios.delete('/placements/delete', {params: this.dataPlacements})
                     .then((response) => {
-                        console.log(response.data.data);
+                        // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
                         this.successDeleteResponse = [
                             {
@@ -638,7 +638,7 @@
                 try {
                     await axios.get('/placements/getAll', {params: this.dataPlacements})
                     .then((response) => {
-                        console.log(response.data.data);
+                        // console.log(response.data.data);
                         Object.keys(response.data.data.placements).forEach((item) => {
                             this.dataArray.push(
                                 {

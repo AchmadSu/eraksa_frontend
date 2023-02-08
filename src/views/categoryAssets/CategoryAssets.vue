@@ -560,7 +560,7 @@
                 try {
                     await axios.delete('/categoryAssets/delete', {params: this.dataObject})
                     .then((response) => {
-                        console.log(response.data.data);
+                        // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
                         this.successDeleteResponse = [
                             {

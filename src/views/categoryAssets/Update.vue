@@ -98,7 +98,7 @@
                                         <div class="col-md-6 col-12 px-lg-5 text-center">
                                             <div class="input-group py-md-0 py-lg-1">
                                                 <h3 class="fw-bolder text-secondary">
-                                                    EDIT TEMPAT
+                                                    EDIT KATEGORI
                                                 </h3>
                                             </div>
                                             <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
@@ -110,21 +110,28 @@
                                                 <div class="py-lg-4 py-md-0 py-sm-1">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                            <i class="fa fa-map-marker"></i>
+                                                            <i class="fa fa-cubes"></i>
                                                         </span>
                                                         <input 
-                                                            name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                            placeholder="Nama Tempat Baru" aria-label="name" 
+                                                            name="name" type="text" class="form-control"
+                                                            placeholder="Nama Kategori Baru (Dapat dikosongkan)" aria-label="name" 
                                                             aria-describedby="basic-addon1"
                                                             v-model="form.name"
                                                         />
-                                                        <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
-                                                            Panjang minimal nama adalah 3 karakter
-                                                        </div>
                                                     </div>
-                                                    <div v-for="item in successResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-primary alert-dismissible' : 'd-none'" role="alert">
-                                                        <strong> <font-awesome-icon icon="fa-solid fa-circle-check" /> {{ item.message }}</strong> <br/> {{ item.detail }} Tekan tombol kembali di bawah ini untuk melihat perubahan data 
-                                                        <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                            <i class="fa fa-sticky-note-o"></i>
+                                                        </span>
+                                                        <input 
+                                                            name="description" type="text" :class="this.checkDescription == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                                            placeholder="Deskripsi Kategori" aria-label="name" 
+                                                            aria-describedby="basic-addon1"
+                                                            v-model="form.description"
+                                                        />
+                                                        <div :class="this.checkDescription == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                            Panjang minimal deskripsi adalah 5 karakter
+                                                        </div>
                                                     </div>
                                                     <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
                                                         <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
@@ -214,6 +221,7 @@
                 widhtStyle: '',
                 form: {
                     name: '',
+                    description: ''
                 },
                 errorResponse: [],
                 errorDelete: [],
@@ -243,12 +251,13 @@
                 handler: function (val) {
                     let name = val.name;
                     let validateName = this.validateName(name);
-                    if(validateName){
+                    let description = val.description;
+                    let validateDescription = this.validateDescription(description);
+                    if(validateDescription){
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
                     }
-                    // console.log(name)
                 },
                 deep: true,
             },
@@ -281,6 +290,17 @@
                     return false;
                 }
             },
+            validateDescription(value){
+                // console.log(value1);
+                if(value.length >= 5) {
+                    this.checkDescription = true;
+                    // console.log(this.fullname);
+                    return true;
+                } else {
+                    this.checkDescription = false;
+                    return false;
+                }
+            },
             backFunction(){
                 // this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -304,7 +324,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -320,11 +340,16 @@
             async detailFunction(id){
                 try {
                     let data = window.atob(id)
-                    await axios.get('/placements/detail/'+data)
+                    await axios.get('/categoryAssets/detail/'+data)
                     .then((response) => {
                         // console.log(response.data.data)
-                        this.detailObject = {"id": response.data.data.id, "name": response.data.data.name};
-                        this.form.name = this.detailObject.name;
+                        this.detailObject = {
+                            "id": response.data.data.id,
+                            "name": response.data.data.name,
+                            "description": response.data.data.description
+                        };
+                        // this.form.name = this.detailObject.name;
+                        this.form.description = this.detailObject.description;
                     }).catch((err) => {
                         if(!err.response) {
                             this.errorDetail = true;
@@ -368,7 +393,7 @@
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
                     this.detailObject = {'id': 1, 'message': error.code, 'detail': error.message,};
                     this.isLoadingResponse = false;
                     this.isLoadingContent = false;
@@ -383,13 +408,14 @@
                 this.buttonDisabled = true;
                 let data = window.atob(this.id)
                 // this.cursorStyle = 'cursor: not-allowed';
-                this.dataPlacements = {
+                this.dataObject = {
                     "id": data,
-                    "name": this.form.name,
+                    "new_name": this.form.name,
+                    "description": this.form.description,
                 }
-                // console.log(this.dataPlacements);
+                // console.log(this.dataObject);
                 try {
-                    await axios.put('/placements/update', this.dataPlacements)
+                    await axios.put('/categoryAssets/update', this.dataObject)
                     .then((response) => {
                         // this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -509,7 +535,7 @@
             // console.log(window.atob(this.id));
             this.detailFunction(this.id);
             // this.loansList();
-            console.log(this.detailObject);
+            // console.log(this.detailObject);
             // this.dataArray.filter((index) => index !== 1 )
 
             

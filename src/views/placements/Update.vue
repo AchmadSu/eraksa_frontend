@@ -368,7 +368,7 @@
                     });
                     this.isLoadingContent = false;
                 } catch (error) {
-                    console.log(error);
+                    // console.log(error);
                     this.detailObject = {'id': 1, 'message': error.code, 'detail': error.message,};
                     this.isLoadingResponse = false;
                     this.isLoadingContent = false;
@@ -509,7 +509,7 @@
             // console.log(window.atob(this.id));
             this.detailFunction(this.id);
             // this.loansList();
-            console.log(this.detailObject);
+            // console.log(this.detailObject);
             // this.dataArray.filter((index) => index !== 1 )
 
             
