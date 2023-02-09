@@ -323,7 +323,7 @@
                     setTimeout(() => {
                         if (response.data.data.user.status === "1") {
                             this.lastPath = this.$router.options.history.state.back;
-                            if (this.lastPath) {
+                            if (this.lastPath != '/register' || this.lastPath != '/resetPassword' || this.lastPath != '/verification' || this.lastPath != '/resetPhone') {
                                 this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });    
                             } else {
                                 this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });

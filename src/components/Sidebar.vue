@@ -132,7 +132,7 @@
 
         <!-- Nav Item - Assets -->
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link" href="#" :style="this.cursorStyle">
+            <a @click="manageAssets" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-cube"></i>&ensp;
                 <span>Kelola Aset</span>
             </a>
@@ -362,6 +362,40 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'manageWorkshops' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            manageAssets(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
