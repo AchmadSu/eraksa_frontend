@@ -140,7 +140,7 @@
                                                         <th class="align-middle">No</th>
                                                         <th class="align-middle">Nama</th>
                                                         <th class="align-middle" colspan="2">
-                                                            <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
+                                                            <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                 <i class="fa fa-plus"></i> &ensp; Tambah Data
                                                             </button>
                                                         </th>
@@ -151,12 +151,12 @@
                                                         <td class="text-center">{{index+1}}</td>
                                                         <td><b>{{item.name}}</b></td>
                                                         <td class="text-center">
-                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                 <i class="fa fa-pencil"></i> &ensp; Ubah data
                                                             </button>
                                                         </td>
                                                         <td class="text-center">
-                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
                                                                 <i class="fa fa-trash-o"></i> &ensp; Hapus data
                                                             </button>
                                                         </td>

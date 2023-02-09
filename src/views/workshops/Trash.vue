@@ -139,7 +139,7 @@
                                                         <td><b>{{item.name}}</b></td>
                                                         <td>{{item.phone}}</td>
                                                         <td class="text-center">
-                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                 <i class="fa fa-undo"></i> &ensp; Pulihkan data
                                                             </button>
                                                         </td>

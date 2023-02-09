@@ -142,7 +142,7 @@
                                                             <th class="align-middle">Nama</th>
                                                             <th class="align-middle">Deskripsi</th>
                                                             <th class="align-middle" colspan="2">
-                                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-75 btn-success">
+                                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-plus"></i> &ensp; Tambah Data
                                                                 </button>
                                                             </th>
@@ -154,12 +154,12 @@
                                                             <td><b>{{item.name}}</b></td>
                                                             <td>{{item.description}}</td>
                                                             <td class="text-center">
-                                                                <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-75 btn-primary">
+                                                                <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-pencil"></i> <br> Ubah data
                                                                 </button>
                                                             </td>
                                                             <td class="text-center">
-                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-75 btn-danger">
+                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
                                                                     <i class="fa fa-trash-o"></i> <br> Hapus data
                                                                 </button>
                                                             </td>
