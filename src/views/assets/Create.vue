@@ -74,18 +74,18 @@
                                 <div class="col-md-6 col-12 px-lg-5 text-center">
                                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                                         <h3 class="fw-bolder text-secondary">
-                                            TAMBAH KATEGORI
+                                            TAMBAH ASET
                                         </h3>
                                     </div>
                                     <form class="form needs-validation" id="app" @submit.prevent="createFunction" novalidate>
                                         <div class="py-lg-4 py-md-0 py-sm-1">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                    <i class="fa fa-cubes"></i>
+                                                    <i class="fa fa-cube"></i>
                                                 </span>
                                                 <input 
                                                     name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                    placeholder="Nama Kategori" aria-label="name" 
+                                                    placeholder="Nama Aset" aria-label="name" 
                                                     aria-describedby="basic-addon1"
                                                     v-model="form.name"
                                                 />
@@ -94,17 +94,62 @@
                                                 </div>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                    <i class="fa fa-sticky-note-o"></i>
-                                                </span>
-                                                <input 
-                                                    name="description" type="text" :class="this.checkDescription == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                    placeholder="Deskripsi Kategori" aria-label="name" 
-                                                    aria-describedby="basic-addon1"
-                                                    v-model="form.description"
-                                                />
-                                                <div :class="this.checkDescription == false ? 'text-start invalid-feedback' : 'd-none'">
-                                                    Panjang minimal deskripsi adalah 5 karakter
+                                                <select v-model="form.study_programs" class="form-select form-select mb-3" aria-label=".form-select example">
+                                                    <option selected disabled>Program Studi</option>
+                                                    <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                    <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                </select>
+                                                <div v-if="this.isLoadingStudyPrograms == false" class="rounded-0">
+                                                    <a @click="getStudyProgram(this.skipStudyProgram+10, this.takeStudyProgram)" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>                                                  
+                                                    <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
+                                                </div>
+                                                <div v-else>
+                                                    <button type="submit" class="btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        
+                                                    </button>
+                                                </div>
+                                                <div :class="this.checkStudyProgram == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                    Pilih salah satu Program Studi!
+                                                </div>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <select v-model="form.category_assets" class="form-select form-select mb-3" aria-label=".form-select example">
+                                                    <option selected disabled>Kategori</option>
+                                                    <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                    <option v-if="this.showAlertCategory" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                </select>
+                                                <div v-if="this.isLoadingCategory == false" class="rounded-0">
+                                                    <a @click="getCategory(this.skipCategory+10, this.takeCategory)" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>
+                                                    <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                            
+                                                </div>
+                                                <div v-else>
+                                                    <button type="submit" class="btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        
+                                                    </button>
+                                                </div>
+                                                <div :class="this.checkCategory == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                    Pilih salah satu kategori!
+                                                </div>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <select v-model="form.placements" class="form-select form-select mb-3" aria-label=".form-select example">
+                                                    <option selected disabled>Tempat</option>
+                                                    <option v-for="item in placementsArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                    <option v-if="this.showAlertPlacements" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                </select>
+                                                <div v-if="this.isLoadingPlacements == false" class="rounded-0">
+                                                    <a @click="getPlacements(this.skipPlacements+10, this.takePlacements)" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>
+                                                    <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
+                                                </div>
+                                                <div v-else>
+                                                    <button type="submit" class="btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <div :class="this.checkPlacements == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                    Pilih salah satu tempat!
                                                 </div>
                                             </div>
                                             <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
@@ -172,8 +217,12 @@
                 isLoading: true,
                 checkName: false,
                 checkDescription: false,
+                submitEnabled: false,
                 buttonDisabled: false,
                 isLoadingContent: true,
+                isLoadingStudyPrograms: true,
+                isLoadingCategory: true,
+                isLoadingPlacements: true,
                 isLoadingResponse: false,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
@@ -192,7 +241,9 @@
                 widhtStyle: '',
                 form: {
                     name: '',
-                    description: ''
+                    study_programs: 'Program Studi',
+                    category_assets: 'Kategori',
+                    placements: 'Tempat'
                 },
                 errorResponse: [],
                 errorDelete: [],
@@ -200,6 +251,15 @@
                 successDeleteResponse: [],
                 sessionData: [],
                 dataArray: [],
+                studyProgramArray: [],
+                errorStudyPrograms: [],
+                studyProgramTotal: 0,
+                categoryArray: [],
+                errorCategory: [],
+                categoryTotal: 0,
+                placementsArray: [],
+                errorPlacements: [],
+                placementsTotal: 0,
                 deleteArray: [],
                 username: this.$session.name,
                 errorLoans: false,
@@ -207,6 +267,15 @@
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
+                showAlertStudyPrograms: false,
+                showAlertCategory: false,
+                showAlertPlacements: false,
+                skipStudyProgram: 0,
+                takeStudyProgram: 10,
+                skipCategory: 0,
+                takeCategory: 10,
+                skipPlacements: 0,
+                takePlacements: 10,
                 successDelete: false,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
@@ -220,10 +289,15 @@
             form: {
                 handler: function (val) {
                     let name = val.name;
+                    let study_program_id = val.study_programs;
+                    let category_id = val.category_assets;
+                    let placement_id = val.placements;
                     let validateName = this.validateName(name);
-                    let description = val.description;
-                    let validateDescription = this.validateDescription(description);
-                    if(validateName && validateDescription){
+
+                    // console.log(!(isNaN(study_program_id)))
+                    // console.log(!(isNaN(category_id)))
+                    // console.log(!(isNaN(placement_id)))
+                    if(validateName && !(isNaN(study_program_id)) && !(isNaN(category_id)) && !(isNaN(placement_id))) {
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -294,7 +368,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -314,12 +388,14 @@
                 this.cursorStyle = 'cursor: not-allowed';
                 this.dataObject = {
                     "name": this.form.name,
-                    "description": this.form.description,
+                    "study_program_id": this.form.study_programs,
+                    "category_id": this.form.category_assets,
+                    "placement_id": this.form.placements,
                 }
                 // this.openModal();
                 // console.log(this.dataObject);
                 try {
-                    await axios.post('/categoryAssets/create', this.dataObject)
+                    await axios.post('/assets/create', this.dataObject)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -330,7 +406,7 @@
                             {
                                 'id': 1,
                                 'message': response.data.message, 
-                                'detail': response.data.data.message,
+                                'detail': response.data.data.code,
                             }
                         ];
                         // this.dataArray.filter((index) => index != 2)
@@ -403,6 +479,227 @@
                 this.successResponse = [];
                 this.errorResponse = [];
             },
+            async getStudyProgram(skip, take){
+                this.isLoadingStudyPrograms = true;
+                this.showAlertStudyPrograms = false;
+                this.errorStudyPrograms = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                    "name": this.name
+                }
+                try {
+                    await axios.get('/studyPrograms/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                            this.studyProgramArray.push(
+                                {
+                                    "id": response.data.data.study_programs[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.study_programs[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.studyProgramTotal = response.data.data.count;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertStudyPrograms = true;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorStudyPrograms = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertStudyPrograms = true;
+                    this.isLoadingStudyPrograms = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            async getCategory(skip, take){
+                this.isLoadingCategory = true;
+                this.showAlertCategory = false;
+                this.errorCategory = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                    "order": "name"
+                }
+                try {
+                    await axios.get('/categoryAssets/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.category_assets).forEach((item) => {
+                            this.categoryArray.push(
+                                {
+                                    "id": response.data.data.category_assets[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.category_assets[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.categoryTotal = response.data.data.count;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertCategory = true;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorCategory = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertCategory = true;
+                    this.isLoadingCategory = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            async getPlacements(skip, take){
+                this.isLoadingPlacements = true;
+                this.showAlertPlacements = false;
+                this.errorPlacements = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                }
+                try {
+                    await axios.get('/placements/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.placements).forEach((item) => {
+                            this.placementsArray.push(
+                                {
+                                    "id": response.data.data.placements[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.placements[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.placementsTotal = response.data.data.count;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertPlacements = true;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorPlacements = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertPlacements = true;
+                    this.isLoadingPlacements = false;
+                    this.buttonDisabled = false;
+                }
+            },
         },
         created(){
             window.addEventListener('resize', () => {
@@ -437,6 +734,9 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
+            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
+            this.getCategory(this.skipCategory, this.takeCategory);
+            this.getPlacements(this.skipPlacements, this.takePlacements);
             // console.log(this.$route.query.search);
             // this.loansList();
             // this.dataArray.filter((index) => index !== 1 )
