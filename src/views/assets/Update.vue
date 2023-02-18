@@ -68,7 +68,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row d-flex justify-content-center">
                                     <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
                                         <div v-if="windowWidth < 720">
                                             <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
@@ -98,50 +98,153 @@
                                         <div class="col-md-6 col-12 px-lg-5 text-center">
                                             <div class="input-group py-md-0 py-lg-1">
                                                 <h3 class="fw-bolder text-secondary">
-                                                    EDIT KATEGORI
+                                                    EDIT ASET
                                                 </h3>
                                             </div>
                                             <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                                                 <h5 class="text-secondary">
                                                     {{this.detailObject.name}}
                                                 </h5>
+                                                <h6 class="text-secondary text-justify">
+                                                    {{this.detailObject.code}}
+                                                </h6>
                                             </div>
                                             <form class="form needs-validation" id="app" @submit.prevent="updateFunction" novalidate>
                                                 <div class="py-lg-4 py-md-0 py-sm-1">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                            <i class="fa fa-cubes"></i>
+                                                            <i class="fa fa-cube"></i>
                                                         </span>
                                                         <input 
-                                                            name="name" type="text" class="form-control"
-                                                            placeholder="Nama Kategori Baru (Dapat dikosongkan)" aria-label="name" 
+                                                            name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                                            placeholder="Nama Aset" aria-label="name" 
                                                             aria-describedby="basic-addon1"
                                                             v-model="form.name"
                                                         />
+                                                        <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                            Panjang minimal nama adalah 3 karakter
+                                                        </div>
                                                     </div>
                                                     <div class="input-group mb-3">
-                                                        <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                            <i class="fa fa-sticky-note-o"></i>
-                                                        </span>
-                                                        <input 
-                                                            name="description" type="text" :class="this.checkDescription == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                            placeholder="Deskripsi Kategori" aria-label="name" 
-                                                            aria-describedby="basic-addon1"
-                                                            v-model="form.description"
-                                                        />
-                                                        <div :class="this.checkDescription == false ? 'text-start invalid-feedback' : 'd-none'">
-                                                            Panjang minimal deskripsi adalah 5 karakter
+                                                        <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" :class="isNaN(this.form.study_programs) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
+                                                            <option disabled>Program Studi</option>
+                                                            <option :value="this.detailObject.study_program_id" selected>{{this.detailObject.study_program_name}}</option>
+                                                            <template v-for="item in studyProgramArray" :key="item.id">
+                                                                <option v-if="item.id !== this.detailObject.study_program_id" :value="item.id">{{item.name}}</option>
+                                                            </template>
+                                                            <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                        </select>
+                                                        <div v-if="this.isLoadingStudyPrograms == false">
+                                                            <div class="rounded-0 d-none d-lg-block">
+                                                                <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0">Muat lebih</a>                                                  
+                                                                <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0">Muat ulang</a>                                                  
+                                                            </div>
+                                                            <div class="rounded-0 d-sm-block d-lg-none">
+                                                                <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                            </div>
                                                         </div>
+                                                        <div v-else>
+                                                            <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                            </button>
+                                                            <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                Memuat...
+                                                            </button>
+                                                        </div>
+                                                        <div :class="isNaN(this.form.study_programs) ? 'text-start invalid-feedback' : 'd-none'">
+                                                            Pilih salah satu Program Studi!
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <select :disabled="this.isLoadingCategory" v-model="form.category_assets" :class="isNaN(this.form.category_assets) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
+                                                            <option selected disabled>Kategori</option>
+                                                            <option :value="this.detailObject.category_id" selected>{{this.detailObject.category_name}}</option>
+                                                            <template v-for="item in categoryArray" :key="item.id">
+                                                                <option v-if="item.id !== this.detailObject.category_id" :value="item.id">{{item.name}}</option>
+                                                            </template>
+                                                            <option v-if="this.showAlertCategory" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                        </select>
+                                                        <div v-if="this.isLoadingCategory == false">
+                                                            <div class="rounded-0 d-none d-lg-block">
+                                                                <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
+                                                                <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                            
+                                                            </div>
+                                                            <div class="rounded-0 d-sm-block d-lg-none">
+                                                                <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                            </div>
+                                                        </div> 
+                                                        <div v-else>
+                                                            <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                            </button>
+                                                            <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                Memuat...
+                                                            </button>
+                                                        </div>
+                                                        <div :class="isNaN(this.form.category_assets) ? 'text-start invalid-feedback' : 'd-none'">
+                                                            Pilih salah satu kategori!
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <select :disabled="this.isLoadingPlacements" v-model="form.placements" :class="isNaN(this.form.placements) ? 'form-select form-select is-invalid':'is-valid form-select form-select'" aria-label=".form-select example">
+                                                            <option selected disabled>Tempat</option>
+                                                            <option :value="this.detailObject.placement_id" selected>{{this.detailObject.placement_name}}</option>
+                                                            <template v-for="item in placementsArray" :key="item.id">
+                                                                <option v-if="item.id !== this.detailObject.placement_id" :value="item.id">{{item.name}}</option>
+                                                            </template>
+                                                            <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                        </select>
+                                                        <div v-if="this.isLoadingPlacements == false">
+                                                            <div class="rounded-0 d-none d-lg-block">
+                                                                <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
+                                                                <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                                  
+                                                            </div>
+                                                            <div class="rounded-0 d-sm-block d-lg-none">
+                                                                <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                            </div>
+                                                        </div>
+                                                        <div v-else>
+                                                            <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                            </button>
+                                                            <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                Memuat...
+                                                            </button>
+                                                        </div>
+                                                        <div :class="isNaN(this.form.placements) ? 'text-start invalid-feedback' : 'd-none'">
+                                                            Pilih salah satu tempat!
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <select v-model="form.condition" class="form-select form-select" aria-label=".form-select example">
+                                                            <option disabled>Kondisi</option>
+                                                            <option :value="this.detailObject.condition" selected>
+                                                                <template v-if="this.detailObject.condition == '0'">Optimal</template>
+                                                                <template v-else-if="this.detailObject.conditon == '1'">Rusak</template>
+                                                            </option>
+                                                            <template v-for="item in conditionArray" :key="item.condition">
+                                                                <option v-if="item.condition !== this.detailObject.condition" :value="item.condition">
+                                                                    {{item.description}}
+                                                                </option>
+                                                            </template>
+                                                            <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                        </select>
                                                     </div>
                                                     <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
                                                         <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                         <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                     </div>
                                                     <div v-if="isLoadingResponse == false">
-                                                        <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="!submitEnabled">Update</button>
+                                                        <button type="submit" class="btn btn-primary mt-3" style="width:100%;" :disabled="!submitEnabled">Update</button>
                                                     </div>
                                                     <div v-if="isLoadingResponse == true">
-                                                        <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
+                                                        <button type="submit" class="btn btn-primary mt-3" style="width:100%;" :disabled="true">
                                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                             Memuat ...
                                                         </button>
@@ -199,9 +302,13 @@
                 isLoading: true,
                 isLoading: true,
                 checkName: false,
-                errorDetail: false,
+                checkDescription: false,
+                submitEnabled: false,
                 buttonDisabled: false,
                 isLoadingContent: true,
+                isLoadingStudyPrograms: true,
+                isLoadingCategory: true,
+                isLoadingPlacements: true,
                 isLoadingResponse: false,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
@@ -210,7 +317,6 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: '',
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -221,7 +327,10 @@
                 widhtStyle: '',
                 form: {
                     name: '',
-                    description: ''
+                    study_programs: 'Program Studi',
+                    category_assets: 'Kategori',
+                    placements: 'Tempat',
+                    condition: 'Kondisi'
                 },
                 errorResponse: [],
                 errorDelete: [],
@@ -229,16 +338,46 @@
                 successDeleteResponse: [],
                 sessionData: [],
                 dataArray: [],
-                detailObject: {},
+                studyProgramArray: [],
+                errorStudyPrograms: [],
+                studyProgramTotal: 0,
+                categoryArray: [],
+                errorCategory: [],
+                categoryTotal: 0,
+                placementsArray: [],
+                errorPlacements: [],
+                placementsTotal: 0,
                 deleteArray: [],
+                conditionArray:[
+                    {
+                        "id": 1,
+                        "condition": "0",
+                        "description": "Optimal"
+                    },
+                    {
+                        "id": 2,
+                        "condition": "1",
+                        "description": "Rusak"
+                    }
+                ],
                 username: this.$session.name,
-                id: this.$route.query.data,
-                errorDetail: false,
+                errorLoans: false,
+                errorMaintenance: false,
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
+                showAlertStudyPrograms: false,
+                showAlertCategory: false,
+                showAlertPlacements: false,
+                skipStudyProgram: 0,
+                takeStudyProgram: 10,
+                skipCategory: 0,
+                takeCategory: 10,
+                skipPlacements: 0,
+                takePlacements: 10,
                 successDelete: false,
-                accountIcon: this.$baseUrl+'/src/assets/img/account.png'
+                accountIcon: this.$baseUrl+'/src/assets/img/account.png',
+                id: this.$route.query.data
             }
         },
         components: {
@@ -250,10 +389,16 @@
             form: {
                 handler: function (val) {
                     let name = val.name;
+                    let study_program_id = val.study_programs;
+                    let category_id = val.category_assets;
+                    let placement_id = val.placements;
+                    let condition = val.condition;
                     let validateName = this.validateName(name);
-                    let description = val.description;
-                    let validateDescription = this.validateDescription(description);
-                    if(validateDescription){
+
+                    // console.log(!(isNaN(study_program_id)))
+                    // console.log(!(isNaN(category_id)))
+                    // console.log(!(isNaN(placement_id)))
+                    if(validateName && !(isNaN(study_program_id)) && !(isNaN(category_id)) && !(isNaN(placement_id)) && condition != null) {
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -290,17 +435,6 @@
                     return false;
                 }
             },
-            validateDescription(value){
-                // console.log(value1);
-                if(value.length >= 5) {
-                    this.checkDescription = true;
-                    // console.log(this.fullname);
-                    return true;
-                } else {
-                    this.checkDescription = false;
-                    return false;
-                }
-            },
             backFunction(){
                 // this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -324,7 +458,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageAssets' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -340,16 +474,28 @@
             async detailFunction(id){
                 try {
                     let data = window.atob(id)
-                    await axios.get('/categoryAssets/detail/'+data)
+                    await axios.get('/assets/detail/'+data)
                     .then((response) => {
                         // console.log(response.data.data)
                         this.detailObject = {
                             "id": response.data.data.id,
                             "name": response.data.data.name,
-                            "description": response.data.data.description
+                            "code": response.data.data.code,
+                            "placement_id": response.data.data.placement_id,
+                            "placement_name": response.data.data.placement_name,
+                            "category_id": response.data.data.category_id,
+                            "category_name": response.data.data.category_name,
+                            "study_program_id": response.data.data.study_program_id,
+                            "study_program_name": response.data.data.study_program_name,
+                            "condition": response.data.data.condition
                         };
+                        this.form.study_programs = this.detailObject.study_program_id
+                        this.form.placements = this.detailObject.placement_id
+                        this.form.category_assets = this.detailObject.category_id
+                        this.form.name = this.detailObject.name
+                        this.form.condition = this.detailObject.condition
+                        // console.log(typeof this.detailObject.placement_id)
                         // this.form.name = this.detailObject.name;
-                        this.form.description = this.detailObject.description;
                     }).catch((err) => {
                         if(!err.response) {
                             this.errorDetail = true;
@@ -409,13 +555,17 @@
                 let data = window.atob(this.id)
                 // this.cursorStyle = 'cursor: not-allowed';
                 this.dataObject = {
-                    "id": data,
-                    "new_name": this.form.name,
-                    "description": this.form.description,
+                    "id": parseInt(data),
+                    "name": this.form.name,
+                    "placement_id": parseInt(this.form.placements),
+                    "study_program_id": parseInt(this.form.study_programs),
+                    "category_id": parseInt(this.form.category_assets),
+                    "condition": this.form.condition,
                 }
+                // console.table(this.dataObject)
                 // console.log(this.dataObject);
                 try {
-                    await axios.put('/categoryAssets/update', this.dataObject)
+                    await axios.put('/assets/update', this.dataObject)
                     .then((response) => {
                         // this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -498,6 +648,239 @@
                 this.successResponse = [];
                 this.errorResponse = [];
             },
+            nextStudyProgram(){
+                this.skipStudyProgram = this.skipStudyProgram+10;
+                this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)
+            },
+            async getStudyProgram(skip, take){
+                this.isLoadingStudyPrograms = true;
+                this.showAlertStudyPrograms = false;
+                this.errorStudyPrograms = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                    "name": this.name
+                }
+                try {
+                    await axios.get('/studyPrograms/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                            this.studyProgramArray.push(
+                                {
+                                    "id": response.data.data.study_programs[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.study_programs[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.studyProgramTotal = response.data.data.count;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertStudyPrograms = true;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorStudyPrograms = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertStudyPrograms = true;
+                    this.isLoadingStudyPrograms = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            nextCategory(){
+                this.skipCategory = this.skipCategory+10;
+                this.getCategory(this.skipCategory, this.takeCategory)
+            },
+            async getCategory(skip, take){
+                this.isLoadingCategory = true;
+                this.showAlertCategory = false;
+                this.errorCategory = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                    "order": "name"
+                }
+                try {
+                    await axios.get('/categoryAssets/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.category_assets).forEach((item) => {
+                            this.categoryArray.push(
+                                {
+                                    "id": response.data.data.category_assets[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.category_assets[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.categoryTotal = response.data.data.count;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertCategory = true;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorCategory = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertCategory = true;
+                    this.isLoadingCategory = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            nextPlacements(){
+                this.skipPlacements = this.skipPlacements+10;
+                this.getPlacements(this.skipPlacements, this.takePlacements)
+            },
+            async getPlacements(skip, take){
+                this.isLoadingPlacements = true;
+                this.showAlertPlacements = false;
+                this.errorPlacements = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                }
+                try {
+                    await axios.get('/placements/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.placements).forEach((item) => {
+                            this.placementsArray.push(
+                                {
+                                    "id": response.data.data.placements[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.placements[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.placementsTotal = response.data.data.count;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertPlacements = true;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorPlacements = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertPlacements = true;
+                    this.isLoadingPlacements = false;
+                    this.buttonDisabled = false;
+                }
+            },
         },
         created(){
             window.addEventListener('resize', () => {
@@ -533,6 +916,9 @@
                 // window.location.reload();
             }
             // console.log(window.atob(this.id));
+            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
+            this.getCategory(this.skipCategory, this.takeCategory);
+            this.getPlacements(this.skipPlacements, this.takePlacements);
             this.detailFunction(this.id);
             // this.loansList();
             // console.log(this.detailObject);

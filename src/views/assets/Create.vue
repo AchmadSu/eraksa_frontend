@@ -94,61 +94,89 @@
                                                 </div>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <select v-model="form.study_programs" class="form-select form-select mb-3" aria-label=".form-select example">
+                                                <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" :class="isNaN(this.form.study_programs) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
                                                     <option selected disabled>Program Studi</option>
                                                     <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
                                                     <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
                                                 </select>
-                                                <div v-if="this.isLoadingStudyPrograms == false" class="rounded-0">
-                                                    <a @click="getStudyProgram(this.skipStudyProgram+10, this.takeStudyProgram)" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>                                                  
-                                                    <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
+                                                <div v-if="this.isLoadingStudyPrograms == false">
+                                                    <div class="rounded-0 d-none d-lg-block">
+                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>                                                  
+                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
+                                                    </div>
+                                                    <div class="rounded-0 d-sm-block d-lg-none">
+                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0"></a>                                                  
+                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0"></a>                                                  
+                                                    </div>
                                                 </div>
                                                 <div v-else>
-                                                    <button type="submit" class="btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                    <button type="submit" class="d-sm-block d-lg-none btn btn-primary rounded-0" style="width:100%;" :disabled="true">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        
+                                                    </button>
+                                                    <button type="submit" class="d-sm-none d-lg-block btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Memuat...
                                                     </button>
                                                 </div>
-                                                <div :class="this.checkStudyProgram == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                <div :class="isNaN(this.form.study_programs) ? 'text-start invalid-feedback' : 'd-none'">
                                                     Pilih salah satu Program Studi!
                                                 </div>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <select v-model="form.category_assets" class="form-select form-select mb-3" aria-label=".form-select example">
+                                                <select :disabled="this.isLoadingCategory" v-model="form.category_assets" :class="isNaN(this.form.category_assets) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
                                                     <option selected disabled>Kategori</option>
                                                     <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
                                                     <option v-if="this.showAlertCategory" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
                                                 </select>
-                                                <div v-if="this.isLoadingCategory == false" class="rounded-0">
-                                                    <a @click="getCategory(this.skipCategory+10, this.takeCategory)" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>
-                                                    <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                            
-                                                </div>
+                                                <div v-if="this.isLoadingCategory == false">
+                                                    <div class="rounded-0 d-none d-lg-block">
+                                                        <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
+                                                        <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                            
+                                                    </div>
+                                                    <div class="rounded-0 d-sm-block d-lg-none">
+                                                        <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>
+                                                        <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>
+                                                    </div>
+                                                </div> 
                                                 <div v-else>
-                                                    <button type="submit" class="btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                    <button type="submit" class="btn btn-primary rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Memuat...
                                                     </button>
                                                 </div>
-                                                <div :class="this.checkCategory == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                <div :class="isNaN(this.form.category_assets) ? 'text-start invalid-feedback' : 'd-none'">
                                                     Pilih salah satu kategori!
                                                 </div>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <select v-model="form.placements" class="form-select form-select mb-3" aria-label=".form-select example">
+                                                <select :disabled="this.isLoadingPlacements" v-model="form.placements" :class="isNaN(this.form.placements) ? 'form-select form-select is-invalid':'is-valid form-select form-select'" aria-label=".form-select example">
                                                     <option selected disabled>Tempat</option>
                                                     <option v-for="item in placementsArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                    <option v-if="this.showAlertPlacements" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                    <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
                                                 </select>
-                                                <div v-if="this.isLoadingPlacements == false" class="rounded-0">
-                                                    <a @click="getPlacements(this.skipPlacements+10, this.takePlacements)" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>
-                                                    <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
+                                                <div v-if="this.isLoadingPlacements == false">
+                                                    <div class="rounded-0 d-none d-lg-block">
+                                                        <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
+                                                        <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                                  
+                                                    </div>
+                                                    <div class="rounded-0 d-sm-block d-lg-none">
+                                                        <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>
+                                                        <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                    </div>
                                                 </div>
                                                 <div v-else>
-                                                    <button type="submit" class="btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                    <button type="submit" class="btn btn-primary rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
                                                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     </button>
+                                                    <button type="submit" class="btn btn-primary rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Memuat...
+                                                    </button>
                                                 </div>
-                                                <div :class="this.checkPlacements == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                <div :class="isNaN(this.form.placements) ? 'text-start invalid-feedback' : 'd-none'">
                                                     Pilih salah satu tempat!
                                                 </div>
                                             </div>
@@ -157,10 +185,10 @@
                                                 <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                             <div v-if="isLoadingResponse == false">
-                                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Tambah</button>
+                                                <button type="submit" class="btn btn-success mt-3" style="width:100%;" :disabled="!submitEnabled">Tambah</button>
                                             </div>
                                             <div v-if="isLoadingResponse == true">
-                                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                                <button type="submit" class="btn btn-success mt-3" style="width:100%;" :disabled="true">
                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Memuat ...
                                                 </button>
@@ -334,17 +362,6 @@
                     return false;
                 }
             },
-            validateDescription(value){
-                // console.log(value1);
-                if(value.length >= 5) {
-                    this.checkDescription = true;
-                    // console.log(this.fullname);
-                    return true;
-                } else {
-                    this.checkDescription = false;
-                    return false;
-                }
-            },
             backFunction(){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -479,6 +496,10 @@
                 this.successResponse = [];
                 this.errorResponse = [];
             },
+            nextStudyProgram(){
+                this.skipStudyProgram = this.skipStudyProgram+10;
+                this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)
+            },
             async getStudyProgram(skip, take){
                 this.isLoadingStudyPrograms = true;
                 this.showAlertStudyPrograms = false;
@@ -553,6 +574,10 @@
                     this.buttonDisabled = false;
                 }
             },
+            nextCategory(){
+                this.skipCategory = this.skipCategory+10;
+                this.getCategory(this.skipCategory, this.takeCategory)
+            },
             async getCategory(skip, take){
                 this.isLoadingCategory = true;
                 this.showAlertCategory = false;
@@ -626,6 +651,10 @@
                     this.isLoadingCategory = false;
                     this.buttonDisabled = false;
                 }
+            },
+            nextPlacements(){
+                this.skipPlacements = this.skipPlacements+10;
+                this.getPlacements(this.skipPlacements, this.takePlacements)
             },
             async getPlacements(skip, take){
                 this.isLoadingPlacements = true;
@@ -737,6 +766,8 @@
             this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
             this.getCategory(this.skipCategory, this.takeCategory);
             this.getPlacements(this.skipPlacements, this.takePlacements);
+
+            // console.log(isNaN(this.form.placements))
             // console.log(this.$route.query.search);
             // this.loansList();
             // this.dataArray.filter((index) => index !== 1 )
