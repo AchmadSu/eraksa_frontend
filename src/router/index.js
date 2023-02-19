@@ -5,6 +5,7 @@ import userRouter from './user/router';
 import categoryAssetsRouter from './categoryAssets/router';
 import workshopsRouter from './workshops/router';
 import assetsRouter from './assets/router';
+import loansRouter from './loans/router';
 
 const routes = [
     {
@@ -41,6 +42,10 @@ Object.keys(workshopsRouter).forEach((item) => {
 
 Object.keys(assetsRouter).forEach((item) => {
     routes.push(assetsRouter[item]);
+})
+
+Object.keys(loansRouter).forEach((item) => {
+    routes.push(loansRouter[item]);
 })
 
 const router = createRouter({

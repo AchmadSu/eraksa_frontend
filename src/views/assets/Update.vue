@@ -226,7 +226,7 @@
                                                             <option disabled>Kondisi</option>
                                                             <option :value="this.detailObject.condition" selected>
                                                                 <template v-if="this.detailObject.condition == '0'">Optimal</template>
-                                                                <template v-else-if="this.detailObject.conditon == '1'">Rusak</template>
+                                                                <template v-else-if="this.detailObject.condition == '1'">Rusak</template>
                                                             </option>
                                                             <template v-for="item in conditionArray" :key="item.condition">
                                                                 <option v-if="item.condition !== this.detailObject.condition" :value="item.condition">

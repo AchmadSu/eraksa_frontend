@@ -69,7 +69,16 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" :style="this.cursorStyle" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline text-success"><b>{{username}}</b></span>
+                    <span class="mr-2 d-none d-lg-inline text-success">
+                        <b>
+                            <template v-if="username.length < 20">
+                                {{username}}
+                            </template>
+                            <template v-else>
+                                {{username.substring(0,20)+"..."}}
+                            </template>
+                        </b>
+                    </span>
                     <img class="img-profile rounded-circle" :src="this.accountIcon">
                 </a>
                 <!-- Dropdown - User Information -->
