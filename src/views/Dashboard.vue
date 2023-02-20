@@ -45,7 +45,7 @@
                             </div>
                             <div v-else class="d-sm-flex align-items-center justify-content-between mb-4">
                                 <h1 class="h4 mb-0 text-gray-800">Aset yang dapat dipinjam</h1>
-                                <a href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                <a @click="createLoans" href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                     <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
                                 </a>
                             </div>
@@ -202,6 +202,40 @@
                 } catch (error) {
                     this.isLoadingContent = false;
                     this.errorLoans = true;
+                }
+            },
+            createLoans(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'createLoans' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
                 }
             },
             dashboard(){

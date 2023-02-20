@@ -80,12 +80,12 @@
                                     <form class="form needs-validation" id="app" @submit.prevent="createFunction" novalidate>
                                         <div class="py-lg-4 py-md-0 py-sm-1">
                                             <div class="row">
-                                                <div class="col-lg-6 col-sm-12">
-                                                    <div class="input-group mb-3">
-                                                        <button style="width: 100%;" class="form-select is-valid btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <div class="col-lg-8 col-sm-12">
+                                                    <div class="dropdown input-group mb-3">
+                                                        <a style="width: 100%;" :class="this.selectDataArray.length == 0 ? 'form-select is-invalid btn btn-light':'form-select is-valid btn btn-light'" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                             Pilih Aset
-                                                        </button>
-                                                        <ul style="width: 100%;" class="dropdown-menu border-bottom-success shadow-lg p-2">
+                                                        </a>
+                                                        <ul style="width: 100%;" class="dropdown-menu border-bottom-success shadow-lg p-2" aria-labelledby="dropdownMenuLink">
                                                             <li v-if="isTyping" class="pb-2 text-center">
                                                                 Tekan tombol ENTER untuk mengeksekusi pencarian
                                                             </li>
@@ -113,9 +113,9 @@
                                                                     />
                                                                 </a>
                                                             </li>
-                                                            <li v-if="this.isLoadingAssets == false" v-for="item in dataArray" class="mb-2">
-                                                                <div class="list-group mt-3">
-                                                                    <a href="#" class="border-primary dropdown-item list-group-item list-group-item-action">
+                                                            <li v-if="this.isLoadingAssets == false" v-for="item in dataArray" :selectedAssets="selectedAssets" class="mb-2">
+                                                                <div v-if="item.id != this.selectDataArray.id" class="list-group mt-3">
+                                                                    <a @click="addSelection(item.id)" href="#" class="border-primary dropdown-item list-group-item list-group-item-action">
                                                                         <h6 class="h6">
                                                                             <template v-if="this.windowWidth > $widthPotraitPhone">
                                                                                 <template v-if="item.name.length < 35">
@@ -182,38 +182,42 @@
                                                             </li>
                                                             <div v-if="this.isLoadingAssets == false && this.errorAssets == false" class="row text-center d-flex justify-content-evenly mt-3 mb-2">
                                                                 <div v-if="this.skipAsset > 0" class="col-6">
-                                                                    <button @click="prevFunction" class="btn btn-primary">
+                                                                    <a @click="prevFunction" class="btn btn-primary">
                                                                         <i class="fa fa-arrow-left"></i> 
                                                                         <!-- <template v-if="this.windowWidth > $widthPotraitPhone"> -->
                                                                             Sebelumnya
                                                                         <!-- </template> -->
-                                                                    </button>
+                                                                    </a>
                                                                 </div>
                                                                 <div v-if="this.next < this.dataCount" class="col-6">
-                                                                    <button @click="nextFunction" class="btn btn-primary">
+                                                                    <a @click="nextFunction" class="btn btn-primary">
                                                                         <i class="fa fa-arrow-right"></i> 
                                                                         <!-- <template v-if="this.windowWidth > $widthPotraitPhone"> -->
                                                                             Selanjutnya
                                                                         <!-- </template> -->
-                                                                    </button>
+                                                                    </a>
                                                                 </div>
                                                             </div>
-                                                            <div v-if="this.isLoadingAssets == false && this.keyWords != ''" class="row text-center d-flex justify-content-center mt-3 mb-2">
-                                                                <div class="col-12">
-                                                                    <button @click="loadAllFunction" class="btn btn-secondary"> 
-                                                                        <!-- <template v-if="this.windowWidth > $widthPotraitPhone"> -->
+                                                            <div v-if="this.isLoadingAssets == false && (this.keyWords != '' || this.errorAssets)" class="row text-center d-flex justify-content-center mt-3 mb-2">
+                                                                <div class="col-12 d-flex justify-content-center">
+                                                                    <a @click="loadAllFunction" class="btn btn-primary">
+                                                                        <i class="fa fa-undo"></i> 
+                                                                        <template v-if="this.keyWords != ''">
                                                                             Muat Seluruh Data
-                                                                        <!-- </template> -->
-                                                                    </button>
+                                                                        </template>
+                                                                        <template v-else>
+                                                                            Muat Ulang
+                                                                        </template>
+                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </ul>
-                                                        <div :class="isNaN(this.form.time) ? 'text-start invalid-feedback' : 'd-none'">
+                                                        <div :class="this.selectDataArray.length == 0 ? 'text-start invalid-feedback' : 'd-none'">
                                                             Tidak ada aset yang dipilih
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6 col-sm-12">
+                                                <div class="col-lg-4 col-sm-12">
                                                     <div class="input-group mb-3">
                                                         <select v-model="form.time" :class="isNaN(this.form.time) ? 'form-select form-select is-invalid':'is-valid form-select form-select'" aria-label=".form-select example">
                                                             <option selected disabled>Lama Peminjaman</option>
@@ -226,21 +230,21 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-5">
-                                                <div class="col-sm-6 col-lg-4 my-3">
-                                                    <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
+                                                <div v-for="item, index in selectDataArray" class="col-sm-6 col-lg-4 my-3">
+                                                    <div @click="removeSelection(item.id)" class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Kategori Aset</h6> <span>Nama Kategori</span>
+                                                                    <h6 class="mb-0">Kategori Aset</h6> <span>{{item.category_name}}</span>
                                                                 </div>
                                                             </div>
-                                                            <div class="badge text-primary"> <span>TERSEDIA</span> </div>
+                                                            <div class="badge text-primary"> <span>DIPILIH</span> </div>
                                                         </div>
                                                         <div class="my-2">
-                                                            <h3 class="heading">Nama Item</h3>
-                                                            <h6>Kode Item</h6>
-                                                            <h6>Prodi</h6>
+                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <h6>{{item.code}}</h6>
+                                                            <h6>{{item.study_program_name}}</h6>
                                                             <div class=" mt-3">
                                                                 <div class="mt-3"> 
                                                                     <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk membatalkan pilihan</span>
@@ -251,9 +255,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
+                                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
                                                 <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                             </div>
                                             <div v-if="isLoadingResponse == false">
                                                 <button type="submit" class="btn btn-success" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled">Buat Permintaan</button>
@@ -337,6 +341,7 @@
                     time: 'Lama Peminjaman',
                     search: '',
                 },
+                filterIds: [],
                 timesArray: [
                     {
                         "id": 1,
@@ -432,7 +437,9 @@
                 showAlertSuccess: false,
                 showAlertError: false,
                 successDelete: false,
-                accountIcon: this.$baseUrl+'/src/assets/img/account.png'
+                accountIcon: this.$baseUrl+'/src/assets/img/account.png',
+                validateForm: false,
+                validateSelect: false
             }
         },
         components: {
@@ -441,6 +448,29 @@
             Footer
         },
         watch: {
+            submitEnabled: {
+                handler: function () {
+                    // console.log("Test HAHAY")
+                    if(this.validateSelect && this.validateForm) {
+                        this.submitEnabled = true
+                    } else {
+                        this.submitEnabled = false
+                    }
+                },
+                deep: true,
+            },
+            selectDataArray: {
+                handler: function(val){
+                    let length = val.length
+                    if(length > 0) {
+                        this.validateSelect = true;
+                    } else {
+                        this.validateSelect = false;
+                    }
+                    this.validateRequest()
+                },
+                deep: true,
+            },
             form: {
                 handler: function (val) {
                     let time = val.time
@@ -451,14 +481,14 @@
                     } else {
                         this.isTyping = false;
                     }
+
+                    if (!isNaN(time)) {
+                        this.validateForm = true;
+                    } else {
+                        this.validateForm = false;
+                    }
                     
-                    // let name = val.name;
-                    // let validateName = this.validateName(name);
-                    // if(validateName){
-                    //     this.submitEnabled = true;
-                    // } else {
-                    //     this.submitEnabled = false;
-                    // }
+                    this.validateRequest()
                 },
                 deep: true,
             },
@@ -480,15 +510,12 @@
                 // console.log("test")
                 $('#successModal').modal('hide')
             },
-            validateName(value){
+            validateRequest(){
                 // console.log(value1);
-                if(value.length >= 3) {
-                    this.checkName = true;
-                    // console.log(this.fullname);
-                    return true;
+                if(this.validateForm && this.validateSelect) {
+                    this.submitEnabled = true;
                 } else {
-                    this.checkName = false;
-                    return false;
+                    this.submitEnabled = false;
                 }
             },
             backFunction(){
@@ -514,7 +541,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            // this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -532,13 +559,16 @@
                 this.isLoadingResponse = true;
                 this.buttonDisabled = true;
                 this.cursorStyle = 'cursor: not-allowed';
-                this.dataPlacements = {
-                    "name": this.form.name,
+                let asset_ids = Object.values(this.filterIds)
+                this.dataCreate = {
+                    "hours": this.form.time,
+                    "asset_ids" : asset_ids
                 }
+                // console.log(this.dataCreate)
                 // this.openModal();
                 // console.log(this.dataPlacements);
                 try {
-                    await axios.post('/placements/create', this.dataPlacements)
+                    await axios.post('/loans/create', this.dataCreate)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -644,9 +674,10 @@
                 this.getAssets(this.skipAsset, this.takeAsset)
             },
             async getAssets(skip, take){
-                    // console.log('test1');
                 this.isLoadingAssets = true;
                 this.showAlert = false;
+                let negation_ids = Object.values(this.filterIds)
+                // console.log(negation_ids)
                 this.dataObject = {
                     "skip": skip,
                     "take": take,
@@ -655,6 +686,7 @@
                     "order": "name",
                     "condition": 0,
                     "status": 0,
+                    "negation_ids": negation_ids 
                 }
                 try {
                     await axios.get('/assets/getAll', {params: this.dataObject})
@@ -668,6 +700,7 @@
                                     "code": response.data.data.assets[item].code,
                                     "condition": response.data.data.assets[item].condition,
                                     "status": response.data.data.assets[item].status,
+                                    "category_name": response.data.data.assets[item].category_name,
                                     "study_program_name": response.data.data.assets[item].study_program_name,
                                 }
                             );
@@ -678,7 +711,7 @@
                             
                         // }
                         this.isLoadingAssets = false;
-                        this.isLoadingResponse1 = false;
+                        // this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                     }).catch((err) => {
@@ -692,7 +725,7 @@
                                 }
                             ];
                         this.isLoadingAssets = false;
-                        this.isLoadingResponse1 = false;
+                        // this.isLoadingResponse1 = false;
                         this.buttonDisabled = false;
                         this.isLoadingContent = false;
                         // console.log(err.response);
@@ -707,7 +740,7 @@
                                 }
                             ];
                             this.isLoadingAssets = false;
-                            this.isLoadingResponse1 = false;
+                            // this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         } else {
@@ -720,7 +753,7 @@
                                 }
                             ];
                             this.isLoadingAssets = false;
-                            this.isLoadingResponse1 = false;
+                            // this.isLoadingResponse1 = false;
                             this.isLoadingContent = false;
                             this.buttonDisabled = false;
                         }
@@ -737,12 +770,31 @@
                     ];
                     this.isLoadingAssets = false;
                     this.isLoading = false;
-                    this.isLoadingResponse1 = false;
+                    // this.isLoadingResponse1 = false;
                     this.isLoadingContent = false;
                     this.isLoadingContent = false;
                     this.errorAssets = true;
                     this.buttonDisabled = false;
                 }
+            },
+            addSelection(id){
+                // console.log(index)
+                let select = this.dataArray.filter(item => item.id == id)
+                Object.keys(select).forEach((item) => {
+                    this.selectDataArray.push(select[item])
+                    this.filterIds.push(select[item].id)
+                })
+                this.dataArray = this.dataArray.filter(item => item.id != id)
+                this.dataCount = this.dataCount-1
+                console.log(this.filterIds)
+            },
+            removeSelection(id){
+                let select = this.selectDataArray.filter(item => item.id == id)
+                this.dataArray.push(select[0])
+                this.selectDataArray = this.selectDataArray.filter(item => item.id != id)
+                this.filterIds = this.filterIds.filter(item => item != id)
+                this.dataCount = this.dataCount+1
+                console.log(this.filterIds)
             },
             setAlert(){
                 // this.alertMsg = null;
