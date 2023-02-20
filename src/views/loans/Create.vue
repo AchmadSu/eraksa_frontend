@@ -219,7 +219,7 @@
                                                 </div>
                                                 <div class="col-lg-4 col-sm-12">
                                                     <div class="input-group mb-3">
-                                                        <select v-model="form.time" :class="isNaN(this.form.time) ? 'form-select form-select is-invalid':'is-valid form-select form-select'" aria-label=".form-select example">
+                                                        <select v-model="form.time" :class="isNaN(this.form.time) ? 'form-select form-select is-invalid text-center':'is-valid text-center form-select form-select'" aria-label=".form-select example">
                                                             <option selected disabled>Lama Peminjaman</option>
                                                             <option v-for="item in timesArray" :key="item.id" :value="item.value">{{item.description}}</option>
                                                         </select>
@@ -236,7 +236,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Kategori Aset</h6> <span>{{item.category_name}}</span>
+                                                                    <span>Kategori Aset</span> <h6>{{item.category_name}}</h6>
                                                                 </div>
                                                             </div>
                                                             <div class="badge text-primary"> <span>DIPILIH</span> </div>
@@ -245,7 +245,7 @@
                                                             <h3 class="heading">{{item.name}}</h3>
                                                             <h6>{{item.code}}</h6>
                                                             <h6>{{item.study_program_name}}</h6>
-                                                            <div class=" mt-3">
+                                                            <div class="text-center mt-3">
                                                                 <div class="mt-3"> 
                                                                     <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk membatalkan pilihan</span>
                                                                     <span v-else class="text2">Klik untuk membatalkan pilihan</span>
@@ -260,7 +260,7 @@
                                                 <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                             </div>
                                             <div v-if="isLoadingResponse == false">
-                                                <button type="submit" class="btn btn-success" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled">Buat Permintaan</button>
+                                                <button type="submit" class="btn btn-success" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled"><i class="fa fa-paper-plane"></i> Ajukan Permintaan</button>
                                             </div>
                                             <div v-if="isLoadingResponse == true">
                                                 <button type="submit" class="btn btn-success" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="true">
@@ -450,7 +450,6 @@
         watch: {
             submitEnabled: {
                 handler: function () {
-                    // console.log("Test HAHAY")
                     if(this.validateSelect && this.validateForm) {
                         this.submitEnabled = true
                     } else {
@@ -794,7 +793,7 @@
                 this.selectDataArray = this.selectDataArray.filter(item => item.id != id)
                 this.filterIds = this.filterIds.filter(item => item != id)
                 this.dataCount = this.dataCount+1
-                console.log(this.filterIds)
+                // console.log(this.filterIds)
             },
             setAlert(){
                 // this.alertMsg = null;
@@ -831,7 +830,7 @@
             // console.log(this.$route.query.search);
             // this.loansList();
             // this.dataArray.filter((index) => index !== 1 )
-            console.log(typeof this.form.time)
+            // console.log(typeof this.form.time)
             
             window.scrollTo(0,0);
             // console.log(this.dataArray.length === 0);

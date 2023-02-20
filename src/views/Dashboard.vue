@@ -70,7 +70,7 @@
                                             <div class="d-flex flex-row align-items-center">
                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                 <div class="ms-2 c-details">
-                                                    <h6 class="mb-0">Kategori Aset</h6> <span>{{item.category_name}}</span>
+                                                    <span>Kategori Aset</span> <h6>{{item.category_name}}</h6>
                                                 </div>
                                             </div>
                                             <div class="badge text-primary"> <span>TERSEDIA</span> </div>
@@ -173,7 +173,7 @@
                         "condition": "0",
                         "skip": 0,
                         "take": 6,
-                        "random": 1
+                        "order": "name"
                     }
                 } else {
                     this.dataLoans = {
@@ -181,7 +181,7 @@
                         "condition": "0",
                         "skip": 0,
                         "take": 4,
-                        "random": 1
+                        "order": "name"
                     }
                 }
                 try {
