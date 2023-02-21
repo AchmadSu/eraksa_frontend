@@ -63,7 +63,7 @@
                                 </div>
                                 <h6 class="text-center my-3">Atau mungkin koneksi anda terganggu, silakan muat ulang!</h6>
                             </div>
-                            <div class="row">
+                            <div class="row d-flex justify-content-evenly">
                                 <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                         <div class="d-flex justify-content-between">
@@ -225,7 +225,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'createLoans' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'loans.create' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

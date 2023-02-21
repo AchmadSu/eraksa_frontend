@@ -37,7 +37,7 @@
             </div>
         
             <!-- Content Row -->
-            <div class="row">
+            <div class="row d-flex justify-content-evenly">
                 <!-- Aset yang dipinjam -->
                 <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-primary shadow h-100 w-100 py-2">

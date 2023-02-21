@@ -173,6 +173,12 @@
                                                                     </a>
                                                                 </div>
                                                             </li>
+                                                            <li v-if="this.errorAssets" v-for="item in this.errorAssetsArray" class="mb-2 mt-2 text-center d-flex justify-content-center">
+                                                                <div class="list-group">
+                                                                    <h6>{{item.message}}</h6>
+                                                                    <span>{{item.detail}}</span>
+                                                                </div>
+                                                            </li>
                                                             <li v-if="this.isLoadingAssets" class="mb-2 mt-2 d-flex justify-content-center">
                                                                 <div class="list-group">
                                                                     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -229,7 +235,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row mb-5">
+                                            <div class="row d-flex justify-content-evenly mb-5">
                                                 <div v-for="item, index in selectDataArray" class="col-sm-6 col-lg-4 my-3">
                                                     <div @click="removeSelection(item.id)" class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                                         <div class="d-flex justify-content-between">
@@ -673,6 +679,7 @@
                 this.getAssets(this.skipAsset, this.takeAsset)
             },
             async getAssets(skip, take){
+                this.errorAssets = false;
                 this.isLoadingAssets = true;
                 this.showAlert = false;
                 let negation_ids = Object.values(this.filterIds)
@@ -785,7 +792,7 @@
                 })
                 this.dataArray = this.dataArray.filter(item => item.id != id)
                 this.dataCount = this.dataCount-1
-                console.log(this.filterIds)
+                // console.log(this.filterIds)
             },
             removeSelection(id){
                 let select = this.selectDataArray.filter(item => item.id == id)

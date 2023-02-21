@@ -1,7 +1,7 @@
 const loansRouter = [
     {
         path:'/loans/create',
-        name : 'createLoans',
+        name : 'loans.create',
         component : () => import("../../views/loans/Create.vue")
     },
     // {
@@ -14,11 +14,11 @@ const loansRouter = [
     //     name : 'manageAssets.create',
     //     component : () => import("../../views/assets/Create.vue")
     // },
-    // {
-    //     path:'/manage/assets/edit',
-    //     name : 'manageAssets.update',
-    //     component : () => import("../../views/assets/Update.vue")
-    // },
+    {
+        path:'/loans/edit',
+        name : 'loans.update',
+        component : () => import("../../views/loans/Update.vue")
+    },
     // {
     //     path:'/register',
     //     name : 'user.register',

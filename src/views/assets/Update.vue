@@ -641,6 +641,7 @@
                     this.showAlert = true;
                     this.buttonDisabled = false;
                 }
+                this.isLoading = false;
             },
             setAlert(){
                 // this.alertMsg = null;

@@ -429,7 +429,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'createLoans' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'loans.create' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

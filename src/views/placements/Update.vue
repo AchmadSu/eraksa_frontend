@@ -376,6 +376,7 @@
                     this.showAlert = true;
                     this.buttonDisabled = false;
                 }
+                this.isLoading = false;
             },
             async updateFunction(){
                 this.setAlert();
@@ -517,7 +518,7 @@
             // console.log(this.dataArray.length === 0);
             
             // setTimeout(() => this.isLoadingContent = false, 8000);
-            setTimeout(() => this.isLoading = false, 3000);
+            // setTimeout(() => this.isLoading = false, 3000);
             setTimeout(() => this.isLoadingImage = false, 10000);
         },
     }
