@@ -76,11 +76,11 @@
                                             <div class="badge text-primary"> <span>TERSEDIA</span> </div>
                                         </div>
                                         <div class="my-2">
-                                            <h3 class="heading">{{item.name}}</h3>
+                                            <h3 class="heading text-left">{{item.name}}</h3>
                                             <h6>{{item.code}}</h6>
                                             <h6>{{item.study_program_name}}</h6>
                                             <div class=" mt-3">
-                                                <div class="mt-3"> 
+                                                <div class="mt-3 text-center"> 
                                                     <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
                                                     <span v-else class="text2">Klik untuk selengkapnya</span>
                                                 </div>
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div v-if="this.errorLoans == false" class="col-12 mb-5">
-                                    <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
+                                    <a @click="createLoans" href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
                                         <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
                                     </a>
                                 </div>

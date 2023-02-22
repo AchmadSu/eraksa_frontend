@@ -117,10 +117,10 @@
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
                                                 <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-center">
-                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/loans/img/404.png'" alt="">
                                                 </div>
                                                 <div v-else class="col-12 d-flex justify-content-center">
-                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/loans/img/404.png'" alt="">
                                                 </div>
                                                 <div class="text-center text-sm-justify mt-3">
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
@@ -139,52 +139,28 @@
                                                     <thead>
                                                         <tr class="text-center">
                                                             <th class="align-middle">No</th>
-                                                            <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">Kode Aset</th>
-                                                            <th class="align-middle">Dibuat oleh</th>
-                                                            <th class="align-middle">Program Studi</th>
-                                                            <th class="align-middle">Kondisi</th>
+                                                            <th class="align-middle">Kode</th>
                                                             <th class="align-middle">Status</th>
-                                                            <th class="align-middle">Tanggal Masuk</th>
-                                                            <th class="align-middle">Penempatan</th>
-                                                            <th class="align-middle">Kategori Aset</th>
-                                                            <th class="align-middle" colspan="6">
-                                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </button>
-                                                            </th>
+                                                            <th class="align-middle">Waktu Mulai</th>
+                                                            <th class="align-middle">Tenggat Waktu</th>
+                                                            <th class="align-middle">Periode</th>
+                                                            <th class="align-middle">Peminjam</th>
+                                                            <th class="align-middle" colspan="2">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="text-center">{{index+1}}</td>
-                                                            <td><b>{{item.name}}</b></td>
-                                                            <td>{{item.code}}</td>
-                                                            <td>{{item.user_name}}</td>
-                                                            <td>{{item.study_program_name}}</td>
-                                                            <td v-if="item.condition == 0">Optimal</td>
-                                                            <td v-else>Rusak</td>
-                                                            <td v-if="item.status == 0">Tersedia</td>
-                                                            <td v-else-if="item.status == 1">Dipinjam</td>
-                                                            <td v-else-if="item.status == 2">Diperbaiki</td>
+                                                            <td><b>{{item.code}}</b></td>
+                                                            <td v-if="item.status == '0'">Menunggu konfirmasi</td>
                                                             <td>{{item.date}}</td>
-                                                            <td>{{item.placement_name}}</td>
-                                                            <td>{{item.category_name}}</td>
-                                                            <td v-if="item.status == 0" class="text-center" colspan="3">
+                                                            <td>{{item.due_date}}</td>
+                                                            <td>Ini adalah periode</td>
+                                                            <td>{{item.loaner_name}}</td>
+                                                            <td class="text-center">
                                                                 <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-pencil"></i> <br>
+                                                                    <i class="fa fa-info"></i> <br> Lihat Details
                                                                 </button>
-                                                            </td>
-                                                            <td v-else class="text-center bg-light" colspan="3">
-                                                                &nbsp;
-                                                            </td>
-                                                            <td v-if="item.status == 0" class="text-center" colspan="3">
-                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-trash-o"></i> <br>
-                                                                </button>
-                                                            </td>
-                                                            <td v-else class="text-center bg-light" colspan="3">
-                                                                &nbsp;
                                                             </td>
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
@@ -196,7 +172,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <!-- <div v-else class="row">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
@@ -268,7 +244,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="row my-lg-3 my-5">
                                                 <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
                                                     <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
@@ -371,7 +347,7 @@
                 showAlertSuccess: false,
                 showAlertError: false,
                 successDelete: false,
-                accountIcon: this.$baseUrl+'/src/assets/img/account.png'
+                accountIcon: this.$baseUrl+'/src/loans/img/account.png'
             }
         },
         components: {
@@ -417,41 +393,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets.trash' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            createRouter(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets.create' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageloans.trash' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -487,7 +429,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets.update', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageloans.update', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -518,7 +460,7 @@
                     this.take = 4;
                 }
                 // console.log(this.skip)
-                this.getAssets(this.skip, this.take)
+                this.getLoansRequest(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -542,7 +484,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageloans' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -576,7 +518,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets', query: {search: this.searchParams} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageloans', query: {search: this.searchParams} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -597,7 +539,7 @@
                 };
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.delete('/assets/delete', {params: this.dataObject})
+                    await axios.delete('/loans/delete', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -670,52 +612,35 @@
                     this.isLoadingDelete = false;
                 }
             },
-            async getAssets(skip, take){
+            async getLoansRequest(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
-                if(this.$roles == 'Admin'){
-                    const study_program_id = this.$session.study_program_id
-                    this.dataObject = {
-                        "skip": skip,
-                        "take": take,
-                        "sleep": 3,
-                        "keyWords": this.keyWords,
-                        "order": "name",
-                        "study_program_id": study_program_id
-                    }
-                } else {
-                    this.dataObject = {
-                        "skip": skip,
-                        "take": take,
-                        "sleep": 3,
-                        "keyWords": this.keyWords,
-                        "order": "name"
-                    }
+                const status = "0"
+                this.dataObject = {
+                    "skip": skip,
+                    "take": take,
+                    "keyWords": this.keyWords,
+                    "status": status
                 }
                 try {
-                    await axios.get('/assets/getAll', {params: this.dataObject})
+                    await axios.get('/loans/getAll', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
-                        Object.keys(response.data.data.assets).forEach((item) => {
-                            let date = new Date(response.data.data.assets[item].date);
+                        Object.keys(response.data.data.loans).forEach((item) => {
+                            let date = new Date(response.data.data.loans[item].date);
                             let finalDate = date.toLocaleDateString("id");
+                            let dueDate = new Date(response.data.data.loans[item].due_date);
+                            let finalDueDate = dueDate.toLocaleDateString("id");
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.assets[item].id,
+                                    "id": response.data.data.loans[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.assets[item].name,
-                                    "code": response.data.data.assets[item].code,
-                                    "condition": response.data.data.assets[item].condition,
-                                    "status": response.data.data.assets[item].status,
+                                    "code": response.data.data.loans[item].code,
+                                    "status": response.data.data.loans[item].status,
                                     "date": finalDate,
-                                    "placement_id": response.data.data.assets[item].placement_id,
-                                    "placement_name": response.data.data.assets[item].placement_name,
-                                    "category_id": response.data.data.assets[item].category_id,
-                                    "category_name": response.data.data.assets[item].category_name,
-                                    "user_id": response.data.data.assets[item].user_id,
-                                    "user_name": response.data.data.assets[item].user_name,
-                                    "study_program_id": response.data.data.assets[item].study_program_id,
-                                    "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "due_date": finalDueDate,
+                                    "loaner_id": response.data.data.loans[item].loaner_id,
+                                    "loaner_name": response.data.data.loans[item].loaner_name
                                 }
                             );
                         });
@@ -829,10 +754,10 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getAssets(this.skip, this.take);
+                this.getLoansRequest(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getAssets(this.skip, this.take);
+                this.getLoansRequest(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)

@@ -96,6 +96,9 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Jadwal Perawatan</h6>
                     <a class="collapse-item" href="#" :style="this.cursorStyle">
+                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal
+                    </a>
+                    <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-spinner"></i>&ensp; Aktif
                     </a>
                     <a v-if="this.$roles == 'Super-Admin'" class="collapse-item" href="#" :style="this.cursorStyle">
@@ -107,8 +110,8 @@
                     <a class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
                     </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal Perawatan
+                    <a class="collapse-item" href="#" :style="this.cursorStyle"> 
+                        <i class="fa fa-history"></i>&ensp; Riwayat Saya
                     </a>
                 </div>
             </div>

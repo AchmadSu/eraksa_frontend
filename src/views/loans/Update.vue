@@ -261,6 +261,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="row d-flex justify-content-evenly mb-5">
+                                                    <div class="col-12">
+                                                        <h6>Setiap aset pilihan default tidak akan dimuat dalam opsi pilih aset</h6>
+                                                    </div>
                                                     <div v-for="item, index in selectDataArray" class="col-sm-6 col-lg-4 my-3">
                                                         <div @click="removeSelection(item.id)" class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                                             <div class="d-flex justify-content-between">
@@ -273,7 +276,7 @@
                                                                 <div class="badge text-primary"> <span>DIPILIH</span> </div>
                                                             </div>
                                                             <div class="my-2">
-                                                                <h3 class="heading">{{item.name}}</h3>
+                                                                <h3 class="heading text-left">{{item.name}}</h3>
                                                                 <h6>{{item.code}}</h6>
                                                                 <h6>{{item.study_program_name}}</h6>
                                                                 <div class="text-center mt-3">
@@ -619,7 +622,7 @@
                 // this.openModal();
                 // console.log(this.dataPlacements);
                 try {
-                    await axios.post('/loans/update', this.dataUpdate)
+                    await axios.put('/loans/update', this.dataUpdate)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -837,16 +840,18 @@
                     this.filterIds.push(select[item].id)
                 })
                 this.dataArray = this.dataArray.filter(item => item.id != id)
-                this.dataCount = this.dataCount-1
+                // this.dataCount = this.dataCount-1
                 // console.log(this.filterIds)
             },
             removeSelection(id){
-                console.log(this.dataArray)
-                let select = this.selectDataArray.filter(item => item.id == id)
-                this.dataArray.push(select[0])
+                // console.log(this.dataArray)
+                // let select = this.selectDataArray.filter(item => item.id == id)
+                // this.dataArray.push(select[0])
                 this.selectDataArray = this.selectDataArray.filter(item => item.id != id)
                 this.filterIds = this.filterIds.filter(item => item != id)
-                this.dataCount = this.dataCount+1
+                this.dataArray = []
+                this.getAssets(this.skipAsset, this.takeAsset)
+                // this.dataCount = this.dataCount+1
                 // console.log(this.filterIds)
             },
             async detailFunction(id){
@@ -886,7 +891,7 @@
                             this.filterIds.push(select[item].asset_id)
                         })
                         this.getAssets(this.skipAsset, this.takeAsset)
-                        console.log(this.selectDataArray)
+                        // console.log(this.selectDataArray)
                         this.isLoading = false;
                         // this.form.study_programs = this.detailObject.study_program_id
                         // this.form.placements = this.detailObject.placement_id

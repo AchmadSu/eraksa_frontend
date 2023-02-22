@@ -506,11 +506,23 @@
                 this.errorStudyPrograms = [];
                 this.buttonDisabled = true;
                 // console.log('test1');
-                this.data = {
-                    "skip": skip,
-                    "take": take,
-                    "sleep": 3,
-                    "name": this.name
+                if(this.$roles == 'Admin'){
+                    // console.log("test")
+                    const ids = this.$session.study_program_id
+                    this.data = {
+                        "ids": [ids],
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "name": this.name
+                    }
+                } else {
+                    this.data = {
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "name": this.name
+                    }
                 }
                 try {
                     await axios.get('/studyPrograms/getAll', {params: this.data})

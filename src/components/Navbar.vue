@@ -207,6 +207,11 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
+                                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         <i class="fa fa-spinner"></i>&ensp; Aktif
                                     </a>
                                 </li>
@@ -227,7 +232,7 @@
                                 </li>
                                 <li class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal Perawatan
+                                        <i class="fa fa-history"></i>&ensp; Riwayat Saya
                                     </a>
                                 </li>
                             </ul>

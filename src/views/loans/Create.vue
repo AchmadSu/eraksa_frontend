@@ -248,7 +248,7 @@
                                                             <div class="badge text-primary"> <span>DIPILIH</span> </div>
                                                         </div>
                                                         <div class="my-2">
-                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <h3 class="heading text-left">{{item.name}}</h3>
                                                             <h6>{{item.code}}</h6>
                                                             <h6>{{item.study_program_name}}</h6>
                                                             <div class="text-center mt-3">
@@ -713,6 +713,7 @@
                         });
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
+                        // console.log(this.dataCount)
                         // if (this.windowWidth < ) {
                             
                         // }
@@ -791,15 +792,17 @@
                     this.filterIds.push(select[item].id)
                 })
                 this.dataArray = this.dataArray.filter(item => item.id != id)
-                this.dataCount = this.dataCount-1
+                // this.skipAsset = this.skipAsset - 5;
+                // this.getAssets(this.skipAsset, this.takeAsset)
                 // console.log(this.filterIds)
             },
             removeSelection(id){
-                let select = this.selectDataArray.filter(item => item.id == id)
-                this.dataArray.push(select[0])
+                // let select = this.selectDataArray.filter(item => item.id == id)
+                // this.dataArray.push(select[0])
                 this.selectDataArray = this.selectDataArray.filter(item => item.id != id)
                 this.filterIds = this.filterIds.filter(item => item != id)
-                this.dataCount = this.dataCount+1
+                this.dataArray = []
+                this.getAssets(this.skipAsset, this.takeAsset)
                 // console.log(this.filterIds)
             },
             setAlert(){
