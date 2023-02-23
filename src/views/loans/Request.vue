@@ -112,11 +112,6 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
-                                                <button @click="getLoansRequest" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                    <i class="fa fa-undo"></i> &ensp; Muat Ulang
-                                                </button>
-                                            </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row">
@@ -130,11 +125,6 @@
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
                                                 </div>
                                                 <h6 class="text-center my-3">{{item.detail}}</h6>
-                                                <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'd-none':'col-12 py-2 d-sm-flex justify-content-center'">
-                                                    <button @click="getLoansRequest" :disabled="buttonDisabled" class="btn w-25 btn-primary">
-                                                        <i class="fa fa-undo"></i> &ensp; Muat Ulang
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                         <div v-else>
@@ -155,13 +145,13 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                            <td class="text-center">{{index+1}}</td>
-                                                            <td><b>{{item.code}}</b></td>
-                                                            <td class="text-center" v-if="item.status == '0'">Menunggu konfirmasi</td>
-                                                            <td class="text-center">{{item.date_string}}</td>
-                                                            <td class="text-center">{{item.due_date_string}}</td>
-                                                            <td class="text-center">{{item.difference}}</td>
-                                                            <td>
+                                                            <td class="align-middle text-center">{{index+1}}</td>
+                                                            <td class="align-middle text-justify"><b>{{item.code}}</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '0'">Menunggu konfirmasi</td>
+                                                            <td class="align-middle text-center">{{item.date_string}}</td>
+                                                            <td class="align-middle text-center">{{item.due_date_string}}</td>
+                                                            <td class="align-middle text-center"><b>{{item.difference}}</b></td>
+                                                            <td class="align-middle text-justify">
                                                                 <template v-if="item.loaner_name.length < 20">
                                                                     {{item.loaner_name}}
                                                                 </template>
@@ -169,19 +159,19 @@
                                                                     {{item.loaner_name.substring(0,20)+"..."}}
                                                                 </template>
                                                             </td>
-                                                            <!-- <td class="text-center">
-                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-question"></i> <br> Kirim Notifikasi
-                                                                </button>
-                                                            </td> -->
-                                                            <td class="text-center">
+                                                            <td class="align-middle text-center" :colspan="this.currentTime > item.due_date_time ? '':'2'">
                                                                 <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-info"></i> <br> Lihat Details
                                                                 </button>
                                                             </td>
+                                                            <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
+                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                    <i class="fa fa-paper-plane"></i> <br> Notifikasi Pengembalian
+                                                                </button>
+                                                            </td>
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                            <td class="text-center" colspan="4">
+                                                            <td class="align-middle text-center" colspan="4">
                                                                 <b>{{item.message}}</b>
                                                                 <p>{{item.detail}}</p>
                                                             </td>
@@ -189,51 +179,50 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <!-- <div v-else class="row">
+                                            <div v-else class="row">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-cubes"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Aset</h6>
+                                                                    <h6 class="mb-0">Data Permintaan</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="my-2">
-                                                            <h3 class="heading">{{item.name}}</h3>
-                                                            <p>{{item.code}}</p>
+                                                            <h3 class="heading text-left">{{item.code}}</h3> <br>
                                                             <p>
-                                                                <small>Dibuat oleh: {{item.user_name}}</small><br>
-                                                                <small>Program Studi: <br>{{item.study_program_name}}</small><br>
-                                                                <small>Kondisi: </small>
-                                                                <small v-if="item.condition == 0">Optimal</small>
-                                                                <small v-else>Rusak</small>
-                                                                <br>
-                                                                <small>Status: </small>
-                                                                <small v-if="item.status == 0">Tersedia</small>
-                                                                <small v-else-if="item.status == 1">Dipinjam</small>
-                                                                <small v-else-if="item.status == 2">Diperbaiki</small>
-                                                                <br>
-                                                                <small>Tanggal masuk: {{item.date}}</small><br>
-                                                                <small>Penempatan: {{item.placement_name}}</small><br>
-                                                                <small>Kategori Aset: {{item.category_name}}</small><br>
+                                                                <big v-if="item.status == '0'">Status: Menunggu Konfirmasi</big><br>
+                                                                <big>Tanggal: {{item.date_string}}</big><br>
+                                                                <big>Tenggat: {{item.due_date_string}}</big><br>
+                                                                <big>Periode: {{item.difference}}</big><br>
+                                                                <big>Peminjam:
+                                                                    <template v-if="item.loaner_name.length < 20">
+                                                                        {{item.loaner_name}}
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        {{item.loaner_name.substring(0,20)+"..."}}
+                                                                    </template>
+                                                                </big><br>
                                                             </p>
                                                             <div class="mt-3">
                                                                 <div v-if="item.status == 0" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
-                                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                        <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                            <i class="fa fa-info"></i> &ensp; Lihat Detail
                                                                         </button>
                                                                     </div>
-                                                                    <div class="col-12 w-100 text-center py-2">
-                                                                       ATAU
-                                                                    </div>
-                                                                    <div class="col-12 py-2">
-                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus
-                                                                        </button>
-                                                                    </div>
+                                                                    <template v-if="this.currentTime > item.due_date_time">
+                                                                        <div class="col-12 w-100 text-center py-2">
+                                                                           ATAU
+                                                                        </div>
+                                                                        <div class="col-12 py-2">
+                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                                <i class="fa fa-paper-plane"></i> &ensp; Notifikasi Pengembalian
+                                                                            </button>
+                                                                        </div>
+                                                                    </template>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -243,9 +232,9 @@
                                                     <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Aset</h6>
+                                                                    <h6 class="mb-0">Data Permintaan</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -261,7 +250,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <div class="row my-lg-3 my-5">
                                                 <div :class="this.dataArray.length < this.dataCount && this.isLoadingResponse1 == false ? 'col-12 text-center':'d-none'">
                                                     <button :disabled="buttonDisabled" @click="nextFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
@@ -276,7 +265,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.code != NULL || this.$route.query.dateOne != NULL || this.$route.query.dateTwo != NULL || this.$route.query.dueDateOne != NULL || this.$route.query.dueDateTwo != NULL || this.$route.query.loaner != NULL" class="row my-lg-3 my-5">
+                                        <div v-if="this.keyCode != NULL ||
+                                            this.keyDateOne != NULL ||
+                                            this.keyDateTwo != NULL ||
+                                            this.keyDueDateOne != NULL ||
+                                            this.keyDueDateTwo != NULL ||
+                                            this.keyLoaner != NULL
+                                            " class="row my-lg-3 my-5"
+                                        >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat seluruh data
@@ -344,6 +340,9 @@
                 keyDueDateOne: this.$route.query.dueDateOne,
                 keyDueDateTwo: this.$route.query.dueDateTwo,
                 currentYear: new Date().getFullYear(),
+                currentDate: new Date().getDate(),
+                currentTime: new Date().getTime(),
+                // today: new Date().getDate().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
                 dataCount: 0,
@@ -678,6 +677,7 @@
                     "skip": skip,
                     "take": take,
                     "status": status,
+                    "code": this.keyCode,
                     "dateOne": this.keyDateOne,
                     "dateTwo": this.keyDateTwo,
                     "dueDateOne": this.keyDueDateOne,
@@ -702,9 +702,7 @@
                             const getDueDate = dueDate.getDate();
                             const getDueDateTime = dueDate.getTime();
                             const getDueTime = dueDate.getHours();
-
-                            console.log(getDate == getDueDate)
-                            console.log(getTime == getDueTime)
+                            // console.log(compareDueDate);
                             if(getDate == getDueDate) {
                                 difference = (getDueTime - getTime)+" Jam"
                             } else {
@@ -731,14 +729,14 @@
                                     "due_date_string": finalDueDate+" "+finalDueTime,
                                     "loaner_id": response.data.data.loans[item].loaner_id,
                                     "loaner_name": response.data.data.loans[item].loaner_name,
-                                    "due_date": dueDate,
+                                    "due_date_time": getDueDateTime,
                                     "date": date,
                                     "difference": difference
                                 }
                             );
+                            console.log(new Date().getTime() == getDueDateTime)
                         });
 
-                        // console.log(response.data.data);
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         // if (this.windowWidth < ) {
