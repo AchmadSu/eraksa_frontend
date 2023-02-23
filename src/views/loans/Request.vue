@@ -147,7 +147,7 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '0'">Menunggu konfirmasi</td>
+                                                            <td class="align-middle text-center" v-if="item.status == '0'"><b>Menunggu konfirmasi</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -164,11 +164,11 @@
                                                                     <i class="fa fa-info"></i> <br> Lihat Details
                                                                 </button>
                                                             </td>
-                                                            <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
+                                                            <!-- <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
                                                                 <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-paper-plane"></i> <br> Notifikasi Pengembalian
+                                                                    <i class="fa fa-paper-plane"></i> <br> Kirim Notif Pengembalian
                                                                 </button>
-                                                            </td>
+                                                            </td> -->
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
                                                             <td class="align-middle text-center" colspan="4">
@@ -193,10 +193,10 @@
                                                         <div class="my-2">
                                                             <h3 class="heading text-left">{{item.code}}</h3> <br>
                                                             <p>
-                                                                <big v-if="item.status == '0'">Status: Menunggu Konfirmasi</big><br>
+                                                                <big v-if="item.status == '0'">Status: <b>Menunggu Konfirmasi</b></big><br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
-                                                                <big>Periode: {{item.difference}}</big><br>
+                                                                <big>Periode: <b>{{item.difference}}</b></big><br>
                                                                 <big>Peminjam:
                                                                     <template v-if="item.loaner_name.length < 20">
                                                                         {{item.loaner_name}}
@@ -213,16 +213,16 @@
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Detail
                                                                         </button>
                                                                     </div>
-                                                                    <template v-if="this.currentTime > item.due_date_time">
+                                                                    <!-- <template v-if="this.currentTime > item.due_date_time">
                                                                         <div class="col-12 w-100 text-center py-2">
                                                                            ATAU
                                                                         </div>
                                                                         <div class="col-12 py-2">
                                                                             <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                                <i class="fa fa-paper-plane"></i> &ensp; Notifikasi Pengembalian
+                                                                                <i class="fa fa-paper-plane"></i> &ensp; Kirim Notif Pengembalian
                                                                             </button>
                                                                         </div>
-                                                                    </template>
+                                                                    </template> -->
                                                                 </div>
                                                             </div>
                                                         </div>

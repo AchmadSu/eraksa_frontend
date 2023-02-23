@@ -211,20 +211,20 @@
                                                             <h3 class="heading">{{item.name}}</h3>
                                                             <p>{{item.code}}</p>
                                                             <p>
-                                                                <small>Dibuat oleh: {{item.user_name}}</small><br>
-                                                                <small>Program Studi: <br>{{item.study_program_name}}</small><br>
-                                                                <small>Kondisi: </small>
-                                                                <small v-if="item.condition == 0">Optimal</small>
-                                                                <small v-else>Rusak</small>
+                                                                <big>Dibuat oleh: {{item.user_name}}</big><br>
+                                                                <big>Program Studi: <br>{{item.study_program_name}}</big><br>
+                                                                <big>Kondisi: </big>
+                                                                <big v-if="item.condition == 0">Optimal</big>
+                                                                <big v-else>Rusak</big>
                                                                 <br>
-                                                                <small>Status: </small>
-                                                                <small v-if="item.status == 0">Tersedia</small>
-                                                                <small v-else-if="item.status == 1">Dipinjam</small>
-                                                                <small v-else-if="item.status == 2">Diperbaiki</small>
+                                                                <big>Status: </big>
+                                                                <big v-if="item.status == 0">Tersedia</big>
+                                                                <big v-else-if="item.status == 1">Dipinjam</big>
+                                                                <big v-else-if="item.status == 2">Diperbaiki</big>
                                                                 <br>
-                                                                <small>Tanggal masuk: {{item.date}}</small><br>
-                                                                <small>Penempatan: {{item.placement_name}}</small><br>
-                                                                <small>Kategori Aset: {{item.category_name}}</small><br>
+                                                                <big>Tanggal masuk: {{item.date}}</big><br>
+                                                                <big>Penempatan: {{item.placement_name}}</big><br>
+                                                                <big>Kategori Aset: {{item.category_name}}</big><br>
                                                             </p>
                                                             <div class="mt-3">
                                                                 <div v-if="item.status == 0" class="row my-3 py-2">
@@ -250,7 +250,7 @@
                                                     <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-cubes"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Aset</h6>
                                                                 </div>
