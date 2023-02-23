@@ -5,47 +5,6 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog modal-dialog-centered">
-                <div v-if="successDelete == false" class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
-                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-dark">
-                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
-                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
-                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <div class="mt-3 float-end">
-                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
-                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Memuat...
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="successDelete" class="modal-content">
-                    <div class="modal-header bg-success">
-                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
-                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
-                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -67,14 +26,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Aset</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Permintaan Peminjaman</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Aset</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Permintaan</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -90,16 +49,61 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
-                                                <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
-                                                    <i class="fa fa-trash-o"></i> &ensp;Data Sampah
-                                                </button>
-                                            </div>
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
-                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search">
-                                                    <div class="input-group">
-                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Nama atau Kode"
-                                                            aria-label="Search" aria-describedby="basic-addon2">
+                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'mx-2 col-12 pb-3':'mx-2 col-12 pb-3'">
+                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search row">
+                                                    <div class="input-group col-12">
+                                                        <input type="text"
+                                                            v-model="form.code"
+                                                            name="search"
+                                                            class="form-control input-lg bg-light"
+                                                            placeholder="Cari Kode"
+                                                            aria-label="Code"
+                                                            aria-describedby="basic-addon2"
+                                                        />
+                                                        <input type="text"
+                                                            v-model="form.dateOne"
+                                                            name="date"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tanggal Awal"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input v-if="isDateOneIsset" type="text"
+                                                            v-model="form.dateTwo"
+                                                            name="date"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tanggal Akhir"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input type="text"
+                                                            v-model="form.dueDateOne"
+                                                            name="dueDate"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tenggat Awal"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input v-if="isDueDateOneIsset" type="text"
+                                                            v-model="form.dueDateTwo"
+                                                            name="date"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tanggal Akhir"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input type="text"
+                                                            v-model="form.loaner"
+                                                            name="loaner"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Nama Peminjam"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                        />
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
@@ -109,26 +113,26 @@
                                                 </form>
                                             </div>
                                             <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
-                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
-                                                    <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                <button @click="getLoansRequest" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                    <i class="fa fa-undo"></i> &ensp; Muat Ulang
                                                 </button>
                                             </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
-                                            <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
-                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-center">
-                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/loans/img/404.png'" alt="">
+                                            <div v-for="item in errorResponse" :key="item.id" class="row">
+                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-evenly">
+                                                    <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
-                                                <div v-else class="col-12 d-flex justify-content-center">
-                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/loans/img/404.png'" alt="">
+                                                <div v-else class="col-12 d-flex justify-content-evenly">
+                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
-                                                <div class="text-center text-sm-justify mt-3">
+                                                <div class="text-center col-12 text-sm-justify mt-3">
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
                                                 </div>
                                                 <h6 class="text-center my-3">{{item.detail}}</h6>
                                                 <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'd-none':'col-12 py-2 d-sm-flex justify-content-center'">
-                                                    <button @click="createRouter" :disabled="buttonDisabled" class="btn w-25 btn-success">
-                                                        <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                    <button @click="getLoansRequest" :disabled="buttonDisabled" class="btn w-25 btn-primary">
+                                                        <i class="fa fa-undo"></i> &ensp; Muat Ulang
                                                     </button>
                                                 </div>
                                             </div>
@@ -145,6 +149,7 @@
                                                             <th class="align-middle">Tenggat Waktu</th>
                                                             <th class="align-middle">Periode</th>
                                                             <th class="align-middle">Peminjam</th>
+                                                            <!-- <th class="align-middle">Status Peminjaman</th> -->
                                                             <th class="align-middle" colspan="2">Aksi</th>
                                                         </tr>
                                                     </thead>
@@ -152,13 +157,25 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="text-center">{{index+1}}</td>
                                                             <td><b>{{item.code}}</b></td>
-                                                            <td v-if="item.status == '0'">Menunggu konfirmasi</td>
-                                                            <td>{{item.date}}</td>
-                                                            <td>{{item.due_date}}</td>
-                                                            <td>Ini adalah periode</td>
-                                                            <td>{{item.loaner_name}}</td>
+                                                            <td class="text-center" v-if="item.status == '0'">Menunggu konfirmasi</td>
+                                                            <td class="text-center">{{item.date_string}}</td>
+                                                            <td class="text-center">{{item.due_date_string}}</td>
+                                                            <td class="text-center">{{item.difference}}</td>
+                                                            <td>
+                                                                <template v-if="item.loaner_name.length < 20">
+                                                                    {{item.loaner_name}}
+                                                                </template>
+                                                                <template v-else>
+                                                                    {{item.loaner_name.substring(0,20)+"..."}}
+                                                                </template>
+                                                            </td>
+                                                            <!-- <td class="text-center">
+                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                    <i class="fa fa-question"></i> <br> Kirim Notifikasi
+                                                                </button>
+                                                            </td> -->
                                                             <td class="text-center">
-                                                                <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                                <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-info"></i> <br> Lihat Details
                                                                 </button>
                                                             </td>
@@ -259,7 +276,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
+                                        <div v-if="this.$route.query.code != NULL || this.$route.query.dateOne != NULL || this.$route.query.dateTwo != NULL || this.$route.query.dueDateOne != NULL || this.$route.query.dueDateTwo != NULL || this.$route.query.loaner != NULL" class="row my-lg-3 my-5">
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat seluruh data
@@ -320,7 +337,12 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                keyWords: this.$route.query.search,
+                keyCode: this.$route.query.code,
+                keyLoaner: this.$route.query.loaner,
+                keyDateOne: this.$route.query.dateOne,
+                keyDateTwo: this.$route.query.dateTwo,
+                keyDueDateOne: this.$route.query.dueDateOne,
+                keyDueDateTwo: this.$route.query.dueDateTwo,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -330,9 +352,21 @@
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
-                    search: '',
+                    code: '',
+                    dateOne: '',
+                    dateTwo: '',
+                    dueDateOne: '',
+                    dueDateTwo: '',
+                    loaner: '',
                 },
-                searchParams: '',
+                isDateOneIsset: false,
+                isDueDateOneIsset: false,
+                searchCode: '',
+                searchDateOne: '',
+                searchDateTwo: '',
+                searchDueDateOne: '',
+                searchDueDateTwo: '',
+                searchLoaner: '',
                 errorResponse: [],
                 errorDelete: [],
                 successResponse: [],
@@ -358,7 +392,22 @@
         watch: {
             form: {
                 handler: function (val) {
-                    this.searchParams = val.search;
+                    this.searchCode = val.code;
+                    this.searchDateOne = val.dateOne;
+                    this.searchDateTwo = val.dateTwo;
+                    this.searchDueDateOne = val.dueDateOne;
+                    this.searchDueDateTwo = val.dueDateTwo;
+                    this.searchLoaner = val.loaner;
+                    if(this.searchDateOne.length > 0) {
+                        this.isDateOneIsset = true;
+                    } else {
+                        this.isDateOneIsset = false;
+                    }
+                    if (this.searchDueDateOne.length > 0) {
+                        this.isDueDateOneIsset = true
+                    } else {
+                        this.isDueDateOneIsset = false
+                    }
                 },
                 deep: true,
             },
@@ -484,7 +533,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageloans' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -516,9 +565,18 @@
                             this.setProgress == false;
                             // this.setProgress = false;
                         }
-                        // console.log("Test");
+                        // console.log(this.searchParams);
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageloans', query: {search: this.searchParams} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.request', 
+                                query: {
+                                    code: this.searchCode,
+                                    dateOne: this.searchDateOne,
+                                    dateTwo: this.searchDateTwo,
+                                    dueDateOne: this.searchDueDateOne,
+                                    dueDateTwo: this.searchDueDateTwo,
+                                    loaner: this.searchLoaner
+                                }
+                            }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -619,31 +677,68 @@
                 this.dataObject = {
                     "skip": skip,
                     "take": take,
-                    "keyWords": this.keyWords,
-                    "status": status
+                    "status": status,
+                    "dateOne": this.keyDateOne,
+                    "dateTwo": this.keyDateTwo,
+                    "dueDateOne": this.keyDueDateOne,
+                    "dueDateTwo": this.keyDueDateTwo,
+                    "loaner_keyWords": this.keyLoaner,
                 }
                 try {
                     await axios.get('/loans/getAll', {params: this.dataObject})
                     .then((response) => {
-                        // console.log(response.data.data);
+                        // console.log(response.data.data.loans);
                         Object.keys(response.data.data.loans).forEach((item) => {
                             let date = new Date(response.data.data.loans[item].date);
                             let finalDate = date.toLocaleDateString("id");
+                            let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
+                            // let finalTime = date.format("id");
+                            // // finalTime = finalTime.format('hh:mm')
+                            let difference = ''
                             let dueDate = new Date(response.data.data.loans[item].due_date);
+                            const getDate = date.getDate();
+                            const getDateTime = date.getTime();
+                            const getTime = date.getHours();
+                            const getDueDate = dueDate.getDate();
+                            const getDueDateTime = dueDate.getTime();
+                            const getDueTime = dueDate.getHours();
+
+                            console.log(getDate == getDueDate)
+                            console.log(getTime == getDueTime)
+                            if(getDate == getDueDate) {
+                                difference = (getDueTime - getTime)+" Jam"
+                            } else {
+                                let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
+                                // console.log(calculate)
+                                // let calculateDays = calculate / (1000*3600*24) 
+                                if (calculate < 7) {
+                                    difference = (calculate)+" Hari"   
+                                } else if(calculate > 7 && calculate < 30) {
+                                    difference = (calculate/7)+" Minggu"   
+                                } else {
+                                    difference = (calculate/30)+" Bulan"   
+                                }
+                            }
                             let finalDueDate = dueDate.toLocaleDateString("id");
+                            let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
                             this.dataArray.push(
                                 {
                                     "id": response.data.data.loans[item].id,
                                     "row": this.index++,
                                     "code": response.data.data.loans[item].code,
                                     "status": response.data.data.loans[item].status,
-                                    "date": finalDate,
-                                    "due_date": finalDueDate,
+                                    "date_string": finalDate+" "+finalTime,
+                                    "due_date_string": finalDueDate+" "+finalDueTime,
                                     "loaner_id": response.data.data.loans[item].loaner_id,
-                                    "loaner_name": response.data.data.loans[item].loaner_name
+                                    "loaner_name": response.data.data.loans[item].loaner_name,
+                                    "due_date": dueDate,
+                                    "date": date,
+                                    "difference": difference
                                 }
                             );
                         });
+
+                        // console.log(response.data.data);
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         // if (this.windowWidth < ) {
