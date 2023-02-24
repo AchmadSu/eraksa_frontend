@@ -454,7 +454,7 @@
                     ];
                 }
             },
-            updateRouter(id){
+            detailRouter(id){
                 // console.log("Teset")
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -477,7 +477,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageloans.update', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.confirmation', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -709,12 +709,14 @@
                                 let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
                                 // console.log(calculate)
                                 // let calculateDays = calculate / (1000*3600*24) 
-                                if (calculate < 7) {
+                                if (calculate < 7 && calculate > 0) {
                                     difference = (calculate)+" Hari"   
                                 } else if(calculate > 7 && calculate < 30) {
                                     difference = (calculate/7)+" Minggu"   
-                                } else {
+                                } else if(calculate > 30){
                                     difference = (calculate/30)+" Bulan"   
+                                } else {
+                                    difference = "Di luar jangkauan"   
                                 }
                             }
                             let finalDueDate = dueDate.toLocaleDateString("id");

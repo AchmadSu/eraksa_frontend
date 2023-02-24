@@ -24,6 +24,11 @@ const loansRouter = [
         name : 'manageLoans.request',
         component : () => import("../../views/loans/Request.vue")
     },
+    {
+        path:'/manage/loans/confirmation',
+        name : 'manageLoans.confirmation',
+        component : () => import("../../views/loans/Confirmation.vue")
+    },
     // {
     //     path:'/register',
     //     name : 'user.register',
