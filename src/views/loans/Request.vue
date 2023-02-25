@@ -115,11 +115,11 @@
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row">
-                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-evenly">
+                                                <div v-if="this.windowWidth <= this.$widthPotraitPhone" class="col-12 d-flex justify-content-evenly">
                                                     <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
                                                 <div v-else class="col-12 d-flex justify-content-evenly">
-                                                    <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                                    <img class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
                                                 <div class="text-center col-12 text-sm-justify mt-3">
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
@@ -296,7 +296,7 @@
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
-                <Footer v-if="this.windowWidth >= this.$widthLandscapePhone" class="bottom-0"></Footer>
+                <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="bottom-0"></Footer>
                 <Footer v-else class="w-100 position-absolute bottom-0"></Footer>
                 <!-- End of Footer -->
                 
@@ -716,7 +716,7 @@
                                 } else if(calculate > 30){
                                     difference = (calculate/30)+" Bulan"   
                                 } else {
-                                    difference = "Di luar jangkauan"   
+                                    difference = (24 - (getTime - getDueTime))+" Jam" 
                                 }
                             }
                             let finalDueDate = dueDate.toLocaleDateString("id");

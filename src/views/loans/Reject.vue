@@ -5,47 +5,6 @@
         </div>
     </div>
     <div v-else>
-        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog modal-dialog-centered">
-                <div v-if="successDelete == false" class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
-                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-dark">
-                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
-                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
-                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                        <div class="mt-3 float-end">
-                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
-                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
-                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Memuat...
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="successDelete" class="modal-content">
-                    <div class="modal-header bg-success">
-                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
-                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
-                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -67,14 +26,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Penempatan</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Penolakan Peminjaman</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Penempatan</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Penolakan</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -90,16 +49,61 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
-                                                <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
-                                                    <i class="fa fa-trash-o"></i> &ensp;Data Sampah
-                                                </button>
-                                            </div>
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
-                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search">
-                                                    <div class="input-group">
-                                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Tempat"
-                                                            aria-label="Search" aria-describedby="basic-addon2">
+                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'mx-2 col-12 pb-3':'mx-2 col-12 pb-3'">
+                                                <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search row">
+                                                    <div class="input-group col-12">
+                                                        <input type="text"
+                                                            v-model="form.code"
+                                                            name="search"
+                                                            class="form-control input-lg bg-light"
+                                                            placeholder="Cari Kode"
+                                                            aria-label="Code"
+                                                            aria-describedby="basic-addon2"
+                                                        />
+                                                        <input type="text"
+                                                            v-model="form.dateOne"
+                                                            name="date"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tanggal Awal"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input v-if="isDateOneIsset" type="text"
+                                                            v-model="form.dateTwo"
+                                                            name="date"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tanggal Akhir"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input type="text"
+                                                            v-model="form.dueDateOne"
+                                                            name="dueDate"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tenggat Awal"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input v-if="isDueDateOneIsset" type="text"
+                                                            v-model="form.dueDateTwo"
+                                                            name="date"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Tanggal Akhir"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                            onfocus="(this.type='date')"
+                                                        />
+                                                        <input type="text"
+                                                            v-model="form.loaner"
+                                                            name="loaner"
+                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
+                                                            placeholder="Nama Peminjam"
+                                                            aria-label="Date"
+                                                            aria-describedby="basic-addon2"
+                                                        />
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
@@ -108,95 +112,134 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
-                                                <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
-                                                    <i class="fa fa-plus"></i> &ensp; Tambah Data
-                                                </button>
-                                            </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
-                                            <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
-                                                <div v-if="this.windowWidth <= this.$widthPotraitPhone" class="col-12 d-flex justify-content-center">
+                                            <div v-for="item in errorResponse" :key="item.id" class="row">
+                                                <div v-if="this.windowWidth <= this.$widthPotraitPhone" class="col-12 d-flex justify-content-evenly">
                                                     <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
-                                                <div v-else class="col-12 d-flex justify-content-center">
+                                                <div v-else class="col-12 d-flex justify-content-evenly">
                                                     <img  class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
-                                                <div class="text-center text-sm-justify mt-3">
+                                                <div class="text-center col-12 text-sm-justify mt-3">
                                                     <h3 class="h4 mb-0 text-gray-800">{{item.message}}</h3>
                                                 </div>
                                                 <h6 class="text-center my-3">{{item.detail}}</h6>
-                                                <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'd-none':'col-12 py-2 d-sm-flex justify-content-center'">
-                                                    <button @click="createRouter" :disabled="buttonDisabled" class="btn w-25 btn-success">
-                                                        <i class="fa fa-plus"></i> &ensp; Tambah Data
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                         <div v-else>
-                                            <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
-                                                <thead>
-                                                    <tr class="text-center">
-                                                        <th class="align-middle">No</th>
-                                                        <th class="align-middle">Nama</th>
-                                                        <th class="align-middle" colspan="2">
-                                                            <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
-                                                                <i class="fa fa-plus"></i> &ensp; Tambah Data
-                                                            </button>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                        <td class="text-center">{{index+1}}</td>
-                                                        <td><b>{{item.name}}</b></td>
-                                                        <td class="text-center">
-                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                            </button>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                <i class="fa fa-trash-o"></i> &ensp; Hapus data
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                        <td class="text-center" colspan="4">
-                                                            <b>{{item.message}}</b>
-                                                            <p>{{item.detail}}</p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div v-if="this.windowWidth > this.$widthLandscapePhone" class="table-responsive">
+                                                <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th class="align-middle">No</th>
+                                                            <th class="align-middle">Kode</th>
+                                                            <th class="align-middle">Status</th>
+                                                            <th class="align-middle">Waktu Mulai</th>
+                                                            <th class="align-middle">Tenggat Waktu</th>
+                                                            <th class="align-middle">Periode</th>
+                                                            <th class="align-middle">Peminjam</th>
+                                                            <th class="align-middle">Ditolak Oleh</th>
+                                                            <!-- <th class="align-middle">Status Peminjaman</th> -->
+                                                            <th class="align-middle" colspan="2">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="item, index in this.dataArray" :key="item.id">
+                                                            <td class="align-middle text-center">{{index+1}}</td>
+                                                            <td class="align-middle text-justify"><b>{{item.code}}</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '2'"><b>Ditolak</b></td>
+                                                            <td class="align-middle text-center">{{item.date_string}}</td>
+                                                            <td class="align-middle text-center">{{item.due_date_string}}</td>
+                                                            <td class="align-middle text-center"><b>{{item.difference}}</b></td>
+                                                            <td class="align-middle text-justify">
+                                                                <template v-if="item.loaner_name.length < 20">
+                                                                    {{item.loaner_name}}
+                                                                </template>
+                                                                <template v-else>
+                                                                    {{item.loaner_name.substring(0,20)+"..."}}
+                                                                </template>
+                                                            </td>
+                                                            <td class="align-middle text-justify">
+                                                                <template v-if="item.lender_name.length < 20">
+                                                                    {{item.lender_name}}
+                                                                </template>
+                                                                <template v-else>
+                                                                    {{item.lender_name.substring(0,20)+"..."}}
+                                                                </template>
+                                                            </td>
+                                                            <td class="align-middle text-center" :colspan="this.currentTime > item.due_date_time ? '':'2'">
+                                                                <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                                    <i class="fa fa-info"></i> <br> Lihat Details
+                                                                </button>
+                                                            </td>
+                                                            <!-- <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
+                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                    <i class="fa fa-paper-plane"></i> <br> Kirim Notif Pengembalian
+                                                                </button>
+                                                            </td> -->
+                                                        </tr>
+                                                        <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
+                                                            <td class="align-middle text-center" colspan="4">
+                                                                <b>{{item.message}}</b>
+                                                                <p>{{item.detail}}</p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <div v-else class="row">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Penempatan</h6>
+                                                                    <h6 class="mb-0">Data Permintaan</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="my-2">
-                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <h5 class="heading text-left">{{item.code}}</h5> <br>
+                                                            <p>
+                                                                <big v-if="item.status == '2'">Status: <b>Ditolak</b></big><br>
+                                                                <big>Tanggal: {{item.date_string}}</big><br>
+                                                                <big>Tenggat: {{item.due_date_string}}</big><br>
+                                                                <big>Periode: <b>{{item.difference}}</b></big><br>
+                                                                <big>Peminjam:
+                                                                    <template v-if="item.loaner_name.length < 20">
+                                                                        {{item.loaner_name}}
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        {{item.loaner_name.substring(0,20)+"..."}}
+                                                                    </template>
+                                                                </big><br>
+                                                                <big>Ditolak Oleh:
+                                                                    <template v-if="item.lender_name.length < 20">
+                                                                        {{item.lender_name}}
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        {{item.lender_name.substring(0,20)+"..."}}
+                                                                    </template>
+                                                                </big><br>
+                                                            </p>
                                                             <div class="mt-3">
-                                                                <div class="row my-3 py-2">
+                                                                <div v-if="item.status == '2'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
-                                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                        <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                            <i class="fa fa-info"></i> &ensp; Lihat Detail
                                                                         </button>
                                                                     </div>
-                                                                    <div class="col-12 w-100 text-center py-2">
-                                                                       ATAU
-                                                                    </div>
-                                                                    <div class="col-12 py-2">
-                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus
-                                                                        </button>
-                                                                    </div>
+                                                                    <!-- <template v-if="this.currentTime > item.due_date_time">
+                                                                        <div class="col-12 w-100 text-center py-2">
+                                                                           ATAU
+                                                                        </div>
+                                                                        <div class="col-12 py-2">
+                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                                <i class="fa fa-paper-plane"></i> &ensp; Kirim Notif Pengembalian
+                                                                            </button>
+                                                                        </div>
+                                                                    </template> -->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -206,9 +249,9 @@
                                                     <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Penempatan</h6>
+                                                                    <h6 class="mb-0">Data Permintaan</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -239,7 +282,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
+                                        <div v-if="this.keyCode != NULL ||
+                                            this.keyDateOne != NULL ||
+                                            this.keyDateTwo != NULL ||
+                                            this.keyDueDateOne != NULL ||
+                                            this.keyDueDateTwo != NULL ||
+                                            this.keyLoaner != NULL
+                                            " class="row my-lg-3 my-5"
+                                        >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat seluruh data
@@ -300,8 +350,16 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                name: this.$route.query.search,
+                keyCode: this.$route.query.code,
+                keyLoaner: this.$route.query.loaner,
+                keyDateOne: this.$route.query.dateOne,
+                keyDateTwo: this.$route.query.dateTwo,
+                keyDueDateOne: this.$route.query.dueDateOne,
+                keyDueDateTwo: this.$route.query.dueDateTwo,
                 currentYear: new Date().getFullYear(),
+                currentDate: new Date().getDate(),
+                currentTime: new Date().getTime(),
+                // today: new Date().getDate().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
                 dataCount: 0,
@@ -310,9 +368,21 @@
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
-                    search: '',
+                    code: '',
+                    dateOne: '',
+                    dateTwo: '',
+                    dueDateOne: '',
+                    dueDateTwo: '',
+                    loaner: '',
                 },
-                searchParams: '',
+                isDateOneIsset: false,
+                isDueDateOneIsset: false,
+                searchCode: '',
+                searchDateOne: '',
+                searchDateTwo: '',
+                searchDueDateOne: '',
+                searchDueDateTwo: '',
+                searchLoaner: '',
                 errorResponse: [],
                 errorDelete: [],
                 successResponse: [],
@@ -327,7 +397,7 @@
                 showAlertSuccess: false,
                 showAlertError: false,
                 successDelete: false,
-                accountIcon: this.$baseUrl+'/src/assets/img/account.png'
+                accountIcon: this.$baseUrl+'/src/loans/img/account.png'
             }
         },
         components: {
@@ -338,7 +408,22 @@
         watch: {
             form: {
                 handler: function (val) {
-                    this.searchParams = val.search;
+                    this.searchCode = val.code;
+                    this.searchDateOne = val.dateOne;
+                    this.searchDateTwo = val.dateTwo;
+                    this.searchDueDateOne = val.dueDateOne;
+                    this.searchDueDateTwo = val.dueDateTwo;
+                    this.searchLoaner = val.loaner;
+                    if(this.searchDateOne.length > 0) {
+                        this.isDateOneIsset = true;
+                    } else {
+                        this.isDateOneIsset = false;
+                    }
+                    if (this.searchDueDateOne.length > 0) {
+                        this.isDueDateOneIsset = true
+                    } else {
+                        this.isDueDateOneIsset = false
+                    }
                 },
                 deep: true,
             },
@@ -352,75 +437,7 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
-            trashRouter(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.trash' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            createRouter(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.create' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            updateRouter(id){
+            detailRouter(id){
                 // console.log("Teset")
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -443,7 +460,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements.update', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.detail', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -474,7 +491,7 @@
                     this.take = 4;
                 }
                 // console.log(this.skip)
-                this.getPlacements(this.skip, this.take)
+                this.getLoansReject(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -498,7 +515,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -530,9 +547,18 @@
                             this.setProgress == false;
                             // this.setProgress = false;
                         }
-                        // console.log("Test");
+                        // console.log(this.searchParams);
                         setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements', query: {search: this.searchParams} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.request', 
+                                query: {
+                                    code: this.searchCode,
+                                    dateOne: this.searchDateOne,
+                                    dateTwo: this.searchDateTwo,
+                                    dueDateOne: this.searchDueDateOne,
+                                    dueDateTwo: this.searchDueDateTwo,
+                                    loaner: this.searchLoaner
+                                }
+                            }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -548,12 +574,12 @@
             async delete(id){
                 this.isLoadingDelete = true;
                 this.buttonDisabled = true;
-                this.dataPlacements = {
+                this.dataObject = {
                     "ids": [id]
                 };
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.delete('/placements/delete', {params: this.dataPlacements})
+                    await axios.delete('/loans/delete', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -626,28 +652,79 @@
                     this.isLoadingDelete = false;
                 }
             },
-            async getPlacements(skip, take){
-                    // console.log('test1');
+            async getLoansReject(skip, take){
+                // console.log('test1');
                 this.showAlert = false;
-                this.dataPlacements = {
+                const status = "2"
+                this.dataObject = {
                     "skip": skip,
                     "take": take,
-                    "sleep": 3,
-                    "name": this.name
+                    "status": status,
+                    "code": this.keyCode,
+                    "dateOne": this.keyDateOne,
+                    "dateTwo": this.keyDateTwo,
+                    "dueDateOne": this.keyDueDateOne,
+                    "dueDateTwo": this.keyDueDateTwo,
+                    "loaner_keyWords": this.keyLoaner,
+                    "orderDate": "DESC"
                 }
                 try {
-                    await axios.get('/placements/getAll', {params: this.dataPlacements})
+                    await axios.get('/loans/getAll', {params: this.dataObject})
                     .then((response) => {
-                        // console.log(response.data.data);
-                        Object.keys(response.data.data.placements).forEach((item) => {
+                        // console.log(response.data.data.loans);
+                        Object.keys(response.data.data.loans).forEach((item) => {
+                            let date = new Date(response.data.data.loans[item].date);
+                            let finalDate = date.toLocaleDateString("id");
+                            let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
+                            // let finalTime = date.format("id");
+                            // // finalTime = finalTime.format('hh:mm')
+                            let difference = ''
+                            let dueDate = new Date(response.data.data.loans[item].due_date);
+                            const getDate = date.getDate();
+                            const getDateTime = date.getTime();
+                            const getTime = date.getHours();
+                            const getDueDate = dueDate.getDate();
+                            const getDueDateTime = dueDate.getTime();
+                            const getDueTime = dueDate.getHours();
+                            // console.log(compareDueDate);
+                            if(getDate == getDueDate) {
+                                difference = (getDueTime - getTime)+" Jam"
+                            } else {
+                                let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
+                                // console.log(calculate)
+                                // let calculateDays = calculate / (1000*3600*24) 
+                                if (calculate < 7 && calculate > 0) {
+                                    difference = (calculate)+" Hari"   
+                                } else if(calculate > 7 && calculate < 30) {
+                                    difference = (calculate/7)+" Minggu"   
+                                } else if(calculate > 30){
+                                    difference = (calculate/30)+" Bulan"   
+                                } else {
+                                    difference = (24 - (getTime - getDueTime))+" Jam" 
+                                }
+                            }
+                            let finalDueDate = dueDate.toLocaleDateString("id");
+                            let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.placements[item].id,
+                                    "id": response.data.data.loans[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.placements[item].name,
+                                    "code": response.data.data.loans[item].code,
+                                    "status": response.data.data.loans[item].status,
+                                    "date_string": finalDate+" "+finalTime,
+                                    "due_date_string": finalDueDate+" "+finalDueTime,
+                                    "loaner_id": response.data.data.loans[item].loaner_id,
+                                    "loaner_name": response.data.data.loans[item].loaner_name,
+                                    "lender_id": response.data.data.loans[item].lender_id,
+                                    "lender_name": response.data.data.loans[item].lender_name,
+                                    "due_date_time": getDueDateTime,
+                                    "date": date,
+                                    "difference": difference
                                 }
                             );
+                            console.log(new Date().getTime() == getDueDateTime)
                         });
+
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         // if (this.windowWidth < ) {
@@ -758,13 +835,13 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getPlacements(this.skip, this.take);
+                this.getLoansReject(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getPlacements(this.skip, this.take);
+                this.getLoansReject(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
-            console.log(this.dataArray.length)
+            // console.log(this.dataArray.length)
 
             
             window.scrollTo(0,0);

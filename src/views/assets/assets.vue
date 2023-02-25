@@ -116,7 +116,7 @@
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
-                                                <div v-if="this.windowWidth <= this.$widthLandscapePhone" class="col-12 d-flex justify-content-center">
+                                                <div v-if="this.windowWidth <= this.$widthPotraitPhone" class="col-12 d-flex justify-content-center">
                                                     <img class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                                 </div>
                                                 <div v-else class="col-12 d-flex justify-content-center">
@@ -307,7 +307,7 @@
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
-                <Footer v-if="this.windowWidth >= this.$widthLandscapePhone" class="bottom-0"></Footer>
+                <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="bottom-0"></Footer>
                 <Footer v-else class="w-100 position-absolute bottom-0"></Footer>
                 <!-- End of Footer -->
                 

@@ -186,18 +186,18 @@
                                                                                     <h5 v-for="item, index in selectDataArray" :key="item.id">
                                                                                         <template v-if="this.windowWidth > $widthLandscapePhone">
                                                                                             <template v-if="item.name.length+item.code.length < 60">
-                                                                                                {{ item.name }} ({{ item.code }}) <br>
+                                                                                                {{ index+1 +'.&ensp;'+item.name }} ({{ item.code }}) <br>
                                                                                             </template>
                                                                                             <template v-else>
-                                                                                                {{ (item.name+' ('+item.code).substring(0,60)+"..."}} <br>
+                                                                                                {{ index+1 +'.&ensp;'+(item.name+' ('+item.code).substring(0,60)+"..."}} <br>
                                                                                             </template>
                                                                                         </template>
                                                                                         <template v-else>
                                                                                             <template v-if="item.name.length+item.code.length < 40">
-                                                                                                {{ item.name }} ({{ item.code }}) <br>
+                                                                                                {{ index+1 +'.&ensp;'+item.name }} ({{ item.code }}) <br>
                                                                                             </template>
                                                                                             <template v-else>
-                                                                                                {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
+                                                                                                {{ index+1 +'.&ensp;'+(item.name+' ('+item.code).substring(0,40)+"..."}} <br>
                                                                                             </template>
                                                                                         </template>
                                                                                     </h5>
@@ -265,7 +265,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row ml-1 input-group mb-3 btn-group rounded-0 d-flex justify-content-evenly" role="group">
+                                                <div v-if="$roles == 'Super-Admin'" class="row ml-1 input-group mb-3 btn-group rounded-0 d-flex justify-content-evenly" role="group">
                                                     <input 
                                                         type="radio" 
                                                         class="btn-check" 
@@ -303,7 +303,7 @@
                                                     <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                                 </div>
                                                 <div v-if="isLoadingResponse == false">
-                                                    <button type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled"><i class="fa fa-paper-plane"></i> Kirim Konfirmasi</button>
+                                                    <button v-if="$roles == 'Super-Admin'" type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled"><i class="fa fa-paper-plane"></i> Kirim Konfirmasi</button>
                                                 </div>
                                                 <div v-if="isLoadingResponse == true">
                                                     <button type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="true">
@@ -571,7 +571,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -711,7 +711,7 @@
                             } else if(calculate > 30){
                                 difference = (calculate/30)+" Bulan"   
                             } else {
-                                difference = "Di luar jangkauan"   
+                                difference = (getDueTime - getTime)+" Jam"   
                             }
                         }
                         let finalDueDate = dueDate.toLocaleDateString("id");
