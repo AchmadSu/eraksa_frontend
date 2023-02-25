@@ -76,9 +76,30 @@
                                             <div class="badge text-primary"> <span>TERSEDIA</span> </div>
                                         </div>
                                         <div class="my-2">
-                                            <h3 class="heading text-left">{{item.name}}</h3>
-                                            <h6>{{item.code}}</h6>
-                                            <h6>{{item.study_program_name}}</h6>
+                                            <h3 class="heading text-left">
+                                                <template v-if="item.name.length < 20">
+                                                    {{item.name}}
+                                                </template>
+                                                <template v-else>
+                                                    {{(item.name).substring(0,20)+"..."}}
+                                                </template>
+                                            </h3>
+                                            <h6>
+                                                <template v-if="item.code.length < 30">
+                                                    {{item.code}}
+                                                </template>
+                                                <template v-else>
+                                                    {{ (item.code).substring(0,30)+"..." }}
+                                                </template>
+                                            </h6>
+                                            <h6>
+                                                <template v-if="item.study_program_name.length < 30">
+                                                    {{item.study_program_name}}
+                                                </template>
+                                                <template v-else>
+                                                    {{(item.study_program_name).substring(0,30)+"..."}}
+                                                </template>
+                                            </h6>
                                             <div class=" mt-3">
                                                 <div class="mt-3 text-center"> 
                                                     <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
