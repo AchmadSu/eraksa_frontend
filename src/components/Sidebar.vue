@@ -43,12 +43,12 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Tabel</h6>
-                    <a @click="manageStudyPrograms" :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
-                    <a @click="managePlacements" class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
+                    <a @click="router('manageStudyPrograms')" :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
+                    <a @click="router('managePlacements')" class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
-                    <a @click="manageCategoryAssets" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
-                    <a @click="manageWorkshops" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
+                    <a @click="router('manageCategoryAssets')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
+                    <a @click="router('manageWorkshops')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
                 </div>
             </div>
         </li>
@@ -63,22 +63,22 @@
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Peminjaman</h6>
-                    <a @click="createLoans" class="collapse-item" href="#" :style="this.cursorStyle"> 
+                    <a @click="router('loans.create')" class="collapse-item" href="#" :style="this.cursorStyle"> 
                         <i class="fa fa-plus-circle"></i>&ensp; Buat Peminjaman
                     </a>
-                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
+                    <a @click="router('manageLoans.accept')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-spinner"></i>&ensp; Aktif
                     </a>
-                    <a @click="manageRequestLoans" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
+                    <a @click="router('manageLoans.request')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
                     </a>
                     <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-check"></i>&ensp; Selesai
                     </a>
-                    <a @click="manageRejectLoans" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
+                    <a @click="router('manageLoans.reject')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
                     </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle"> 
+                    <a @click="router('loans.myHistory')" class="collapse-item" href="#" :style="this.cursorStyle"> 
                         <i class="fa fa-history"></i>&ensp; Riwayat Saya
                     </a>
                 </div>
@@ -135,7 +135,7 @@
 
         <!-- Nav Item - Assets -->
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a @click="manageAssets" class="nav-link" href="#" :style="this.cursorStyle">
+            <a @click="router('manageAssets')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-cube"></i>&ensp;
                 <span>Kelola Aset</span>
             </a>
@@ -241,7 +241,7 @@
                     ];
                 }
             },
-            manageStudyPrograms(){
+            router(name){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
@@ -262,245 +262,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageStudyPrograms' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            managePlacements(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'managePlacements' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            manageCategoryAssets(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageCategoryAssets' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            manageWorkshops(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageWorkshops' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            manageAssets(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            createLoans(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'loans.create' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            manageRequestLoans(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
-            manageRejectLoans(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.reject' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: name }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
