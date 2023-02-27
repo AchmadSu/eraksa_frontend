@@ -30,9 +30,19 @@ const loansRouter = [
         component : () => import("../../views/loans/Confirmation.vue")
     },
     {
+        path:'/manage/loans/accept',
+        name : 'manageLoans.accept',
+        component : () => import("../../views/loans/Accept.vue")
+    },
+    {
         path:'/manage/loans/reject',
         name : 'manageLoans.reject',
         component : () => import("../../views/loans/Reject.vue")
+    },
+    {
+        path:'/manage/loans/details',
+        name : 'manageLoans.details',
+        component : () => import("../../views/loans/Details.vue")
     },
     // {
     //     path:'/register',

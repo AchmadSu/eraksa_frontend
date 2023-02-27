@@ -69,7 +69,7 @@
                         <div class="container-fluid">
                             <!-- DataTales Example -->
                             <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-                                <div :class="this.loansStatus == '0' ? 'row':'d-none'">
+                                <div :class="this.loansStatus != '0' ? 'row':'d-none'">
                                     <div v-if="isLoadingImage == true" class="col-sm-12 d-md-none text-center my-5">
                                         <div v-if="windowWidth < 720">
                                             <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
@@ -99,7 +99,7 @@
                                     <div class="col-12 px-lg-5 text-center">
                                         <div class="d-flex justify-content-center input-group py-sm-3 mb-sm-3 mb-md-0 py-md-0 py-lg-1">
                                             <h3 class="fw-bolder text-secondary">
-                                                KONFIRMASI PERMINTAAN PEMINJAMAN
+                                                DETAIL PEMINJAMAN
                                             </h3>
                                         </div>
                                         <form class="form needs-validation" id="app" @submit.prevent="confirmFunction" novalidate>
@@ -120,7 +120,7 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td class="align-middle" colspan="2">
-                                                                                    <h5>Rincian Permintaan</h5>
+                                                                                    <h5>Rincian Peminjaman</h5>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -146,12 +146,39 @@
                                                                                     <h5>{{this.detailObject.loaner_code}}</h5>
                                                                                 </td>
                                                                             </tr>
+                                                                            <template v-if="this.detailObject.status != '0'">
+                                                                                <tr>
+                                                                                    <td class="align-middle">
+                                                                                        <h5>Dikonfirmasi oleh</h5>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <h5>{{this.detailObject.lender_name}}</h5>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="align-middle">
+                                                                                        <h5>
+                                                                                            <template v-if="this.detailObject.lender_code_type == '0'">
+                                                                                                NIM
+                                                                                            </template>
+                                                                                            <template v-else>
+                                                                                                NIDN
+                                                                                            </template>
+                                                                                        </h5>
+                                                                                    </td>
+                                                                                    <td class="align-middle">
+                                                                                        <h5>{{this.detailObject.lender_code}}</h5>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </template>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5 v-if="this.detailObject.status == '0'">Status</h5>
+                                                                                    <h5>Status</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5 v-if="this.detailObject.status == '0'"> Menunggu Konfirmasi</h5>
+                                                                                    <h5 v-if="this.detailObject.status == '1'"> Aktif</h5>
+                                                                                    <h5 v-if="this.detailObject.status == '2'"> Ditolak</h5>
+                                                                                    <h5 v-if="this.detailObject.status == '3'"> Selesai</h5>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -241,10 +268,20 @@
                                                                                                 </template>
                                                                                                 {{this.detailObject.loaner_name}}
                                                                                             </b>
+                                                                                            Dikonfirmasi oleh:
+                                                                                            <b>
+                                                                                                <template v-if="this.detailObject.lender_name.length > 20">
+                                                                                                    {{(this.detailObject.lender_name).substring(0,20)+"..."}}
+                                                                                                </template>
+                                                                                                {{this.detailObject.lender_name}}
+                                                                                            </b>
                                                                                             <br>
                                                                                             Status:
-                                                                                                <template v-if="this.detailObject.status == '0'">
-                                                                                                    <b>Menunggu Konfirmasi</b>
+                                                                                                <template v-if="this.detailObject.status == '1'">
+                                                                                                    <b>Aktif</b>
+                                                                                                </template> 
+                                                                                                <template v-if="this.detailObject.status == '2'">
+                                                                                                    <b>Ditolak</b>
                                                                                                 </template> 
                                                                                             <br>
                                                                                             Mulai: <br> <b>{{ this.detailObject.date }}</b>
@@ -275,45 +312,19 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div v-if="$roles == 'Super-Admin'" class="row ml-1 input-group mb-3 btn-group rounded-0 d-flex justify-content-evenly" role="group">
-                                                    <input 
-                                                        type="radio" 
-                                                        class="btn-check" 
-                                                        name="status"
-                                                        value="2"
-                                                        id="status2"
-                                                        v-model="form.radio"
-                                                        :disabled="!this.radioEnabled">
-                                                    <label :class="windowWidth <= $widthLandscapePhone ? 
-                                                        'my-2 p-2 col-12 btn btn-outline-danger rounded-0':
-                                                        'p-3 w-100 col-6 btn btn-outline-danger rounded-start'" 
-                                                        for="status2"
-                                                    >
-                                                    <b><i class="fa fa-ban"></i> &ensp; TOLAK</b>
-                                                    </label>
-                                                    <input 
-                                                        type="radio" 
-                                                        class="btn-check" 
-                                                        name="status"
-                                                        value="1"
-                                                        id="status1"
-                                                        v-model="form.radio"
-                                                        :disabled="!this.radioEnabled"
-                                                        >
-                                                    <label :class="windowWidth <= $widthLandscapePhone ? 
-                                                        'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                                        'p-3 col-6 btn btn-outline-success rounded-end'" 
-                                                        for="status1"
-                                                    >
-                                                    <b><i class="fa fa-circle-check"></i> &ensp; SETUJU</b>
-                                                    </label>
-                                                </div>
                                                 <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
                                                     <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                     <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                                 </div>
                                                 <div v-if="isLoadingResponse == false">
-                                                    <button v-if="$roles == 'Super-Admin'" type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled"><i class="fa fa-paper-plane"></i> Kirim Konfirmasi</button>
+                                                    <button 
+                                                        v-if="$roles != 'Member'
+                                                        && this.detailObject.status == '1'"
+                                                        type="submit" class="btn btn-primary"
+                                                        :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'"
+                                                        :disabled="!submitEnabled">
+                                                        Konfirmasi Pengembalian
+                                                    </button>
                                                 </div>
                                                 <div v-if="isLoadingResponse == true">
                                                     <button type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="true">
@@ -325,20 +336,19 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div :class="this.loansStatus == '0' ? 'd-none':'row mh-100'">
-                                    <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
+                                <div v-if="this.detailObject.status == '1'" class="row my-4 d-flex justify-content-center">
+                                    <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                        <button @click="createLetterFunction" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                            <i class="fa fa-print"></i>&ensp;Cetak Surat Persetujuan
+                                        </button>
                                     </div>
-                                    <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
-                                        <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                                </div>
+                                <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
+                                    <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                        <button @click="returnRouterFunction" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                            Lihat Rincian Pengembalian&ensp; <i class="fa fa-arrow-right"></i>
+                                        </button>
                                     </div>
-                                    <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
-                                        <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                    </div>
-                                    <div v-else class="col-12">
-                                        <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
-                                    </div>
-                                    <h3 class="text-center my-3">Status tidak sesuai</h3>
-                                    <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman. Permintaan perbaruan data tidak dapat dilakukan</p>
                                 </div>
                                 <div class="row my-4 d-flex justify-content-center">
                                     <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
@@ -510,6 +520,7 @@
                 showAlertSuccess: false,
                 showAlertError: false,
                 successDelete: false,
+                submitEnabled: true,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png',
                 validateForm: false,
                 validateSelect: false
@@ -519,19 +530,6 @@
             Sidebar,
             Navbar,
             Footer
-        },
-        watch: {
-            form: {
-                handler: function (val) {
-                    let radio = val.radio
-                    if(radio.length > 0) {
-                        this.submitEnabled = true;
-                    } else {
-                        this.submitEnabled = false;
-                    }
-                },
-                deep: true,
-            },
         },
         methods: {
             toTop(){
@@ -549,14 +547,6 @@
             closeModal() {
                 // console.log("test")
                 $('#successModal').modal('hide')
-            },
-            validateRequest(){
-                // console.log(value1);
-                if(this.validateForm && this.validateSelect) {
-                    this.submitEnabled = true;
-                } else {
-                    this.submitEnabled = false;
-                }
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -580,8 +570,51 @@
                             // this.setProgress = false;
                         }
                         // console.log("Test");
+                        this.lastPath = this.$router.options.history.state.back
+                        if (this.lastPath) {
+                            setTimeout(() => {
+                                this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() })
+                            }, 4000);
+                        } else {
+                            setTimeout(() => {
+                                this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                            }, 4000);
+                        }
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            returnRouterFunction(){
+                this.isLoadingResponse2 = true;
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                this.closeModal();
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
+                            // this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -737,6 +770,10 @@
                             "loaner_name": response.data.data.loans.loaner_name,
                             "loaner_code_type": response.data.data.loans.loaner_code_type,
                             "loaner_code": response.data.data.loans.loaner_code,
+                            "lender_id": response.data.data.loans.lender_id,
+                            "lender_name": response.data.data.loans.lender_name,
+                            "lender_code_type": response.data.data.loans.lender_code_type,
+                            "lender_code": response.data.data.loans.lender_code,
                             "difference": difference,
                         };
                         // console.log(this.detailObject)
@@ -841,8 +878,8 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles === "Member"){
-                this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+            } else if (this.$roles == "Member") {
+                this.$router.push({ name: "dashboard" });
             }
         },  
         mounted(){
@@ -851,6 +888,9 @@
                 // window.location.reload();
             }
             this.detailFunction(this.id)
+            if (this.$roles == 'Member') {
+                this.submitEnabled = false;
+            }
             // console.log(this.$route.query.search);
             // this.loansList();
             // this.dataArray.filter((index) => index !== 1 )

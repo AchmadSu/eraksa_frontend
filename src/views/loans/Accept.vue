@@ -26,14 +26,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Penolakan Peminjaman</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Peminjaman Aktif</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Penolakan</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Peminjaman</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -139,7 +139,7 @@
                                                             <th class="align-middle">Tenggat Waktu</th>
                                                             <th class="align-middle">Periode</th>
                                                             <th class="align-middle">Peminjam</th>
-                                                            <th class="align-middle">Ditolak Oleh</th>
+                                                            <th class="align-middle">Disetujui Oleh</th>
                                                             <!-- <th class="align-middle">Status Peminjaman</th> -->
                                                             <th class="align-middle" colspan="2">Aksi</th>
                                                         </tr>
@@ -148,7 +148,7 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '2'"><b>Ditolak</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '1'"><b>Aktif</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -173,11 +173,11 @@
                                                                     <i class="fa fa-info"></i> <br> Lihat Details
                                                                 </button>
                                                             </td>
-                                                            <!-- <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
+                                                            <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
                                                                 <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
                                                                     <i class="fa fa-paper-plane"></i> <br> Kirim Notif Pengembalian
                                                                 </button>
-                                                            </td> -->
+                                                            </td>
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
                                                             <td class="align-middle text-center" colspan="4">
@@ -202,7 +202,7 @@
                                                         <div class="my-2">
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
-                                                                <big v-if="item.status == '2'">Status: <b>Ditolak</b></big><br>
+                                                                <big v-if="item.status == '1'">Status: <b>Aktif</b></big><br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
@@ -224,22 +224,22 @@
                                                                 </big><br>
                                                             </p>
                                                             <div class="mt-3">
-                                                                <div v-if="item.status == '2'" class="row my-3 py-2">
+                                                                <div v-if="item.status == '1'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Detail
                                                                         </button>
                                                                     </div>
-                                                                    <!-- <template v-if="this.currentTime > item.due_date_time">
+                                                                    <template v-if="this.currentTime > item.due_date_time">
                                                                         <div class="col-12 w-100 text-center py-2">
                                                                            ATAU
                                                                         </div>
                                                                         <div class="col-12 py-2">
-                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <button @click="demand(item.id)" :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
                                                                                 <i class="fa fa-paper-plane"></i> &ensp; Kirim Notif Pengembalian
                                                                             </button>
                                                                         </div>
-                                                                    </template> -->
+                                                                    </template>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -655,7 +655,7 @@
             async getLoansReject(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
-                const status = "2"
+                const status = "1"
                 this.dataObject = {
                     "skip": skip,
                     "take": take,
@@ -666,7 +666,7 @@
                     "dueDateOne": this.keyDueDateOne,
                     "dueDateTwo": this.keyDueDateTwo,
                     "loaner_keyWords": this.keyLoaner,
-                    "orderDate": "DESC"
+                    "orderDueDate": "ASC"
                 }
                 try {
                     await axios.get('/loans/getAll', {params: this.dataObject})
