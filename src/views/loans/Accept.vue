@@ -537,7 +537,7 @@
                     this.take = 4;
                 }
                 // console.log(this.skip)
-                this.getLoansReject(this.skip, this.take)
+                this.getLoansAccept(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -561,7 +561,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.accept' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -595,7 +595,7 @@
                         }
                         // console.log(this.searchParams);
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.request', 
+                            this.$router.push({ name: 'manageLoans.accept', 
                                 query: {
                                     code: this.searchCode,
                                     dateOne: this.searchDateOne,
@@ -697,7 +697,7 @@
                     this.isLoadingDemand = false;
                 }
             },
-            async getLoansReject(skip, take){
+            async getLoansAccept(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
                 const status = "1"
@@ -873,10 +873,10 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getLoansReject(this.skip, this.take);
+                this.getLoansAccept(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getLoansReject(this.skip, this.take);
+                this.getLoansAccept(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)

@@ -530,7 +530,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.request' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.done' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -564,7 +564,7 @@
                         }
                         // console.log(this.searchParams);
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.request', 
+                            this.$router.push({ name: 'manageLoans.done', 
                                 query: {
                                     code: this.searchCode,
                                     dateOne: this.searchDateOne,
