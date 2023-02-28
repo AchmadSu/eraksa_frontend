@@ -66,6 +66,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade" id="demandModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="demandModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-success">
+                                        <h5 class="text-white modal-title" id="demandModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                                        <button @click="closeDemandModal" type="button" class="btn-close" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div v-for="item, index in successDemandResponse" :key="item.id" class="text-start text-success ml-3 alert alert-dismissible" role="alert">
+                                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                        </div>
+                                        <button @click="closeDemandModal" type="button" class="float-end btn btn-success">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="container-fluid">
                             <!-- DataTales Example -->
                             <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
@@ -176,7 +192,8 @@
                                                                                     <h5>Status</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5 v-if="this.detailObject.status == '1'"> Aktif</h5>
+                                                                                    <h5 v-if="this.detailObject.status == '1' && this.currentTime <= this.getDueTime"> Aktif</h5>
+                                                                                    <h5 class="text-danger" v-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Overdue</h5>
                                                                                     <h5 v-if="this.detailObject.status == '2'"> Ditolak</h5>
                                                                                     <h5 v-if="this.detailObject.status == '3'"> Selesai</h5>
                                                                                 </td>
@@ -277,8 +294,11 @@
                                                                                             </b>
                                                                                             <br>
                                                                                             Status:
-                                                                                                <template v-if="this.detailObject.status == '1'">
+                                                                                                <template v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time">
                                                                                                     <b>Aktif</b>
+                                                                                                </template> 
+                                                                                                <template v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time">
+                                                                                                    <b class="text-danger">Overdue</b>
                                                                                                 </template> 
                                                                                                 <template v-if="this.detailObject.status == '2'">
                                                                                                     <b>Ditolak</b>
@@ -334,6 +354,17 @@
                                                 </div>
                                             </div>
                                         </form>
+                                    </div>
+                                </div>
+                                <div v-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time" class="row my-4 d-flex justify-content-center">
+                                    <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                        <button v-if="isLoadingDemand == false" @click="demand(this.detailObject.id)" :disabled="buttonDisabled" class="btn btn-danger w-100">
+                                            <i class="fa fa-paper-plane"></i>&ensp;Kirim Notif Pengembalian
+                                        </button>
+                                        <button v-else :disabled="buttonDisabled" class="btn btn-danger w-100">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                Memuat ...
+                                        </button>
                                     </div>
                                 </div>
                                 <div v-if="this.detailObject.status == '1'" class="row my-4 d-flex justify-content-center">
@@ -401,6 +432,7 @@
                 isLoadingContent: true,
                 isLoadingResponse: false,
                 isLoadingAssets: false,
+                isLoadingDemand: false,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
@@ -409,6 +441,7 @@
                 sidebarShow: true,
                 imageLogo: false,
                 currentYear: new Date().getFullYear(),
+                currentTime: new Date().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
                 dataCount: 0,
@@ -504,7 +537,7 @@
                 errorResponse: [],
                 errorDelete: [],
                 successResponse: [],
-                successDeleteResponse: [],
+                successDemandResponse: [],
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
@@ -544,9 +577,17 @@
                 // console.log("test")
                 $('#successModal').modal('show')
             },
+            openDemandModal() {
+                // console.log("test")
+                $('#demandModal').modal('show')
+            },
             closeModal() {
                 // console.log("test")
                 $('#successModal').modal('hide')
+            },
+            closeDemandModal() {
+                // console.log("test")
+                $('#demandModal').modal('hide')
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -634,16 +675,15 @@
                 this.cursorStyle = 'cursor: not-allowed';
                 this.radioEnabled = false;
                 // let asset_ids = Object.values(this.filterIds)
-                let data = window.atob(this.id)
+                let data = parseInt(window.atob(this.id))
                 this.dataConfirm = {
-                    "id": data,
-                    "status": this.form.radio,
+                    "loan_id": data,
                 }
-                // console.log(this.dataConfirm)
+                console.log(this.dataConfirm)
                 // this.openModal();
                 // console.log(this.dataPlacements);
                 try {
-                    await axios.put('/loans/confirmation', this.dataConfirm)
+                    await axios.post('/returns/create', this.dataConfirm)
                     .then((response) => {
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -766,6 +806,7 @@
                             "status": response.data.data.loans.status,
                             "date": finalDate+" "+finalTime,
                             "due_date": finalDueDate+" "+finalDueTime,
+                            "due_date_time": getDueDateTime,
                             "loaner_id": response.data.data.loans.loaner_id,
                             "loaner_name": response.data.data.loans.loaner_name,
                             "loaner_code_type": response.data.data.loans.loaner_code_type,
@@ -852,6 +893,87 @@
                     this.buttonDisabled = false;
                     this.errorDetail = true;
                     this.isLoading = false;
+                }
+            },
+            async demand(id){
+                this.isLoadingDemand = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "id": id
+                };
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.post('/loans/demand', this.dataObject)
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successDemandResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.message
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingDemand = false;
+                        this.buttonDisabled = false;
+                        this.openDemandModal();
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDemand = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDemand = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDemand = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorDelete = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingDemand = false;
                 }
             },
             setAlert(){

@@ -8,6 +8,47 @@
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'demandModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="showAlertSuccess == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="successModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi pengiriman pesan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan mengirim pesan permintaan pengembalian barang kepada <b>{{ item.loaner_name }}</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDemand == false" :disabled="buttonDisabled" @click="this.demand(item.id)" type="button" class="btn btn-danger">Kirim</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDemand" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="showAlertSuccess" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="successModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="setSuccessClose" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="setSuccessClose" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="wrapper">
 
             <!-- Sidebar -->
@@ -148,7 +189,8 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '1'"><b>Aktif</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '1' && this.currentTime <= item.due_date_time"><b>Aktif</b></td>
+                                                            <td class="align-middle text-center text-danger" v-else-if="item.status == '1' && this.currentTime > item.due_date_time"><b>Overdue</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -170,11 +212,11 @@
                                                             </td>
                                                             <td class="align-middle text-center" :colspan="this.currentTime > item.due_date_time ? '':'2'">
                                                                 <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-info"></i> <br> Lihat Details
+                                                                    <i class="fa fa-info"></i> <br> Lihat Rincian
                                                                 </button>
                                                             </td>
                                                             <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
-                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                <button :disabled="buttonDisabled" class="btn w-100 btn-danger" data-bs-toggle="modal" :data-bs-target="'#demandModal'+item.id">
                                                                     <i class="fa fa-paper-plane"></i> <br> Kirim Notif Pengembalian
                                                                 </button>
                                                             </td>
@@ -202,7 +244,8 @@
                                                         <div class="my-2">
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
-                                                                <big v-if="item.status == '1'">Status: <b>Aktif</b></big><br>
+                                                                <big v-if="item.status == '1' && this.currentTime <= item.due_date_time">Status: <b>Aktif</b></big><br>
+                                                                <big v-if="item.status == '1' && this.currentTime > item.due_date_time">Status: <b class="text-danger">Overdue</b></big><br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
@@ -227,7 +270,7 @@
                                                                 <div v-if="item.status == '1'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-info"></i> &ensp; Lihat Detail
+                                                                            <i class="fa fa-info"></i> &ensp; Lihat Rincian
                                                                         </button>
                                                                     </div>
                                                                     <template v-if="this.currentTime > item.due_date_time">
@@ -235,7 +278,7 @@
                                                                            ATAU
                                                                         </div>
                                                                         <div class="col-12 py-2">
-                                                                            <button @click="demand(item.id)" :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#demandModal'+item.id" class="btn w-100 btn-danger rounded-0">
                                                                                 <i class="fa fa-paper-plane"></i> &ensp; Kirim Notif Pengembalian
                                                                             </button>
                                                                         </div>
@@ -347,7 +390,8 @@
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
-                isLoadingDelete: false,
+                isLoadingDemand: false,
+                isLoadingDemand: false,
                 sidebarShow: true,
                 imageLogo: false,
                 keyCode: this.$route.query.code,
@@ -432,10 +476,19 @@
             toTop(){
                 window.scrollTo(0,0);
             },
+            openModal() {
+                // console.log("test")
+                $('#successModal').modal('show')
+            },
             setAlert(){
                 // this.alertMsg = null;
                 this.showAlert = false;
                 this.errorResponse = [];
+            },
+            setSuccessClose(){
+                // console.log(id);
+                this.successResponse = [];
+                this.showAlertSuccess = false;
             },
             detailRouter(id){
                 // console.log("Teset")
@@ -472,13 +525,6 @@
                         }
                     ];
                 }
-            },
-            setSuccessClose(id){
-                // console.log(id);
-                this.successDelete = false;
-                this.dataArray = this.dataArray.filter((item) => item.id !== id );
-                this.dataCount--;
-                this.successDeleteResponse = [];
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -571,32 +617,31 @@
                     ];
                 }
             },
-            async delete(id){
-                this.isLoadingDelete = true;
+            async demand(id){
+                this.isLoadingDemand = true;
                 this.buttonDisabled = true;
                 this.dataObject = {
-                    "ids": [id]
+                    "id": id
                 };
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.delete('/loans/delete', {params: this.dataObject})
+                    await axios.post('/loans/demand', this.dataObject)
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
-                        this.successDeleteResponse = [
+                        this.successResponse = [
                             {
                                 "id": 1,
                                 "message": response.data.message,
-                                "detail": response.data.data.token
+                                "detail": response.data.data.message
                             }
                         ];
                         this.showAlertSuccess = true;
-                        this.isLoadingDelete = false;
-                        this.successDelete = true;
+                        this.isLoadingDemand = false;
                         this.buttonDisabled = false;
                     }).catch((err) => {
                         if(!err.response) {
-                            this.errorDelete = [
+                            this.errorResponse = [
                                 {
                                     'id': 1,
                                     'message': "Network Error", 
@@ -606,7 +651,7 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
+                            this.isLoadingDemand = false;
                         // console.log(err.response);
                         } else if (err.response.data.message == 'Error!'){
                             // console.log(err.response.data);
@@ -621,7 +666,7 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
+                            this.isLoadingDemand = false;
                         } else {
                             this.showAlert = true;
                             this.errorDelete = [
@@ -634,7 +679,7 @@
                             this.showAlertError = true;
                             this.isLoadingResponse = false;
                             this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
+                            this.isLoadingDemand = false;
                         }
                     });
                     this.isLoadingContent = false;
@@ -649,7 +694,7 @@
                     this.showAlertError = true;
                     this.isLoadingResponse = false;
                     this.buttonDisabled = false;
-                    this.isLoadingDelete = false;
+                    this.isLoadingDemand = false;
                 }
             },
             async getLoansReject(skip, take){
