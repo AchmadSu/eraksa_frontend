@@ -26,14 +26,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Penolakan Peminjaman</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Peminjaman Selesai</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Penolakan</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Peminjaman</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -139,7 +139,8 @@
                                                             <th class="align-middle">Tenggat Waktu</th>
                                                             <th class="align-middle">Periode</th>
                                                             <th class="align-middle">Peminjam</th>
-                                                            <th class="align-middle">Ditolak Oleh</th>
+                                                            <th class="align-middle">Disetujui Oleh</th>
+                                                            <th class="align-middle">Dikembalikan Kepada</th>
                                                             <!-- <th class="align-middle">Status Peminjaman</th> -->
                                                             <th class="align-middle" colspan="2">Aksi</th>
                                                         </tr>
@@ -148,7 +149,7 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '2'"><b>Ditolak</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '3'"><b>Selesai</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -168,16 +169,24 @@
                                                                     {{item.lender_name.substring(0,20)+"..."}}
                                                                 </template>
                                                             </td>
-                                                            <td class="align-middle text-center" :colspan="this.currentTime > item.due_date_time ? '':'2'">
+                                                            <td class="align-middle text-justify">
+                                                                <template v-if="item.recipient_name.length < 20">
+                                                                    {{item.recipient_name}}
+                                                                </template>
+                                                                <template v-else>
+                                                                    {{item.recipient_name.substring(0,20)+"..."}}
+                                                                </template>
+                                                            </td>
+                                                            <td class="align-middle text-center">
                                                                 <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-info"></i> <br> Lihat Rincian
                                                                 </button>
                                                             </td>
-                                                            <!-- <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
-                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-paper-plane"></i> <br> Kirim Notif Pengembalian
+                                                            <td class="align-middle text-center">
+                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                                    <i class="fa fa-info"></i> <br> Lihat Rincian Pengembalian
                                                                 </button>
-                                                            </td> -->
+                                                            </td>
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
                                                             <td class="align-middle text-center" colspan="4">
@@ -214,12 +223,20 @@
                                                                         {{item.loaner_name.substring(0,20)+"..."}}
                                                                     </template>
                                                                 </big><br>
-                                                                <big>Ditolak Oleh:
+                                                                <big>Disetujui Oleh:
                                                                     <template v-if="item.lender_name.length < 20">
                                                                         {{item.lender_name}}
                                                                     </template>
                                                                     <template v-else>
                                                                         {{item.lender_name.substring(0,20)+"..."}}
+                                                                    </template>
+                                                                </big><br>
+                                                                <big>Dikembalikan Kepada:
+                                                                    <template v-if="item.recipient_name.length < 20">
+                                                                        {{item.recipient_name}}
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        {{item.recipient_name.substring(0,20)+"..."}}
                                                                     </template>
                                                                 </big><br>
                                                             </p>
@@ -491,7 +508,7 @@
                     this.take = 4;
                 }
                 // console.log(this.skip)
-                this.getLoansReject(this.skip, this.take)
+                this.getLoansDone(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -652,10 +669,10 @@
                     this.isLoadingDelete = false;
                 }
             },
-            async getLoansReject(skip, take){
+            async getLoansDone(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
-                const status = "2"
+                const status = "3"
                 this.dataObject = {
                     "skip": skip,
                     "take": take,
@@ -717,6 +734,8 @@
                                     "loaner_name": response.data.data.loans[item].loaner_name,
                                     "lender_id": response.data.data.loans[item].lender_id,
                                     "lender_name": response.data.data.loans[item].lender_name,
+                                    "recipient_id": response.data.data.loans[item].recipient_id,
+                                    "recipient_name": response.data.data.loans[item].recipient_name,
                                     "due_date_time": getDueDateTime,
                                     "date": date,
                                     "difference": difference
@@ -828,10 +847,10 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getLoansReject(this.skip, this.take);
+                this.getLoansDone(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getLoansReject(this.skip, this.take);
+                this.getLoansDone(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)

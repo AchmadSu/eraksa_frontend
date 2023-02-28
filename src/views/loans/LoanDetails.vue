@@ -192,10 +192,10 @@
                                                                                     <h5>Status</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5 v-if="this.detailObject.status == '1' && this.currentTime <= this.getDueTime"> Aktif</h5>
+                                                                                    <h5 class="text-primary" v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time"> Aktif</h5>
                                                                                     <h5 class="text-danger" v-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Overdue</h5>
                                                                                     <h5 v-if="this.detailObject.status == '2'"> Ditolak</h5>
-                                                                                    <h5 v-if="this.detailObject.status == '3'"> Selesai</h5>
+                                                                                    <h5 class="text-success" v-if="this.detailObject.status == '3'"> Selesai</h5>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -295,13 +295,16 @@
                                                                                             <br>
                                                                                             Status:
                                                                                                 <template v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time">
-                                                                                                    <b>Aktif</b>
+                                                                                                    <b class="text-primary">Aktif</b>
                                                                                                 </template> 
                                                                                                 <template v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time">
                                                                                                     <b class="text-danger">Overdue</b>
                                                                                                 </template> 
                                                                                                 <template v-if="this.detailObject.status == '2'">
                                                                                                     <b>Ditolak</b>
+                                                                                                </template> 
+                                                                                                <template v-if="this.detailObject.status == '3'">
+                                                                                                    <b class="text-success">Ditolak</b>
                                                                                                 </template> 
                                                                                             <br>
                                                                                             Mulai: <br> <b>{{ this.detailObject.date }}</b>

@@ -161,7 +161,7 @@
                                                             </td>
                                                             <td class="align-middle text-center" :colspan="this.currentTime > item.due_date_time ? '':'2'">
                                                                 <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-info"></i> <br> Lihat Details
+                                                                    <i class="fa fa-info"></i> <br> Lihat Rincian
                                                                 </button>
                                                             </td>
                                                             <!-- <td :class="this.currentTime > item.due_date_time ? 'text-center':'d-none'">
@@ -210,7 +210,7 @@
                                                                 <div v-if="item.status == 0" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-info"></i> &ensp; Lihat Detail
+                                                                            <i class="fa fa-info"></i> &ensp; Lihat Rincian
                                                                         </button>
                                                                     </div>
                                                                     <!-- <template v-if="this.currentTime > item.due_date_time">

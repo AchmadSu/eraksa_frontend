@@ -181,7 +181,7 @@
                                 <li @click="router('manageLoans.request')" v-if="this.$roles != 'Member'" class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru</a>
                                 </li>
-                                <li v-if="this.$roles != 'Member'" class="list-group-item">
+                                <li @click="router('manageLoans.done')" v-if="this.$roles != 'Member'" class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-check"></i>&ensp; Selesai</a>
                                 </li>
                                 <li @click="router('manageLoans.reject')" v-if="this.$roles != 'Member'" class="list-group-item">

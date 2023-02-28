@@ -44,7 +44,7 @@
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
+                                    Banyak Aset <br> yang sedang dipinjam <br> Saat ini
                                 </div>
                                 <div class="ml-2 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -59,7 +59,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
+                                        Banyak Aset <br> yang sedang dipinjam <br> Saat ini
                                     </div>
                                     <div v-if="this.isErrorLoans" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -420,8 +420,6 @@
                     await axios.get('/loans/percentage', {params: {
                         "sleep": 0,
                         "status": "1",
-                        "dateOne": this.weekAgo+' 00:00:00',
-                        "dateTwo": this.currentDate+' 23:59:59'
                     }})
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';

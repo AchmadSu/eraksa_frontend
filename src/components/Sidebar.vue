@@ -72,7 +72,7 @@
                     <a @click="router('manageLoans.request')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
                     </a>
-                    <a v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
+                    <a @click="router('manageLoans.done')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-check"></i>&ensp; Selesai
                     </a>
                     <a @click="router('manageLoans.reject')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
