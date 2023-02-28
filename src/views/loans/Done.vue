@@ -149,7 +149,7 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '3'"><b>Selesai</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '3'"><b class="text-success">Selesai</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -211,7 +211,7 @@
                                                         <div class="my-2">
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
-                                                                <big v-if="item.status == '2'">Status: <b>Ditolak</b></big><br>
+                                                                <big v-if="item.status == '3'">Status: <b class="text-success">Selesai</b></big><br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
@@ -231,7 +231,7 @@
                                                                         {{item.lender_name.substring(0,20)+"..."}}
                                                                     </template>
                                                                 </big><br>
-                                                                <big>Dikembalikan Kepada:
+                                                                <big>Dikembalikan Kepada: <br>
                                                                     <template v-if="item.recipient_name.length < 20">
                                                                         {{item.recipient_name}}
                                                                     </template>
@@ -241,22 +241,20 @@
                                                                 </big><br>
                                                             </p>
                                                             <div class="mt-3">
-                                                                <div v-if="item.status == '2'" class="row my-3 py-2">
+                                                                <div v-if="item.status == '3'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Rincian
                                                                         </button>
                                                                     </div>
-                                                                    <!-- <template v-if="this.currentTime > item.due_date_time">
-                                                                        <div class="col-12 w-100 text-center py-2">
-                                                                           ATAU
-                                                                        </div>
-                                                                        <div class="col-12 py-2">
-                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                                <i class="fa fa-paper-plane"></i> &ensp; Kirim Notif Pengembalian
-                                                                            </button>
-                                                                        </div>
-                                                                    </template> -->
+                                                                    <div class="col-12 w-100 text-center py-2">
+                                                                        ATAU
+                                                                    </div>
+                                                                    <div class="col-12 py-2">
+                                                                        <button @click="detailReturnRouter(item.id)" type="button" class="btn w-100 btn-success rounded-0">
+                                                                            <i class="fa fa-info"></i> &ensp; Lihat Rincian Pengembalian
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
