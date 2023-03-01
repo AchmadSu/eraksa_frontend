@@ -564,16 +564,9 @@
                             // this.setProgress = false;
                         }
                         // console.log("Test");
-                        this.lastPath = this.$router.options.history.state.back
-                        if (this.lastPath) {
-                            setTimeout(() => {
-                                this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() })
-                            }, 4000);
-                        } else {
-                            setTimeout(() => {
-                                this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
-                            }, 4000);
-                        }
+                        setTimeout(() => {
+                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                        }, 4000);
                     }
                 } catch(e) {
                     this.errorResponse = [
