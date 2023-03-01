@@ -1,21 +1,21 @@
 const placementsRouter = [
     {
-        path:'/manage/placements',
+        path:'/placements',
         name : 'managePlacements',
         component : () => import("../../views/placements/Placements.vue")
     },
     {
-        path:'/manage/placements/trash',
+        path:'/placements/trash',
         name : 'managePlacements.trash',
         component : () => import("../../views/placements/Trash.vue")
     },
     {
-        path:'/manage/placements/create',
+        path:'/placements/create',
         name : 'managePlacements.create',
         component : () => import("../../views/placements/Create.vue")
     },
     {
-        path:'/manage/placements/edit',
+        path:'/placements/edit',
         name : 'managePlacements.update',
         component : () => import("../../views/placements/Update.vue")
     },

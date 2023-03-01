@@ -109,7 +109,7 @@
                                                         <div class="card w-100 h-100 btn text-dark text-justify p-3">
                                                             <div class="my-2">
                                                                 <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                                    <table class="table table-hover table-sm table-borderless">
+                                                                    <table class="table table-sm table-borderless">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th colspan="2">
@@ -180,7 +180,7 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                    <table class="table table-hover table-sm table-borderless">
+                                                                    <table class="table table-sm table-borderless">
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td class="align-middle">

@@ -20,34 +20,39 @@ const loansRouter = [
         component : () => import("../../views/loans/Update.vue")
     },
     {
-        path:'/manage/loans/request',
+        path:'/loans/request',
         name : 'manageLoans.request',
         component : () => import("../../views/loans/Request.vue")
     },
     {
-        path:'/manage/loans/confirmation',
+        path:'/loans/confirmation',
         name : 'manageLoans.confirmation',
         component : () => import("../../views/loans/Confirmation.vue")
     },
     {
-        path:'/manage/loans/accept',
+        path:'/loans/accept',
         name : 'manageLoans.accept',
         component : () => import("../../views/loans/Accept.vue")
     },
     {
-        path:'/manage/loans/done',
+        path:'/loans/done',
         name : 'manageLoans.done',
         component : () => import("../../views/loans/Done.vue")
     },
     {
-        path:'/manage/loans/reject',
+        path:'/loans/reject',
         name : 'manageLoans.reject',
         component : () => import("../../views/loans/Reject.vue")
     },
     {
-        path:'/manage/loans/details',
+        path:'/loans/details',
         name : 'manageLoans.details',
         component : () => import("../../views/loans/LoanDetails.vue")
+    },
+    {
+        path:'/loans/returnDetails',
+        name : 'manageLoans.returnDetails',
+        component : () => import("../../views/loans/ReturnDetails.vue")
     },
     // {
     //     path:'/register',

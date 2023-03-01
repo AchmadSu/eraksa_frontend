@@ -183,7 +183,7 @@
                                                                 </button>
                                                             </td>
                                                             <td class="align-middle text-center">
-                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                                <button @click="detailReturnRouter(item.return_id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-info"></i> <br> Lihat Rincian Pengembalian
                                                                 </button>
                                                             </td>
@@ -251,7 +251,7 @@
                                                                         ATAU
                                                                     </div>
                                                                     <div class="col-12 py-2">
-                                                                        <button @click="detailReturnRouter(item.id)" type="button" class="btn w-100 btn-success rounded-0">
+                                                                        <button @click="detailReturnRouter(item.return_id)" type="button" class="btn w-100 btn-success rounded-0">
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Rincian Pengembalian
                                                                         </button>
                                                                     </div>
@@ -488,6 +488,42 @@
                     ];
                 }
             },
+            detailReturnRouter(id){
+                // console.log("Teset")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'manageLoans.returnDetails', query: {data: data} }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
             setSuccessClose(id){
                 // console.log(id);
                 this.successDelete = false;
@@ -586,87 +622,6 @@
                     ];
                 }
             },
-            async delete(id){
-                this.isLoadingDelete = true;
-                this.buttonDisabled = true;
-                this.dataObject = {
-                    "ids": [id]
-                };
-                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
-                try {
-                    await axios.delete('/loans/delete', {params: this.dataObject})
-                    .then((response) => {
-                        // console.log(response.data.data);
-                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
-                        this.successDeleteResponse = [
-                            {
-                                "id": 1,
-                                "message": response.data.message,
-                                "detail": response.data.data.token
-                            }
-                        ];
-                        this.showAlertSuccess = true;
-                        this.isLoadingDelete = false;
-                        this.successDelete = true;
-                        this.buttonDisabled = false;
-                    }).catch((err) => {
-                        if(!err.response) {
-                            this.errorDelete = [
-                                {
-                                    'id': 1,
-                                    'message': "Network Error", 
-                                    'detail': "Silakan periksa jaringan internet anda!",
-                                }
-                            ];
-                            this.showAlertError = true;
-                            this.isLoadingResponse = false;
-                            this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
-                        // console.log(err.response);
-                        } else if (err.response.data.message == 'Error!'){
-                            // console.log(err.response.data);
-                            // this.showAlert = true;
-                            this.errorDelete = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.data.message,
-                                    'detail': err.response.data.data.error
-                                }
-                            ];
-                            this.showAlertError = true;
-                            this.isLoadingResponse = false;
-                            this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
-                        } else {
-                            this.showAlert = true;
-                            this.errorDelete = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.statusText,
-                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
-                                }
-                            ];
-                            this.showAlertError = true;
-                            this.isLoadingResponse = false;
-                            this.buttonDisabled = false;
-                            this.isLoadingDelete = false;
-                        }
-                    });
-                    this.isLoadingContent = false;
-                } catch (error) {
-                    this.errorDelete = [
-                        {
-                            'id': 1,
-                            'message': error.code, 
-                            'detail': error.message,
-                        }
-                    ];
-                    this.showAlertError = true;
-                    this.isLoadingResponse = false;
-                    this.buttonDisabled = false;
-                    this.isLoadingDelete = false;
-                }
-            },
             async getLoansDone(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
@@ -728,6 +683,7 @@
                                     "status": response.data.data.loans[item].status,
                                     "date_string": finalDate+" "+finalTime,
                                     "due_date_string": finalDueDate+" "+finalDueTime,
+                                    "return_id": response.data.data.loans[item].return_id,
                                     "loaner_id": response.data.data.loans[item].loaner_id,
                                     "loaner_name": response.data.data.loans[item].loaner_name,
                                     "lender_id": response.data.data.loans[item].lender_id,

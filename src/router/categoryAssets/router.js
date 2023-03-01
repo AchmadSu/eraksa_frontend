@@ -1,21 +1,21 @@
 const categoryAssetsRouter = [
     {
-        path:'/manage/categoryAssets',
+        path:'/categoryAssets',
         name : 'manageCategoryAssets',
         component : () => import("../../views/categoryAssets/CategoryAssets.vue")
     },
     {
-        path:'/manage/categoryAssets/trash',
+        path:'/categoryAssets/trash',
         name : 'manageCategoryAssets.trash',
         component : () => import("../../views/categoryAssets/Trash.vue")
     },
     {
-        path:'/manage/categoryAssets/create',
+        path:'/categoryAssets/create',
         name : 'manageCategoryAssets.create',
         component : () => import("../../views/categoryAssets/Create.vue")
     },
     {
-        path:'/manage/categoryAssets/edit',
+        path:'/categoryAssets/edit',
         name : 'manageCategoryAssets.update',
         component : () => import("../../views/categoryAssets/Update.vue")
     },

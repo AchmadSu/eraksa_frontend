@@ -1,21 +1,21 @@
 const workshopsRouter = [
     {
-        path:'/manage/workshops',
+        path:'/workshops',
         name : 'manageWorkshops',
         component : () => import("../../views/workshops/Workshops.vue")
     },
     {
-        path:'/manage/workshops/trash',
+        path:'/workshops/trash',
         name : 'manageWorkshops.trash',
         component : () => import("../../views/workshops/Trash.vue")
     },
     {
-        path:'/manage/workshops/create',
+        path:'/workshops/create',
         name : 'manageWorkshops.create',
         component : () => import("../../views/workshops/Create.vue")
     },
     {
-        path:'/manage/workshops/edit',
+        path:'/workshops/edit',
         name : 'manageWorkshops.update',
         component : () => import("../../views/workshops/Update.vue")
     },

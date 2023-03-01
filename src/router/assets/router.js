@@ -1,21 +1,21 @@
 const assetsRouter = [
     {
-        path:'/manage/assets',
+        path:'/assets',
         name : 'manageAssets',
         component : () => import("../../views/assets/Assets.vue")
     },
     {
-        path:'/manage/assets/trash',
+        path:'/assets/trash',
         name : 'manageAssets.trash',
         component : () => import("../../views/assets/Trash.vue")
     },
     {
-        path:'/manage/assets/create',
+        path:'/assets/create',
         name : 'manageAssets.create',
         component : () => import("../../views/assets/Create.vue")
     },
     {
-        path:'/manage/assets/edit',
+        path:'/assets/edit',
         name : 'manageAssets.update',
         component : () => import("../../views/assets/Update.vue")
     },

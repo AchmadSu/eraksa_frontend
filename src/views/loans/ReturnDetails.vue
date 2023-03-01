@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div v-else>
-                        <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
+                        <!-- <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header bg-success">
@@ -81,11 +81,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="container-fluid">
                             <!-- DataTales Example -->
                             <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-                                <div :class="this.loansStatus != '0' ? 'row':'d-none'">
+                                <div :class="this.loansStatus == '3' ? 'row':'d-none'">
                                     <div v-if="isLoadingImage == true" class="col-sm-12 d-md-none text-center my-5">
                                         <div v-if="windowWidth < 720">
                                             <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
@@ -115,7 +115,7 @@
                                     <div class="col-12 px-lg-5 text-center">
                                         <div class="d-flex justify-content-center input-group py-sm-3 mb-sm-3 mb-md-0 py-md-0 py-lg-1">
                                             <h3 class="fw-bolder text-secondary">
-                                                DETAIL PEMINJAMAN
+                                                DETAIL PENGEMBALIAN
                                             </h3>
                                         </div>
                                         <form class="form needs-validation" id="app" @submit.prevent="confirmFunction" novalidate>
@@ -136,7 +136,15 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td class="align-middle" colspan="2">
-                                                                                    <h5>Rincian Peminjaman</h5>
+                                                                                    <h5>Rincian Pengembalian</h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Kode Peminjaman</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{this.detailObject.loan_code}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -162,19 +170,18 @@
                                                                                     <h5>{{this.detailObject.loaner_code}}</h5>
                                                                                 </td>
                                                                             </tr>
-                                                                            <template v-if="this.detailObject.status != '0'">
                                                                                 <tr>
                                                                                     <td class="align-middle">
-                                                                                        <h5>Dikonfirmasi oleh</h5>
+                                                                                        <h5>Dikembalikan kepada</h5>
                                                                                     </td>
                                                                                     <td class="align-middle">
-                                                                                        <h5>{{this.detailObject.lender_name}}</h5>
+                                                                                        <h5>{{this.detailObject.recipient_name}}</h5>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td class="align-middle">
                                                                                         <h5>
-                                                                                            <template v-if="this.detailObject.lender_code_type == '0'">
+                                                                                            <template v-if="this.detailObject.recipient_code_type == '0'">
                                                                                                 NIM
                                                                                             </template>
                                                                                             <template v-else>
@@ -183,43 +190,15 @@
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle">
-                                                                                        <h5>{{this.detailObject.lender_code}}</h5>
+                                                                                        <h5>{{this.detailObject.recipient_code}}</h5>
                                                                                     </td>
                                                                                 </tr>
-                                                                            </template>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Status</h5>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <h5 class="text-primary" v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time"> Aktif</h5>
-                                                                                    <h5 class="text-danger" v-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Overdue</h5>
-                                                                                    <h5 v-if="this.detailObject.status == '2'"> Ditolak</h5>
-                                                                                    <h5 class="text-success" v-if="this.detailObject.status == '3'"> Selesai</h5>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="align-middle">
-                                                                                    <h5>Waktu Mulai</h5>
+                                                                                    <h5>Waktu Pengembalian</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.date}}</h5>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="align-middle">
-                                                                                    <h5>Tenggat Waktu</h5>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <h5>{{this.detailObject.due_date}}</h5>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="align-middle">
-                                                                                    <h5>Periode</h5>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <h5>{{this.detailObject.difference}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -285,31 +264,14 @@
                                                                                                 </template>
                                                                                                 {{this.detailObject.loaner_name}}
                                                                                             </b>
-                                                                                            Dikonfirmasi oleh:
+                                                                                            Dikembalikan kepada:
                                                                                             <b>
-                                                                                                <template v-if="this.detailObject.lender_name.length > 20">
-                                                                                                    {{(this.detailObject.lender_name).substring(0,20)+"..."}}
+                                                                                                <template v-if="this.detailObject.recipient_name.length > 20">
+                                                                                                    {{(this.detailObject.recipient_name).substring(0,20)+"..."}}
                                                                                                 </template>
-                                                                                                {{this.detailObject.lender_name}}
+                                                                                                {{this.detailObject.recipient_name}}
                                                                                             </b>
-                                                                                            <br>
-                                                                                            Status:
-                                                                                                <template v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time">
-                                                                                                    <b class="text-primary">Aktif</b>
-                                                                                                </template> 
-                                                                                                <template v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time">
-                                                                                                    <b class="text-danger">Overdue</b>
-                                                                                                </template> 
-                                                                                                <template v-if="this.detailObject.status == '2'">
-                                                                                                    <b>Ditolak</b>
-                                                                                                </template> 
-                                                                                                <template v-if="this.detailObject.status == '3'">
-                                                                                                    <b class="text-success">Ditolak</b>
-                                                                                                </template> 
-                                                                                            <br>
                                                                                             Mulai: <br> <b>{{ this.detailObject.date }}</b>
-                                                                                            <br>
-                                                                                            Tenggat: <br> <b>{{ this.detailObject.due_date }}</b>
                                                                                             <br>
                                                                                             Periode: <b>{{ this.detailObject.difference }}</b>
                                                                                             <br>
@@ -339,52 +301,25 @@
                                                     <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                     <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                                 </div>
-                                                <div v-if="isLoadingResponse == false">
-                                                    <button 
-                                                        v-if="$roles != 'Member'
-                                                        && this.detailObject.status == '1'"
-                                                        type="submit" class="btn btn-primary"
-                                                        :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'"
-                                                        :disabled="!submitEnabled">
-                                                        Konfirmasi Pengembalian
-                                                    </button>
-                                                </div>
-                                                <div v-if="isLoadingResponse == true">
-                                                    <button type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="true">
-                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        Memuat ...
-                                                    </button>
-                                                </div>
                                             </div>
                                         </form>
-                                        <div v-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time" class="row my-4 d-flex justify-content-center">
-                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                                <button v-if="isLoadingDemand == false" @click="demand(this.detailObject.id)" :disabled="buttonDisabled" class="btn btn-danger w-100">
-                                                    <i class="fa fa-paper-plane"></i>&ensp;Kirim Notif Pengembalian
-                                                </button>
-                                                <button v-else :disabled="buttonDisabled" class="btn btn-danger w-100">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        Memuat ...
-                                                </button>
-                                            </div>
+                                    </div>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="createLetterFunction" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                <i class="fa fa-print"></i>&ensp;Cetak Rincian
+                                            </button>
                                         </div>
-                                        <div v-if="this.detailObject.status == '1'" class="row my-4 d-flex justify-content-center">
-                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                                <button @click="createLetterFunction" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                    <i class="fa fa-print"></i>&ensp;Cetak Surat Persetujuan
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
-                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                                <button @click="returnRouterFunction(this.detailObject.return_id)" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                    Lihat Rincian Pengembalian&ensp; <i class="fa fa-arrow-right"></i>
-                                                </button>
-                                            </div>
+                                    </div>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="loanRouterFunction(this.detailObject.loan_id)" :disabled="buttonDisabled" class="btn btn-primary w-100">
+                                                Lihat Rincian Peminjaman&ensp; <i class="fa fa-arrow-right"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div :class="this.loansStatus != '0' ? 'd-none':'row mh-100'">
+                                <div :class="this.loansStatus == '3' ? 'd-none':'row mh-100'">
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
                                     </div>
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
@@ -650,7 +585,7 @@
                     ];
                 }
             },
-            returnRouterFunction(id){
+            loanRouterFunction(id){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -675,7 +610,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.returnDetails', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.details', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -786,61 +721,34 @@
             async detailFunction(id){
                 try {
                     let data = window.atob(id)
-                    await axios.get('/loans/detail/'+data)
+                    await axios.get('/returns/detail/'+data)
                     .then((response) => {
-                        let date = new Date(response.data.data.loans.date);
+                        let date = new Date(response.data.data.returns.date);
                         let finalDate = date.toLocaleDateString("id");
                         // console.log(finalDate)
                         let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
-                        let difference = ''
-                        let dueDate = new Date(response.data.data.loans.due_date);
-                        const getDate = date.getDate();
-                        const getDateTime = date.getTime();
-                        const getTime = date.getHours();
-                        const getDueDate = dueDate.getDate();
-                        const getDueDateTime = dueDate.getTime();
-                        const getDueTime = dueDate.getHours();
                         // console.log(compareDueDate);
-                        if(getDate == getDueDate) {
-                            difference = (getDueTime - getTime)+" Jam"
-                        } else {
-                            let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
-                            // console.log(calculate)
-                            // let calculateDays = calculate / (1000*3600*24) 
-                            if (calculate < 7 && calculate > 0) {
-                                difference = (calculate)+" Hari"   
-                            } else if(calculate > 7 && calculate < 30) {
-                                difference = (calculate/7)+" Minggu"   
-                            } else if(calculate > 30){
-                                difference = (calculate/30)+" Bulan"   
-                            } else {
-                                difference = (24 - (getTime - getDueTime))+" Jam" 
-                            }
-                        }
-                        let finalDueDate = dueDate.toLocaleDateString("id");
-                        let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
+                        
                         // console.log(difference)
                         this.detailObject = {
-                            "id": response.data.data.loans.id,
-                            "code": response.data.data.loans.code,
-                            "status": response.data.data.loans.status,
+                            "id": response.data.data.returns.id,
+                            "code": response.data.data.returns.code,
+                            "loan_id": response.data.data.returns.loan_id,
+                            "loan_code": response.data.data.returns.loan_code,
+                            "status": response.data.data.returns.loan_status,
                             "date": finalDate+" "+finalTime,
-                            "due_date": finalDueDate+" "+finalDueTime,
-                            "due_date_time": getDueDateTime,
-                            "return_id": response.data.data.loans.return_id,
-                            "loaner_id": response.data.data.loans.loaner_id,
-                            "loaner_name": response.data.data.loans.loaner_name,
-                            "loaner_code_type": response.data.data.loans.loaner_code_type,
-                            "loaner_code": response.data.data.loans.loaner_code,
-                            "lender_id": response.data.data.loans.lender_id,
-                            "lender_name": response.data.data.loans.lender_name,
-                            "lender_code_type": response.data.data.loans.lender_code_type,
-                            "lender_code": response.data.data.loans.lender_code,
-                            "difference": difference,
+                            "loaner_id": response.data.data.returns.loaner_id,
+                            "loaner_name": response.data.data.returns.loaner_name,
+                            "loaner_code_type": response.data.data.returns.loaner_code_type,
+                            "loaner_code": response.data.data.returns.loaner_code,
+                            "recipient_id": response.data.data.returns.recipient_id,
+                            "recipient_name": response.data.data.returns.recipient_name,
+                            "recipient_code_type": response.data.data.returns.recipient_code_type,
+                            "recipient_code": response.data.data.returns.recipient_code,
                         };
                         // console.log(this.detailObject)
                         // this.form.time = response.data.data.hours;
-                        let select = response.data.data.loan_details;
+                        let select = response.data.data.return_details;
                         // console.log(select[0]['asset_id'])
                         this.loansStatus = this.detailObject.status;
                         Object.keys(select).forEach((item) => {

@@ -85,7 +85,7 @@
             </div>
         </li>
 
-        <li v-if="this.$roles != 'Member'" class="nav-item">
+        <!-- <li v-if="this.$roles != 'Member'" class="nav-item">
             <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseMaintenances"
                 aria-expanded="true" aria-controls="collapseMaintenances">
                 <i class="fa fa-recycle" aria-hidden="true"></i>&ensp;
@@ -115,7 +115,7 @@
                     </a>
                 </div>
             </div>
-        </li>
+        </li> -->
 
         <!-- Divider -->
         <hr v-if="this.$roles != 'Member'" class="sidebar-divider">

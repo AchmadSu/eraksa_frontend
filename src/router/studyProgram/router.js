@@ -1,21 +1,21 @@
 const studyProgramRouter = [
     {
-        path:'/manage/studyPrograms',
+        path:'/studyPrograms',
         name : 'manageStudyPrograms',
         component : () => import("../../views/studyPrograms/StudyProgram.vue")
     },
     {
-        path:'/manage/studyPrograms/trash',
+        path:'/studyPrograms/trash',
         name : 'manageStudyPrograms.trash',
         component : () => import("../../views/studyPrograms/Trash.vue")
     },
     {
-        path:'/manage/studyPrograms/create',
+        path:'/studyPrograms/create',
         name : 'manageStudyPrograms.create',
         component : () => import("../../views/studyPrograms/Create.vue")
     },
     {
-        path:'/manage/studyPrograms/edit',
+        path:'/studyPrograms/edit',
         name : 'manageStudyPrograms.update',
         component : () => import("../../views/studyPrograms/Update.vue")
     },
