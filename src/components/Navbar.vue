@@ -154,9 +154,9 @@
                                         <i class="fa fa-cubes"></i>&ensp;Kategori Aset
                                     </a>
                                 </li>
-                                <li class="list-group-item" @click="router('manageWorkshops')">
+                                <!-- <li class="list-group-item" @click="router('manageWorkshops')">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>

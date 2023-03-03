@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <!-- <div v-else class="col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -139,7 +139,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
         
                 <!-- Aset yang rusak -->
                 <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
@@ -147,7 +147,7 @@
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                    Banyak Aset <br> yang rusak <br> Pekan ini
+                                    Banyak Aset <br> yang rusak <br> Saat ini
                                 </div>
                                 <div class="ml-2 spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -162,7 +162,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                        Banyak Aset <br> yang rusak <br> Pekan ini
+                                        Banyak Aset <br> yang rusak <br> Saat ini
                                     </div>
                                     <div v-if="this.isErrorBroken" class="row no-gutters align-items-center">
                                         <div class="col-auto">

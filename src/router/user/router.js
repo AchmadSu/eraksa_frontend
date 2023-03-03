@@ -28,6 +28,11 @@ const userRouter = [
         path:'/resetPhone',
         name : 'user.resetPhone',
         component : () => import("../../views/user/ResetPhone.vue"),
+    },
+    {
+        path:'/users',
+        name : 'manageUser',
+        component : () => import("../../views/user/User.vue"),
     }
 ]
 

@@ -36,9 +36,9 @@ Object.keys(categoryAssetsRouter).forEach((item) => {
     routes.push(categoryAssetsRouter[item]);
 })
 
-Object.keys(workshopsRouter).forEach((item) => {
-    routes.push(workshopsRouter[item]);
-})
+    // Object.keys(workshopsRouter).forEach((item) => {
+    //     routes.push(workshopsRouter[item]);
+    // })
 
 Object.keys(assetsRouter).forEach((item) => {
     routes.push(assetsRouter[item]);

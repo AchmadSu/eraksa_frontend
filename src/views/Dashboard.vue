@@ -117,7 +117,7 @@
                             </div>
                         </div>
                         <hr class="sidebar-divider bg-secondary">
-                        <Maintenance v-if="this.$roles != 'Member'"></Maintenance>
+                        <!-- <Maintenance v-if="this.$roles != 'Member'"></Maintenance> -->
 
                     </div>
                     <!-- /.container-fluid -->

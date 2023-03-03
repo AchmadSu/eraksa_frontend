@@ -48,7 +48,7 @@
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
                     <a @click="router('manageCategoryAssets')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
-                    <a @click="router('manageWorkshops')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a>
+                    <!-- <a @click="router('manageWorkshops')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a> -->
                 </div>
             </div>
         </li>
