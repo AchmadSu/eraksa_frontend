@@ -127,7 +127,7 @@
 
         <!-- Nav Item - Users -->
         <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link" href="#" :style="this.cursorStyle">
+            <a @click="router('manageUser')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-users"></i>&ensp;
                 <span>Kelola Users</span>
             </a>

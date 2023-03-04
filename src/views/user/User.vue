@@ -5,6 +5,47 @@
         </div>
     </div>
     <div v-else>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successDelete" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -61,15 +102,7 @@
                                                             v-model="form.keyWords"
                                                             name="search"
                                                             class="form-control input-lg bg-light"
-                                                            placeholder="Cari Nama/Email"
-                                                            aria-label="Code"
-                                                            aria-describedby="basic-addon2"
-                                                        />
-                                                        <input type="text"
-                                                            v-model="form.code"
-                                                            name="search"
-                                                            class="form-control input-lg bg-light"
-                                                            placeholder="Cari NIM/NIDN"
+                                                            placeholder="Cari Nama/Email/NIM/NIDN"
                                                             aria-label="Code"
                                                             aria-describedby="basic-addon2"
                                                         />
@@ -199,7 +232,7 @@
                                                             <td class="align-middle text-left">{{item.phone}}</td>
                                                             <td class="align-middle text-left">
                                                                 <template v-if="item.study_program_name == null">
-                                                                    &nbsp;
+                                                                    Umum
                                                                 </template>
                                                                 <template v-else>
                                                                     {{ item.study_program_name }}
@@ -209,13 +242,13 @@
                                                                 {{ item.user_role }}
                                                             </td>
                                                             <td :class="$roles == 'Super-Admin' ? 'align-middle text-center':'d-none'">
-                                                                <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-pencil"></i> <br> Edit
+                                                                <button @click="assignRoles(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                                    <i class="fa fa-pencil"></i> <br> Edit Peran
                                                                 </button>
                                                             </td>
                                                             <td class="align-middle text-center" :colspan="$roles == 'Super-Admin' ? '2':''">
-                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-trash"></i> <br> Hapus
+                                                                <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger ">
+                                                                    <i class="fa fa-trash"></i> <br> Hapus Data
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -228,7 +261,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <div v-else class="row d-flex justify-content-evenly">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
@@ -273,13 +306,13 @@
                                                                 </big>
                                                                 <br>
                                                                 <big>No. WhatsApp: {{item.phone}}</big><br>
-                                                                <big>Program Studi: {{item.study_program_name}}</big><br>
+                                                                <big v-if="item.study_program_name">Program Studi: {{item.study_program_name}}</big><br>
                                                                 <big>Peran Pengguna: <b>{{item.user_role}}</b></big><br>
                                                             </p>
                                                             <div class="mt-3">
                                                                 <div class="row my-3 py-2">
                                                                     <div v-if="$roles == 'Super-Admin'" class="col-12 py-2">
-                                                                        <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                        <button @click="assignRoles(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-pencil"></i> &ensp; Edit Peran Pengguna
                                                                         </button>
                                                                     </div>
@@ -510,7 +543,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageloans.trash' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageUser.trash' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -523,7 +556,7 @@
                     ];
                 }
             },
-            detailRouter(id){
+            assignRoles(id){
                 // console.log("Teset")
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -546,7 +579,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.confirmation', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageUser.roles', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -665,7 +698,7 @@
                 };
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.delete('/loans/delete', {params: this.dataObject})
+                    await axios.delete('/users/delete', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -746,11 +779,11 @@
                     "skip": skip,
                     "take": take,
                     "status": this.keyStatus,
-                    "code": this.keyCode,
                     "keyWords": this.keyWords,
                     "code_type": this.keyCodeType,
                     "roles": this.keyRole,
-                    "study_program_keyWords": this.keyStudyProgramName
+                    "study_program_keyWords": this.keyStudyProgramName,
+                    "order": "name"
                 }
                 try {
                     await axios.get('/users/getAll', {params: this.dataObject})
