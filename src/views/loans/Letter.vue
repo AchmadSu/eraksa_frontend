@@ -235,18 +235,18 @@
                                                 <i class="fa fa-download"></i>&ensp;Unduh Surat Persetujuan
                                             </button>
                                         </div>
+                                        <div class="row my-4 d-flex justify-content-center">
+                                            <div class="col-4">
+                                                <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                    <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <div class="row my-4 d-flex justify-content-center">
-                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
-                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'd-none'">
@@ -263,7 +263,7 @@
                     </div>
                 </div>
             </div>
-            <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="w-100 position-absolute bottom-0"></Footer>
+            <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="bottom-0"></Footer>
             <Footer v-else class="w-100 position-absolute bottom-0"></Footer>
             <a @click="toTop" class="scroll-to-top rounded" href="#">
                 <i class="fa fa-arrow-up"></i>
