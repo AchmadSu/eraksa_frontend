@@ -22,6 +22,7 @@ axios.defaults.withCredentials = true;
 
 
 // import './index.css'
+// import VueHtml2Canvas from 'html2canvas.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import 'bootstrap/dist/js/bootstrap.min.js'

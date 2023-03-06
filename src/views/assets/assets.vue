@@ -46,6 +46,32 @@
                 </div>
             </div>
         </div>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'QrModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="QrModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="QrModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Generate QrCode</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center text-dark">
+                        <div :id="'capture'+item.id" class="bg-light text-primary p-5 vh-50 mw-50">
+                            <QrCode 
+                            :value="item.qrCode"
+                            size="200"
+                            level="H" 
+                            />
+                            <h6>
+                                <b>{{item.code}}</b>
+                            </h6>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                            <button @click="this.downloadQrCode(item.code, ('capture'+item.id))" type="button" class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -148,7 +174,7 @@
                                                             <th class="align-middle">Tanggal Masuk</th>
                                                             <th class="align-middle">Penempatan</th>
                                                             <th class="align-middle">Kategori Aset</th>
-                                                            <th class="align-middle" colspan="6">
+                                                            <th class="align-middle" colspan="3">
                                                                 <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
@@ -170,21 +196,22 @@
                                                             <td>{{item.date}}</td>
                                                             <td>{{item.placement_name}}</td>
                                                             <td>{{item.category_name}}</td>
-                                                            <td v-if="item.status == 0" class="text-center" colspan="3">
-                                                                <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-pencil"></i> <br>
+                                                            <template v-if="item.status == 0">
+                                                                <td class="text-center">
+                                                                    <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                                        <i class="fa fa-pencil"></i> <br>
+                                                                    </button>
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                        <i class="fa fa-trash-o"></i> <br>
+                                                                    </button>
+                                                                </td>
+                                                            </template>
+                                                            <td class="text-center">
+                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#QrModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                                    <i class="fa fa-qrcode"></i> <br>
                                                                 </button>
-                                                            </td>
-                                                            <td v-else class="text-center bg-light" colspan="3">
-                                                                &nbsp;
-                                                            </td>
-                                                            <td v-if="item.status == 0" class="text-center" colspan="3">
-                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-trash-o"></i> <br>
-                                                                </button>
-                                                            </td>
-                                                            <td v-else class="text-center bg-light" colspan="3">
-                                                                &nbsp;
                                                             </td>
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
@@ -227,18 +254,22 @@
                                                                 <big>Kategori Aset: {{item.category_name}}</big><br>
                                                             </p>
                                                             <div class="mt-3">
-                                                                <div v-if="item.status == 0" class="row my-3 py-2">
+                                                                <div class="row my-3 py-2">
+                                                                    <template v-if="item.status == 0">
+                                                                        <div class="col-12 py-2">
+                                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                                <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="col-12 py-2">
+                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                                <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                            </button>
+                                                                        </div>
+                                                                    </template>
                                                                     <div class="col-12 py-2">
-                                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="col-12 w-100 text-center py-2">
-                                                                       ATAU
-                                                                    </div>
-                                                                    <div class="col-12 py-2">
-                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#QrModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-success rounded-0">
+                                                                            <i class="fa fa-qrcode"></i> &ensp; Generate QrCode
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -324,15 +355,18 @@
 <script>
     import Sidebar from '../../components/Sidebar.vue';
     import Navbar from '../../components/Navbar.vue';
+    import * as htmlToImage from 'html-to-image'
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
     import Footer from '../../components/Footer.vue';
+    import QrCode from 'qrcode.vue';
     import { useRouter } from 'vue-router'
     import axios from 'axios'
     export default{
         data() {
             return {
                 windowWidth: window.innerWidth,
+                QrValue: null,
                 isLoading: true,
                 isLoading: true,
                 buttonDisabled: false,
@@ -377,7 +411,8 @@
         components: {
             Sidebar,
             Navbar,
-            Footer
+            Footer,
+            QrCode
         },
         watch: {
             form: {
@@ -429,6 +464,15 @@
                         }
                     ];
                 }
+            },
+            downloadQrCode(code, target){
+                htmlToImage.toJpeg(document.getElementById(target), { quality: 0.95 })
+                .then(function (dataUrl) {
+                    var link = document.createElement('a');
+                    link.download = code + '.jpeg';
+                    link.href = dataUrl;
+                    link.click();
+                });
             },
             createRouter(){
                 this.setProgress = true;
@@ -697,6 +741,7 @@
                     .then((response) => {
                         // console.log(response.data.data);
                         Object.keys(response.data.data.assets).forEach((item) => {
+                            let data = window.btoa(response.data.data.assets[item].id);
                             let date = new Date(response.data.data.assets[item].date);
                             let finalDate = date.toLocaleDateString("id");
                             this.dataArray.push(
@@ -716,6 +761,7 @@
                                     "user_name": response.data.data.assets[item].user_name,
                                     "study_program_id": response.data.data.assets[item].study_program_id,
                                     "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "qrCode": "localhost:3000/assets/edit?"+data
                                 }
                             );
                         });

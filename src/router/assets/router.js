@@ -19,11 +19,11 @@ const assetsRouter = [
         name : 'manageAssets.update',
         component : () => import("../../views/assets/Update.vue")
     },
-    // {
-    //     path:'/register',
-    //     name : 'user.register',
-    //     component : () => import("../../views/user/Register.vue")
-    // },
+    {
+        path:'/testQr',
+        name : 'testQr',
+        component : () => import("../../views/QrGenerator.vue")
+    },
     // {
     //     path:'/verification',
     //     name : 'user.otpPage',

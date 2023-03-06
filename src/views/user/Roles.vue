@@ -792,7 +792,7 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles === "Member"){
+            } else if (this.$roles !== "Super-Admin"){
                 this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
             }
         },  

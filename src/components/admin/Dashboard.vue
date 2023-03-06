@@ -90,7 +90,7 @@
                 </div>
         
                 <!-- Aset yang diperbaiki -->
-                <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <!-- <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
                 <!-- <div v-else class="col-xl-3 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
