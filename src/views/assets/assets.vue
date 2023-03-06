@@ -50,14 +50,14 @@
             <div class="modal-dialog modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-success">
-                        <h5 class="text-light modal-title" id="QrModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Generate QrCode</h5>
+                        <h5 class="text-light modal-title" id="QrModalLabel"><i class="fa fa-qrcode"></i> &ensp;Generate QrCode</h5>
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center text-dark">
-                        <div :id="'capture'+item.id" class="bg-light text-primary p-5 vh-50 mw-50">
+                        <div :id="'capture'+item.id" class="bg-light text-primary p-md-5">
                             <QrCode 
                             :value="item.qrCode"
-                            size="200"
+                            size="300"
                             level="H" 
                             />
                             <h6>
@@ -208,7 +208,7 @@
                                                                     </button>
                                                                 </td>
                                                             </template>
-                                                            <td class="text-center">
+                                                            <td :colspan="item.status == 0 ? '' : '3'" class="text-center">
                                                                 <button type="button" data-bs-toggle="modal" :data-bs-target="'#QrModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-qrcode"></i> <br>
                                                                 </button>

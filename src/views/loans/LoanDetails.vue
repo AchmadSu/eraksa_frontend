@@ -370,8 +370,10 @@
                                         </div>
                                         <div v-if="this.detailObject.status == '1'" class="row my-4 d-flex justify-content-center">
                                             <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                                <button @click="createLetterFunction" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                    <i class="fa fa-print"></i>&ensp;Cetak Surat Persetujuan
+                                                <!-- <Letter id="targetPdf" :hidden="isHidden" :dataId="this.detailObject.id">
+                                                </Letter> -->
+                                                <button type="button" @click="downloadLetterFunction(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                    <i class="fa fa-download"></i>&ensp;Unduh Surat Persetujuan
                                                 </button>
                                             </div>
                                         </div>
@@ -408,6 +410,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- <Letter :dataId="this.detailObject.id"></Letter> -->
                     </div>
                     <!-- /.container-fluid -->
     
@@ -435,7 +438,9 @@
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
     import Footer from '../../components/Footer.vue';
+    import Letter from './Letter.vue';
     import { useRouter } from 'vue-router'
+    import HTML2PDF from 'html2pdf.js'
     import axios from 'axios'
     export default{
         data() {
@@ -444,6 +449,7 @@
                 isLoading: true,
                 isLoading: true,
                 isTyping: false,
+                isHidden: true,
                 checkName: false,
                 radioEnabled: true,
                 buttonDisabled: false,
@@ -642,6 +648,14 @@
                         }
                     ];
                 }
+            },
+            downloadLetterFunction(code){
+                // this.isHidden = false;
+                HTML2PDF(document.getElementById("targetPdf"), {
+				    margin: 1,
+                    filename: code+".pdf",
+                });
+                // this.isHidden = true;
             },
             returnRouterFunction(id){
                 this.isLoadingResponse2 = true;
@@ -1041,4 +1055,4 @@
             setTimeout(() => this.isLoadingImage = false, 10000);
         },
     }
-</script>
+</script>   

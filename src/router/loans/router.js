@@ -50,6 +50,11 @@ const loansRouter = [
         component : () => import("../../views/loans/LoanDetails.vue")
     },
     {
+        path:'/loans/printOut',
+        name : 'manageLoans.printOut',
+        component : () => import("../../views/loans/Letter.vue")
+    },
+    {
         path:'/loans/returnDetails',
         name : 'manageLoans.returnDetails',
         component : () => import("../../views/loans/ReturnDetails.vue")
