@@ -1,77 +1,280 @@
 <template>
-    <div :class= "windowWidth < 760 ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-        <div :class="windowWidth >= 760 ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
-            <picture class="mx-5">
-                <source srcset="src/assets/img/logo-01.png" type="image/svg+xml">
-                <img src="src/assets/img/logo-01.png" class="img-fluid w-25" alt="...">
-            </picture>
+    <div v-if="isLoading == true" class="min-vh-100 container-fluid bg-light position-absolute">
+        <div class="position-absolute top-50 start-50 translate-middle p-5 text-center">
+            <span class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status" aria-hidden="true"></span> <h3 class="text-primary">Processing</h3>
         </div>
-        <div class="row">
-            <div class="col-sm-12 d-sm-block d-md-none text-center">
-                <picture class="mx-3">
-                    <source srcset="src/assets/img/logo.png" type="image/svg+xml">
-                    <img src="src/assets/img/logo.png" class="img-fluid w-25" alt="...">
-                </picture>
-                <h3 class="mt-2">ERAKSA</h3>
+    </div>
+    <div v-else>
+        <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
+            <div class="progress-bar bg-primary" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>    
+        <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
+            <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
+                <div :class="windowWidth >= $widthLandscapePhone && windowWidth <= $widthComputer? 'd-block' : 'd-none'">
+                    <center>
+                        <picture class="mx-5">
+                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-50" alt="...">
+                        </picture>
+                    </center>
+                </div>
+                <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
+                    <picture class="mx-5">
+                        <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
+                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
+                    </picture>
+                </div>
             </div>
-            <div class="col-md-6 col-sm-12 text-center">
-                <img src="src/assets/img/Data_security_28.jpg" class="img-fluid" alt="...">
-            </div>
-            <div class="col-md-6 col-sm-12 px-lg-5 text-center">
-                <form class="form" action="#" method="POST">
-                    <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
-                        <h3 class="fw-bolder">
-                            Log In
-                        </h3>
-                    </div>
-                    <div class="py-lg-4 py-md-0 py-sm-1">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-transparent" id="basic-addon1">
-                                <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
-                            </span>
-                            <input name="email" type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+            <div class="row">
+                <div class="col-sm-12 d-sm-block d-md-none text-center">
+                    <picture class="mx-3">
+                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                    </picture>
+                </div>
+                <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
+                    <div v-if="windowWidth < 720">
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                        <div v-if="passwordHidden">
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else-if="windowWidth < $widthComputer">
+                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="col-md-6 col-sm-12 text-center">
+                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-6 col-sm-12 px-lg-5 text-center">
+                    <form class="form needs-validation" id="app" @submit.prevent="login" novalidate>    
+                        <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
+                            <h3 class="fw-bolder text-secondary">
+                                LOG IN
+                            </h3>
+                        </div>
+                        <div class="py-lg-4 py-md-0 py-sm-1">
                             <div class="input-group mb-3">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-envelope" />
                                 </span>
-                                <input name="password" type="password" class="form-control" v-model="passwordText" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2" />
-                                <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
+                                <input 
+                                    name="email" type="email" :class="this.checkEmail == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                    placeholder="Email" aria-label="Email" 
+                                    aria-describedby="basic-addon1"
+                                    v-model="form.email" required
+                                />
+                                <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
+                                    Masukkan data email dengan benar!
+                                </div>
+                            </div>
+                            <div v-if="passwordHidden">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <input 
+                                        name="password" type="password" :class="this.checkPassword == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                        v-model="form.password" placeholder="Password" aria-label="Password"
+                                        aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                    />
+                                    <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2">
+                                        <font-awesome-icon icon="fa-solid fa-eye" />
+                                    </button>
+                                </div>
+                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
+                                        <small>Panjang password minimal 6 karakter!</small>
+                                    </div>
+                                </div>
+                                <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
+                                        <small>Panjang password minimal 6 karakter!</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="!passwordHidden">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent" id="basic-addon1">
+                                        <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
+                                    </span>
+                                    <input 
+                                        name="password" type="text" :class="this.checkPassword == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                        v-model="form.password" placeholder="Password" aria-label="Password"
+                                        aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
+                                    />
+                                    <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2">
+                                        <font-awesome-icon icon="fa-solid fa-eye-slash"/>
+                                    </button>
+                                </div>
+                                <div :class="windowWidth < $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
+                                        <small>Panjang password minimal 6 karakter!</small>
+                                    </div>
+                                </div>
+                                <div :class="windowWidth >= $widthComputer ? 'p-0 text-start':'d-none'">
+                                    <div :class ="checkPassword == false ? 'text-danger' : 'd-none'">
+                                        <small>Panjang password minimal 6 karakter!</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="isLoadingResponse == false" class="pt-4">
+                                <button :disabled="!submitEnabled" type="submit" class="btn btn-primary" style="width:100%;">Masuk</button>
+                            </div>
+                            <div v-if="isLoadingResponse == true" class="pt-4">
+                                <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                            <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                                <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
-                        <div v-if="!passwordHidden">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-lock" />
-                                </span>
-                                <input name="password" type="text" class="form-control" v-model="passwordText" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2" />
-                                <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
-                            </div>
+                    </form>
+                    <div :class="windowWidth >= $widthLandscapePhone ? 'row py-3 my-md-3 my-lg-0' : 'd-none'">
+                        <div class="col-6 text-right">
+                            <button class="btn btn-light w-100" disabled>Member baru?</button>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="width:100%;">Masuk</button>
+                        <div class="col-6" v-if="isLoadingRouter == false">
+                            <button @click="register" class="btn btn-success w-100" :disabled="secondaryButtonDisabled">
+                                <font-awesome-icon icon="fa-solid fa-user-plus" />
+                                Daftar
+                            </button>
+                        </div>
+                        <div class="col-6" v-if="isLoadingRouter == true">
+                            <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat ...
+                            </button>
+                        </div>
                     </div>
-                </form>
-                <p class="mt-5 mt-md-3 mt-lg-1">Belum menjadi anggota? Daftar di <a href="#">sini</a></p>
+                    <div :class="windowWidth < $widthLandscapePhone ? 'row my-3' : 'd-none'">
+                        <div v-if="isLoadingRouter == false">
+                            <div class="col-12">
+                                <p>Atau</p>
+                            </div>
+                            <div class="col-12">
+                                <button @click="register" class="btn btn-success w-100" :disabled="secondaryButtonDisabled">
+                                    <font-awesome-icon icon="fa-solid fa-user-plus" />
+                                    Daftar
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="isLoadingRouter">
+                            <div class="col-12">
+                                <p>Atau</p>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div :class="windowWidth >= $widthLandscapePhone ? 'row my-4' : 'd-none'">
+                        <div class="col-12" v-if="isLoadingRouterResetPassword == false">
+                            <button @click="resetPassword" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                                <font-awesome-icon icon="fa-solid fa-lock" />
+                                Reset Password
+                            </button>
+                        </div>
+                        <div class="col-12" v-if="isLoadingRouterResetPassword == true">
+                            <button type="submit" class="btn btn-secondary" style="width:100%;" :disabled="true">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat ...
+                            </button>
+                        </div>
+                    </div>
+                    <div :class="windowWidth < $widthLandscapePhone ? 'row mt-4' : 'd-none'">
+                        <div v-if="isLoadingRouterResetPassword == false">
+                            <div class="col-12">
+                                <button @click="resetPassword" class="btn btn-light text-secondary w-100" :disabled="secondaryButtonDisabled">
+                                    <font-awesome-icon icon="fa-solid fa-lock" />
+                                    Reset Password
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="isLoadingRouterResetPassword">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-light" style="width:100%;" :disabled="true">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memuat ...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row text-center">
-            <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> 2023</p>
+            <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
+                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    // import { ref } from 'vue'
+    import { useRouter } from 'vue-router'
+    import axios from 'axios'
+
     export default {
-        data () {
+        data (){
             return {
+                windowWidth: window.innerWidth,
                 passwordHidden: {
                     default: true,
                     type: Boolean
                 },
-                windowWidth: window.innerWidth
+
+                isLoadingRouterResetPassword: false,
+                loginButtonCount: 0,
+
+                secondaryButtonDisabled: false,
+                submitEnabled: false,
+                checkEmail: false,
+                checkPassword: false,
+                isLoading: true,
+                isLoadingResponse: false,
+                isLoadingRouter: false,
+                isLoadingImage: true,
+                currentYear: new Date().getFullYear(),
+                setProgress: false,
+                widthProgressBar: 0,
+                intervalProgressbar: null,
+                widhtStyle: '',
+                lastPath: null,
+
+                regexExp: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+
+                form: {
+                    email: '',
+                    password: '',   
+                },
+
+                errorResponse: [],
+                sessionData: [],
+
+                // alertMsg: null,
+                // detailMessage: null,
+                showAlert: false,
             }
         },
+
         methods: {
             hidePassword() {
                 this.passwordHidden = true;
@@ -79,11 +282,255 @@
             showPassword() {
                 this.passwordHidden = false;
             },
+
+            async login() {
+                this.setAlert();
+                this.isLoadingResponse = true;
+                this.secondaryButtonDisabled = true;
+                const data = {
+                    "email": this.form.email,
+                    "password": this.form.password, 
+                }
+                await axios.post('/login', data)
+                .then(response => {
+                    // console.log(response.headers);
+                    localStorage.setItem('token', response.data.data.token);
+                    localStorage.setItem('roles', response.data.data.roles);
+                    this.sessionData = {
+                        "id": response.data.data.user.id,
+                        "name": response.data.data.user.name,
+                        "email": response.data.data.user.email,
+                        "status": response.data.data.user.status,
+                        "phone": response.data.data.user.phone,
+                        "study_program_id": response.data.data.user.study_program_id
+                    };
+                    localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
+                    localStorage.setItem('loggedIn', true);
+                    this.setProgress = true;
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            // this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                    }
+                    setTimeout(() => {
+                        if (response.data.data.user.status === "1") {
+                            this.lastPath = this.$router.options.history.state.back;
+                            if (this.lastPath != '/register' || this.lastPath != '/resetPassword' || this.lastPath != '/verification' || this.lastPath != '/resetPhone') {
+                                this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });    
+                            } else {
+                                this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+                            }
+                        } else {
+                            this.$router.push({ name: "user.otpPage" });
+                        }                        
+                    }, 4000);
+                })
+                .catch(error => {
+                    if(!error.response){
+                        this.secondaryButtonDisabled = false;
+                        this.showAlert = true;
+                        this.isLoadingResponse = false;
+                        this.errorResponse = [
+                            {
+                                'id': 1,
+                                'message': 'Error!', 
+                                'detail': 'Network Error. Anda terputus dengan jaringan kami!',
+                            }
+                        ];
+                        // console.log(!error.response);
+                    } else if (error.response) {
+                        this.secondaryButtonDisabled = false;
+                        this.showAlert = true;
+                        this.isLoadingResponse = false;
+                        if(error.response.data.message == 'Unauthorised!') {
+                            this.loginButtonCount++;
+                            if (this.loginButtonCount < 4) {
+                                this.errorResponse = [
+                                    {
+                                        'id': 1,
+                                        'message': error.response.data.message, 
+                                        'detail': error.response.data.data.error,
+                                    }
+                                ]
+                            } else {
+                                this.errorResponse = [
+                                    {
+                                        'id': 1,
+                                        'message': error.response.data.message, 
+                                        'detail': `Mungkin anda lupa dengan kata sandi 
+                                            anda. Silakan hubungi admin untuk mengatur ulang sandi anda.`,
+                                    }
+                                ]
+                            }
+                        } else if (error.response.data.message == 'Error!'){
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.data.message, 
+                                    'detail': error.response.data.data.error,
+                                }
+                            ]
+                        } else {
+                            this.errorResponse = [
+                                {
+                                    'id': 1,
+                                    'message': error.response.status +' '+ error.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ]
+                        }
+                    }
+                })
+            },
+
+            register(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                    }
+                    setTimeout(() => this.$router.push({ name: "user.register" }), 4000);
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+
+            resetPassword(){
+                this.setProgress = true;
+                this.isLoadingRouterResetPassword = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log(this.widhtStyle);
+                    }
+                    setTimeout(() => this.$router.push({ name: "user.requestResetPassword" }), 4000);
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            
+            validateEmail(value){
+                // console.log(this.checkPasswords);
+                if (this.regexExp.test(value)) {
+                    this.checkEmail = true;
+                    return true;
+                } else {
+                    this.checkEmail = false;
+                    return false;
+                }
+            },
+
+            validatePassword(value){
+                if (value.length <= 5) {
+                    this.checkPassword = false;
+                    return false
+                } else {
+                    this.checkPassword = true;
+                    return true;
+                }
+            },
+
+            setAlert(){
+                // this.alertMsg = null;
+                this.showAlert = false;
+                this.errorResponse = [];
+            }
+
+        },
+        watch: {
+            form: {
+                handler: function (val) {
+                    let email = val.email;
+                    let password = val.password;
+
+                    let validateName = this.validateEmail(email);
+                    let validatePassword = this.validatePassword(password);
+
+                    if(validateName && validatePassword) {
+                        this.submitEnabled = true;
+                    } else {
+                        this.submitEnabled = false;
+                    }
+                },
+                deep: true,
+            },
+        },
+        beforeCreate(){
+            // console.table(this.$session != null, this.$loggedIn != 'null');
+            if(this.$session != null || this.$loggedIn != 'null') {
+                if (this.$session['status'] == "1") {
+                    this.lastPath = this.$router.options.history.state.back
+                    if(this.lastPath != null) {
+                        this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
+                    }
+                    else {
+                        this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+                    }
+                }
+                else {
+                    this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
+                }
+            }
+        },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
         },
         mounted(){
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+        
+            window.scrollTo(0,0);
+            
+            setTimeout(() => this.isLoadingImage = false, 5000);
+            setTimeout(() => this.isLoading = false, 5000);
+            
         }
     };
 </script>
