@@ -169,12 +169,12 @@
                 <span>Tempat Aset</span>
             </a>
         </li>
-        <li v-if="this.$roles != 'Member'" class="nav-item">
+        <!-- <li v-if="this.$roles != 'Member'" class="nav-item">
             <a class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-briefcase"></i>&ensp;
                 <span>Bengkel</span>
             </a>
-        </li>
+        </li> -->
     </ul>
 </template>
 <script>

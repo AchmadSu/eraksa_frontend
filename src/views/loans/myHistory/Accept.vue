@@ -26,14 +26,13 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Peminjaman Selesai</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Peminjaman</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Peminjaman Aktif</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
@@ -49,6 +48,11 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div class="col-12 pb-3">
+                                                <button :disabled="buttonDisabled" @click="backRouter" class="btn w-100 btn-secondary rounded-0">
+                                                    <i class="fa fa-arrow-left"></i> &ensp;Kembali
+                                                </button>
+                                            </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'mx-2 col-12 pb-3':'mx-2 col-12 pb-3'">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search row">
                                                     <div class="input-group col-12">
@@ -96,14 +100,6 @@
                                                             aria-describedby="basic-addon2"
                                                             onfocus="(this.type='date')"
                                                         />
-                                                        <input type="text"
-                                                            v-model="form.loaner"
-                                                            name="loaner"
-                                                            :class="this.windowWidth > $widthPotraitPhone ? 'form-control input-lg bg-light':'d-none'" 
-                                                            placeholder="Nama Peminjam"
-                                                            aria-label="Date"
-                                                            aria-describedby="basic-addon2"
-                                                        />
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
@@ -138,53 +134,20 @@
                                                             <th class="align-middle">Waktu Mulai</th>
                                                             <th class="align-middle">Tenggat Waktu</th>
                                                             <th class="align-middle">Periode</th>
-                                                            <th class="align-middle">Peminjam</th>
-                                                            <th class="align-middle">Disetujui Oleh</th>
-                                                            <th class="align-middle">Dikembalikan Kepada</th>
-                                                            <!-- <th class="align-middle">Status Peminjaman</th> -->
-                                                            <th class="align-middle" colspan="2">Aksi</th>
+                                                            <th class="align-middle">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '3'"><b class="text-success">Selesai</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '1'"><b class="text-primary">Aktif</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
-                                                            <td class="align-middle text-justify">
-                                                                <template v-if="item.loaner_name.length < 20">
-                                                                    {{item.loaner_name}}
-                                                                </template>
-                                                                <template v-else>
-                                                                    {{item.loaner_name.substring(0,20)+"..."}}
-                                                                </template>
-                                                            </td>
-                                                            <td class="align-middle text-justify">
-                                                                <template v-if="item.lender_name.length < 20">
-                                                                    {{item.lender_name}}
-                                                                </template>
-                                                                <template v-else>
-                                                                    {{item.lender_name.substring(0,20)+"..."}}
-                                                                </template>
-                                                            </td>
-                                                            <td class="align-middle text-justify">
-                                                                <template v-if="item.recipient_name.length < 20">
-                                                                    {{item.recipient_name}}
-                                                                </template>
-                                                                <template v-else>
-                                                                    {{item.recipient_name.substring(0,20)+"..."}}
-                                                                </template>
-                                                            </td>
                                                             <td class="align-middle text-center">
                                                                 <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-info"></i> <br> Lihat Rincian
-                                                                </button>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <button @click="detailReturnRouter(item.return_id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
-                                                                    <i class="fa fa-info"></i> <br> Lihat Rincian Pengembalian
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -204,55 +167,23 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Peminjaman</h6>
+                                                                    <h6 class="mb-0">Data Peminjaman Aktif</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="my-2">
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
-                                                                <big v-if="item.status == '3'">Status: <b class="text-success">Selesai</b></big><br>
+                                                                <big v-if="item.status == '1'">Status: <b class="text-primary">Aktif</b></big><br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
-                                                                <big>Peminjam:
-                                                                    <template v-if="item.loaner_name.length < 20">
-                                                                        {{item.loaner_name}}
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        {{item.loaner_name.substring(0,20)+"..."}}
-                                                                    </template>
-                                                                </big><br>
-                                                                <big>Disetujui Oleh:
-                                                                    <template v-if="item.lender_name.length < 20">
-                                                                        {{item.lender_name}}
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        {{item.lender_name.substring(0,20)+"..."}}
-                                                                    </template>
-                                                                </big><br>
-                                                                <big>Dikembalikan Kepada: <br>
-                                                                    <template v-if="item.recipient_name.length < 20">
-                                                                        {{item.recipient_name}}
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        {{item.recipient_name.substring(0,20)+"..."}}
-                                                                    </template>
-                                                                </big><br>
                                                             </p>
                                                             <div class="mt-3">
-                                                                <div v-if="item.status == '3'" class="row my-3 py-2">
+                                                                <div v-if="item.status == '1'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Rincian
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="col-12 w-100 text-center py-2">
-                                                                        ATAU
-                                                                    </div>
-                                                                    <div class="col-12 py-2">
-                                                                        <button @click="detailReturnRouter(item.return_id)" type="button" class="btn w-100 btn-success rounded-0">
-                                                                            <i class="fa fa-info"></i> &ensp; Lihat Rincian Pengembalian
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -266,7 +197,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Peminjaman</h6>
+                                                                    <h6 class="mb-0">Data Peminjaman Aktif</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -301,8 +232,7 @@
                                             this.keyDateOne != NULL ||
                                             this.keyDateTwo != NULL ||
                                             this.keyDueDateOne != NULL ||
-                                            this.keyDueDateTwo != NULL ||
-                                            this.keyLoaner != NULL
+                                            this.keyDueDateTwo != NULL
                                             " class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
@@ -343,11 +273,11 @@
     </div>
 </template>
 <script>
-    import Sidebar from '../../components/Sidebar.vue';
-    import Navbar from '../../components/Navbar.vue';
+    import Sidebar from '../../../components/Sidebar.vue';
+    import Navbar from '../../../components/Navbar.vue';
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
-    import Footer from '../../components/Footer.vue';
+    import Footer from '../../../components/Footer.vue';
     import { useRouter } from 'vue-router'
     import axios from 'axios'
     export default{
@@ -366,7 +296,6 @@
                 sidebarShow: true,
                 imageLogo: false,
                 keyCode: this.$route.query.code,
-                keyLoaner: this.$route.query.loaner,
                 keyDateOne: this.$route.query.dateOne,
                 keyDateTwo: this.$route.query.dateTwo,
                 keyDueDateOne: this.$route.query.dueDateOne,
@@ -452,6 +381,42 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
+            backRouter(){
+                // console.log("Teset")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                // let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'loans.myHistory' }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
             detailRouter(id){
                 // console.log("Teset")
                 this.setProgress = true;
@@ -475,7 +440,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.details', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'myLoans.details', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -511,7 +476,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.returnDetails', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'myLoans.returnDetails', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -566,7 +531,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.done' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'myLoans.active' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -600,14 +565,13 @@
                         }
                         // console.log(this.searchParams);
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.done', 
+                            this.$router.push({ name: 'myLoans.active', 
                                 query: {
                                     code: this.searchCode,
                                     dateOne: this.searchDateOne,
                                     dateTwo: this.searchDateTwo,
                                     dueDateOne: this.searchDueDateOne,
-                                    dueDateTwo: this.searchDueDateTwo,
-                                    loaner: this.searchLoaner
+                                    dueDateTwo: this.searchDueDateTwo
                                 }
                             }).then(() => { this.$router.go() })
                         }, 4000);
@@ -625,7 +589,7 @@
             async getLoansDone(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
-                const status = "3"
+                const status = "1"
                 this.dataObject = {
                     "skip": skip,
                     "take": take,
@@ -635,7 +599,7 @@
                     "dateTwo": this.keyDateTwo,
                     "dueDateOne": this.keyDueDateOne,
                     "dueDateTwo": this.keyDueDateTwo,
-                    "loaner_keyWords": this.keyLoaner,
+                    "loaner_id": this.$session.id,
                     "orderDate": "DESC"
                 }
                 try {
@@ -683,13 +647,6 @@
                                     "status": response.data.data.loans[item].status,
                                     "date_string": finalDate+" "+finalTime,
                                     "due_date_string": finalDueDate+" "+finalDueTime,
-                                    "return_id": response.data.data.loans[item].return_id,
-                                    "loaner_id": response.data.data.loans[item].loaner_id,
-                                    "loaner_name": response.data.data.loans[item].loaner_name,
-                                    "lender_id": response.data.data.loans[item].lender_id,
-                                    "lender_name": response.data.data.loans[item].lender_name,
-                                    "recipient_id": response.data.data.loans[item].recipient_id,
-                                    "recipient_name": response.data.data.loans[item].recipient_name,
                                     "due_date_time": getDueDateTime,
                                     "date": date,
                                     "difference": difference
@@ -788,8 +745,6 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles === "Member"){
-                this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
             }
         },  
         mounted(){

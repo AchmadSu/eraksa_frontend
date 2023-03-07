@@ -842,7 +842,7 @@
                             let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
                             // console.log(calculate)
                             // let calculateDays = calculate / (1000*3600*24) 
-                            if (calculate < 7 && calculate > 0) {
+                            if (calculate < 7 && calculate > 1) {
                                 difference = (calculate)+" Hari"   
                             } else if(calculate > 7 && calculate < 30) {
                                 difference = (calculate/7)+" Minggu"   

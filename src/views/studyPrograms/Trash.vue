@@ -193,7 +193,7 @@
                                         <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat seluruh data
+                                                    Hapus Filter
                                                 </button>
                                             </div>
                                             <div class="col-12 text-center">

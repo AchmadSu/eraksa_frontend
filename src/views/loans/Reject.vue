@@ -188,14 +188,14 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <div v-else class="row d-flex justify-content-evenly">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Permintaan</h6>
+                                                                    <h6 class="mb-0">Data Peminjaman</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -251,7 +251,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Permintaan</h6>
+                                                                    <h6 class="mb-0">Data Peminjaman</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -292,7 +292,7 @@
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat seluruh data
+                                                    Hapus Filter
                                                 </button>
                                             </div>
                                             <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
@@ -693,7 +693,7 @@
                                 let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
                                 // console.log(calculate)
                                 // let calculateDays = calculate / (1000*3600*24) 
-                                if (calculate < 7 && calculate > 0) {
+                                if (calculate < 7 && calculate > 1) {
                                     difference = (calculate)+" Hari"   
                                 } else if(calculate > 7 && calculate < 30) {
                                     difference = (calculate/7)+" Minggu"   
