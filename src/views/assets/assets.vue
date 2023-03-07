@@ -183,32 +183,32 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                            <td class="text-center">{{index+1}}</td>
-                                                            <td><b>{{item.name}}</b></td>
-                                                            <td>{{item.code}}</td>
-                                                            <td>{{item.user_name}}</td>
-                                                            <td>{{item.study_program_name}}</td>
-                                                            <td v-if="item.condition == 0">Optimal</td>
-                                                            <td v-else>Rusak</td>
-                                                            <td v-if="item.status == 0">Tersedia</td>
-                                                            <td v-else-if="item.status == 1">Dipinjam</td>
-                                                            <td v-else-if="item.status == 2">Diperbaiki</td>
-                                                            <td>{{item.date}}</td>
-                                                            <td>{{item.placement_name}}</td>
-                                                            <td>{{item.category_name}}</td>
+                                                            <td class="text-center align-middle">{{index+1}}</td>
+                                                            <td class="align-middle"><b>{{item.name}}</b></td>
+                                                            <td class="align-middle">{{item.code}}</td>
+                                                            <td class="align-middle">{{item.user_name}}</td>
+                                                            <td class="align-middle">{{item.study_program_name}}</td>
+                                                            <td class="align-middle" v-if="item.condition == 0">Optimal</td>
+                                                            <td class="align-middle" v-else>Rusak</td>
+                                                            <td class="align-middle" v-if="item.status == 0">Tersedia</td>
+                                                            <td class="align-middle" v-else-if="item.status == 1">Dipinjam</td>
+                                                            <td class="align-middle" v-else-if="item.status == 2">Diperbaiki</td>
+                                                            <td class="align-middle">{{item.date}}</td>
+                                                            <td class="align-middle">{{item.placement_name}}</td>
+                                                            <td class="align-middle">{{item.category_name}}</td>
                                                             <template v-if="item.status == 0">
-                                                                <td class="text-center">
+                                                                <td class="align-middle text-center">
                                                                     <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                         <i class="fa fa-pencil"></i> <br>
                                                                     </button>
                                                                 </td>
-                                                                <td class="text-center">
+                                                                <td class="align-middle text-center">
                                                                     <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
                                                                         <i class="fa fa-trash-o"></i> <br>
                                                                     </button>
                                                                 </td>
                                                             </template>
-                                                            <td :colspan="item.status == 0 ? '' : '3'" class="text-center">
+                                                            <td :colspan="item.status == 0 ? '' : '3'" class="text-center align-middle">
                                                                 <button type="button" data-bs-toggle="modal" :data-bs-target="'#QrModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-qrcode"></i> <br>
                                                                 </button>

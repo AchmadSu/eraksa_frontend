@@ -41,14 +41,16 @@
                             <div class="row d-flex justify-content-evenly my-sm-5 my-md-3">
                                 <div class="col-8">
                                     <div class="bg-light card w-100 h-100 btn text-justify rounded-0">
-                                        <div id="target" class="bg-light p-5">
-                                            <div class="d-flex justify-content-center input-group py-sm-3 mb-sm-3 mb-md-0 py-md-0 py-lg-1">
-                                                <h3 class="fw-bolder text-secondary">
-                                                    SURAT PERNYATAAN
-                                                </h3>
-                                            </div>
+                                        <div class="p-5">
                                             <div class="my-2">
-                                                <table class="table table-sm table-borderless">
+                                                <table id="primaryTable" class="table table-sm table-borderless">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="text-center align-middle" colspan="2">
+                                                                <h4>Surat Pernyataan</h4>
+                                                            </td>
+                                                        </tr>
+                                                    </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td class="align-middle">
@@ -61,12 +63,8 @@
                                                         <tr>
                                                             <td class="align-middle">
                                                                 <h5>
-                                                                    <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                        NIM
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        NIDN
-                                                                    </template>
+                                                                    <template v-if="this.detailObject.loaner_code_type == '0'">NIM</template>
+                                                                    <template v-else>NIDN</template>
                                                                 </h5>
                                                             </td>
                                                             <td class="align-middle">
@@ -75,65 +73,66 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="align-middle" colspan="2">
-                                                                <h5>Dengan ini menyatakan bahwa:</h5>
+                                                                <h5>Dengan ini menyatakan bahwa: </h5>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="align-middle" colspan="2">
+                                                            <td>
                                                                 <h5>
-                                                                    <ol class="my-2">
-                                                                        <li class="my-2">Saya melakukan transaksi peminjaman aset dengan kode pinjam <br><b>{{this.detailObject.code}}</b></li>
-                                                                        <li class="my-2">
-                                                                            Saya melakukan peminjaman pada: 
-                                                                            <ol type="a">
-                                                                                <li class="my-2">Tanggal dan Waktu: {{this.detailObject.date}}</li>
-                                                                                <li class="my-2">Tenggat Waktu: {{this.detailObject.due_date}}</li>
-                                                                                <li class="my-2">Periode: {{this.detailObject.difference}}</li>
-                                                                            </ol>
-                                                                        </li>
-                                                                        <li class="my-2">Saya melakukan peminjaman atas beberapa aset yang diantaranya adalah:</li>
-                                                                        <table class="table table-bordered">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <td class="align-middle text-center">
-                                                                                        No
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        Nama Aset
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        Kode Aset
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        Jenis Aset
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        Total Aset
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr v-for="item, index in selectDataArray" :key="item.id">
-                                                                                    <td class="align-middle text-center">
-                                                                                        {{index+1}}
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        {{item.name}}
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        {{item.code}}
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        {{item.category_name}}
-                                                                                    </td>
-                                                                                    <td class="align-middle text-center">
-                                                                                        ....
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                        <li class="my-2"><b>Saya bersedia bertanggung jawab</b> apabila terdapat kerusakan dan/atau kehilangan terhadap seluruh aset yang saya pinjam</li>
-                                                                    </ol>
+                                                                    1.
+                                                                </h5> 
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <h5>
+                                                                    Saya melakukan transaksi peminjaman aset dengan kode pinjam {{this.detailObject.code}}
+                                                                </h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <h5>
+                                                                    2.
+                                                                </h5>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <h5>
+                                                                    Saya melakukan peminjaman Tanggal: {{this.detailObject.date}}
+                                                                </h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <h5>
+                                                                    3.
+                                                                </h5>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <h5>
+                                                                    Saya akan mengembalikan aset sebelum Tanggal: {{this.detailObject.due_date}}
+                                                                </h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <h5>
+                                                                    4.
+                                                                </h5>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <h5>
+                                                                    Saya meminjam beberapa aset yang tertera pada Lampiran
+                                                                </h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <h5>
+                                                                    5.
+                                                                </h5>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <h5>
+                                                                    Saya bersedia bertanggung jawab apabila terdapat kerusakan dan/atau kehilangan terhadap seluruh aset yang saya pinjam
                                                                 </h5>
                                                             </td>
                                                         </tr>
@@ -145,43 +144,35 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="d-flex justify-content-evenly">
-                                                <table class="table table-borderless">
-                                                    <thead>
-                                                        <tr class="text-center">
-                                                            <td>
-                                                                <h5>
-                                                                    <ul style="list-style-type:none;">
-                                                                        <li>
-                                                                            Disetujui Oleh,
-                                                                        </li>
-                                                                    </ul>
-                                                                </h5>
-                                                            </td>
-                                                            <td>
-                                                                <h5>
-                                                                    <ul style="list-style-type:none;">
-                                                                        <li>
-                                                                            Peminjam,
-                                                                        </li>
-                                                                    </ul>
-                                                                </h5>
-                                                            </td>
-                                                        </tr>
-                                                    </thead>
+                                            <div style="background-color: #fff;" class="d-flex justify-content-evenly">
+                                                <table id="signatureTable" class="table table-borderless">
                                                     <tbody>
                                                         <tr class="text-center">
                                                             <td>
                                                                 <h5>
-                                                                    <ul style="list-style-type:none;">
-                                                                        <li>
-                                                                            <QrCode 
-                                                                                :value="this.detailObject.qrCode"
-                                                                                size="80"
-                                                                                level="H" 
-                                                                            />
-                                                                        </li>
-                                                                    </ul>
+                                                                    Disetujui Oleh,
+                                                                </h5>
+                                                            </td>
+                                                            <td>
+                                                                <h5>
+                                                                    Peminjam,
+                                                                </h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-center">
+                                                            <td>
+                                                                <h5>
+                                                                    &nbsp;
+                                                                </h5>
+                                                            </td>
+                                                            <td>
+                                                                <h5>&nbsp;</h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-center">
+                                                            <td>
+                                                                <h5>
+                                                                    &nbsp;
                                                                 </h5>
                                                             </td>
                                                             <td>
@@ -191,47 +182,100 @@
                                                         <tr class="text-center">
                                                             <td>
                                                                 <h5 class="text-center">
-                                                                    <ul style="list-style-type:none;">
-                                                                        <li>
-                                                                            {{this.detailObject.lender_name}}
-                                                                        </li>
-                                                                        <li>
-                                                                            <template v-if="this.detailObject.lender_code_type == '0'">
-                                                                                NIM. 
-                                                                            </template>
-                                                                            <template v-else>
-                                                                                NIDN. 
-                                                                            </template>
-                                                                            {{this.detailObject.lender_code}}
-                                                                        </li>
-                                                                    </ul>
+                                                                    {{this.detailObject.lender_name}}
                                                                 </h5>
                                                             </td>
                                                             <td>
                                                                 <h5 class="text-center">
-                                                                    <ul style="list-style-type:none;">
-                                                                        <li>
-                                                                            {{this.detailObject.loaner_name}}
-                                                                        </li>
-                                                                        <li>
-                                                                            <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                NIM. 
-                                                                            </template>
-                                                                            <template v-else>
-                                                                                NIDN. 
-                                                                            </template>
-                                                                            {{this.detailObject.loaner_code}}
-                                                                        </li>
-                                                                    </ul>
+                                                                    {{this.detailObject.loaner_name}}
+                                                                </h5>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="text-center">
+                                                            <td>
+                                                                <h5 class="text-center">
+                                                                    <template v-if="this.detailObject.lender_code_type == '0'">
+                                                                        NIM. 
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        NIDN. 
+                                                                    </template>
+                                                                    {{this.detailObject.lender_code}}
+                                                                </h5>
+                                                            </td>
+                                                            <td>
+                                                                <h5 class="text-center">
+                                                                    <template v-if="this.detailObject.loaner_code_type == '0'">
+                                                                        NIM. 
+                                                                    </template>
+                                                                    <template v-else>
+                                                                        NIDN. 
+                                                                    </template>
+                                                                    {{this.detailObject.loaner_code}}
                                                                 </h5>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <QrCode 
+                                                class="d-flex justify-content-center"
+                                                id="target"
+                                                style="background-color: #fff; color: #000;"
+                                                :value="this.detailObject.qrCode"
+                                                size="80"
+                                                level="H" 
+                                            />
+                                        </div>
+                                        <table style="font-family: times new roman; font-size: 12pt; background-color: #fff;" id="targetTable" class="table table-bordered mt-5">
+                                            <thead>
+                                                <tr>
+                                                    <td class="align-middle text-center">
+                                                        No
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        Nama Aset
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        Kode Aset
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        Jenis Aset
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        Total Aset
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="item, index in selectDataArray" :key="item.id">
+                                                    <td class="align-middle text-center">
+                                                        {{index+1}}
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        {{item.name}}
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        {{item.code}}
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        {{item.category_name}}
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        ....
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
+                                            <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                            <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                         </div>
                                         <div class="p-5">
-                                            <button type="button" @click="downloadLetterFunction(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                            <button v-if="isLoadingResponse" type="button" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                <span class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status" aria-hidden="true"></span> Memuat ...
+                                            </button>
+                                            <button v-else type="button" @click="downloadLetterFunction(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
                                                 <i class="fa fa-download"></i>&ensp;Unduh Surat Persetujuan
                                             </button>
                                         </div>
@@ -280,6 +324,7 @@
     import jsPDF from 'jspdf' 
     import html2canvas from "html2canvas"
     import * as htmlToImage from 'html-to-image'
+    import 'jspdf-autotable'
     export default{
         // props: ['dataId'],
         // setup(props) {
@@ -394,20 +439,91 @@
                 }
             },
             downloadLetterFunction(name){
+                this.isLoadingResponse2 = true;
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                this.isLoadingResponse = true;
                 htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
                 .then(function (dataUrl) {
                     const imgData = dataUrl
-                    const pdf = new jsPDF
+                    const pdf = new jsPDF("p", "pt", "a4")
+                    pdf.setFont("Times New Roman");
                     const imgProps= pdf.getImageProperties(imgData);
+                    let heightLeft = imgProps.height;
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    pdf.save(name+'.pdf')
-                    // let link = document.createElement('a');
-                    // link.download = name + '.jpeg';
-                    // link.href = dataUrl;
-                    // link.click();
+                    let pageHeight= pdf.internal.pageSize.height;
+                    let position = 0;
+                    heightLeft -= pdfHeight;
+                    pdf.autoTable({
+                        html: '#primaryTable',
+                        theme: 'plain',
+                    })
+                    pdf.autoTable({
+                        html: '#signatureTable',
+                        theme: 'plain'
+                    })
+                    pdf.addImage(imgData, 'PNG', 40, pdfHeight+20, 80, 80);
+                    pdf.addPage();
+                    pdf.autoTable({
+                        html: '#targetTable',
+                        showHead: 'everyPage',
+                        theme: 'grid'
+                    })
+                    pdf.save(name+'.pdf')    
+                }).catch((err) => {
+                    if(!err) {
+                        // console.log("Test")
+                        this.errorDetail = true;
+                        this.showAlert = true;
+                        this.detailObject = 
+                            {
+                                'id': 1,
+                                'message': "Network Error", 
+                                'detail': "Silakan periksa jaringan internet anda!",
+                            };
+                        this.isLoadingResponse = false;
+                        this.buttonDisabled = false;
+                        this.isLoadingContent = false;
+                    // console.log(err.response);
+                    } else if (err.response.data.message == 'Error!'){
+                        // console.log("Test")
+                        this.errorDetail = true;
+                        // console.log(err.response.data);
+                        this.showAlert = true;
+                        this.detailObject =
+                            {
+                                'id': 1,
+                                'message': err.response.status +' '+ err.response.data.message,
+                                'detail': err.response.data.data.error
+                            };
+                        this.isLoadingResponse = false;
+                        this.isLoadingContent = false;
+                        this.buttonDisabled = false;
+                    } else {
+                        this.errorDetail = true;
+                        this.showAlert = true;
+                        this.detailObject =
+                            {
+                                'id': 1,
+                                'message': err.response.status +' '+ err.response.statusText,
+                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                            };
+                        this.isLoadingResponse = false;
+                        this.isLoadingContent = false;
+                        this.buttonDisabled = false;
+                    }
                 });
+                this.isLoadingResponse2 = false;
+                this.setProgress = false;
+                this.isLoadingRouter = false;
+                this.secondaryButtonDisabled = false;
+                this.submitEnabled = false;
+                this.buttonDisabled = false;
+                this.isLoadingResponse = false;
             },
             async detailFunction(id){
                 try {
