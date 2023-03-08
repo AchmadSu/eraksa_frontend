@@ -187,7 +187,7 @@
                                 <li @click="router('manageLoans.reject')" v-if="this.$roles != 'Member'" class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-times"></i>&ensp; Permintaan Ditolak</a>
                                 </li>
-                                <li class="list-group-item">
+                                <li @click="router('loans.myHistory')" class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"> <i class="fa fa-history"></i>&ensp; Riwayat Saya</a>
                                 </li>
                             </ul>

@@ -44,7 +44,7 @@
                         <div class="row my-4 d-flex justify-content-center">
                             <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
                                 <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
-                                    <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                    <i class="fa fa-arrow-left"></i>&ensp; Dahsboard
                                 </button>
                             </div>
                         </div>
@@ -639,9 +639,9 @@
                             // this.setProgress = false;
                         }
                         // console.log("Test");
-                        this.lastPath = this.$router.options.history.state.back
+                        // this.lastPath = this.$router.options.history.state.back
                         setTimeout(() => {
-                            this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() })
+                            this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

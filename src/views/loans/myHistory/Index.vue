@@ -127,7 +127,7 @@
                                                         </button>
                                                     </td>
                                                     <td :class="item.return_id ? 'align-middle text-center':'d-none'">
-                                                        <button @click="detailReturnRouter(item.return_id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                        <button @click="returnRouterFunction(item.return_id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                             <i class="fa fa-info"></i> <br> Lihat Rincian Pengembalian
                                                         </button>
                                                     </td>
@@ -189,7 +189,7 @@
                                                                     ATAU
                                                                 </div>
                                                                 <div class="col-12 py-2">
-                                                                    <button @click="detailReturnRouter(item.return_id)" type="button" class="btn w-100 btn-success rounded-0">
+                                                                    <button @click="returnRouterFunction(item.return_id)" type="button" class="btn w-100 btn-success rounded-0">
                                                                         <i class="fa fa-info"></i> &ensp; Lihat Rincian Pengembalian
                                                                     </button>
                                                                 </div>
@@ -476,6 +476,44 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'myLoans.details', query: {data: data} }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            returnRouterFunction(id){
+                this.isLoadingResponse2 = true;
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                // this.closeModal();
+                let data = window.btoa(id);
+                // console.log(data);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'myLoans.returnDetails', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

@@ -125,7 +125,7 @@
                                                         <div class="card w-100 h-100 btn text-dark text-justify p-3">
                                                             <div class="my-2">
                                                                 <!-- <template v-if="this.windowWidth > $widthPotraitPhone"> -->
-                                                                    <table id="primaryTable" class="table table-sm table-borderless">
+                                                                    <table id="primaryTable" class="d-none d-md-block table table-sm table-borderless">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th colspan="2">

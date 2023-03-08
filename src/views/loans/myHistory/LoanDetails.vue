@@ -575,9 +575,9 @@
                             // this.setProgress = false;
                         }
                         // console.log("Test");
-                        this.lastPath = this.$router.options.history.state.back
+                        // this.lastPath = this.$router.options.history.state.back
                         setTimeout(() => {
-                            this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() })
+                            this.$router.push({ name: "loans.myHistory" }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
