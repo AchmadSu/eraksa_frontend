@@ -369,11 +369,11 @@
     </div>
 </template>
 <script>
-    import Sidebar from '../../components/Sidebar.vue';
-    import Navbar from '../../components/Navbar.vue';
+    import Sidebar from '../../../components/Sidebar.vue';
+    import Navbar from '../../../components/Navbar.vue';
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
-    import Footer from '../../components/Footer.vue';
+    import Footer from '../../../components/Footer.vue';
     import { useRouter } from 'vue-router'
     import axios from 'axios'
     import 'jspdf-autotable'
