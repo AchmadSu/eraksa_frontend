@@ -40,11 +40,6 @@ const loansRouter = [
         component : () => import("../../views/loans/LoanDetails.vue")
     },
     {
-        path:'/loans/printOut',
-        name : 'manageLoans.printOut',
-        component : () => import("../../views/loans/Letter.vue")
-    },
-    {
         path:'/loans/returnDetails',
         name : 'manageLoans.returnDetails',
         component : () => import("../../views/loans/ReturnDetails.vue")
@@ -73,6 +68,16 @@ const loansRouter = [
         path:'/loans/myDone',
         name : 'myLoans.done',
         component : () => import("../../views/loans/myHistory/Done.vue")
+    },
+    {
+        path:'/loans/myDetails',
+        name : 'myLoans.details',
+        component : () => import("../../views/loans/myHistory/LoanDetails.vue")
+    },
+    {
+        path:'/loans/myReturnDetails',
+        name : 'myLoans.returnDetails',
+        component : () => import("../../views/loans/ReturnDetails.vue")
     },
     // {
     //     path:'/verification',

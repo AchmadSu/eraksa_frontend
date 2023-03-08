@@ -43,6 +43,8 @@ import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
 import './assets/img/login.jpg'
 import './assets/css/sb-admin-2.css'
 import './assets/css/style.css'
+import 'jspdf-autotable'
+import jsPDF from 'jspdf'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js'
 
 // @import = url('https://fonts.googleapis.com/css?family=Roboto+Condensed');

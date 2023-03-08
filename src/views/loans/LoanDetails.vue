@@ -124,8 +124,8 @@
                                                     <div class="col-12">
                                                         <div class="card w-100 h-100 btn text-dark text-justify p-3">
                                                             <div class="my-2">
-                                                                <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                                    <table class="table table-sm table-borderless">
+                                                                <!-- <template v-if="this.windowWidth > $widthPotraitPhone"> -->
+                                                                    <table id="primaryTable" class="d-none d-md-block table table-sm table-borderless table-responsive">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th colspan="2">
@@ -192,10 +192,11 @@
                                                                                     <h5>Status</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5 class="text-primary" v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time"> Aktif</h5>
-                                                                                    <h5 class="text-danger" v-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Overdue</h5>
-                                                                                    <h5 v-if="this.detailObject.status == '2'"> Ditolak</h5>
-                                                                                    <h5 class="text-success" v-if="this.detailObject.status == '3'"> Selesai</h5>
+                                                                                    <h5 v-if="this.detailObject.status == '0'"> Menunggu Konfirmasi</h5>
+                                                                                    <h5 class="text-primary" v-else-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time"> Aktif</h5>
+                                                                                    <h5 class="text-danger" v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Overdue</h5>
+                                                                                    <h5 class="text-danger" v-else-if="this.detailObject.status == '2'"> Ditolak</h5>
+                                                                                    <h5 class="text-success" v-else-if="this.detailObject.status == '3'"> Selesai</h5>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -224,44 +225,48 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                    <table class="table table-sm table-borderless">
-                                                                        <tbody>
+                                                                    <table id="targetTable" class="d-none d-md-block table table-sm table-borderless">
+                                                                        <thead>
                                                                             <tr>
-                                                                                <td class="align-middle">
-                                                                                    <h5>Rincian Aset</h5>
+                                                                                <td colspan="4">
+                                                                                    <h4>Rincian Aset</h4>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <ol>
-                                                                                        <h5>
-                                                                                            <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                <template v-if="this.windowWidth > $widthLandscapePhone">
-                                                                                                    <template v-if="item.name.length+item.code.length < 60">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,60)+"..."}} <br>
-                                                                                                    </template>
-                                                                                                </template>
-                                                                                                <template v-else>
-                                                                                                    <template v-if="item.name.length+item.code.length < 40">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
-                                                                                                    </template>
-                                                                                                </template>
-                                                                                            </li>
-                                                                                        </h5>
-                                                                                    </ol>
+                                                                                    <h5>No</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Nama Aset</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Kode</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Kategori</h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr v-for="item, index in selectDataArray" :key="item.id">
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{index+1}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.name}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.code}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.category_name}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                </template>
-                                                                <template v-else>
-                                                                    <div class="row d-flex justify-content-evenly mb-5">
+                                                                <!-- </template> -->
+                                                                <!-- <template v-else> -->
+                                                                    <div class="row d-flex justify-content-evenly mb-5 d-block d-md-none">
                                                                         <div class="col-12">
                                                                             <h6 class="heading text-center mb-3">{{this.detailObject.code}}</h6>
                                                                         </div>
@@ -280,20 +285,17 @@
                                                                                         <p>
                                                                                             Peminjam:
                                                                                             <b>
-                                                                                                <template v-if="this.detailObject.loaner_name.length > 20">
-                                                                                                    {{(this.detailObject.loaner_name).substring(0,20)+"..."}}
-                                                                                                </template>
                                                                                                 {{this.detailObject.loaner_name}}
                                                                                             </b>
                                                                                             Dikonfirmasi oleh:
                                                                                             <b>
-                                                                                                <template v-if="this.detailObject.lender_name.length > 20">
-                                                                                                    {{(this.detailObject.lender_name).substring(0,20)+"..."}}
-                                                                                                </template>
                                                                                                 {{this.detailObject.lender_name}}
                                                                                             </b>
                                                                                             <br>
                                                                                             Status:
+                                                                                                <template v-if="this.detailObject.status == '0'">
+                                                                                                    <b>Menunggu Konfirmasi</b>
+                                                                                                </template> 
                                                                                                 <template v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time">
                                                                                                     <b class="text-primary">Aktif</b>
                                                                                                 </template> 
@@ -316,12 +318,7 @@
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
                                                                                                 <li v-for="item in selectDataArray">
-                                                                                                    <template v-if="item.name.length+item.code.length < 40">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
-                                                                                                    </template>
+                                                                                                    {{ item.name }} ({{ item.code }}) <br>
                                                                                                 </li>
                                                                                             </ol>
                                                                                         </p>
@@ -330,7 +327,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </template>
+                                                                <!-- </template> -->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -368,21 +365,27 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div v-if="this.detailObject.status == '1' && this.windowWidth > $widthPotraitPhone" class="row my-4 d-flex justify-content-center">
-                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                                <!-- <Letter id="targetPdf" :hidden="isHidden" :dataId="this.detailObject.id">
-                                                </Letter> -->
-                                                <button type="button" @click="downloadLetterRouter(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                    <i class="fa fa-download"></i>&ensp;Unduh Surat Persetujuan
-                                                </button>
+                                        <div v-if="this.detailObject.status == '0'" class="row my-4 d-flex justify-content-center">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-8'">
+                                                <Letter :dataId="this.detailObject.id">
+                                                </Letter>
                                             </div>
                                         </div>
-                                        <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
-                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                                <button @click="returnRouterFunction(this.detailObject.return_id)" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                    Lihat Rincian Pengembalian&ensp; <i class="fa fa-arrow-right"></i>
-                                                </button>
-                                            </div>
+                                    </div>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <!-- <Letter id="targetPdf" :hidden="isHidden" :dataId="this.detailObject.id">
+                                            </Letter> -->
+                                            <button type="button" @click="downloadLoanDetail(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                <i class="fa fa-download"></i>&ensp;Unduh Rincian Peminjaman
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="returnRouterFunction(this.detailObject.return_id)" :disabled="buttonDisabled" class="btn btn-info w-100">
+                                                Lihat Rincian Pengembalian&ensp; <i class="fa fa-check-square-o"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -435,12 +438,12 @@
 <script>
     import Sidebar from '../../components/Sidebar.vue';
     import Navbar from '../../components/Navbar.vue';
+    import Letter from '../../components/Letter.vue';
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
     import Footer from '../../components/Footer.vue';
-    import Letter from './Letter.vue';
-    import { useRouter } from 'vue-router'
-    import HTML2PDF from 'html2pdf.js'
+    import 'jspdf-autotable'
+    import jsPDF from 'jspdf'
     import axios from 'axios'
     export default{
         data() {
@@ -586,7 +589,8 @@
         components: {
             Sidebar,
             Navbar,
-            Footer
+            Footer,
+            Letter
         },
         methods: {
             toTop(){
@@ -635,8 +639,9 @@
                             // this.setProgress = false;
                         }
                         // console.log("Test");
+                        this.lastPath = this.$router.options.history.state.back
                         setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                            this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -817,6 +822,42 @@
                     this.buttonDisabled = false;
                     this.radioEnabled = false;
                 }
+            },
+            downloadLoanDetail(name){
+                this.isLoadingResponse2 = true;
+                // this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                this.closeModal();
+                const element1 = document.getElementById("primaryTable");
+                const element2 = document.getElementById("targetTable");
+                let clonedElement1 = element1.cloneNode(true);
+                let clonedElement2 = element2.cloneNode(true);
+                $(clonedElement1).css("display", "block");
+                $(clonedElement2).css("display", "block");
+
+                const pdf = new jsPDF("p", "pt", "a4")
+                pdf.setFont("Times New Roman");
+                pdf.autoTable({
+                    html: '#primaryTable',
+                    theme: 'plain',
+                })
+                pdf.autoTable({
+                    html: '#targetTable',
+                    showHead: 'everyPage',
+                    theme: 'grid'
+                })
+                pdf.save(name+'.pdf')
+                clonedElement1.remove();
+                clonedElement2.remove();
+                this.isLoadingResponse2 = false;
+                // this.setProgress = false;
+                this.isLoadingRouter = false;
+                this.secondaryButtonDisabled = false;
+                this.submitEnabled = false;
+                this.buttonDisabled = false;
             },
             async detailFunction(id){
                 try {
