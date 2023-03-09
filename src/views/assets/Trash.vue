@@ -88,16 +88,133 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
+                                            <div :class="
+                                                this.keyWords != NULL ||
+                                                this.creator != NULL ||
+                                                this.studyProgram != NULL ||
+                                                this.placement != NULL ||
+                                                this.category != NULL ?
+                                                'col-12 pb-3':'d-none'"
+                                            >
+                                                <h5 class="text-center">
+                                                    Menampilkan hasil pencarian
+                                                    <br>
+                                                    <template v-if="this.keyWords != ''">
+                                                        Nama Aset atau Kode Aset: {{ this.keyWords}} <br>
+                                                    </template>
+                                                    <template v-if="this.creator != ''">
+                                                        Nama Pembuat: {{ this.creator}} <br>
+                                                    </template>
+                                                    <template v-for="item, index in dataArray" :key="item.id">
+                                                        <template v-if="this.studyProgram != '' && item.study_program_id == this.dataStudyProgram && index == 0">
+                                                            Program Studi: {{ item.study_program_name }}
+                                                            <br>
+                                                        </template>
+                                                    </template>
+                                                    <template v-for="item, index in dataArray" :key="item.id">
+                                                        <template v-if="this.category != '' && item.category_id == this.dataCategory && index == 0">
+                                                            Kategori: {{ item.category_name }}
+                                                            <br>
+                                                        </template>
+                                                    </template>
+                                                    <template v-for="item, index in dataArray" :key="item.id">
+                                                        <template v-if="this.placement != '' && item.placement_id == this.dataPlacement && index == 0">
+                                                            Tempat: {{ item.placement_name }}
+                                                            <br>
+                                                        </template>
+                                                    </template>
+                                                </h5>
+                                            </div>
+                                            <div class="col-12 pb-3">
                                                 <button :disabled="buttonDisabled" @click="indexRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-arrow-left"></i> &ensp;Kembali
                                                 </button>
                                             </div>
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
+                                            <div class="col-12 pb-3">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
                                                     <div class="input-group">
                                                         <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Kode"
                                                             aria-label="Search" aria-describedby="basic-addon2">
+
+                                                            <template v-if="this.windowWidth > $widthPotraitPhone">
+                                                                <input type="text" v-model="form.creator" name="creator" class="form-control input-lg bg-light" placeholder="Cari Nama Pembuat"
+                                                                    aria-label="Search" aria-describedby="basic-addon2">
+    
+                                                                <template v-if="this.$roles == 'Super-Admin'">
+                                                                    <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
+                                                                        <option selected disabled>Program Studi</option>
+                                                                        <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                                        <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                                    </select>
+                                                                    <div v-if="this.isLoadingStudyPrograms == false">
+                                                                        <div class="rounded-0 d-none d-lg-block">
+                                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                            <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                        </div>
+                                                                        <div class="rounded-0 d-sm-block d-lg-none">
+                                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                            <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                        </div>
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                        </button>
+                                                                        <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                        </button>
+                                                                    </div>
+                                                                </template>
+        
+                                                                <select :disabled="this.isLoadingCategory" v-model="form.category_assets" class="form-select form-select" aria-label=".form-select example">
+                                                                    <option selected disabled>Kategori</option>
+                                                                    <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                                    <option v-if="this.showAlertCategory" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                                </select>
+                                                                <div v-if="this.isLoadingCategory == false">
+                                                                    <div class="rounded-0 d-none d-lg-block">
+                                                                        <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                        <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                            
+                                                                    </div>
+                                                                    <div class="rounded-0 d-sm-block d-lg-none">
+                                                                        <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                        <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                    </div>
+                                                                </div> 
+                                                                <div v-else>
+                                                                    <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    </button>
+                                                                </div>
+        
+                                                                <select :disabled="this.isLoadingPlacements" v-model="form.placements" class="form-select form-select" aria-label=".form-select example">
+                                                                    <option selected disabled>Tempat</option>
+                                                                    <option v-for="item in placementsArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                                    <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                                </select>
+                                                                <div v-if="this.isLoadingPlacements == false">
+                                                                    <div class="rounded-0 d-none d-lg-block">
+                                                                        <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                        <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                                    </div>
+                                                                    <div class="rounded-0 d-sm-block d-lg-none">
+                                                                        <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                        <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                                    </div>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </template>
+
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
@@ -226,7 +343,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
+                                        <div v-if="this.keyWords != NULL || this.placement != NULL || this.category != NULL || this.placement != NULL" 
+                                            class="row my-lg-3 my-5"
+                                        >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Hapus Filter
@@ -285,21 +404,39 @@
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 isLoadingRestore: false,
+                isLoadingStudyPrograms: true,
+                isLoadingCategory: true,
+                isLoadingPlacements: true,
                 sidebarShow: true,
                 imageLogo: false,
                 keyWords: this.$route.query.search,
+                creator: this.$route.query.creator,
+                studyProgram: this.$route.query.studyProgram,
+                placement: this.$route.query.placement,
+                category: this.$route.query.category,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
                 take: 0,
+                dataStudyProgram: '',
+                dataCategory: '',
+                dataPlacements: '',
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
                     search: '',
+                    creator: '',
+                    study_programs: 'Program Studi',
+                    category_assets: 'Kategori',
+                    placements: 'Tempat',
                 },
                 searchParams: '',
+                creatorParams: '',
+                studyProgramParams: '',
+                placementParams: '',
+                categoryParams: '',
                 errorResponse: [],
                 errorRestore: [],
                 successResponse: [],
@@ -307,11 +444,29 @@
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
+                studyProgramArray: [],
+                errorStudyPrograms: [],
+                studyProgramTotal: 0,
+                categoryArray: [],
+                errorCategory: [],
+                categoryTotal: 0,
+                placementsArray: [],
+                errorPlacements: [],
+                placementsTotal: 0,
                 username: this.$session.name,
                 showAlert: false,
                 showAlertSuccess: false,
                 showAlertError: false,
                 successRestore: false,
+                showAlertStudyPrograms: false,
+                showAlertCategory: false,
+                showAlertPlacements: false,
+                skipStudyProgram: 0,
+                takeStudyProgram: 10,
+                skipCategory: 0,
+                takeCategory: 10,
+                skipPlacements: 0,
+                takePlacements: 10,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
@@ -324,6 +479,16 @@
             form: {
                 handler: function (val) {
                     this.searchParams = val.search;
+                    this.creatorParams = val.creator;
+                    if(!isNaN(val.study_programs)) {
+                        this.studyProgramParams = window.btoa(val.study_programs);
+                    }
+                    if(!isNaN(val.category_assets)) {
+                        this.categoryParams = window.btoa(val.category_assets);
+                    }   
+                    if(!isNaN(val.placements)) {
+                        this.placementParams = window.btoa(val.placements);
+                    }
                 },
                 deep: true,
             },
@@ -456,7 +621,16 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets.trash', query: {search: this.searchParams} }).then(() => { this.$router.go() })
+                            this.$router.push({
+                                name: 'manageAssets.trash',
+                                query: {
+                                    search: this.searchParams,
+                                    creator: this.creatorParams,
+                                    studyProgram: this.studyProgramParams,
+                                    category: this.categoryParams,
+                                    placement: this.placementParams,
+                                } 
+                            }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -554,11 +728,44 @@
             async getAssets(skip, take){
                     // console.log('test1');
                 this.showAlert = false;
-                this.dataObject = {
-                    "skip": skip,
-                    "take": take,
-                    "sleep": 3,
-                    "keyWords": this.keyWords
+                let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+                let testStudyProgram = base64regex.test(this.studyProgram)
+                let testCategory = base64regex.test(this.category)
+                let testPlacements = base64regex.test(this.placement)
+                if(testStudyProgram) {
+                    this.dataStudyProgram = window.atob(this.studyProgram)
+                }
+                if(testCategory) {
+                    this.dataCategory = window.atob(this.category)
+                }
+                if(testPlacements) {
+                    this.dataPlacements = window.atob(this.placement)
+                }
+                if(this.$roles == 'Admin'){
+                    const study_program_id = this.$session.study_program_id
+                    this.dataObject = {
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "keyWords": this.keyWords,
+                        "user_keyWords": this.creator,
+                        "category_id": this.dataCategory,
+                        "placement_id": this.dataPlacements,
+                        "order": "name",
+                        "study_program_id": study_program_id
+                    }
+                } else {
+                    this.dataObject = {
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "keyWords": this.keyWords,
+                        "user_keyWords": this.creator,
+                        "category_id": this.dataCategory,
+                        "placement_id": this.dataPlacements,
+                        "study_program_id": this.dataStudyProgram,
+                        "order": "name"
+                    }
                 }
                 try {
                     await axios.get('/assets/trash', {params: this.dataObject})
@@ -651,6 +858,251 @@
                     this.buttonDisabled = false;
                 }
             },
+            nextStudyProgram(){
+                this.skipStudyProgram = this.skipStudyProgram+10;
+                this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)
+            },
+            async getStudyProgram(skip, take){
+                this.isLoadingStudyPrograms = true;
+                this.showAlertStudyPrograms = false;
+                this.errorStudyPrograms = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                if(this.$roles == 'Admin'){
+                    // console.log("test")
+                    const ids = this.$session.study_program_id
+                    this.data = {
+                        "ids": [ids],
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "name": this.name
+                    }
+                } else {
+                    this.data = {
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "name": this.name
+                    }
+                }
+                try {
+                    await axios.get('/studyPrograms/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                            this.studyProgramArray.push(
+                                {
+                                    "id": response.data.data.study_programs[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.study_programs[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.studyProgramTotal = response.data.data.count;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertStudyPrograms = true;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorStudyPrograms = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertStudyPrograms = true;
+                    this.isLoadingStudyPrograms = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            nextCategory(){
+                this.skipCategory = this.skipCategory+10;
+                this.getCategory(this.skipCategory, this.takeCategory)
+            },
+            async getCategory(skip, take){
+                this.isLoadingCategory = true;
+                this.showAlertCategory = false;
+                this.errorCategory = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                    "order": "name"
+                }
+                try {
+                    await axios.get('/categoryAssets/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.category_assets).forEach((item) => {
+                            this.categoryArray.push(
+                                {
+                                    "id": response.data.data.category_assets[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.category_assets[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.categoryTotal = response.data.data.count;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertCategory = true;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorCategory = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertCategory = true;
+                    this.isLoadingCategory = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            nextPlacements(){
+                this.skipPlacements = this.skipPlacements+10;
+                this.getPlacements(this.skipPlacements, this.takePlacements)
+            },
+            async getPlacements(skip, take){
+                this.isLoadingPlacements = true;
+                this.showAlertPlacements = false;
+                this.errorPlacements = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                }
+                try {
+                    await axios.get('/placements/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.placements).forEach((item) => {
+                            this.placementsArray.push(
+                                {
+                                    "id": response.data.data.placements[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.placements[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.placementsTotal = response.data.data.count;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertPlacements = true;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorPlacements = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertPlacements = true;
+                    this.isLoadingPlacements = false;
+                    this.buttonDisabled = false;
+                }
+            },
         },
         created(){
             window.addEventListener('resize', () => {
@@ -693,6 +1145,9 @@
                 this.take = 4;
                 this.getAssets(this.skip, this.take);
             } 
+            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
+            this.getCategory(this.skipCategory, this.takeCategory);
+            this.getPlacements(this.skipPlacements, this.takePlacements);
             // this.dataArray.filter((index) => index !== 1 )
 
             

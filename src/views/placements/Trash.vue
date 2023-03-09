@@ -88,6 +88,13 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="this.name != NULL ? 'col-12 pb-3':'d-none'">
+                                                <h5 class="text-center">
+                                                    <template v-if="this.name != ''">
+                                                        Menampilkan hasil pencarian: {{this.name}}
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
                                                 <button :disabled="buttonDisabled" @click="indexRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-arrow-left"></i> &ensp;Kembali

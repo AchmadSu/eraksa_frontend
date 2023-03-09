@@ -90,6 +90,55 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="
+                                                this.keyWords != NULL ||
+                                                this.keyCodeType != NULL ||
+                                                this.keyRole != NULL ||
+                                                this.keyStatus != NULL ||
+                                                this.keyStudyProgramName != NULL 
+                                                ? 'col-12 pb-3':'d-none'"
+                                            >
+                                                <h5 class="text-center">
+                                                    Menampilkan hasil pencarian
+                                                    <template v-if="this.keyWords != ''">
+                                                        Kata Kunci: {{ this.keyWords }} 
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyCodeType != ''">
+                                                        <template v-if="this.keyCodeType == '0'">
+                                                            Tipe: Mahasiswa
+                                                        </template>
+                                                        <template v-else-if="this.keyCodeType == '1'">
+                                                            Tipe: Dosen
+                                                        </template>
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyRole != ''">
+                                                        <template v-if="this.keyRole == '1'">
+                                                            Peran: Super-Admin
+                                                        </template>
+                                                        <template v-else-if="this.keyRole == '2'">
+                                                            Peran: Admin
+                                                        </template>
+                                                        <template v-else-if="this.keyRole == '2'">
+                                                            Peran: Member
+                                                        </template>
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyStatus != ''">
+                                                        <template v-if="this.keyStatus == '1'">
+                                                            Status: Aktif
+                                                        </template>
+                                                        <template v-else-if="this.keyStatus == '0'">
+                                                            Status: Belum diverifikasi
+                                                        </template>
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyStudyProgramName != ''">
+                                                        Program Studi: {{this.keyStudyProgramName}} <br>
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div class="col-12 pb-3">
                                                 <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-trash-o"></i> &ensp;Data Sampah
@@ -366,7 +415,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.keyCode != NULL ||
+                                        <div v-if="
                                             this.keyCodeType != NULL ||
                                             this.keyStudyProgramName != NULL ||
                                             this.keyRole != NULL ||
@@ -435,7 +484,6 @@
                 sidebarShow: true,
                 imageLogo: false,
                 keyWords: this.$route.query.keyWords,
-                keyCode: this.$route.query.code,
                 keyCodeType: this.$route.query.codeType,
                 keyStatus: this.$route.query.status,
                 keyStudyProgramName: this.$route.query.studyProgramName,
@@ -462,7 +510,6 @@
                 isDateOneIsset: false,
                 isDueDateOneIsset: false,
                 searchKeyWords: '',
-                searchCode: '',
                 searchCodeType: '',
                 searchStatus: '',
                 searchStudyPrograms: '',
@@ -494,7 +541,6 @@
                 handler: function (val) {
                     console.log(val)
                     this.searchKeyWords = val.keyWords;
-                    this.searchCode = val.code;
                     
                     if(val.code_type == '0' || val.code_type == '1') {
                         this.searchCodeType = val.code_type;
@@ -671,7 +717,6 @@
                             this.$router.push({ name: 'manageUser', 
                                 query: {
                                     keyWords: this.searchKeyWords,
-                                    code: this.searchCode,
                                     codeType: this.searchCodeType,
                                     role: this.searchRole,
                                     status: this.searchStatus,

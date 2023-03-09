@@ -90,6 +90,13 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="this.keyWords != NULL ? 'col-12 pb-3':'d-none'">
+                                                <h5 class="text-center">
+                                                    <template v-if="this.keyWords != ''">
+                                                        Menampilkan hasil pencarian: {{this.keyWords}}
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
                                                 <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-trash-o"></i> &ensp;Data Sampah

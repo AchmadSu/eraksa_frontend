@@ -49,6 +49,34 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="
+                                                this.keyCode != NULL ||
+                                                this.keyDateOne != NULL ||
+                                                this.keyDateTwo != NULL ||
+                                                this.keyDueDateOne != NULL ||
+                                                this.keyDueDateTwo != NULL ?
+                                                'col-12 pb-3':'d-none'"
+                                            >
+                                                <h5 class="text-center">
+                                                    Menampilkan hasil pencarian untuk
+                                                    <br>
+                                                    <template v-if="this.keyCode != ''">
+                                                        Kode Peminjaman: {{ this.keyCode }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDateOne != '' && keyDateTwo == ''">
+                                                        Tanggal Peminjaman: {{ new Date(this.keyDateOne).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDateOne != '' && keyDateTwo != ''">
+                                                        Tanggal Peminjaman di antara: {{ new Date(this.keyDateOne).toLocaleDateString("id") }} s/d {{ new Date(this.keyDateTwo).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDueDateOne != '' && keyDueDateTwo == ''">
+                                                        Tenggat: {{ new Date(this.keyDueDateOne).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDueDateOne != '' && keyDueDateTwo != ''">
+                                                        Tenggat Peminjaman di antara: {{ new Date(this.keyDueDateOne).toLocaleDateString("id") }} s/d {{ new Date(this.keyDueDateTwo).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'mx-2 col-12 pb-3':'mx-2 col-12 pb-3'">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search row">
                                                     <div class="input-group col-12">
