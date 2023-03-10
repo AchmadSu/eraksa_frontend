@@ -19,11 +19,11 @@ const studyProgramRouter = [
         name : 'manageStudyPrograms.update',
         component : () => import("../../views/studyPrograms/Update.vue")
     },
-    // {
-    //     path:'/register',
-    //     name : 'user.register',
-    //     component : () => import("../../views/user/Register.vue")
-    // },
+    {
+        path:'/menu/studyPrograms',
+        name : 'menu.studyPrograms',
+        component : () => import("../../views/studyPrograms/Index.vue")
+    },
     // {
     //     path:'/verification',
     //     name : 'user.otpPage',

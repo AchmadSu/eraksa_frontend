@@ -534,7 +534,7 @@
                     this.take = 4;
                 }
                 // console.log(this.skip)
-                this.getLoansDone(this.skip, this.take)
+                this.getLoans(this.skip, this.take)
             },
             backFunction(){
                 this.isLoadingResponse2 = true;
@@ -613,7 +613,7 @@
                     ];
                 }
             },
-            async getLoansDone(skip, take){
+            async getLoans(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
                 const status = "1"
@@ -783,10 +783,10 @@
             // this.loansList();
             if(this.windowWidth > this.$widthLandscapePhone){
                 this.take = 10;
-                this.getLoansDone(this.skip, this.take);
+                this.getLoans(this.skip, this.take);
             } else {
                 this.take = 4;
-                this.getLoansDone(this.skip, this.take);
+                this.getLoans(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)
