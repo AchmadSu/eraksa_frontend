@@ -218,7 +218,7 @@
                                                     <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-cubes"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Kategori Aset</h6>
                                                                 </div>

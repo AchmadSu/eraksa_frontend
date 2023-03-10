@@ -19,6 +19,11 @@ const categoryAssetsRouter = [
         name : 'manageCategoryAssets.update',
         component : () => import("../../views/categoryAssets/Update.vue")
     },
+    {
+        path:'/menu/categories',
+        name : 'menu.categories',
+        component : () => import("../../views/categoryAssets/Index.vue")
+    },
     // {
     //     path:'/register',
     //     name : 'user.register',

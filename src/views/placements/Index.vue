@@ -38,7 +38,7 @@
                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search" @submit.prevent="searchFunction">
                                     <div class="input-group">
-                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Program Studi"
+                                        <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Nama Tempat"
                                             aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
@@ -69,9 +69,9 @@
                                     <div @click="route(item.id)" class="card w-100 h-100 btn text-dark shadow-lg border-bottom-primary p-3">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
-                                                <div class="icon"> <i class="fa fa-graduation-cap"></i> </div>
+                                                <div class="icon"> <i class="fa fa-map-marker"></i> </div>
                                                 <div class="ms-2 c-details">
-                                                    <span></span> <h6>Data Program Studi</h6>
+                                                    <span></span> <h6>Data Tempat</h6>
                                                 </div>
                                             </div>
                                             <div class="badge text-primary"> <span>Menu</span> </div>
@@ -169,7 +169,6 @@
                 currentTime: new Date().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
-                dataCount: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -178,6 +177,7 @@
                 searchParams: '',
                 skip: 0,
                 take: 10,
+                dataCount: 0,
                 errorResponse: [],
                 sessionData: [],
                 dataArray: [],
@@ -225,7 +225,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'menu.studyPrograms', query: {search: this.searchParams} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'menu.placements', query: {search: this.searchParams} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -266,7 +266,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'menu.studyPrograms' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'menu.placements' }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {
@@ -289,15 +289,15 @@
                     "name": this.name
                 }
                 try {
-                    await axios.get('/studyPrograms/getAll', {params: this.dataObject})
+                    await axios.get('/placements/getAll', {params: this.dataObject})
                     .then((response) => {
                         // console.table(response.data.data.count);
-                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                        Object.keys(response.data.data.placements).forEach((item) => {
                             this.dataArray.push(
                                 {
-                                    "id": response.data.data.study_programs[item].id,
+                                    "id": response.data.data.placements[item].id,
                                     "row": this.index++,
-                                    "name": response.data.data.study_programs[item].name,
+                                    "name": response.data.data.placements[item].name,
                                 }
                             );
                         });

@@ -274,19 +274,19 @@
                     Menu Master
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item my-2">
+                <li @click="router('menu.studyPrograms')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-graduation-cap"></i>&ensp;
                         <span>Program Studi</span>
                     </a>
                 </li>
-                <li class="nav-item my-2">
+                <li @click="router('menu.categories')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-cubes"></i>&ensp;
                         <span>Kategori Aset</span>
                     </a>
                 </li>
-                <li class="nav-item my-2">
+                <li @click="router('menu.placements')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         &nbsp;<i class="fa fa-map-marker"></i>&nbsp;&ensp;
                         <span>Tempat Aset</span>

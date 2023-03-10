@@ -19,6 +19,11 @@ const placementsRouter = [
         name : 'managePlacements.update',
         component : () => import("../../views/placements/Update.vue")
     },
+    {
+        path:'/menu/placements',
+        name : 'menu.placements',
+        component : () => import("../../views/placements/Index.vue")
+    },
     // {
     //     path:'/register',
     //     name : 'user.register',
