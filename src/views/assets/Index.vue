@@ -182,7 +182,7 @@
                                                     <div class="d-flex flex-row align-items-center">
                                                         <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                         <div class="ms-2 c-details">
-                                                            <h6 class="mb-0">Data Aset</h6>
+                                                            <span>Kategori Aset</span> <h6>{{item.category_name}}</h6>
                                                         </div>
                                                     </div>
                                                     <div v-if="item.status == '0'" class="badge text-primary"> 
@@ -193,24 +193,34 @@
                                                     </div>
                                                 </div>
                                                 <div class="my-2">
-                                                    <h3 class="heading text-left">{{item.name}}</h3>
-                                                    <p>{{item.code}}</p>
-                                                    <p>
-                                                        <template v-if="this.windowWidth <= $widthLandscapePhone">
-                                                            <big>Program Studi: <br>{{item.study_program_name}}</big><br>
-                                                            <big>Penempatan: {{item.placement_name}}</big><br>
-                                                            <big>Kategori Aset: {{item.category_name}}</big><br>
+                                                    <h3 class="heading text-left">
+                                                        <template v-if="item.name.length < 20">
+                                                            {{item.name}}
                                                         </template>
                                                         <template v-else>
-                                                            Program Studi: <br>{{item.study_program_name}}<br>
-                                                            Penempatan: {{item.placement_name}}<br>
-                                                            Kategori Aset: {{item.category_name}}<br>
+                                                            {{(item.name).substring(0,20)+"..."}}
                                                         </template>
-                                                    </p>
+                                                    </h3>
+                                                    <h6>
+                                                        <template v-if="item.code.length < 30">
+                                                            {{item.code}}
+                                                        </template>
+                                                        <template v-else>
+                                                            {{ (item.code).substring(0,30)+"..." }}
+                                                        </template>
+                                                    </h6>
+                                                    <h6>
+                                                        <template v-if="item.study_program_name.length < 30">
+                                                            {{item.study_program_name}}
+                                                        </template>
+                                                        <template v-else>
+                                                            {{(item.study_program_name).substring(0,30)+"..."}}
+                                                        </template>
+                                                    </h6>
                                                     <div class=" mt-3">
                                                         <div class="mt-3 text-center"> 
-                                                            <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk memilih</span>
-                                                            <span v-else class="text2">Klik untuk memilih</span>
+                                                            <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
+                                                            <span v-else class="text2">Klik untuk selengkapnya</span>
                                                         </div>
                                                     </div>
                                                 </div>

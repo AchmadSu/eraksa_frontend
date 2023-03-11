@@ -27,10 +27,10 @@
             <div class="col-8">
                 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg bg-light" placeholder="Cari Aset, Kategori Aset..."
+                        <input type="text" v-model="this.form.search" class="form-control input-lg bg-light" placeholder="Cari Nama Aset atau Kode Aset"
                             aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
+                            <button @click="searchFunction" class="btn btn-primary" type="button">
                                 <i class="fa fa-search fa-sm"></i>
                             </button>
                         </div>
@@ -52,11 +52,11 @@
                     aria-labelledby="searchDropdown">
                     <form class="form-inline mr-auto w-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small"
-                                placeholder="Search for..." aria-label="Search"
+                            <input v-model="this.form.search" type="text" class="form-control bg-light border-0 small"
+                                placeholder="Cari Nama atau Kode Aset" aria-label="Search"
                                 aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button @click="searchFunction" class="btn btn-primary" type="button">
                                     <i class="fa fa-search fa-sm"></i>
                                 </button>
                             </div>
@@ -320,15 +320,67 @@
                 intervalProgressbar: null,
                 widhtStyle: '',
                 cursorStyle: '',
+                searchParams: '',
+                form: {
+                    search: ''
+                },
                 errorResponse: [],
                 sessionData: [],
                 username: this.$session.name,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
+        watch: {
+            form: {
+                handler: function (val) {
+                    // console.log(val)
+                    this.searchParams = val.search;   
+                },
+                deep: true,
+            },
+        },
         methods: {
             toggleSideBar(){
                 this.$parent.$emit('toggleSideBar')
+            },
+            searchFunction(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ 
+                                name: 'menu.assets', 
+                                query: {
+                                    search: this.searchParams,
+                                }
+                            }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
             },
             dashboard(){
                 this.setProgress = true;
