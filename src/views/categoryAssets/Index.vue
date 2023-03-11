@@ -378,6 +378,7 @@
                 this.isLoadingRouter = true;
                 this.secondaryButtonDisabled = true;
                 this.submitEnabled = false;
+                let data = window.btoa(id)
                 try{
                     if(this.setProgress == true) {
                         this.intervalProgressbar = setInterval(() => {
@@ -393,7 +394,12 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            // this.$router.push({ name:  }).then(() => { this.$router.go() })
+                            this.$router.push({ 
+                                name: 'menu.assets', 
+                                query: {
+                                    category: data,
+                                }
+                            }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

@@ -20,9 +20,9 @@ const assetsRouter = [
         component : () => import("../../views/assets/Update.vue")
     },
     {
-        path:'/testQr',
-        name : 'testQr',
-        component : () => import("../../views/QrGenerator.vue")
+        path:'/menu/assets',
+        name : 'menu.assets',
+        component : () => import("../../views/assets/Index.vue")
     },
     // {
     //     path:'/verification',

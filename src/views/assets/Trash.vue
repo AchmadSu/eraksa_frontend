@@ -99,26 +99,26 @@
                                                 <h5 class="text-center">
                                                     Menampilkan hasil pencarian
                                                     <br>
-                                                    <template v-if="this.keyWords != ''">
+                                                    <template v-if="this.keyWords != '' && this.keyWords != NULL">
                                                         Nama Aset atau Kode Aset: {{ this.keyWords}} <br>
                                                     </template>
-                                                    <template v-if="this.creator != ''">
+                                                    <template v-if="this.creator != '' && this.creator != NULL">
                                                         Nama Pembuat: {{ this.creator}} <br>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.studyProgram != '' && item.study_program_id == this.dataStudyProgram && index == 0">
+                                                        <template v-if="this.studyProgram != '' && this.studyProgram != NULL && item.study_program_id == this.dataStudyProgram && index == 0">
                                                             Program Studi: {{ item.study_program_name }}
                                                             <br>
                                                         </template>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.category != '' && item.category_id == this.dataCategory && index == 0">
+                                                        <template v-if="this.category != '' && this.category != NULL && item.category_id == this.dataCategory && index == 0">
                                                             Kategori: {{ item.category_name }}
                                                             <br>
                                                         </template>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.placement != '' && item.placement_id == this.dataPlacement && index == 0">
+                                                        <template v-if="this.placement != '' && this.placement != NULL && item.placement_id == this.dataPlacement && index == 0">
                                                             Tempat: {{ item.placement_name }}
                                                             <br>
                                                         </template>

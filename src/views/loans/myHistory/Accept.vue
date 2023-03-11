@@ -58,7 +58,7 @@
                                                 <h5 class="text-center">
                                                     Menampilkan hasil pencarian untuk
                                                     <br>
-                                                    <template v-if="this.keyCode != ''">
+                                                    <template v-if="this.keyCode != '' && this.keyCode != NULL">
                                                         Kode Peminjaman: {{ this.keyCode }} <br>
                                                     </template>
                                                     <template v-if="this.keyDateOne != '' && keyDateTwo == ''">
