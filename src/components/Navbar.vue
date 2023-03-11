@@ -97,7 +97,7 @@
             </li>
         </ul>
     </nav>
-    <div class="bg-primary offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="bg-primary offcanvas offcanvas-start py-3" data-bs-backdrop="static" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header text-light">
             <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center ml-3" href="#" :style="this.cursorStyle">
                 <img class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logoPhone-white.png'" alt="">

@@ -1,6 +1,6 @@
 <template>
     <div id="mainRow" class="d-none row">
-        <div v-if="windowWidth > $widthPotraitPhone" class="col-12 text-center">
+        <div class="col-12 text-center">
             <form class="form needs-validation" id="app" novalidate>
                 <div class="py-lg-4 py-md-0 py-sm-1">
                     <div class="row d-flex justify-content-evenly my-sm-5 my-md-3">
@@ -127,7 +127,12 @@
                                                 <tr class="text-center">
                                                     <td>
                                                         <h5>
-                                                            &nbsp;
+                                                            <QrCode 
+                                                                :value="this.detailObject.qrCode"
+                                                                id="qrTarget"
+                                                                size="300"
+                                                                level="H" 
+                                                            />
                                                         </h5>
                                                     </td>
                                                     <td>
@@ -240,10 +245,10 @@
             </form>
         </div>
     </div>
-    <button v-if="isLoading" type="button" :disabled="buttonDisabled" class="btn btn-primary w-100">
+    <button v-if="isLoading" type="button" :disabled="buttonDisabled" class="btn btn-info w-100">
         <span class="spinner-border text-light" role="status" aria-hidden="true"></span>
     </button>
-    <button v-else type="button" @click="downloadLetterFunction(this.detailObject.code)" :disabled="this.errorDetail" class="btn btn-primary w-100">
+    <button v-else type="button" @click="downloadLetterFunction(this.detailObject.code)" :disabled="this.errorDetail" class="btn btn-info w-100">
         <i class="fa fa-download"></i>&ensp;Unduh Surat Pernyataan
     </button>
 </template>
@@ -393,7 +398,7 @@
                 })
                 pdf.autoTable({
                     html: '#signatureTable',
-                    theme: 'plain'
+                    theme: 'plain',
                 })
                 // pdf.addImage(imgData, 'PNG', 40, pdfHeight+20, 80, 80);
                 pdf.addPage();
@@ -472,7 +477,7 @@
                             "lender_code_type": response.data.data.loans.lender_code_type,
                             "lender_code": response.data.data.loans.lender_code,
                             "difference": difference,
-                            "qrCode": "http://localhost:3000/loans/details?data="+ id
+                            "qrCode": "http://localhost:3000/loans/details?data="+ window.btoa(id)
                         };
                         // console.log(this.detailObject.qrCode)
                         // this.form.time = response.data.data.hours;

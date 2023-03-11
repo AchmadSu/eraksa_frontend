@@ -365,20 +365,20 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div v-if="this.detailObject.status == '0'" class="row my-4 d-flex justify-content-center">
+                                        <div v-if="this.detailObject.status == '1'" class="row my-4 d-flex justify-content-center">
                                             <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-8'">
                                                 <Letter :dataId="this.detailObject.id">
                                                 </Letter>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row my-4 d-flex justify-content-center">
-                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                            <!-- <Letter id="targetPdf" :hidden="isHidden" :dataId="this.detailObject.id">
-                                            </Letter> -->
-                                            <button type="button" @click="downloadLoanDetail(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                <i class="fa fa-download"></i>&ensp;Unduh Rincian Peminjaman
-                                            </button>
+                                        <div class="row my-4 d-flex justify-content-center">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                                <!-- <Letter id="targetPdf" :hidden="isHidden" :dataId="this.detailObject.id">
+                                                </Letter> -->
+                                                <button type="button" @click="downloadLoanDetail(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                    <i class="fa fa-download"></i>&ensp;Unduh Rincian Peminjaman
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
