@@ -232,7 +232,7 @@
                                     </div>
                                 </div>
                                 <div 
-                                    v-if="this.keyWords != NULL || this.placement != NULL || this.category != NULL || this.placement != NULL" 
+                                    v-if="this.keyWords != NULL || this.placement != NULL || this.category != NULL || this.placement != NULL || this.studyProgram != NULL" 
                                     class="row my-lg-3 my-5"
                                 >
                                     <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
