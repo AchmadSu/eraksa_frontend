@@ -225,10 +225,32 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                    <table id="targetTable" class="d-none d-md-block table table-sm table-borderless">
+                                                                    <table class="d-none d-md-block table table-sm table-borderless">
                                                                         <thead>
                                                                             <tr>
-                                                                                <td colspan="4">
+                                                                                <td colspan="2">
+                                                                                    <h4>Rincian Aset</h4>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>
+                                                                                        <ol>
+                                                                                            <li v-for="item, index in selectDataArray" :key="item.id">
+                                                                                                {{item.name}}({{ item.code }})
+                                                                                            </li>
+                                                                                        </ol>
+                                                                                    </h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <table id="targetTable" class="d-none table table-sm table-borderless">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td colspan="5">
                                                                                     <h4>Rincian Aset</h4>
                                                                                 </td>
                                                                             </tr>
@@ -245,6 +267,9 @@
                                                                                 <td class="align-middle">
                                                                                     <h5>Kategori</h5>
                                                                                 </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Prodi</h5>
+                                                                                </td>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -260,6 +285,9 @@
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{item.category_name}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.study_program_name}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -366,7 +394,7 @@
                                             </div>
                                         </div>
                                         <div v-if="this.detailObject.status == '1'" class="row my-4 d-flex justify-content-center">
-                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-8'">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
                                                 <Letter :dataId="this.detailObject.id">
                                                 </Letter>
                                             </div>
@@ -583,7 +611,8 @@
                 submitEnabled: true,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png',
                 validateForm: false,
-                validateSelect: false
+                validateSelect: false,
+                detailHidden: true,
             }
         },
         components: {
@@ -823,14 +852,10 @@
                     this.radioEnabled = false;
                 }
             },
+            setDetailHidden(){
+                this.detailHidden = false
+            },
             downloadLoanDetail(name){
-                this.isLoadingResponse2 = true;
-                // this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                this.closeModal();
                 const element1 = document.getElementById("primaryTable");
                 const element2 = document.getElementById("targetTable");
                 let clonedElement1 = element1.cloneNode(true);
@@ -852,12 +877,6 @@
                 pdf.save(name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
-                this.isLoadingResponse2 = false;
-                // this.setProgress = false;
-                this.isLoadingRouter = false;
-                this.secondaryButtonDisabled = false;
-                this.submitEnabled = false;
-                this.buttonDisabled = false;
             },
             async detailFunction(id){
                 try {
