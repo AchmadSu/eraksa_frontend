@@ -24,6 +24,11 @@ const assetsRouter = [
         name : 'menu.assets',
         component : () => import("../../views/assets/Index.vue")
     },
+    {
+        path:'/assets/details',
+        name : 'assets.details',
+        component : () => import("../../views/assets/AssetDetails.vue")
+    },
     // {
     //     path:'/verification',
     //     name : 'user.otpPage',

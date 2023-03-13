@@ -168,7 +168,8 @@
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                            <td class="align-middle text-center" v-if="item.status == '1'"><b class="text-primary">Aktif</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '1' && this.currentTime <= item.due_date_time"><b class="text-primary">Aktif</b></td>
+                                                            <td class="align-middle text-center" v-if="item.status == '1' && this.currentTime > item.due_date_time"><b class="text-danger">Overdue</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -201,7 +202,12 @@
                                                         <div class="my-2">
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
-                                                                <big v-if="item.status == '1'">Status: <b class="text-primary">Aktif</b></big><br>
+                                                                <big v-if="item.status == '1'">
+                                                                    Status: 
+                                                                    <b v-if="this.currentTime <= item.due_date_time" class="text-primary">Aktif</b>
+                                                                    <b v-if="this.currentTime > item.due_date_time" class="text-danger">Overdue</b>
+                                                                </big>
+                                                                <br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>

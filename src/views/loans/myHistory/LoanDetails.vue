@@ -86,7 +86,7 @@
                                                 DETAIL PEMINJAMAN
                                             </h3>
                                         </div>
-                                        <form class="form needs-validation" id="app" @submit.prevent="confirmFunction" novalidate>
+                                        <form class="form needs-validation" id="app" novalidate>
                                             <div class="py-lg-4 py-md-0 py-sm-1">
                                                 <div class="row d-flex justify-content-evenly my-sm-5 my-md-3">
                                                     <div class="col-12">
