@@ -350,6 +350,13 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div :class="this.loansStatus == '3' ? 'd-none':'row mh-100'">
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
@@ -365,12 +372,12 @@
                                     </div>
                                     <h3 class="text-center my-3">Status tidak sesuai</h3>
                                     <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman. Permintaan perbaruan data tidak dapat dilakukan</p>
-                                </div>
-                                <div class="row my-4 d-flex justify-content-center">
-                                    <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                        <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
-                                            <i class="fa fa-arrow-left"></i>&ensp; Kembali
-                                        </button>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

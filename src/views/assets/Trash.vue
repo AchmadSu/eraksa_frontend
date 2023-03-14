@@ -44,6 +44,123 @@
                 </div>
             </div>
         </div>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successRestore == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light dark modal-title" id="eraseModalLabel"><i class="fa fa-trash"></i> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        Apakah anda yakin akan menghapus <b>{{ item.name }} secara permanen</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="deletePermanent(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successRestore" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="restoreModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="restoreModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successRestore == false" class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="text-light dark modal-title" id="restoreModalSelectedLabel"><i class="fa fa-undo"></i> &ensp;Konfirmasi pemulihan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-primary">
+                        Apakah anda yakin akan memulihkan <b>Data Terpilih</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restoreMultiple" type="button" class="btn btn-primary">Pulihkan</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successRestore" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="deleteModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successRestore == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light dark modal-title" id="deleteModalSelectedLabel"><i class="fa fa-trash"></i> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        Apakah anda yakin akan menghapus <b>Data Terpilih secara permanen</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="deletePermanentMultiple" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successRestore" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index:10000;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -128,6 +245,16 @@
                                             <div class="col-12 pb-3">
                                                 <button :disabled="buttonDisabled" @click="indexRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-arrow-left"></i> &ensp;Kembali
+                                                </button>
+                                            </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#restoreModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                    <i class="fa fa-undo"></i> &ensp;Pulihkan data terpilih
+                                                </button>
+                                            </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                    <i class="fa fa-trash"></i> &ensp;Hapus Permanen data terpilih
                                                 </button>
                                             </div>
                                             <div class="col-12 pb-3">
@@ -242,7 +369,7 @@
                                             <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr class="text-center">
-                                                        <th class="align-middle">No</th>
+                                                        <th class="align-middle">Pilih</th>
                                                         <th class="align-middle">Nama</th>
                                                         <th class="align-middle">Kode Aset</th>
                                                         <th class="align-middle">Dibuat oleh</th>
@@ -252,29 +379,36 @@
                                                         <th class="align-middle">Tanggal Masuk</th>
                                                         <th class="align-middle">Penempatan</th>
                                                         <th class="align-middle">Aset</th>
-                                                        <th class="align-middle">
+                                                        <th colspan="2" class="align-middle">
                                                             Aksi
                                                         </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                        <td class="text-center">{{index+1}}</td>
-                                                        <td><b>{{item.name}}</b></td>
-                                                        <td>{{item.code}}</td>
-                                                        <td>{{item.user_name}}</td>
-                                                        <td>{{item.study_program_name}}</td>
-                                                        <td v-if="item.condition == 0">Optimal</td>
-                                                        <td v-else>Rusak</td>
-                                                        <td v-if="item.status == 0">Tersedia</td>
-                                                        <td v-else-if="item.status == 1">Dipinjam</td>
-                                                        <td v-else-if="item.status == 2">Diperbaiki</td>
-                                                        <td>{{item.date}}</td>
-                                                        <td>{{item.placement_name}}</td>
-                                                        <td>{{item.category_name}}</td>
-                                                        <td class="text-center">
+                                                        <td class="align-middle text-center">
+                                                            <input v-model="this.filterIds" type="checkbox" :value="item.id">
+                                                        </td>
+                                                        <td class="align-middle"><b>{{item.name}}</b></td>
+                                                        <td class="align-middle">{{item.code}}</td>
+                                                        <td class="align-middle">{{item.user_name}}</td>
+                                                        <td class="align-middle">{{item.study_program_name}}</td>
+                                                        <td class="align-middle" v-if="item.condition == 0">Optimal</td>
+                                                        <td class="align-middle" v-else>Rusak</td>
+                                                        <td class="align-middle" v-if="item.status == 0">Tersedia</td>
+                                                        <td class="align-middle" v-else-if="item.status == 1">Dipinjam</td>
+                                                        <td class="align-middle" v-else-if="item.status == 2">Diperbaiki</td>
+                                                        <td class="align-middle">{{item.date}}</td>
+                                                        <td class="align-middle">{{item.placement_name}}</td>
+                                                        <td class="align-middle">{{item.category_name}}</td>
+                                                        <td class="align-middle text-center">
                                                             <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                 <i class="fa fa-undo"></i>
+                                                            </button>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                <i class="fa fa-trash"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -296,9 +430,14 @@
                                                                     <h6 class="mb-0">Data Aset</h6>
                                                                 </div>
                                                             </div>
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div v-if="item.status === '0'" class="form-check form-switch">
+                                                                    <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="my-2">
-                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <h3 class="heading text-left">{{item.name}}</h3>
                                                             <p>{{item.code}}</p>
                                                             <p>
                                                                 <small>Dibuat oleh: {{item.user_name}}</small><br>
@@ -321,6 +460,11 @@
                                                                     <div class="col-12 py-2">
                                                                         <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-undo"></i> &ensp; Pulihkan
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <i class="fa fa-trash"></i> &ensp; Hapus
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -452,6 +596,7 @@
                 categoryTotal: 0,
                 placementsArray: [],
                 errorPlacements: [],
+                filterIds: [],
                 placementsTotal: 0,
                 username: this.$session.name,
                 showAlert: false,
@@ -548,6 +693,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successRestoreResponse = [];
+                this.errorRestore = [];
                 // this.closeModal(id);
                 if (this.dataCount <= 0) {
                     this.indexRouter();
@@ -653,6 +799,252 @@
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
                     await axios.put('/assets/restore', this.dataObject)
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successRestoreResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorRestore = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingRestore = false;
+                }
+            },
+            async restoreMultiple(){
+                this.isLoadingRestore = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": this.filterIds
+                };
+                // console.log(this.dataObject)
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.put('/assets/restore', this.dataObject)
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successRestoreResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorRestore = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingRestore = false;
+                }
+            },
+            async deletePermanent(id){
+                this.isLoadingRestore = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": [id]
+                };
+                // console.log(this.dataObject)
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/assets/deletePermanently', {params: this.dataObject})
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successRestoreResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorRestore = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingRestore = false;
+                }
+            },
+            async deletePermanentMultiple(){
+                this.isLoadingRestore = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": this.filterIds
+                };
+                // console.log(this.dataObject)
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/assets/deletePermanently', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );

@@ -258,21 +258,17 @@
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
                                                             </p>
                                                             <div class="mt-3">
-                                                                <div v-if="item.status == '0'" class="row my-3 py-2">
+                                                                <div v-if="item.status == '0'" class="row py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Rincian
                                                                         </button>
                                                                     </div>
-                                                                </div>
-                                                                <div v-if="item.status == '0'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button @click="updateFunction(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-success rounded-0">
                                                                             <i class="fa fa-pencil"></i> &ensp; Ubah Permintaan
                                                                         </button>
                                                                     </div>
-                                                                </div>
-                                                                <div v-if="item.status == '0'" class="row my-3 py-2">
                                                                     <div class="col-12 py-2">
                                                                         <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
                                                                             <i class="fa fa-trash-o"></i> <br> Hapus Permintaan

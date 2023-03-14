@@ -350,6 +350,13 @@
                                             </button>
                                         </div>
                                     </div>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div :class="this.detailObject.loaner_id == this.$session.id ? 'd-none':'row mh-100'">
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
@@ -365,12 +372,12 @@
                                     </div>
                                     <h3 class="text-center my-3">Data Tidak Ditemukan</h3>
                                     <p class="text-center my-3">Permintaan tidak dapat dilakukan</p>
-                                </div>
-                                <div class="row my-4 d-flex justify-content-center">
-                                    <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                        <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
-                                            <i class="fa fa-arrow-left"></i>&ensp; Kembali
-                                        </button>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
