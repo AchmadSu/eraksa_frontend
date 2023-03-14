@@ -69,30 +69,30 @@
                                         </div>
                                     </div>
                                     <div class="row d-flex justify-content-center">
-                                    <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                                        <div v-if="windowWidth < 720">
-                                            <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                                </div>
+                                        <div v-if="isLoadingImage == true" class="d-md-none d-block col-sm-12 text-center my-5">
+                                            <div v-if="windowWidth < 720">
                                                 <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
                                                     <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
-                                                <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
+                                                <div v-else-if="windowWidth <= $widthComputer">
+                                                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <div v-else>
+                                                    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div v-else-if="windowWidth <= $widthComputer">
-                                                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
-                                            </div>
-                                            <div v-else>
-                                                <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div v-else class="col-sm-12 text-center">
+                                        <div v-else class="col-sm-12 text-center d-md-none d-block">
                                             <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" :class="this.windowWidth <= $widthPotraitPhone ? 'img-fluid' : 'img-fluid w-50'" alt="...">
                                         </div>
                                         <div class="col-12 px-lg-5 text-center">
@@ -188,7 +188,7 @@
                                                                         </table>
                                                                     <!-- </template> -->
                                                                     <!-- <template v-else> -->
-                                                                        <!-- <div class="row d-flex justify-content-evenly mb-5 d-block d-md-none">
+                                                                        <div class="row d-flex justify-content-evenly mb-5 d-block d-md-none">
                                                                             <div class="col-12">
                                                                                 <h6 class="heading text-center mb-3">{{this.detailObject.code}}</h6>
                                                                             </div>
@@ -196,178 +196,47 @@
                                                                                 <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                                                                     <div class="d-flex justify-content-between">
                                                                                         <div class="d-flex flex-row align-items-center">
-                                                                                            <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
+                                                                                            <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                                             <div class="ms-2 c-details">
-                                                                                                <span>Detail Peminjaman</span>
+                                                                                                <span>Kategori Aset</span> <h6>{{this.detailObject.category_name}}</h6>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="my-2 text-left">
-                                                                                        <small>
-                                                                                            <p>
-                                                                                                Peminjam:
-                                                                                                <b>
-                                                                                                    {{this.detailObject.loaner_name}}
-                                                                                                </b>
-                                                                                                Dikonfirmasi oleh:
-                                                                                                <b>
-                                                                                                    {{this.detailObject.lender_name}}
-                                                                                                </b>
-                                                                                                <br>
-                                                                                                Status:
-                                                                                                    <template v-if="this.detailObject.status == '0'">
-                                                                                                        <b>Menunggu Konfirmasi</b>
-                                                                                                    </template> 
-                                                                                                    <template v-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time">
-                                                                                                        <b class="text-primary">Aktif</b>
-                                                                                                    </template> 
-                                                                                                    <template v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time">
-                                                                                                        <b class="text-danger">Overdue</b>
-                                                                                                    </template> 
-                                                                                                    <template v-if="this.detailObject.status == '2'">
-                                                                                                        <b>Ditolak</b>
-                                                                                                    </template> 
-                                                                                                    <template v-if="this.detailObject.status == '3'">
-                                                                                                        <b class="text-success">Ditolak</b>
-                                                                                                    </template> 
-                                                                                                <br>
-                                                                                                Mulai: <br> <b>{{ this.detailObject.date }}</b>
-                                                                                                <br>
-                                                                                                Tenggat: <br> <b>{{ this.detailObject.due_date }}</b>
-                                                                                                <br>
-                                                                                                Periode: <b>{{ this.detailObject.difference }}</b>
-                                                                                                <br>
-                                                                                                <b>Rincian Aset</b> <br>
-                                                                                                <ol>
-                                                                                                    <li v-for="item in selectDataArray">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </li>
-                                                                                                </ol>
-                                                                                            </p>
-                                                                                        </small>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div> -->
-                                                                    <!-- </template> -->
-                                                                    <div v-if="this.loansArray.length <= 0" class="py-5 input-group d-flex justify-content-center">
-                                                                        <h5 class="text-secondary">
-                                                                            Aset ini belum memiliki riwayat peminjaman
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div v-else>
-                                                                        <div v-if="this.windowWidth > this.$widthLandscapePhone" class="table-responsive">
-                                                                            <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
-                                                                                <thead>
-                                                                                    <tr class="text-center">
-                                                                                        <th class="align-middle">No</th>
-                                                                                        <th class="align-middle">Kode</th>
-                                                                                        <th class="align-middle">Status</th>
-                                                                                        <th class="align-middle">Waktu Mulai</th>
-                                                                                        <th class="align-middle">Tenggat Waktu</th>
-                                                                                        <th class="align-middle">Periode</th>
-                                                                                        <!-- <th class="align-middle">Status Peminjaman</th> -->
-                                                                                        <th class="align-middle" colspan="2">Aksi</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr v-for="item, index in this.loansArray" :key="item.id">
-                                                                                        <td class="align-middle text-center">{{index+1}}</td>
-                                                                                        <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                                                                                        <td class="align-middle text-center">
-                                                                                            <template v-if="item.status == '0'">
-                                                                                                <b class="text-secondary">Menunggu Konfirmasi</b>
-                                                                                            </template>
-                                                                                            <template v-if="item.status == '1' && this.currentTime <= item.due_date_time">
-                                                                                                <b class="text-primary">Aktif</b>
-                                                                                            </template>
-                                                                                            <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                                                                                                <b class="text-danger">Overdue</b>
-                                                                                            </template>
-                                                                                            <template v-if="item.status == '2'">
-                                                                                                <b class="text-danger">Ditolak</b>
-                                                                                            </template>
-                                                                                            <template v-if="item.status == '3'">
-                                                                                                <b class="text-success">Selesai</b>
-                                                                                            </template>
-                                                                                        </td>
-                                                                                        <td class="align-middle text-center">{{item.date_string}}</td>
-                                                                                        <td class="align-middle text-center">{{item.due_date_string}}</td>
-                                                                                        <td class="align-middle text-center"><b>{{item.difference}}</b></td>
-                                                                                        <td :colspan="item.return_id ? '':'2'" class="align-middle text-center">
-                                                                                            <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                                                <i class="fa fa-info"></i> <br> Lihat Rincian
-                                                                                            </button>
-                                                                                        </td>
-                                                                                        <td :class="item.return_id ? 'align-middle text-center':'d-none'">
-                                                                                            <button @click="returnRouterFunction(item.return_id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
-                                                                                                <i class="fa fa-info"></i> <br> Lihat Rincian Pengembalian
-                                                                                            </button>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                        <div v-else class="row d-flex justify-content-evenly">
-                                                                            <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 my-3">
-                                                                                <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
-                                                                                    <div class="d-flex justify-content-between">
-                                                                                        <div class="d-flex flex-row align-items-center">
-                                                                                            <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
-                                                                                            <div class="ms-2 c-details">
-                                                                                                <h6 class="mb-0">Data Peminjaman</h6>
-                                                                                            </div>
+                                                                                        <div v-if="this.detailObject.status == '0'" class="badge text-primary">
+                                                                                            <span>
+                                                                                                TERSEDIA
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div v-if="this.detailObject.status == '1'" class="badge text-success">
+                                                                                            <span>
+                                                                                                DIPINJAM
+                                                                                            </span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="my-2">
-                                                                                        <h5 class="heading text-left">{{item.code}}</h5> <br>
+                                                                                        <h5 class="heading text-left">
+                                                                                            {{this.detailObject.name}}
+                                                                                        </h5>
                                                                                         <p>
-                                                                                            <big>Status: 
-                                                                                                <b v-if="item.status == '0'" class="text-secondary">
-                                                                                                    Menunggu Konfirmasi
-                                                                                                </b>
-                                                                                                <b v-if="item.status == '1' && this.currentTime <= item.due_date_time" class="text-primary">
-                                                                                                    Aktif
-                                                                                                </b>
-                                                                                                <b v-if="item.status == '1' && this.currentTime > item.due_date_time" class="text-danger">
-                                                                                                    Overdue
-                                                                                                </b>
-                                                                                                <b v-if="item.status == '2'" class="text-danger">
-                                                                                                    Ditolak
-                                                                                                </b>
-                                                                                                <b v-if="item.status == '3'" class="text-success">
-                                                                                                    Selesai
-                                                                                                </b>
-                                                                                            </big>
-                                                                                            <br>
-                                                                                            <big>Tanggal: {{item.date_string}}</big><br>
-                                                                                            <big>Tenggat: {{item.due_date_string}}</big><br>
-                                                                                            <big>Periode: <b>{{item.difference}}</b></big><br>
+                                                                                            {{this.detailObject.code}} <br>
+                                                                                            Kondisi: 
+                                                                                            <template v-if="this.detailObject.condition == '0'">
+                                                                                                Optimal
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.condition == '1'">
+                                                                                                Rusak
+                                                                                            </template>
                                                                                         </p>
-                                                                                        <div class="mt-3">
-                                                                                            <div class="row my-3 py-2">
-                                                                                                <div class="col-12 py-2">
-                                                                                                    <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                                                        <i class="fa fa-info"></i> &ensp; Lihat Rincian
-                                                                                                    </button>
-                                                                                                </div>
-                                                                                                <template v-if="item.status == '3'">
-                                                                                                    <div class="col-12 w-100 text-center py-2">
-                                                                                                        ATAU
-                                                                                                    </div>
-                                                                                                    <div class="col-12 py-2">
-                                                                                                        <button @click="returnRouterFunction(item.return_id)" type="button" class="btn w-100 btn-success rounded-0">
-                                                                                                            <i class="fa fa-info"></i> &ensp; Lihat Rincian Pengembalian
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                </template>
+                                                                                        <div class=" mt-3">
+                                                                                            <div class="mt-3 text-left"> 
+                                                                                                <span class="text2">{{this.detailObject.study_program_name}}</span><br>
+                                                                                                <span class="text2">{{this.detailObject.placement_name}}</span>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    <!-- </template> -->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -378,6 +247,16 @@
                                                     </div>
                                                 </div>
                                             </form>
+                                        </div>
+                                        <div v-if="$roles != 'Member'" class="row my-4">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'd-none':'col-4'">
+                                                &nbsp;
+                                            </div>
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                                <button @click="downloadFunction(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                    <i class="fa fa-download"></i>&ensp; Unduh Rincian
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -393,15 +272,16 @@
                                 </div>
                             </div>
                         </div>
+                        <AssetsHistory v-if="this.$roles != 'Member'" :dataId="this.detailObject.id">
+                        </AssetsHistory>
                     </div>
                     <!-- /.container-fluid -->
-    
                 </div>
                 <!-- End of Main Content -->
     
                 <!-- Footer -->
                 <Footer v-if="this.windowWidth >= this.$widthPotraitPhone" class="bottom-0"></Footer>
-                <Footer v-else class="w-100 position-absolute bottom-0"></Footer>   
+                <Footer v-else class="w-100 bottom-0"></Footer>   
                 <!-- End of Footer -->
                 
             </div>
@@ -417,10 +297,14 @@
 <script>
     import Sidebar from '../../components/Sidebar.vue';
     import Navbar from '../../components/Navbar.vue';
+    import AssetsHistory from '../../components/AssetsHistory.vue';
+    
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
     import Footer from '../../components/Footer.vue';
     import { useRouter } from 'vue-router'
+    import 'jspdf-autotable'
+    import jsPDF from 'jspdf'
     import axios from 'axios'
     export default{
         data() {
@@ -436,6 +320,7 @@
                 isLoadingLoans: true,
                 isLoadingCategory: true,
                 isLoadingPlacements: true,
+                isLoadingDownload: true,
                 isLoadingResponse: false,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
@@ -510,29 +395,8 @@
         components: {
             Sidebar,
             Navbar,
-            Footer
-        },
-        watch: {
-            form: {
-                handler: function (val) {
-                    let name = val.name;
-                    let study_program_id = val.study_programs;
-                    let category_id = val.category_assets;
-                    let placement_id = val.placements;
-                    let condition = val.condition;
-                    let validateName = this.validateName(name);
-
-                    // console.log(!(isNaN(study_program_id)))
-                    // console.log(!(isNaN(category_id)))
-                    // console.log(!(isNaN(placement_id)))
-                    if(validateName && !(isNaN(study_program_id)) && !(isNaN(category_id)) && !(isNaN(placement_id)) && condition != null) {
-                        this.submitEnabled = true;
-                    } else {
-                        this.submitEnabled = false;
-                    }
-                },
-                deep: true,
-            },
+            Footer,
+            AssetsHistory
         },
         methods: {
             toTop(){
@@ -597,6 +461,44 @@
                         }
                     ];
                 }
+            },
+            downloadFunction(name){
+                const element1 = document.getElementById("primaryTable");
+                let clonedElement1 = element1.cloneNode(true);
+                const element2 = document.getElementById("dataTable");
+                let clonedElement2 = element2.cloneNode(true);
+                const element3 = document.getElementById("head");
+                let clonedElement3 = element3.cloneNode(true);
+                $(clonedElement1).css("display", "block");
+                $(clonedElement2).css("display", "block");
+                $(clonedElement3).css("display", "block");
+                // htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
+                // const imgData = dataUrl
+                const pdf = new jsPDF("p", "pt", "a4")
+                pdf.setFont("Montserrat");
+                // const imgProps= pdf.getImageProperties(imgData);
+                // let heightLeft = imgProps.height;
+                // const pdfWidth = pdf.internal.pageSize.getWidth();
+                // const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                // let pageHeight= pdf.internal.pageSize.height;
+                // let position = 0;
+                // heightLeft -= pdfHeight;
+                // console.log("Test")
+                pdf.autoTable({
+                    html: '#primaryTable',
+                    theme: 'plain',
+                })
+                // pdf.addImage(imgData, 'PNG', 40, pdfHeight+20, 80, 80);
+                pdf.addPage();
+                pdf.autoTable({
+                    html: '#dataTable',
+                    showHead: 'everyPage',
+                    theme: 'grid'
+                })
+                pdf.save('Rincian_'+name+'.pdf')
+                clonedElement1.remove();
+                clonedElement2.remove();
+                clonedElement3.remove();
             },
             async detailFunction(id){
                 try {
@@ -766,149 +668,6 @@
                     ];
                 }
             },
-            async getLoans(skip, take){
-                // console.log('test1');
-                this.showAlert = false;
-                let data = window.atob(this.id)
-                this.dataObject = {
-                    // "skip": skip,
-                    // "take": take,
-                    // "status": status,
-                    // "code": this.keyCode,
-                    // "dateOne": this.keyDateOne,
-                    // "dateTwo": this.keyDateTwo,
-                    // "dueDateOne": this.keyDueDateOne,
-                    // "dueDateTwo": this.keyDueDateTwo,
-                    // "loaner_id": this.$session.id,
-                    // "orderDate": "DESC"
-                    "asset_id": data
-                }
-                try {
-                    await axios.get('/loans/historyAssets', {params: this.dataObject})
-                    .then((response) => {
-                        console.log(response.data.data.loans);
-                        Object.keys(response.data.data.loans).forEach((item) => {
-                            let date = new Date(response.data.data.loans[item].date);
-                            let finalDate = date.toLocaleDateString("id");
-                            let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
-                            // let finalTime = date.format("id");
-                            // // finalTime = finalTime.format('hh:mm')
-                            let difference = ''
-                            let dueDate = new Date(response.data.data.loans[item].due_date);
-                            const getDate = date.getDate();
-                            const getDateTime = date.getTime();
-                            const getTime = date.getHours();
-                            const getDueDate = dueDate.getDate();
-                            const getDueDateTime = dueDate.getTime();
-                            const getDueTime = dueDate.getHours();
-                            // console.log(compareDueDate);
-                            if(getDate == getDueDate) {
-                                difference = (getDueTime - getTime)+" Jam"
-                            } else {
-                                let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
-                                // console.log(calculate)
-                                // let calculateDays = calculate / (1000*3600*24) 
-                                if (calculate < 7 && calculate > 1) {
-                                    difference = (calculate)+" Hari"   
-                                } else if(calculate > 7 && calculate < 30) {
-                                    difference = (calculate/7)+" Minggu"   
-                                } else if(calculate > 30){
-                                    difference = (calculate/30)+" Bulan"   
-                                } else {
-                                    difference = (24 - (getTime - getDueTime))+" Jam" 
-                                }
-                            }
-                            let finalDueDate = dueDate.toLocaleDateString("id");
-                            let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
-                            this.loansArray.push(
-                                {
-                                    "id": response.data.data.loans[item].id,
-                                    "row": this.index++,
-                                    "code": response.data.data.loans[item].code,
-                                    "status": response.data.data.loans[item].status,
-                                    "date_string": finalDate+" "+finalTime,
-                                    "due_date_string": finalDueDate+" "+finalDueTime,
-                                    "due_date_time": getDueDateTime,
-                                    "date": date,
-                                    "difference": difference
-                                }
-                            );
-                            // console.log(new Date().getTime() == getDueDateTime)
-                        });
-
-                        // this.dataArray.filter((index) => index != 2)
-                        this.dataCount = response.data.data.count;
-                        // if (this.windowWidth < ) {
-                            
-                        // }
-                        this.isLoadingResponse = false;
-                        this.isLoadingResponse1 = false;
-                        this.isLoadingContent = false;
-                        this.buttonDisabled = false;
-                    }).catch((err) => {
-                        if(!err.response) {
-                            this.showAlert = true;
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': "Network Error", 
-                                    'detail': "Silakan periksa jaringan internet anda!",
-                                }
-                            ];
-                        this.isLoadingResponse = false;
-                        this.isLoadingResponse1 = false;
-                        this.buttonDisabled = false;
-                        this.isLoadingContent = false;
-                        // console.log(err.response);
-                        } else if (err.response.data.message == 'Error!'){
-                            // console.log(err.response.data);
-                            this.showAlert = true;
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.data.message,
-                                    'detail': err.response.data.data.error
-                                }
-                            ];
-                            this.isLoadingResponse = false;
-                            this.isLoadingResponse1 = false;
-                            this.isLoadingContent = false;
-                            this.buttonDisabled = false;
-                        } else {
-                            this.showAlert = true;
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.statusText,
-                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
-                                }
-                            ];
-                            this.isLoadingResponse = false;
-                            this.isLoadingResponse1 = false;
-                            this.isLoadingContent = false;
-                            this.buttonDisabled = false;
-                        }
-                    });
-                    this.isLoadingContent = false;
-                    this.isLoading = false;
-                } catch (error) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': error.code, 
-                            'detail': error.message,
-                        }
-                    ];
-                    this.isLoadingResponse = false;
-                    this.isLoading = false;
-                    this.isLoadingResponse1 = false;
-                    this.isLoadingContent = false;
-                    this.isLoadingContent = false;
-                    this.showAlert = true;
-                    this.buttonDisabled = false;
-                }
-                this.isLoadingLoans = false;
-            },
             setAlert(){
                 // this.alertMsg = null;
                 this.showAlert = false;
@@ -942,8 +701,7 @@
             }
             // console.log(window.atob(this.id));
             this.detailFunction(this.id);
-            this.getLoans();
-            // console.log(this.detailObject);
+            // console.log(this.$refs);
             // this.dataArray.filter((index) => index !== 1 )
 
             

@@ -408,12 +408,12 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
-                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                            <button @click="returnRouterFunction(this.detailObject.return_id)" :disabled="buttonDisabled" class="btn btn-info w-100">
-                                                Lihat Rincian Pengembalian&ensp; <i class="fa fa-check-square-o"></i>
-                                            </button>
+                                        <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                                <button @click="returnRouterFunction(this.detailObject.return_id)" :disabled="buttonDisabled" class="btn btn-info w-100">
+                                                    Lihat Rincian Pengembalian&ensp; <i class="fa fa-check-square-o"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -5,6 +5,47 @@
         </div>
     </div>
     <div v-else>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>{{ item.code }}</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successDelete" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -161,7 +202,7 @@
                                                             <th class="align-middle">Waktu Mulai</th>
                                                             <th class="align-middle">Tenggat Waktu</th>
                                                             <th class="align-middle">Periode</th>
-                                                            <th class="align-middle">Aksi</th>
+                                                            <th colspan="3" class="align-middle">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -175,6 +216,16 @@
                                                             <td class="align-middle text-center">
                                                                 <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-info"></i> <br> Lihat Rincian
+                                                                </button>
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                <button @click="updateFunction(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                                    <i class="fa fa-pencil"></i> <br> Ubah Permintaan
+                                                                </button>
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                    <i class="fa fa-trash-o"></i> <br> Hapus Permintaan
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -211,6 +262,20 @@
                                                                     <div class="col-12 py-2">
                                                                         <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-info"></i> &ensp; Lihat Rincian
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div v-if="item.status == '0'" class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <button @click="updateFunction(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-success rounded-0">
+                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah Permintaan
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div v-if="item.status == '0'" class="row my-3 py-2">
+                                                                    <div class="col-12 py-2">
+                                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                                            <i class="fa fa-trash-o"></i> <br> Hapus Permintaan
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -408,6 +473,87 @@
                 this.showAlert = false;
                 this.errorResponse = [];
             },
+            async delete(id){
+                this.isLoadingDelete = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "id": id
+                };
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/loans/delete', {params: this.dataObject})
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successDeleteResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingDelete = false;
+                        this.successDelete = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorDelete = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingDelete = false;
+                }
+            },
             backRouter(){
                 // console.log("Teset")
                 this.setProgress = true;
@@ -522,6 +668,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successDeleteResponse = [];
+                this.backFunction()
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -559,6 +706,42 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ name: 'myLoans.request' }).then(() => { this.$router.go() })
+                        }, 3000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            updateFunction(id){
+                this.isLoadingResponse2 = true;
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'loans.update', query: {data: data} }).then(() => { this.$router.go() })
                         }, 3000);
                     }
                 } catch(e) {

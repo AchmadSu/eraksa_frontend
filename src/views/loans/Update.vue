@@ -69,7 +69,7 @@
                         <div class="container-fluid">
                             <!-- DataTales Example -->
                             <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-                                <div :class="this.loansStatus == '0' ? 'row':'d-none'">
+                                <div :class="this.loansStatus == '0' && this.detailObject.loaner_id == $session.id ? 'row':'d-none'">
                                     <div v-if="isLoadingImage == true" class="col-sm-12 d-lg-none text-center my-5">
                                         <div v-if="windowWidth < 720">
                                             <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
@@ -327,7 +327,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div :class="this.loansStatus == '0' ? 'd-none':'row mh-100'">
+                                <div :class="this.loansStatus == '0' && this.detailObject.loaner_id == $session.id ? 'd-none':'row mh-100'">
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
                                     </div>
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
@@ -340,7 +340,7 @@
                                         <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                     </div>
                                     <h3 class="text-center my-3">Status tidak sesuai</h3>
-                                    <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman. Permintaan perbaruan data tidak dapat dilakukan</p>
+                                    <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman atau anda bukan peminjam untuk transaksi terkait. Permintaan perbaruan data tidak dapat dilakukan</p>
                                 </div>
                                 <div class="row my-4 d-flex justify-content-center">
                                     <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">

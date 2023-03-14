@@ -26,7 +26,7 @@ const assetsRouter = [
     },
     {
         path:'/assets/details',
-        name : 'assets.details',
+        name : 'menu.assetsDetail',
         component : () => import("../../views/assets/AssetDetails.vue")
     },
     // {
