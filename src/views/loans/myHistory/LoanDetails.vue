@@ -644,7 +644,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('myLoansDetails_'+name+'.pdf')
+                pdf.save('myLoanDetails_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
                 this.isLoadingResponse2 = false;
@@ -850,6 +850,8 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
+            } else if (this.$route.query.data == null) {
+                this.$router.push({ name: "dashboard" });
             }
         },  
         mounted(){

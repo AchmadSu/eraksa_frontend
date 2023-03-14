@@ -274,6 +274,12 @@
                     Menu Master
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
+                <li @click="router('menu.assets')" class="nav-item my-2">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
+                        <i class="fa fa-list" aria-hidden="true"></i>&ensp;
+                        <span>Daftar Aset</span>
+                    </a>
+                </li>
                 <li @click="router('menu.studyPrograms')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-graduation-cap"></i>&ensp;

@@ -90,7 +90,7 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
-                                            <div :class="this.keyWords != NULL ? 'col-12 pb-3':'d-none'">
+                                            <div :class="this.keyWords != null ? 'col-12 pb-3':'d-none'">
                                                 <h5 class="text-center">
                                                     <template v-if="this.keyWords != ''">
                                                         Menampilkan hasil pencarian: {{this.keyWords}}
@@ -251,7 +251,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
+                                        <div v-if="this.$route.query.search != null" class="row my-lg-3 my-5">
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Hapus Filter

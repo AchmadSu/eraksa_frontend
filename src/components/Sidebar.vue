@@ -152,6 +152,12 @@
         </div>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
+            <a @click="router('menu.assets')" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-list" aria-hidden="true"></i>&ensp;&nbsp;
+                <span>Daftar Aset</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a @click="router('menu.studyPrograms')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-graduation-cap"></i>&ensp;
                 <span>Program Studi</span>

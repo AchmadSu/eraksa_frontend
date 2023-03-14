@@ -28,7 +28,7 @@
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
                         <!-- Page Heading -->
                         <div class="row d-flex justify-content-evenly">
-                            <div :class="this.name != NULL ? 'col-12 pb-3':'d-none'">
+                            <div :class="this.name != null ? 'col-12 pb-3':'d-none'">
                                 <h5 class="text-center">
                                     <template v-if="this.name != ''">
                                         Menampilkan hasil pencarian: {{this.name}}
@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="this.name != NULL" class="row my-lg-3 my-5">
+                        <div v-if="this.name != null" class="row my-lg-3 my-5">
                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                     Hapus Filter

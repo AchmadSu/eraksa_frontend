@@ -449,7 +449,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -495,7 +495,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('Rincian_'+name+'.pdf')
+                pdf.save('assetDetails_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
                 clonedElement3.remove();
@@ -591,41 +591,6 @@
                 // console.log(this.skip)
                 this.getLoans(this.skip, this.take)
             },
-            backFunction(){
-                this.isLoadingResponse2 = true;
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'myLoans.active' }).then(() => { this.$router.go() })
-                        }, 3000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
             searchFunction(){
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -692,7 +657,9 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } 
+            } else if (this.$route.query.data == null) {
+                this.$router.push({ name: "dashboard" });
+            }
         },  
         mounted(){
             window.onresize = () => {

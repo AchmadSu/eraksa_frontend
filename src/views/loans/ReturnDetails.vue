@@ -203,10 +203,32 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                    <table id="targetTable" class="d-none d-md-block table table-sm table-borderless">
+                                                                    <table class="d-none d-md-block table table-sm table-borderless">
                                                                         <thead>
                                                                             <tr>
-                                                                                <td colspan="4">
+                                                                                <td colspan="2">
+                                                                                    <h4>Rincian Aset</h4>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>
+                                                                                        <ol>
+                                                                                            <li v-for="item, index in selectDataArray" :key="item.id">
+                                                                                                {{item.name}}({{ item.code }})
+                                                                                            </li>
+                                                                                        </ol>
+                                                                                    </h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <table id="targetTable" class="d-none table table-sm table-borderless">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td colspan="5">
                                                                                     <h4>Rincian Aset</h4>
                                                                                 </td>
                                                                             </tr>
@@ -221,7 +243,10 @@
                                                                                     <h5>Kode</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Kategori Aset</h5>
+                                                                                    <h5>Kategori</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Prodi</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </thead>
@@ -238,6 +263,9 @@
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{item.category_name}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.study_program_name}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -790,6 +818,8 @@
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
             } else if (this.$roles == "Member") {
+                this.$router.push({ name: "dashboard" });
+            } else if (this.$route.query.data == null) {
                 this.$router.push({ name: "dashboard" });
             }
         },  

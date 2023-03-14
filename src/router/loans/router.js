@@ -79,11 +79,6 @@ const loansRouter = [
         name : 'myLoans.returnDetails',
         component : () => import("../../views/loans/myHistory/ReturnDetails.vue")
     },
-    {
-        path:'/test',
-        name : 'myLoans.returnDetails',
-        component : () => import("../../views/loans/Letter.vue")
-    },
     // {
     //     path:'/verification',
     //     name : 'user.otpPage',

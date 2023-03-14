@@ -117,36 +117,36 @@
                                     <div v-else>
                                         <div class="row">
                                             <div :class="
-                                                this.keyWords != NULL ||
-                                                this.creator != NULL ||
-                                                this.studyProgram != NULL ||
-                                                this.placement != NULL ||
-                                                this.category != NULL ?
+                                                this.keyWords != null ||
+                                                this.creator != null ||
+                                                this.studyProgram != null ||
+                                                this.placement != null ||
+                                                this.category != null ?
                                                 'col-12 pb-3':'d-none'"
                                             >
                                                 <h5 class="text-center">
                                                     Menampilkan hasil pencarian
                                                     <br>
-                                                    <template v-if="this.keyWords != '' && this.keyWords != NULL">
+                                                    <template v-if="this.keyWords != '' && this.keyWords != null">
                                                         Nama Aset atau Kode Aset: {{ this.keyWords}} <br>
                                                     </template>
-                                                    <template v-if="this.creator != '' && this.creator != NULL">
+                                                    <template v-if="this.creator != '' && this.creator != null">
                                                         Nama Pembuat: {{ this.creator}} <br>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.studyProgram != '' && this.studyProgram != NULL && item.study_program_id == this.dataStudyProgram && index == 0">
+                                                        <template v-if="this.studyProgram != '' && this.studyProgram != null && item.study_program_id == this.dataStudyProgram && index == 0">
                                                             Program Studi: {{ item.study_program_name }}
                                                             <br>
                                                         </template>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.category != '' && this.category != NULL && item.category_id == this.dataCategory && index == 0">
+                                                        <template v-if="this.category != '' && this.category != null && item.category_id == this.dataCategory && index == 0">
                                                             Kategori: {{ item.category_name }}
                                                             <br>
                                                         </template>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.placement != '' && this.placement != NULL && item.placement_id == this.dataPlacement && index == 0">
+                                                        <template v-if="this.placement != '' && this.placement != null && item.placement_id == this.dataPlacement && index == 0">
                                                             Tempat: {{ item.placement_name }}
                                                             <br>
                                                         </template>
@@ -432,7 +432,7 @@
                                             </div>
                                         </div>
                                         <div 
-                                            v-if="this.keyWords != NULL || this.placement != NULL || this.category != NULL || this.placement != NULL || this.studyProgram != NULL" 
+                                            v-if="this.keyWords != null || this.placement != null || this.category != null || this.placement != null || this.studyProgram != null" 
                                             class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
@@ -957,7 +957,7 @@
                                     "user_name": response.data.data.assets[item].user_name,
                                     "study_program_id": response.data.data.assets[item].study_program_id,
                                     "study_program_name": response.data.data.assets[item].study_program_name,
-                                    "qrCode": "localhost:3000/assets/edit?"+data
+                                    "qrCode": "localhost:3000/assets/details?data="+data
                                 }
                             );
                         });

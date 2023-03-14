@@ -572,6 +572,8 @@
                 else {
                     this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
                 }
+            } else if (this.$route.query.data == null) {
+                this.$router.push({ name: "dashboard" });
             }
         },  
         mounted(){

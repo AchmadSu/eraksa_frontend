@@ -209,7 +209,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'assets.details', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'menu.assetsDetail', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {

@@ -89,11 +89,11 @@
                                     <div v-else>
                                         <div class="row">
                                             <div :class="
-                                                this.keyWords != NULL ||
-                                                this.keyCodeType != NULL ||
-                                                this.keyRole != NULL ||
-                                                this.keyStatus != NULL ||
-                                                this.keyStudyProgramName != NULL 
+                                                this.keyWords != null ||
+                                                this.keyCodeType != null ||
+                                                this.keyRole != null ||
+                                                this.keyStatus != null ||
+                                                this.keyStudyProgramName != null 
                                                 ? 'col-12 pb-3':'d-none'"
                                             >
                                                 <h5 class="text-center">
@@ -413,12 +413,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.keyCode != NULL ||
-                                            this.keyCodeType != NULL ||
-                                            this.keyStudyProgramName != NULL ||
-                                            this.keyRole != NULL ||
-                                            this.keyWords != NULL ||
-                                            this.keyStatus != NULL
+                                        <div v-if="this.keyCode != null ||
+                                            this.keyCodeType != null ||
+                                            this.keyStudyProgramName != null ||
+                                            this.keyRole != null ||
+                                            this.keyWords != null ||
+                                            this.keyStatus != null
                                             " class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">

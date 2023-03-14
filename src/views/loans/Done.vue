@@ -50,11 +50,11 @@
                                     <div v-else>
                                         <div class="row">
                                             <div :class="
-                                                this.keyCode != NULL ||
-                                                this.keyDateOne != NULL ||
-                                                this.keyDateTwo != NULL ||
-                                                this.keyDueDateOne != NULL ||
-                                                this.keyDueDateTwo != NULL ?
+                                                this.keyCode != null ||
+                                                this.keyDateOne != null ||
+                                                this.keyDateTwo != null ||
+                                                this.keyDueDateOne != null ||
+                                                this.keyDueDateTwo != null ?
                                                 'col-12 pb-3':'d-none'"
                                             >
                                                 <h5 class="text-center">
@@ -325,12 +325,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.keyCode != NULL ||
-                                            this.keyDateOne != NULL ||
-                                            this.keyDateTwo != NULL ||
-                                            this.keyDueDateOne != NULL ||
-                                            this.keyDueDateTwo != NULL ||
-                                            this.keyLoaner != NULL
+                                        <div v-if="this.keyCode != null ||
+                                            this.keyDateOne != null ||
+                                            this.keyDateTwo != null ||
+                                            this.keyDueDateOne != null ||
+                                            this.keyDueDateTwo != null ||
+                                            this.keyLoaner != null
                                             " class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
