@@ -779,6 +779,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successDeleteResponse = [];
+                this.setAlert()
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -873,6 +874,7 @@
             },
             async delete(id){
                 this.isLoadingDelete = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -954,6 +956,7 @@
             },
             async deleteMultiple(){
                 this.isLoadingDelete = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": this.filterIds

@@ -46,6 +46,47 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="eraseModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalSelectedLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>Data Terpilih</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.deleteMultiple" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successDelete" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalSelectedLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -120,6 +161,11 @@
                                                     <i class="fa fa-plus"></i> &ensp; Tambah Data
                                                 </button>
                                             </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#eraseModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                    <i class="fa fa-trash-o"></i> &ensp;Hapus data terpilih
+                                                </button>
+                                            </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
@@ -144,7 +190,7 @@
                                             <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr class="text-center">
-                                                        <th class="align-middle">No</th>
+                                                        <th class="align-middle">Pilih</th>
                                                         <th class="align-middle">Nama</th>
                                                         <th class="align-middle" colspan="2">
                                                             <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
@@ -155,21 +201,23 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                        <td class="text-center">{{index+1}}</td>
-                                                        <td><b>{{item.name}}</b></td>
-                                                        <td class="text-center">
+                                                        <td class="align-middle text-center">
+                                                            <input v-model="this.filterIds" type="checkbox" :value="item.id">
+                                                        </td>
+                                                        <td class="align-middle"><b>{{item.name}}</b></td>
+                                                        <td class="align-middle text-center">
                                                             <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                 <i class="fa fa-pencil"></i> &ensp; Ubah data
                                                             </button>
                                                         </td>
-                                                        <td class="text-center">
+                                                        <td class="align-middle text-center">
                                                             <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
                                                                 <i class="fa fa-trash-o"></i> &ensp; Hapus data
                                                             </button>
                                                         </td>
                                                     </tr>
                                                     <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
-                                                        <td class="text-center" colspan="4">
+                                                        <td class="align-middle text-center" colspan="4">
                                                             <b>{{item.message}}</b>
                                                             <p>{{item.detail}}</p>
                                                         </td>
@@ -184,6 +232,11 @@
                                                                 <div class="icon"> <i class="fa fa-map-marker"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Penempatan</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -327,6 +380,7 @@
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
+                filterIds: [],
                 username: this.$session.name,
                 errorLoans: false,
                 errorMaintenance: false,
@@ -469,6 +523,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successDeleteResponse = [];
+                this.setAlert()
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -553,10 +608,93 @@
                 }
             },
             async delete(id){
+                this.setAlert
                 this.isLoadingDelete = true;
                 this.buttonDisabled = true;
                 this.dataPlacements = {
                     "ids": [id]
+                };
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/placements/delete', {params: this.dataPlacements})
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successDeleteResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingDelete = false;
+                        this.successDelete = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorDelete = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingDelete = false;
+                }
+            },
+            async deleteMultiple(){
+                this.setAlert
+                this.isLoadingDelete = true;
+                this.buttonDisabled = true;
+                this.dataPlacements = {
+                    "ids": this.filterIds
                 };
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
@@ -771,7 +909,7 @@
                 this.getPlacements(this.skip, this.take);
             } 
             // this.dataArray.filter((index) => index !== 1 )
-            console.log(this.dataArray.length)
+            // console.log(this.dataArray.length)
 
             
             window.scrollTo(0,0);

@@ -321,12 +321,12 @@
                                                                     </div>
                                                                     <div class="col-12 w-100 text-center py-2">
                                                                         ATAU
-                                                                     </div>
-                                                                     <div class="col-12 py-2">
-                                                                         <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                             <i class="fa fa-trash-o"></i> &ensp; Hapus Permanen
-                                                                         </button>
-                                                                     </div>
+                                                                    </div>
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus Permanen
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -471,6 +471,7 @@
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
                 this.isLoadingRestore = true;
+                this.setAlert
                 // this.closeModal();
                 try{
                     if(this.setProgress == true) {
@@ -505,7 +506,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successRestoreResponse = [];
-                this.errorRestore = [];
+                this.setAlert()
                 // this.closeModal(id);
                 if (this.dataCount <= 0) {
                     this.indexRouter();
@@ -594,6 +595,7 @@
             },
             async restore(id){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -676,6 +678,7 @@
             },
             async restoreMultiple(){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": this.filterIds
@@ -758,6 +761,7 @@
             },
             async deletePermanent(id){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -840,6 +844,7 @@
             },
             async deletePermanentMultiple(){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": this.filterIds

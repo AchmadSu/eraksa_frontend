@@ -156,14 +156,14 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
-                                                <button type="button" data-bs-toggle="modal" data-bs-target="#eraseModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
-                                                    <i class="fa fa-trash-o"></i> &ensp;Hapus data terpilih
-                                                </button>
-                                            </div>
                                             <div :class="this.windowWidth <= this.$widthLandscapePhone ? 'col-12 py-2':'d-none'">
                                                 <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                     <i class="fa fa-plus"></i> &ensp; Tambah Data
+                                                </button>
+                                            </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#eraseModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                    <i class="fa fa-trash-o"></i> &ensp;Hapus data terpilih
                                                 </button>
                                             </div>
                                         </div>
@@ -533,6 +533,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successDeleteResponse = [];
+                this.setAlert()
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
@@ -618,6 +619,7 @@
             },
             async delete(id){
                 this.isLoadingDelete = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -699,6 +701,7 @@
             },
             async deleteMultiple(){
                 this.isLoadingDelete = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": this.filterIds

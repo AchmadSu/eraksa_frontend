@@ -659,6 +659,7 @@
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
                 this.isLoadingRestore = true;
+                this.setAlert
                 // this.closeModal();
                 try{
                     if(this.setProgress == true) {
@@ -693,7 +694,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successRestoreResponse = [];
-                this.errorRestore = [];
+                this.setAlert()
                 // this.closeModal(id);
                 if (this.dataCount <= 0) {
                     this.indexRouter();
@@ -791,6 +792,7 @@
             },
             async restore(id){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -873,6 +875,7 @@
             },
             async restoreMultiple(){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": this.filterIds
@@ -955,6 +958,7 @@
             },
             async deletePermanent(id){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -1037,6 +1041,7 @@
             },
             async deletePermanentMultiple(){
                 this.isLoadingRestore = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": this.filterIds

@@ -44,6 +44,123 @@
                 </div>
             </div>
         </div>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successRestore == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light dark modal-title" id="eraseModalLabel"><i class="fa fa-trash"></i> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        Apakah anda yakin akan menghapus <b>{{ item.name }} secara permanen</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="deletePermanent(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successRestore" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="restoreModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="restoreModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successRestore == false" class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="text-light dark modal-title" id="restoreModalSelectedLabel"><i class="fa fa-undo"></i> &ensp;Konfirmasi pemulihan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-primary">
+                        Apakah anda yakin akan memulihkan <b>Data Terpilih</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="this.restoreMultiple" type="button" class="btn btn-primary">Pulihkan</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-primary">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successRestore" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="deleteModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successRestore == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light dark modal-title" id="deleteModalSelectedLabel"><i class="fa fa-trash"></i> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-danger">
+                        Apakah anda yakin akan menghapus <b>Data Terpilih secara permanen</b>?
+                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingRestore == false" :disabled="buttonDisabled" @click="deletePermanentMultiple" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingRestore" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successRestore" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div v-for="item in successRestoreResponse" :key="item.id" :class="showAlertSuccess == true ? 'modal-body':'d-none'">
+                        <div class="text-success alert alert-dismissible" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top top-0 progress':'d-none'" style="height: 5px; z-index:10000;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -113,6 +230,16 @@
                                                     </div>
                                                 </form>
                                             </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#restoreModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                    <i class="fa fa-undo"></i> &ensp;Pulihkan data terpilih
+                                                </button>
+                                            </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#deleteModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                    <i class="fa fa-trash"></i> &ensp;Hapus Permanen data terpilih
+                                                </button>
+                                            </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row d-sm-flex justify-content-center">
@@ -132,7 +259,7 @@
                                             <table v-if="this.windowWidth > this.$widthLandscapePhone" class="table table-hover table-bordered border-" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr class="text-center">
-                                                        <th class="align-middle">No</th>
+                                                        <th class="align-middle">Pilih</th>
                                                         <th class="align-middle">Nama</th>
                                                         <th class="align-middle">
                                                             Aksi
@@ -141,11 +268,18 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                        <td class="text-center">{{index+1}}</td>
-                                                        <td><b>{{item.name}}</b></td>
-                                                        <td class="text-center">
+                                                        <td class="textcenter align-middle">
+                                                            <input v-model="this.filterIds" type="checkbox" :value="item.id">
+                                                        </td>
+                                                        <td class="align-middle"><b>{{item.name}}</b></td>
+                                                        <td class="text-center align-middle">
                                                             <button type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                <i class="fa fa-undo"></i> &ensp; Pulihkan data
+                                                                <i class="fa fa-undo"></i> <br> Pulihkan data
+                                                            </button>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                <i class="fa fa-trash-o"></i> <br> Hapus data
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -167,6 +301,11 @@
                                                                     <h6 class="mb-0">Data Prodi</h6>
                                                                 </div>
                                                             </div>
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="my-2">
                                                             <h3 class="heading">{{item.name}}</h3>
@@ -175,6 +314,14 @@
                                                                     <div class="col-12 py-2">
                                                                         <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#restoreModal'+item.id" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-undo"></i> &ensp; Pulihkan
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-12 w-100 text-center py-2">
+                                                                        ATAU
+                                                                    </div>
+                                                                    <div class="col-12 py-2">
+                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus Permanen
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -278,6 +425,7 @@
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
+                filterIds: [],
                 username: this.$session.name,
                 showAlert: false,
                 showAlertSuccess: false,
@@ -348,6 +496,7 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successRestoreResponse = [];
+                this.setAlert()
                 if(this.dataCount <= 0){
                     this.indexRouter();
                 }
@@ -434,6 +583,7 @@
                 }
             },
             async restore(id){
+                this.setAlert
                 this.isLoadingRestore = true;
                 this.buttonDisabled = true;
                 this.dataStudyProgram = {
@@ -443,6 +593,255 @@
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
                     await axios.put('/studyPrograms/restore', this.dataStudyProgram)
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successRestoreResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorRestore = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingRestore = false;
+                }
+            },
+            async restoreMultiple(){
+                this.setAlert
+                this.isLoadingRestore = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": this.filterIds
+                };
+                // console.log(this.dataObject)
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.put('/studyPrograms/restore', this.dataObject)
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successRestoreResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorRestore = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingRestore = false;
+                }
+            },
+            async deletePermanent(id){
+                this.setAlert
+                this.isLoadingRestore = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": [id]
+                };
+                // console.log(this.dataObject)
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/studyPrograms/deletePermanently', {params: this.dataObject})
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successRestoreResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingRestore = false;
+                        this.successRestore = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorRestore = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingRestore = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorRestore = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingRestore = false;
+                }
+            },
+            async deletePermanentMultiple(){
+                this.setAlert
+                this.isLoadingRestore = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": this.filterIds
+                };
+                // console.log(this.dataObject)
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/studyPrograms/deletePermanently', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
