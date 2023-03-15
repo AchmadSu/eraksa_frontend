@@ -24,16 +24,6 @@ const studyProgramRouter = [
         name : 'menu.studyPrograms',
         component : () => import("../../views/studyPrograms/Index.vue")
     },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
 ]
 
 export default studyProgramRouter;

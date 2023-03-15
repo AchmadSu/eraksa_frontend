@@ -29,16 +29,6 @@ const assetsRouter = [
         name : 'menu.assetsDetail',
         component : () => import("../../views/assets/AssetDetails.vue")
     },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
 ]
 
 export default assetsRouter;

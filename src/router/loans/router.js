@@ -79,16 +79,6 @@ const loansRouter = [
         name : 'myLoans.returnDetails',
         component : () => import("../../views/loans/myHistory/ReturnDetails.vue")
     },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
 ]
 
 export default loansRouter;

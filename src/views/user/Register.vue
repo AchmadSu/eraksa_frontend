@@ -540,8 +540,6 @@
                 this.isLoadingResponse = true;
                 this.radioEnabled = false;
                 this.secondaryButtonDisabled = true;
-                console.log(this.form.code);
-                console.log(this.form.code_type);
                 // if()
                 const data = {
                     "name": this.fullname,
