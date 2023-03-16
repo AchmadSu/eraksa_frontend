@@ -14,15 +14,19 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success">
                         <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" /> &ensp;Permintaan berhasil!</h5>
-                        <button @click="login" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
+                        <button @click="logout" :disabled="buttonDisabled" type="button" class="btn-close" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-success">
                         <div v-for="item, index in successResponse" :key="item.id" class="text-start mt-3 alert alert-dismissible" role="alert">
-                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <strong> {{ item.message }} Silakan login ulang untuk memperbarui data</strong> <br/> {{ item.detail }} 
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button @click="login" type="button" class="mr-4 mr-lg-3 btn btn-success">Tutup</button>
+                        <button v-if="this.isLoadingRouter" type="button" class="mr-4 mr-lg-3 btn btn-success" :disabled="true">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Memuat ...
+                        </button>
+                        <button v-else @click="logout" type="button" class="mr-4 mr-lg-3 btn btn-success">Keluar</button>
                     </div>
                 </div>
             </div>
@@ -129,7 +133,7 @@
                                                 </span>
                                                 <input 
                                                 name="email" type="email" class="form-control"
-                                                placeholder="Email" aria-label="Email" 
+                                                placeholder="Email Baru (Boleh dikosongkan)" aria-label="Email" 
                                                 aria-describedby="basic-addon1"
                                                 v-model="form.email" required
                                                 />
@@ -175,7 +179,7 @@
                                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-key" />
                                                 </span>
                                                 <input 
-                                                    name="code" type="text" class="form-control"
+                                                    name="code" type="text" :class="this.checkCode == false ? 'form-control is-invalid':'form-control is-valid'"
                                                     :placeholder="this.codeString" aria-label="Code" 
                                                     aria-describedby="basic-addon1"
                                                     v-model="form.code" required
@@ -332,7 +336,7 @@
                                                     </span>
                                                     <input 
                                                         name="password" type="password" :class="this.form.password != '' && this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
-                                                        v-model="form.password" placeholder="Password Baru" aria-label="Password"
+                                                        v-model="form.password" placeholder="Password Baru (Boleh dikosongkan)" aria-label="Password"
                                                         aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                                     />
                                                     <button @click="showPassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye" /></button>
@@ -357,7 +361,7 @@
                                                     </span>
                                                     <input 
                                                         name="password" type="text" :class="this.form.password != '' && this.finalCheckPassword == false ? 'form-control is-invalid' : 'form-control'"
-                                                        v-model="form.password" placeholder="Password Baru" aria-label="Password"
+                                                        v-model="form.password" placeholder="Password Baru (Boleh dikosongkan)" aria-label="Password"
                                                         aria-describedby="basic-addon2" required minlength="6" @copy.prevent @paste.prevent
                                                     />
                                                     <button @click="hidePassword" class="btn btn-outline-secondary" id="button-addon2"><font-awesome-icon icon="fa-solid fa-eye-slash" /></button>
@@ -507,23 +511,23 @@
         data (){
             return {
                 windowWidth: window.innerWidth,
-                 
                 regexExp: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi,
                 upper: /[A-Z]/,
                 lower: /[a-z]/,
                 textnumber: /[0-9]/,
-
                 submitEnabled: false,
                 secondaryButtonDisabled: false,
                 checkName: false,
                 checkEmail: false,
                 checkCode: false,
                 checkPhone: false,
+                checkNewPhone: false,
                 floatingTextEmail: true,
                 floatingTextPhone: true,
                 floatingTextConfirmation: true,
                 isLoading: true,
                 isLoadingResponse: false,
+                isLoadingRouter: false,
                 isLoadingImage: true,
                 radioEnabled: true,
                 codeEnabled: false,
@@ -614,7 +618,6 @@
                             "email": response.data.data.email,
                         };
                         this.form.firstname = this.detailObject.name
-                        this.form.email = this.detailObject.email
                         if(this.detailObject.code){
                             this.form.code = this.detailObject.code
                         }
@@ -679,6 +682,39 @@
                     this.isLoading = false;
                 }
             },
+            async logout(){
+                // console.log("Test")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try {
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                this.widthProgressBar = 0;
+                                this.setProgress == false;
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
+                    await axios.post('/logout')
+                    localStorage.clear();
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 3000);
+                } catch (e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
             async update() {
                 this.setAlert();
                 this.isLoadingResponse = true;
@@ -687,16 +723,17 @@
                 // if()
                 const data = {
                     "name": this.fullname,
-                    "email": this.form.email,
+                    "new_email": this.form.email,
                     "phone": this.form.phone.toString(),
-                    "password": this.form.password,
+                    "new_phone": this.form.new_phone.toString(),
+                    "old_password": this.form.old_password,
                     "new_password": this.form.password,
-                    "confirm_new_password": this.form.password,
-                    "confirm_pass": this.form.confirmPassword, 
+                    "confirm_new_password": this.form.confirmPassword, 
                     "code": this.form.code,
                     "code_type": this.form.radio
                 }
-                await axios.post('/update', data)
+                // console.log(data)
+                await axios.put('/users/update', data)
                 .then(response => {
                     this.isLoadingResponse = false;
                     this.secondaryButtonDisabled = false;
@@ -797,9 +834,27 @@
                     return false;
                 }
             },
+            validateNewPhone(value){
+                if(value.length == 0){
+                    this.checkNewPhone = true;
+                    this.floatingTextPhone = true;
+                    return true;
+                } else if(value.length >= 9 && value.length <= 14) {
+                    // console.log('ini method phone');
+                    this.checkNewPhone = true;
+                    this.floatingTextPhone = false;
+                    return true;
+                } else {
+                    this.checkNewPhone = false;
+                    this.floatingTextPhone = false;
+                    return false;
+                }
+            },
             validatePassword(value){
                 // console.log(this.checkPasswords);
-                if (this.upper.test(value) || this.lower.test(value) || this.textnumber.test(value) || value.length >= 6) {
+                if(value.length == 0) {
+                    return true;
+                } else if (this.upper.test(value) || this.lower.test(value) || this.textnumber.test(value) || (value.length >= 6 && value.length < 0)) {
                     
                     if (this.upper.test(value)) {
                         this.checkPasswords[0].status = true;
@@ -841,7 +896,12 @@
                 }
             },
             validateConfirmPassword(value1, value2){
-                if (value2.length == 0) {
+                
+                if (value1.length == 0 && value2.length == 0) {
+                    // this.checkConfirmPassword = true;
+                    // this.floatingTextConfirmation = false;
+                    return true;
+                } else if (value2.length == 0) {
                     this.checkConfirmPassword = false;
                     this.floatingTextConfirmation = true;
                     return false;
@@ -866,19 +926,26 @@
         watch: {
             form: {
                 handler: function (val) {
-                    // console.log(val.code);
                     let code_type = val.radio;
                     let code = val.code;
+                    if(code.length > 3) {
+                        this.checkCode = true;
+                    } else {
+                        this.checkCode = false;
+                    }
                     // console.log(code_type);
                     let firstname = val.firstname;
                     let lastname = val.lastname;
                     let email = val.email;
                     let phone = val.phone.toString();
+                    let newPhone = val.new_phone.toString();
+                    let oldPassword = val.old_password;
                     let password = val.password;
                     let confirmPassword = val.confirmPassword;
                     
                     let validateName = this.validateName(firstname, lastname);
                     let validatePhone = this.validatePhone(phone);
+                    let validateNewPhone = this.validateNewPhone(newPhone);
                     let validatePassword = this.validatePassword(password);
                     let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
                     
@@ -892,7 +959,7 @@
                         this.codeType = "1";
                     }
 
-                    if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
+                    if(code.length > 3 && (email.length >= 6 || email.length == 0) && oldPassword.length >= 6 && validateName && validatePhone && validateNewPhone && validatePassword && validateConfirmPassword) {
                         // console.log('Test');    
                         this.submitEnabled = true;
                     } else {
