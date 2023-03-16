@@ -48,6 +48,30 @@
                     <!-- End of Topbar -->
     
                     <!-- Begin Page Content -->
+                    <div v-if="this.errorDetail">
+                        <div class="row">
+                            <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
+                            </div>
+                            <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
+                                <img class="mx-5 w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                            </div>
+                            <div v-else-if="this.windowWidth >= this.$widthPotraitPhone" class="col-11 mx-5">
+                                <img class="w-75 mx-5 px-5 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                            </div>
+                            <div v-else class="col-12">
+                                <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
+                            </div>
+                            <h3 class="text-center my-3">{{this.detailObject.message}}</h3>
+                            <p class="text-center my-3">{{this.detailObject.detail}}</p>
+                        </div>
+                        <div class="row my-4 d-flex justify-content-center">
+                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                    <i class="fa fa-arrow-left"></i>&ensp; Dahsboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="container-fluid">
                         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
                             <div class="row">
@@ -456,10 +480,10 @@
                                                 </div>
                                             </div>
                                             <div v-if="isLoadingResponse == false">
-                                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="!submitEnabled">Update Data</button>
+                                                <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="!submitEnabled">Update Data</button>
                                             </div>
                                             <div v-if="isLoadingResponse == true">
-                                                <button type="submit" class="btn btn-success" style="width:100%;" :disabled="true">
+                                                <button type="submit" class="btn btn-primary" style="width:100%;" :disabled="true">
                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                     Memuat ...
                                                 </button>
@@ -531,10 +555,10 @@
                 isLoadingImage: true,
                 radioEnabled: true,
                 codeEnabled: false,
-
                 successResponse: [],
                 errorResponse: [],
                 showAlert: false,
+                errorDetail: false,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,

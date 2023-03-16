@@ -39,12 +39,12 @@
             <!-- Content Row -->
             <div class="row d-flex justify-content-evenly">
                 <!-- Aset yang dipinjam -->
-                <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-primary shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Banyak Aset <br> yang sedang dipinjam <br> Saat ini
+                                    Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
                                 </div>
                                 <div class="ml-2 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -53,13 +53,13 @@
                         </div>
                     </div>
                 </div>
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-primary shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang dipinjam <br> Saat ini
+                                        Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
                                     </div>
                                     <div v-if="this.isErrorLoans" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -90,7 +90,7 @@
                 </div>
         
                 <!-- Aset yang diperbaiki -->
-                <!-- <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <!-- <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -105,7 +105,7 @@
                     </div>
                 </div> -->
                 
-                <!-- <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <!-- <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -142,7 +142,7 @@
                 </div> -->
         
                 <!-- Aset yang rusak -->
-                <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-danger shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -156,7 +156,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-danger shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -192,7 +192,7 @@
                 </div>
         
                 <!-- Aset baru -->
-                <div v-if="this.isLoadingAdded == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingAdded == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-info shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -207,7 +207,7 @@
                     </div>
                 </div>
 
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-info shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -240,89 +240,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Content Row -->
-    
-        <div class="row">
-    
-            <!-- Area Chart -->
-            <div class="col-xl-8 col-lg-7">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <canvas id="myPieChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="this.errorResponse == false" class="col-12 mb-5">
-                    <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 p-2 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
-                        <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
-                    </a>
                 </div>
             </div>
         </div>
@@ -420,6 +337,8 @@
                     await axios.get('/loans/percentage', {params: {
                         "sleep": 0,
                         "status": "1",
+                        "dateOne": this.weekAgo,
+                        "dateTwo": this.currentDate
                     }})
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
@@ -479,7 +398,7 @@
                         "status": "2",
                         "condition": "0",
                         "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate+' 23:59:59'
+                        "dateTwo": this.currentDate
                     }})
                     .then((response) => {
                         this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
@@ -530,9 +449,7 @@
                     await axios.get('/assets/percentage', {params: {
                         "sleep": 0,
                         "status": "0",
-                        "condition": "1",
-                        "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate+' 23:59:59'
+                        "condition": "1"
                     }})
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
@@ -584,7 +501,7 @@
                         "sleep": 0,
                         "condition": "0",
                         "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate+' 23:59:59'
+                        "dateTwo": this.currentDate
                     }})
                     .then((response) => {
                         this.styleAddedPercentage = 'width: '+response.data.data.percentage+'%;';

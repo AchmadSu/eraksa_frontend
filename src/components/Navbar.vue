@@ -84,7 +84,7 @@
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#" :style="this.cursorStyle">
+                    <a @click="router('user.update')" class="dropdown-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-user mr-2 text-primary"></i>
                         Ubah Profil
                     </a>
