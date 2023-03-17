@@ -299,6 +299,11 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 mb-5 d-block d-md-none">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#reportModal" href="#" style="text-decoration: none;" class="w-100 d-block d-md-none btn btn-sm btn-primary shadow-sm">
+                    <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
+                </button>
+            </div>
         </div>
     </div>
 </template>
