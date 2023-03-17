@@ -11,8 +11,6 @@ import axios from 'axios'
 // axios.defaults.withCredentials = true   
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
 axios.defaults.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-// const cors = require('cors');
-// axios.defaults.headers['Set-Cookie'] = document.cookie;
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
 axios.defaults.headers.common['Access-Control-Expose-Headers'] = "Access-Token, Uid";
@@ -32,11 +30,6 @@ import './assets/vendor/jquery-easing/jquery.easing.min.js'
 import './assets/js/sb-admin-2.min.js'
 import './assets/vendor/fontawesome-free/css/all.min.css'
 import './assets/font-awesome-4.7.0/css/font-awesome.css'
-// import './assets/vendor/chart.js/Chart.min.js'
-// import './assets/js/demo/chart-area-demo.js'
-// import './assets/js/demo/chart-pie-demo.js'
-// import './assets/fontawesome-free-6.2.0-web/css/all.css'
-// import './assets/fontawesome-free-6.2.0-web/css/all.min.css'
 import './assets/fontawesome-free-6.2.0-web/css/fontawesome.css'
 import './assets/fontawesome-free-6.2.0-web/css/fontawesome.min.css'
 import './assets/font-awesome-4.7.0/css/font-awesome.min.css'
@@ -44,11 +37,7 @@ import './assets/img/login.jpg'
 import './assets/css/sb-admin-2.css'
 import './assets/css/style.css'
 import 'jspdf-autotable'
-import jsPDF from 'jspdf'
 import 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js'
-
-// @import = url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
-// import { library } from '@fortawesome/fontawesome-svg-core'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {

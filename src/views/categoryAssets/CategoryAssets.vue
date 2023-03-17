@@ -238,11 +238,11 @@
                                                                     <h6 class="mb-0">Data Kategori Aset</h6>
                                                                 </div>
                                                             </div>
-                                                            <div class="d-flex flex-row align-items-center">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
+                                                                <div class="d-flex flex-row align-items-center">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
                                                         </div>
                                                         <div class="my-2">
                                                             <h3 class="heading">{{item.name}}</h3>

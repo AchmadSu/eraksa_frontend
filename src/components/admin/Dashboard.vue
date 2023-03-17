@@ -1,5 +1,62 @@
 <template>
     <!-- Page Heading -->
+    <div class="modal fade" id="reportModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="text-white modal-title" id="eraseModalLabel"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &ensp;Generate Report</h5>
+                    <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-light">
+                    <div class="card bg-success shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan transaksi peminjaman minggu lalu
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportWeekly></ReportWeekly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-success shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan transaksi peminjaman per bulan
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportWeekly></ReportWeekly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-success shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan transaksi peminjaman per semester
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportWeekly></ReportWeekly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div v-if="this.isLoadingResponse == true" class="row d-flex align-items-center justify-content-center">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -31,9 +88,9 @@
         <div>
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                <a href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#reportModal" href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                     <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
-                </a>
+                </button>
             </div>
         
             <!-- Content Row -->
@@ -247,6 +304,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import ReportWeekly from '../ReportWeekly.vue';
     export default{
         data() {
             return {
@@ -287,6 +345,9 @@
                 errorResponse: [],
                 sessionData: [],
             }
+        },
+        components: {
+            ReportWeekly
         },
         methods: {
             dashboard(){

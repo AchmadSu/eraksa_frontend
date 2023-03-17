@@ -514,21 +514,10 @@
 </template>
 
 <script>
-    // import { ref } from 'vue'
-    import { useRouter } from 'vue-router'
     import axios from 'axios'
-    import { ref, onMounted } from 'vue'
     import Sidebar from '../../components/Sidebar.vue';
     import Navbar from '../../components/Navbar.vue';
     import Footer from '../../components/Footer.vue';
-    // import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-    // import { response } from 'express';
-    // import useVuelidate from '@vuelidate/core'
-    // import { useField } from 'vee-validate'
-    // import { required, email, minLength, sameAs } from '@vuelidate/validators'
-
-    // import useValidate from '@vuelidate/core'
-    // import { required } from '@vuelidate/validators'
 
     export default {
         el: '#app',
@@ -646,9 +635,6 @@
                             this.form.code = this.detailObject.code
                         }
                         this.form.radio = this.detailObject.code_type
-                        // console.log(this.detailObject)
-                        // this.form.time = response.data.data.hours;
-                        // console.log(this.selectDataArray)
                         this.isLoading = false;
                     }).catch((err) => {
                         if(!err.response) {
