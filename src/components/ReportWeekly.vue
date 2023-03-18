@@ -11,20 +11,20 @@
             <tbody>
                 <tr>
                     <td class="align-middle px-5">
-                        <h5>Periode: </h5>
+                        <h5>Periode </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>{{this.range}}</h5>
+                        <h5>: {{this.range}}</h5>
                     </td>
                 </tr>
                 <tr>
                     <td class="align-middle px-5">
                         <h5>
-                            Total Transaksi Peminjaman: 
+                            Total Transaksi Peminjaman
                         </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>{{this.dataCount}}</h5>
+                        <h5>: {{this.dataCount}} transaksi</h5>
                     </td>
                 </tr>
             </tbody>
@@ -214,6 +214,7 @@
             },
             async report(){
                 try {
+                    this.loansArray = [];
                     await axios.get('/loans/reportWeekly/')
                     .then((response) => {
                         // console.log(response)

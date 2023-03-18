@@ -1,35 +1,35 @@
 <template>
-    <div id="mainRow" class="table-responsive d-none">
-        <table id="primaryTable" class="table table-sm table-borderless table-responsive">
+    <div id="monthlyRow" class="table-responsive d-none">
+        <table id="monthlyTable" class="table table-sm table-borderless table-responsive">
             <thead id="head" class="d-none">
                 <tr>
                     <th colspan="2">
-                        <h3 class="heading text-left">Detail Laporan Mingguan</h3>
+                        <h3 class="heading text-left">Detail Laporan Peminjaman Bulanan</h3>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="align-middle px-5">
-                        <h5>Periode: </h5>
+                        <h5>Periode </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>{{this.range}}</h5>
+                        <h5>: {{this.range}}</h5>
                     </td>
                 </tr>
                 <tr>
                     <td class="align-middle px-5">
                         <h5>
-                            Total Transaksi Peminjaman: 
+                            Total Transaksi Peminjaman
                         </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>{{this.dataCount}}</h5>
+                        <h5>: {{this.dataCount}} transaksi</h5>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-hover table-bordered border" id="monthlyDetails" width="100%" cellspacing="0">
             <thead>
                 <tr class="text-center">
                     <th class="align-middle">No</th>
@@ -276,7 +276,7 @@
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
                 this.isLoadingResponse = true;
-                const element1 = document.getElementById("mainRow");
+                const element1 = document.getElementById("monthlyRow");
                 let clonedElement1 = element1.cloneNode(true);
                 $(clonedElement1).css("display", "block");
                 // htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
@@ -292,15 +292,15 @@
                 // heightLeft -= pdfHeight;
                 // console.log("Test")
                 pdf.autoTable({
-                    html: '#primaryTable',
+                    html: '#monthlyTable',
                     theme: 'plain',
                 })
                 pdf.autoTable({
-                    html: '#dataTable',
+                    html: '#monthlyDetails',
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('ERAKSA_LoansReportMonthly_'+this.range+'_.pdf')
+                pdf.save('ERAKSA_LoansReportMonthly_'+this.range+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
@@ -310,6 +310,7 @@
                 this.isLoading = false;
             },
             async report(){
+                this.loansArray = [];
                 this.isLoading = true;
                 this.errorDetail = false;
                 try {
@@ -319,7 +320,7 @@
                     }
                     await axios.get('/loans/reportMonthly/', {params: data})
                     .then((response) => {
-                        // console.log(response)
+                        console.log(response)
                         let date = new Date(response.data.data.loans.date);
                         let finalDate = date.toLocaleDateString("id");
                         // console.log(finalDate)
@@ -411,6 +412,7 @@
                         this.buttonDisabled = false;
                         this.isLoading = false;
                         this.isParamsChange = false;
+                        // console.table(this.loansArray)
                     }).catch((err) => {
                         if(!err.response) {
                             this.errorDetail = true;
