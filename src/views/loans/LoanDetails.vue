@@ -683,42 +683,6 @@
                     ];
                 }
             },
-            downloadLetterRouter(){
-                this.isLoadingResponse2 = true;
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                this.closeModal();
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.printOut', query:{data: this.id} }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
-                }
-            },
             returnRouterFunction(id){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -768,7 +732,7 @@
                 this.dataConfirm = {
                     "loan_id": data,
                 }
-                console.log(this.dataConfirm)
+                // console.log(this.dataConfirm)
                 // this.openModal();
                 // console.log(this.dataPlacements);
                 try {
@@ -874,7 +838,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save(name+'.pdf')
+                pdf.save('ERAKSA_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
             },

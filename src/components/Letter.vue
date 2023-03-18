@@ -411,7 +411,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('SuratPernyataan_'+name+'.pdf')
+                pdf.save('ERAKSA_Letter_'+name+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;

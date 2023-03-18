@@ -1,10 +1,10 @@
 <template>
-    <div id="monthlyRow" class="table-responsive d-none">
-        <table id="monthlyTable" class="table table-sm table-borderless table-responsive">
+    <div id="monthlyAssetsRow" class="table-responsive d-none">
+        <table id="monthlyAssetsTable" class="table table-sm table-borderless table-responsive">
             <thead id="head" class="d-none">
                 <tr>
                     <th colspan="2">
-                        <h3 class="heading text-left">Detail Laporan Peminjaman Bulanan</h3>
+                        <h3 class="heading text-left">Detail Laporan Aset Rusak Bulanan</h3>
                     </th>
                 </tr>
             </thead>
@@ -20,50 +20,32 @@
                 <tr>
                     <td class="align-middle px-5">
                         <h5>
-                            Total Transaksi Peminjaman
+                            Total Aset Rusak
                         </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: {{this.dataCount}} transaksi</h5>
+                        <h5>: {{this.dataCount}} unit</h5>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <table class="table table-hover table-bordered border" id="monthlyDetails" width="100%" cellspacing="0">
+        <table class="table table-hover table-bordered border" id="monthlyAssetDetails" width="100%" cellspacing="0">
             <thead>
                 <tr class="text-center">
                     <th class="align-middle">No</th>
-                    <th class="align-middle">Kode</th>
-                    <th class="align-middle">Status</th>
-                    <th class="align-middle">Waktu Mulai</th>
-                    <th class="align-middle">Tenggat Waktu</th>
-                    <th class="align-middle">Periode</th>
+                    <th class="align-middle">Nama</th>
+                    <th class="align-middle">Kode Aset</th>
+                    <th class="align-middle">Kondisi</th>
+                    <th class="align-middle">Program Studi</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item, index in this.loansArray" :key="item.id">
-                    <td class="align-middle text-center">{{index+1}}</td>
-                    <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                    <td class="align-middle text-center">
-                        <template v-if="item.status == '0'">
-                            <b class="text-secondary">Menunggu Konfirmasi</b>
-                        </template>
-                        <template v-if="item.status == '1' && this.currentTime <= item.due_date_time">
-                            <b class="text-primary">Aktif</b>
-                        </template>
-                        <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                            <b class="text-danger">Overdue</b>
-                        </template>
-                        <template v-if="item.status == '2'">
-                            <b class="text-danger">Ditolak</b>
-                        </template>
-                        <template v-if="item.status == '3'">
-                            <b class="text-success">Selesai</b>
-                        </template>
-                    </td>
-                    <td class="align-middle text-center">{{item.date_string}}</td>
-                    <td class="align-middle text-center">{{item.due_date_string}}</td>
-                    <td class="align-middle text-center"><b>{{item.difference}}</b></td>
+                <tr v-for="item, index in this.dataArray" :key="item.id">
+                    <td class="text-center align-middle">{{index+1}}</td>
+                    <td class="align-middle"><b>{{item.name}}</b></td>
+                    <td class="align-middle">{{item.code}}</td>
+                    <td class="align-middle">Rusak</td>
+                    <td class="align-middle">{{item.study_program_name}}</td>
                 </tr>
             </tbody>
         </table>
@@ -91,13 +73,13 @@
             <button v-if="this.errorDetail" :disabled="true" type="button" @click="report" class="btn btn-warning w-100 mb-3">
                 <i class="fa fa-times"></i>&ensp;Tidak ada Laporan untuk Bulan yang dipilih
             </button>
-            <button type="button" @click="report" class="btn btn-light w-100">
+            <button :disabled="isNaN(this.selectedMonth) || this.selectedYear <= 0" type="button" @click="report" class="btn btn-light w-100">
                 <i class="fa fa-rocket"></i>&ensp;Generate Report
             </button>
         </div>
     </div>
     <div v-else>
-        <button :disabled="this.selectedMonth === 'Bulan' || this.selectedYear <= 0" type="button" @click="downloadReport" class="btn btn-light w-100">
+        <button :disabled="isNaN(this.selectedMonth) || this.selectedYear <= 0" type="button" @click="downloadReport" class="btn btn-light w-100">
             <i class="fa fa-download"></i>&ensp;Unduh Laporan
         </button>
     </div>
@@ -220,6 +202,7 @@
                     },
                 ],
                 loansArray: [],
+                dataArray: [],
                 deleteArray: [],
                 detailObject: {},
                 skipAsset: 0,
@@ -276,7 +259,7 @@
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
                 this.isLoadingResponse = true;
-                const element1 = document.getElementById("monthlyRow");
+                const element1 = document.getElementById("monthlyAssetsRow");
                 let clonedElement1 = element1.cloneNode(true);
                 $(clonedElement1).css("display", "block");
                 // htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
@@ -292,15 +275,15 @@
                 // heightLeft -= pdfHeight;
                 // console.log("Test")
                 pdf.autoTable({
-                    html: '#monthlyTable',
+                    html: '#monthlyAssetsTable',
                     theme: 'plain',
                 })
                 pdf.autoTable({
-                    html: '#monthlyDetails',
+                    html: '#monthlyAssetDetails',
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('ERAKSA_LoansReportMonthly_'+this.range+'.pdf')
+                pdf.save('ERAKSA_AssetsReportMonthly_'+this.range+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
@@ -310,7 +293,7 @@
                 this.isLoading = false;
             },
             async report(){
-                this.loansArray = [];
+                this.dataArray = [];
                 this.isLoading = true;
                 this.errorDetail = false;
                 try {
@@ -318,89 +301,23 @@
                         "month": this.selectedMonth,
                         "year": this.selectedYear
                     }
-                    await axios.get('/loans/reportMonthly/', {params: data})
+                    await axios.get('/assets/reportMonthly/', {params: data})
                     .then((response) => {
-                        console.log(response)
-                        let date = new Date(response.data.data.loans.date);
-                        let finalDate = date.toLocaleDateString("id");
-                        // console.log(finalDate)
-                        let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
-                        let difference = ''
-                        let dueDate = new Date(response.data.data.loans.due_date);
-                        const getDate = date.getDate();
-                        const getDateTime = date.getTime();
-                        const getTime = date.getHours();
-                        const getDueDate = dueDate.getDate();
-                        const getDueDateTime = dueDate.getTime();
-                        const getDueTime = dueDate.getHours();
-                        // console.log(compareDueDate);
-                        if(getDate == getDueDate) {
-                            difference = (getDueTime - getTime)+" Jam"
-                        } else {
-                            let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
-                            // console.log(calculate)
-                            // let calculateDays = calculate / (1000*3600*24) 
-                            if (calculate < 7 && calculate > 1) {
-                                difference = (calculate)+" Hari"   
-                            } else if(calculate > 7 && calculate < 30) {
-                                difference = (calculate/7)+" Minggu"   
-                            } else if(calculate > 30){
-                                difference = (calculate/30)+" Bulan"   
-                            } else {
-                                difference = (24 - (getTime - getDueTime))+" Jam" 
-                            }
-                        }
-                        let finalDueDate = dueDate.toLocaleDateString("id");
-                        let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
-                        // console.log(difference)
-                        Object.keys(response.data.data.loans).forEach((item) => {
-                            let date = new Date(response.data.data.loans[item].date);
+                        Object.keys(response.data.data.assets).forEach((item) => {
+                            let date = new Date(response.data.data.assets[item].date);
                             let finalDate = date.toLocaleDateString("id");
-                            let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
-                            // let finalTime = date.format("id");
-                            // // finalTime = finalTime.format('hh:mm')
-                            let difference = ''
-                            let dueDate = new Date(response.data.data.loans[item].due_date);
-                            const getDate = date.getDate();
-                            const getDateTime = date.getTime();
-                            const getTime = date.getHours();
-                            const getDueDate = dueDate.getDate();
-                            const getDueDateTime = dueDate.getTime();
-                            const getDueTime = dueDate.getHours();
-                            // console.log(compareDueDate);
-                            if(getDate == getDueDate) {
-                                difference = (getDueTime - getTime)+" Jam"
-                            } else {
-                                let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
-                                // console.log(calculate)
-                                // let calculateDays = calculate / (1000*3600*24) 
-                                if (calculate < 7 && calculate > 1) {
-                                    difference = (calculate)+" Hari"   
-                                } else if(calculate > 7 && calculate < 30) {
-                                    difference = (calculate/7)+" Minggu"   
-                                } else if(calculate > 30){
-                                    difference = (calculate/30)+" Bulan"   
-                                } else {
-                                    difference = (24 - (getTime - getDueTime))+" Jam" 
-                                }
-                            }
-                            let finalDueDate = dueDate.toLocaleDateString("id");
-                            let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
-                            this.loansArray.push(
+                            this.dataArray.push(
                                 {
-                                    "id": response.data.data.loans[item].id,
-                                    "row": this.index++,
-                                    "return_id": response.data.data.loans[item].return_id,
-                                    "code": response.data.data.loans[item].code,
-                                    "status": response.data.data.loans[item].status,
-                                    "date_string": finalDate+" "+finalTime,
-                                    "due_date_string": finalDueDate+" "+finalDueTime,
-                                    "due_date_time": getDueDateTime,
-                                    "date": date,
-                                    "difference": difference
+                                    "id": response.data.data.assets[item].id,
+                                    "name": response.data.data.assets[item].name,
+                                    "code": response.data.data.assets[item].code,
+                                    "condition": response.data.data.assets[item].condition,
+                                    "date": finalDate,
+                                    "placement_name": response.data.data.assets[item].placement_name,
+                                    "category_name": response.data.data.assets[item].category_name,
+                                    "study_program_name": response.data.data.assets[item].study_program_name,
                                 }
                             );
-                            // console.log(new Date().getTime() == getDueDateTime)
                         });
 
                         // this.dataArray.filter((index) => index != 2)

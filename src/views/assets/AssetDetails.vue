@@ -495,7 +495,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('assetDetails_'+name+'.pdf')
+                pdf.save('ERAKSA_assetDetails_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
                 clonedElement3.remove();

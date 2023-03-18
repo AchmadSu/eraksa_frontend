@@ -644,7 +644,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('myLoanDetails_'+name+'.pdf')
+                pdf.save('ERAKSA_myLoanDetails_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
                 this.isLoadingResponse2 = false;

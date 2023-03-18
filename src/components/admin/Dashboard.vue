@@ -1,13 +1,14 @@
 <template>
     <!-- Page Heading -->
     <div class="modal fade" id="reportModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h5 class="text-white modal-title" id="eraseModalLabel"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &ensp;Generate Report</h5>
                     <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body bg-light">
+                    <!-- Report Loans -->
                     <div class="card bg-success shadow w-100 mb-3 pb-2">
                         <div class="card-body mt-3">
                             <div class="row no-gutters align-items-center">
@@ -41,18 +42,66 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan transaksi peminjaman per semester
+                                        Laporan transaksi peminjaman <br> tahun ajaran {{ this.academicYear +"/"+ (this.academicYear + 1) }}
                                     </div>
                                     <div class="row no-gutters align-items-center">
-                                        <ReportWeekly></ReportWeekly>
+                                        <ReportSemester></ReportSemester>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <hr>
+                    <hr>
+
+                    <!-- Report Assets -->
+                    <div class="card bg-danger shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan Aset Rusak minggu lalu
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportAssetsWeekly></ReportAssetsWeekly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-danger shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan Aset Rusak per bulan
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportAssetsMonthly></ReportAssetsMonthly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-danger shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan Aset Rusak <br> tahun ajaran {{ this.academicYear +"/"+ (this.academicYear + 1) }}
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportAssetsSemester></ReportAssetsSemester>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn btn-light" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -116,7 +165,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
+                                        Banyak Aset <br> yang sedang dipinjam <br> satu pekan terakhir
                                     </div>
                                     <div v-if="this.isErrorLoans" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -219,7 +268,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                        Banyak Aset <br> yang rusak <br> Saat ini
+                                        Banyak Aset <br> yang rusak <br> satu pekan terakhir
                                     </div>
                                     <div v-if="this.isErrorBroken" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -270,7 +319,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                        Banyak Aset <br> baru yang ditambahkan <br> pekan ini
+                                        Banyak Aset <br> baru yang ditambahkan <br> satu pekan terakhir
                                     </div>
                                     <div v-if="this.isErrorAdded" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -309,10 +358,18 @@
 </template>
 <script>
     import axios from 'axios'
-    import ReportWeekly from '../ReportWeekly.vue';
-    import ReportMonthly from '../ReportMonthly.vue';
+    import ReportWeekly from '../loansReport/ReportWeekly.vue';
+    import ReportMonthly from '../loansReport/ReportMonthly.vue';
+    import ReportSemester from '../loansReport/ReportSemester.vue';
+
+    import ReportAssetsWeekly from '../assetsReport/ReportWeekly.vue';
+    import ReportAssetsMonthly from '../assetsReport/ReportMonthly.vue';
+    import ReportAssetsSemester from '../assetsReport/ReportSemester.vue';
     export default{
         data() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const isBeforeAugust = today.getMonth() < 7;
             return {
                 windowWidth: window.innerWidth,
                 isLoading: true,
@@ -337,6 +394,7 @@
                 styleAddedPercentage: '',
                 isLoadingloanPercentage: false, 
                 cursorStyle: '',
+                academicYear: isBeforeAugust ? currentYear - 1 : currentYear,
                 currentYear: new Date().getFullYear(),
                 currentDate: new Date().toISOString().slice(0, 10),
                 weekAgo: '',
@@ -354,7 +412,11 @@
         },
         components: {
             ReportWeekly,
-            ReportMonthly
+            ReportMonthly,
+            ReportSemester,
+            ReportAssetsMonthly,
+            ReportAssetsSemester,
+            ReportAssetsWeekly
         },
         methods: {
             dashboard(){
@@ -456,68 +518,76 @@
                 // setTimeout(() => this.isLoadingResponse = false, 20000);
                 // console.log('test');
             },
-            async maintenance(){
-                try {
-                    this.isLoadingMaintenance = true;
+            // async maintenance(){
+            //     try {
+            //         this.isLoadingMaintenance = true;
                     
-                    // Banyak aset yang diperbaiki
-                    await axios.get('/assets/percentage', {params: {
-                        "sleep": 0,
-                        "status": "2",
-                        "condition": "0",
-                        "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate
-                    }})
-                    .then((response) => {
-                        this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
-                        this.maintenancePercentage = response.data.data.percentage.toString();
-                        // console.log(this.styleLoanPercentage);
-                        // setTimeout(() => this.isLoadingLoans = false, 8000);
-                    }).catch((err) => {
-                        if(err.response.data.message == 'Error!'){
-                            // console.log(err.response.data.message);
-                            this.errorMaintenance = {
-                                'id': 1,
-                                'message': err.response.data.message,
-                                'detail': err.response.data.data.error
-                            }
-                            this.isErrorMaintenance = true;
-                            // this.returnMainisErrorMaintenancePercentage = true;
-                            // this.isLoadingResponse = false;
-                            // this.isErrorMaintenance = true;
-                            // setTimeout(() => this.isLoadingMainisErrorMaintenance = false, 8000);
-                        } else if(!err.response){
-                            this.errorMaintenance = {
-                                'id': 1,
-                                'message': 'Error!', 
-                                'detail': 'Network Error. Silakan cek koneksi anda!',
-                            }
-                            this.isErrorMaintenance = true;
-                            // this.errorResponseMessage.push(error);
-                            // console.log(this.errorResponseMessage);
-                        } else {
-                            this.errorMaintenance = {
-                                'id': 1,
-                                'message': err.response.status +' '+ err.response.statusText,
-                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
-                            }
-                            this.isErrorMaintenance = true;
-                        }
-                    });
-                    this.isLoadingMaintenance = false;
-                } catch (error) {
-                    this.errorMaintenance = true;
-                    this.isLoadingMaintenance = false;
-                }
-            },
+            //         // Banyak aset yang diperbaiki
+            //         await axios.get('/assets/percentage', {params: {
+            //             "sleep": 0,
+            //             "status": "2",
+            //             "condition": "0",
+            //             "dateOne": this.weekAgo,
+            //             "dateTwo": this.currentDate
+            //         }})
+            //         .then((response) => {
+            //             this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
+            //             this.maintenancePercentage = response.data.data.percentage.toString();
+            //             // console.log(this.styleLoanPercentage);
+            //             // setTimeout(() => this.isLoadingLoans = false, 8000);
+            //         }).catch((err) => {
+            //             if(err.response.data.message == 'Error!'){
+            //                 // console.log(err.response.data.message);
+            //                 this.errorMaintenance = {
+            //                     'id': 1,
+            //                     'message': err.response.data.message,
+            //                     'detail': err.response.data.data.error
+            //                 }
+            //                 this.isErrorMaintenance = true;
+            //                 // this.returnMainisErrorMaintenancePercentage = true;
+            //                 // this.isLoadingResponse = false;
+            //                 // this.isErrorMaintenance = true;
+            //                 // setTimeout(() => this.isLoadingMainisErrorMaintenance = false, 8000);
+            //             } else if(!err.response){
+            //                 this.errorMaintenance = {
+            //                     'id': 1,
+            //                     'message': 'Error!', 
+            //                     'detail': 'Network Error. Silakan cek koneksi anda!',
+            //                 }
+            //                 this.isErrorMaintenance = true;
+            //                 // this.errorResponseMessage.push(error);
+            //                 // console.log(this.errorResponseMessage);
+            //             } else {
+            //                 this.errorMaintenance = {
+            //                     'id': 1,
+            //                     'message': err.response.status +' '+ err.response.statusText,
+            //                     'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+            //                 }
+            //                 this.isErrorMaintenance = true;
+            //             }
+            //         });
+            //         this.isLoadingMaintenance = false;
+            //     } catch (error) {
+            //         this.errorMaintenance = true;
+            //         this.isLoadingMaintenance = false;
+            //     }
+            // },
             async broken(){
                 // Banyak aset yang dalam keadaan rusak
+                let weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate()-7);
+                weekAgo.toISOString().slice(0, 10);
+                this.weekAgo = weekAgo.toISOString().slice(0, 10);
+                console.log(this.weekAgo)
+                console.log(this.currentDate)
                 try {
                     this.isLoadingBroken = true;
                     await axios.get('/assets/percentage', {params: {
                         "sleep": 0,
                         "status": "0",
-                        "condition": "1"
+                        "condition": "1",
+                        "updated1": this.weekAgo,
+                        "updated2": this.currentDate
                     }})
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
@@ -628,7 +698,7 @@
         mounted(){
             setTimeout(() => this.isLoadingResponse = false, 3000);
             this.loans();
-            this.maintenance();
+            // this.maintenance();
             this.broken();
             this.added();
             window.onresize = () => {
