@@ -95,7 +95,10 @@
                         <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center text-dark">
-                        <div :id="'capture'+item.id" class="bg-light text-primary p-md-5">
+                        <div :id="'capture'+item.id" class="bg-light text-primary py-3">
+                            <h4 class="mb-2">
+                                <b>ERAKSA</b>
+                            </h4>
                             <QrCode 
                             :value="item.qrCode"
                             size="300"

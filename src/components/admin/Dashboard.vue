@@ -30,7 +30,7 @@
                                         Laporan transaksi peminjaman per bulan
                                     </div>
                                     <div class="row no-gutters align-items-center">
-                                        <ReportWeekly></ReportWeekly>
+                                        <ReportMonthly></ReportMonthly>
                                     </div>
                                 </div>
                             </div>
@@ -310,6 +310,7 @@
 <script>
     import axios from 'axios'
     import ReportWeekly from '../ReportWeekly.vue';
+    import ReportMonthly from '../ReportMonthly.vue';
     export default{
         data() {
             return {
@@ -352,7 +353,8 @@
             }
         },
         components: {
-            ReportWeekly
+            ReportWeekly,
+            ReportMonthly
         },
         methods: {
             dashboard(){
