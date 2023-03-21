@@ -1,6 +1,6 @@
 <template>
-    <div id="mainRow" class="table-responsive d-none">
-        <table id="primaryTable" class="table table-sm table-borderless table-responsive">
+    <div id="mainAssetsRowWeekly" class="table-responsive d-none">
+        <table id="primaryAssetsTableWeekly" class="table table-sm table-borderless table-responsive">
             <thead id="head" class="d-none">
                 <tr>
                     <th colspan="2">
@@ -29,7 +29,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-hover table-bordered border" id="dataAssetsTableWeekly" width="100%" cellspacing="0">
             <thead>
                 <tr class="text-center">
                     <th class="align-middle">No</th>
@@ -161,7 +161,7 @@
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
                 this.isLoadingResponse = true;
-                const element1 = document.getElementById("mainRow");
+                const element1 = document.getElementById("mainAssetsRowWeekly");
                 let clonedElement1 = element1.cloneNode(true);
                 $(clonedElement1).css("display", "block");
                 // htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
@@ -177,15 +177,15 @@
                 // heightLeft -= pdfHeight;
                 // console.log("Test")
                 pdf.autoTable({
-                    html: '#primaryTable',
+                    html: '#primaryAssetsTableWeekly',
                     theme: 'plain',
                 })
                 pdf.autoTable({
-                    html: '#dataTable',
+                    html: '#dataAssetsTableWeekly',
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('ERAKSA_LoansReportWeekly_'+this.range+'.pdf')
+                pdf.save('ERAKSA_AssetsReportWeekly_'+this.range+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
