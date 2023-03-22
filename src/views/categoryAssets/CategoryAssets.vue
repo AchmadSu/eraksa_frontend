@@ -376,7 +376,7 @@
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
-                take: 0,
+                take: 10,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -538,13 +538,7 @@
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.skip+10;
-                    this.take = 10;
-                } else {
-                    this.skip = this.skip+4;
-                    this.take = 4;
-                }
+                this.skip = this.skip+10;
                 // console.log(this.skip)
                 this.getCategoryAssets(this.skip, this.take)
             },
@@ -913,13 +907,7 @@
             }
             // console.log(this.take);
             // this.loansList();
-            if(this.windowWidth > this.$widthLandscapePhone){
-                this.take = 10;
-                this.getCategoryAssets(this.skip, this.take);
-            } else {
-                this.take = 4;
-                this.getCategoryAssets(this.skip, this.take);
-            } 
+            this.getCategoryAssets(this.skip, this.take); 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)
 

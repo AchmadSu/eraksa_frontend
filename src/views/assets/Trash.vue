@@ -563,7 +563,7 @@
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
-                take: 0,
+                take: 10,
                 dataStudyProgram: '',
                 dataCategory: '',
                 dataPlacements: '',
@@ -703,13 +703,7 @@
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.skip+10;
-                    this.take = 10;
-                } else {
-                    this.skip = this.skip+4;
-                    this.take = 4;
-                }
+                this.skip = this.skip+10;
                 this.getAssets(this.skip, this.take)
             },
             backFunction(){
@@ -1535,13 +1529,7 @@
             }
             // console.log(this.$route.query.search);
             // this.loansList();
-            if(this.windowWidth > this.$widthLandscapePhone){
-                this.take = 10;
-                this.getAssets(this.skip, this.take);
-            } else {
-                this.take = 4;
-                this.getAssets(this.skip, this.take);
-            } 
+            this.getAssets(this.skip, this.take); 
             this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
             this.getCategory(this.skipCategory, this.takeCategory);
             this.getPlacements(this.skipPlacements, this.takePlacements);

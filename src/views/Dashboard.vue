@@ -223,23 +223,12 @@
                 }
             },
             async loansList(){
-                if (this.windowWidth >= this.$widthLandscapePhone) {
-                    // console.log('test1');
-                    this.dataLoans = {
-                        "status": "0",
-                        "condition": "0",
-                        "skip": 0,
-                        "take": 6,
-                        "order": "name"
-                    }
-                } else {
-                    this.dataLoans = {
-                        "status": "0",
-                        "condition": "0",
-                        "skip": 0,
-                        "take": 4,
-                        "order": "name"
-                    }
+                this.dataLoans = {
+                    "status": "0",
+                    "condition": "0",
+                    "skip": 0,
+                    "take": 6,
+                    "order": "name"
                 }
                 try {
                     await axios.get('/assets/getAll', {params: this.dataLoans})
