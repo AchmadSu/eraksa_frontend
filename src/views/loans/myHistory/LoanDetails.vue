@@ -343,6 +343,13 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        <div v-if="this.detailObject.status == '0'" class="row my-4 d-flex justify-content-center">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                                <button @click="updateFunction(this.detailObject.id)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                    Ubah Permintaan Peminjaman&ensp; <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                         <div v-if="this.detailObject.status == '3'" class="row my-4 d-flex justify-content-center">
                                             <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
                                                 <button @click="returnRouterFunction(this.detailObject.return_id)" :disabled="buttonDisabled" class="btn btn-success w-100">
@@ -681,6 +688,42 @@
                         setTimeout(() => {
                             this.$router.push({ name: 'myLoans.returnDetails', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            updateFunction(id){
+                this.isLoadingResponse2 = true;
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'loans.update', query: {data: data} }).then(() => { this.$router.go() })
+                        }, 3000);
                     }
                 } catch(e) {
                     this.errorResponse = [
