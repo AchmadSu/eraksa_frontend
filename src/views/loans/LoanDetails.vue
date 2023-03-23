@@ -50,6 +50,33 @@
                         </div>
                     </div>
                     <div v-else>
+                        <div class="modal fade" id="confirmModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <h5 class="text-white modal-title" id="eraseModalLabel"><i class="fa fa-question-circle" aria-hidden="true"></i>&ensp;Konfirmasi Pengembalian</h5>
+                                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start text-primary ml-3 alert alert-dismissible" role="alert">
+                                            <strong> Apakah anda yakin akan mengonfirmasi pengembalian aset untuk transaksi ini? Konfirmasi tidak dapat dibatalkan</strong> <br/> 
+                                        </div>
+                                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                        <button v-if="this.isLoadingResponse == false" :disabled="buttonDisabled" @click="confirmFunction" type="button" class="btn btn-primary">Konfirmasi</button>
+                                        <button :disabled="buttonDisabled" v-if="this.isLoadingResponse" class="btn btn-primary">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Memuat...
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -118,7 +145,7 @@
                                                 DETAIL PEMINJAMAN
                                             </h3>
                                         </div>
-                                        <form class="form needs-validation" id="app" @submit.prevent="confirmFunction" novalidate>
+                                        <form class="form needs-validation" id="app" novalidate>
                                             <div class="py-lg-4 py-md-0 py-sm-1">
                                                 <div class="row d-flex justify-content-evenly my-sm-5 my-md-3">
                                                     <div class="col-12">
@@ -239,7 +266,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.name}}({{ item.code }})
+                                                                                                {{item.name}} ({{ item.code }})
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
@@ -368,7 +395,10 @@
                                                     <button 
                                                         v-if="$roles != 'Member'
                                                         && this.detailObject.status == '1'"
-                                                        type="submit" class="btn btn-primary"
+                                                        type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmModal"
+                                                        class="btn btn-primary"
                                                         :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'"
                                                         :disabled="!submitEnabled">
                                                         Konfirmasi Pengembalian
@@ -646,6 +676,10 @@
                 // console.log("test")
                 $('#demandModal').modal('hide')
             },
+            closeConfirmModal() {
+                // console.log("test")
+                $('#confirmModal').modal('hide')
+            },
             backFunction(){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -755,6 +789,7 @@
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                         // console.log(this.successResponse)
+                        this.closeConfirmModal();
                         this.openModal();
                         // this.backFunction();
                     }).catch((err) => {

@@ -217,7 +217,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.name}}({{ item.code }})
+                                                                                                {{item.name}} ({{ item.code }})
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
