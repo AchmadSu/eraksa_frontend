@@ -180,8 +180,9 @@
                                                                                         <h5>Status</h5>
                                                                                     </td>
                                                                                     <td class="align-middle px-5">
-                                                                                        <h5 class="text-primary" v-if="this.detailObject.status == '0'">Tersedia</h5>
-                                                                                        <h5 class="text-success" v-else-if="this.detailObject.status == '1'">Sedang Dipinjam</h5>
+                                                                                        <h5 class="text-primary" v-if="this.detailObject.status == '0' && this.detailObject.condition == '0'">Tersedia</h5>
+                                                                                        <h5 class="text-danger" v-if="this.detailObject.status == '0' && this.detailObject.condition == '1'">Tidak Tersedia</h5>
+                                                                                        <h5 class="text-success" v-else-if="this.detailObject.status == '1' && this.detailObject.condition == '0'">Sedang Dipinjam</h5>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -193,7 +194,7 @@
                                                                                 <h6 class="heading text-center mb-3">{{this.detailObject.code}}</h6>
                                                                             </div>
                                                                             <div class="col-sm-12 my-3">
-                                                                                <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
+                                                                                <div :class="this.detailObject.status == '0' && this.detailObject.condition == '1' ? 'card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-danger p-3':'card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3'">
                                                                                     <div class="d-flex justify-content-between">
                                                                                         <div class="d-flex flex-row align-items-center">
                                                                                             <div class="icon"> <i class="fa fa-cube"></i> </div>
@@ -201,12 +202,17 @@
                                                                                                 <span>Kategori Aset</span> <h6>{{this.detailObject.category_name}}</h6>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div v-if="this.detailObject.status == '0'" class="badge text-primary">
+                                                                                        <div v-if="this.detailObject.status == '0' && this.detailObject.condition == '0'" class="badge text-primary">
                                                                                             <span>
                                                                                                 TERSEDIA
                                                                                             </span>
                                                                                         </div>
-                                                                                        <div v-if="this.detailObject.status == '1'" class="badge text-success">
+                                                                                        <div v-if="this.detailObject.status == '0' && this.detailObject.condition == '1'" class="badge text-danger">
+                                                                                            <span>
+                                                                                                RUSAK
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div v-if="this.detailObject.status == '1' && this.detailObject.condition == '0'" class="badge text-success">
                                                                                             <span>
                                                                                                 DIPINJAM
                                                                                             </span>

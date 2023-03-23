@@ -683,7 +683,7 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save(name+'.pdf')
+                pdf.save('ERAKSA_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
                 this.isLoadingResponse2 = false;

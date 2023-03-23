@@ -15,8 +15,8 @@
         <ul class="navbar-nav d-sm-block d-md-none">
             <li class="nav-item">
                 <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
-                    <img v-if="this.windowWidth <= this.$widthPotraitPhone" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
-                    <img v-else-if="this.windowWidth > this.$widthPotraitPhone && this.windowWidth <= 640" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
+                    <img v-if="this.windowWidth <= 570" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
+                    <img v-else-if="this.windowWidth > 570 && this.windowWidth <= 1999" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                     <img v-else-if="this.windowWidth <= this.$widthComputer" class="w-25 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                     <img v-else class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                 </a>

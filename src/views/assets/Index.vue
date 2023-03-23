@@ -177,7 +177,7 @@
                                 <div v-else>
                                     <div class="row d-flex justify-content-evenly">
                                         <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
-                                            <div @click="detailRouter(item.id)" class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
+                                            <div @click="detailRouter(item.id)" :class="item.status == '0' && item.condition == '1' ? 'card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-danger p-3' : 'card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3'">
                                                 <div class="d-flex justify-content-between">
                                                     <div class="d-flex flex-row align-items-center">
                                                         <div class="icon"> <i class="fa fa-cube"></i> </div>
@@ -185,11 +185,14 @@
                                                             <span>Kategori Aset</span> <h6>{{item.category_name}}</h6>
                                                         </div>
                                                     </div>
-                                                    <div v-if="item.status == '0'" class="badge text-primary"> 
+                                                    <div v-if="item.status == '0' && item.condition == '0'" class="badge text-primary"> 
                                                         <span>TERSEDIA</span>  
                                                     </div>
-                                                    <div v-else-if="item.status == '1'" class="badge text-success"> 
+                                                    <div v-else-if="item.status == '1' && item.condition == '0'" class="badge text-success"> 
                                                         <span>DIPINJAM</span>  
+                                                    </div>
+                                                    <div v-else-if="item.status == '0' && item.condition == '1'" class="badge text-danger"> 
+                                                        <span>RUSAK</span>  
                                                     </div>
                                                 </div>
                                                 <div class="my-2">
@@ -925,16 +928,7 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
-            } else if (this.$roles === "Member"){
-                // this.lastPath = this.$router.options.history.state.back
-                this.lastPath = this.$router.options.history.state.back
-                if(this.lastPath != null) {
-                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
-                }
-                else {
-                    this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
-                }
-            }
+            } 
         },  
         mounted(){
             window.onresize = () => {
