@@ -53,9 +53,13 @@
             <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
                 <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
                     <center>
-                        <picture class="mx-5">
-                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                        <picture v-if="windowWidth <= $widthPotraitPhone" class="mx-3">
+                            <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                        </picture>
+                        <picture v-else-if="windowWidth > $widthPotraitPhone && windowWidth < $widthComputer" class="mx-3">
+                            <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-25" alt="...">
                         </picture>
                     </center>
                 </div>

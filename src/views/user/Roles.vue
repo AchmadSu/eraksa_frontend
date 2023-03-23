@@ -185,61 +185,51 @@
                                                                         </tbody>
                                                                     </table>
                                                                 </template>
-                                                                <!-- <template v-else>
+                                                                <template v-else>
                                                                     <div class="row d-flex justify-content-evenly mb-5">
                                                                         <div class="col-12">
-                                                                            <h6 class="heading text-center mb-3">{{this.detailObject.code}}</h6>
+                                                                            <h6 class="heading text-center mb-3">{{this.detailObject.name}}</h6>
                                                                         </div>
                                                                         <div class="col-sm-12 my-3">
                                                                             <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                                                                 <div class="d-flex justify-content-between">
                                                                                     <div class="d-flex flex-row align-items-center">
-                                                                                        <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
+                                                                                        <div class="icon"> <i class="fa fa-user"></i> </div>
                                                                                         <div class="ms-2 c-details">
-                                                                                            <span>Detail Peminjaman</span>
+                                                                                            <span>Detail User</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="my-2 text-left">
                                                                                     <small>
                                                                                         <p>
-                                                                                            Peminjam:
-                                                                                            <b>
-                                                                                                <template v-if="this.detailObject.loaner_name.length > 20">
-                                                                                                    {{(this.detailObject.loaner_name).substring(0,20)+"..."}}
-                                                                                                </template>
-                                                                                                {{this.detailObject.loaner_name}}
-                                                                                            </b>
+                                                                                            <template v-if="this.detailObject.code_type == '0'">
+                                                                                                NIM: <b>{{this.detailObject.code}}</b>
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.code_type == '1'">
+                                                                                                NIDN: <b>{{this.detailObject.code}}</b>
+                                                                                            </template>
+                                                                                            <br> 
+                                                                                            Email: {{ this.detailObject.email }}
                                                                                             <br>
                                                                                             Status:
-                                                                                                <template v-if="this.detailObject.status == '0'">
-                                                                                                    <b>Menunggu Konfirmasi</b>
-                                                                                                </template> 
+                                                                                            <b v-if="this.detailObject.status == '0'" class="text-danger">Belum diaktivasi</b>
+                                                                                            <b v-else-if="this.detailObject.status == '1'" class="text-primary">Aktif</b>
                                                                                             <br>
-                                                                                            Mulai: <br> <b>{{ this.detailObject.date }}</b>
+                                                                                            No. WhatsApp: <br> <b>{{ this.detailObject.phone }}</b>
                                                                                             <br>
-                                                                                            Tenggat: <br> <b>{{ this.detailObject.due_date }}</b>
-                                                                                            <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
-                                                                                            <br>
-                                                                                            <b>Rincian Aset</b> <br>
-                                                                                            <ol>
-                                                                                                <li v-for="item in selectDataArray">
-                                                                                                    <template v-if="item.name.length+item.code.length < 40">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
-                                                                                                    </template>
-                                                                                                </li>
-                                                                                            </ol>
+                                                                                            <template v-if="this.detailObject.study_program_name">
+                                                                                                Program Studi: <b>{{ this.detailObject.study_program_name }}</b>
+                                                                                                <br>
+                                                                                            </template>
+                                                                                            Peran saat ini: <b>{{this.detailObject.user_role}}</b> <br>
                                                                                         </p>
                                                                                     </small>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </template> -->
+                                                                </template>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -267,18 +257,22 @@
                                                             <a @click="getStudyProgram(this.skip, this.take)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
                                                         </div>
                                                         <div class="rounded-0 d-sm-block d-lg-none">
-                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0"></a>                                                  
-                                                            <a @click="getStudyProgram(this.skip, this.take)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0"></a>                                                  
+                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                            <a @click="getStudyProgram(this.skip, this.take)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>                                                  
                                                         </div>
                                                     </div>
                                                     <div v-else>
-                                                        <button type="submit" class="d-sm-block d-lg-none btn btn-primary rounded-0" style="width:100%;" :disabled="true">
-                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        </button>
-                                                        <button type="submit" class="d-sm-none d-lg-block btn btn-primary rounded-0" style="width:100%;" :disabled="true">
-                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                            Memuat...
-                                                        </button>
+                                                        <div class="rounded-0 d-sm-block d-lg-none">
+                                                            <button type="submit" class="d-sm-block d-lg-none btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="rounded-0 d-none d-lg-block">
+                                                            <button type="submit" class="d-sm-none d-lg-block btn btn-primary rounded-0" style="width:100%;" :disabled="true">
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                Memuat...
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     <div :class="isNaN(this.form.study_programs) ? 'text-start invalid-feedback' : 'd-none'">
                                                         Pilih salah satu Program Studi!
@@ -368,8 +362,6 @@
                 errorDetail: false,
                 loansStatus: 0,
                 keyWords: '',
-                prev: 0,
-                next: 5,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -408,7 +400,7 @@
                 deleteArray: [],
                 detailObject: {},
                 skip: 0,
-                take: 5,
+                take: 10,
                 username: this.$session.name,
                 errorAssets: false,
                 errorAssetsArray: [],

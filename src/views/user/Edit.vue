@@ -110,7 +110,7 @@
                                         </div>
                                         <div class="py-lg-4 py-md-0 py-sm-1">
                                             <div :class="windowWidth >= $widthLandscapePhone ? 'row' : 'd-none'">
-                                                <div class="col-6">
+                                                <div class="col-12">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text bg-transparent" id="basic-addon1">
                                                             <font-awesome-icon class="text-secondary" icon="fa-solid fa-user" />
@@ -124,16 +124,6 @@
                                                         <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
                                                             Panjang minimal nama adalah 3 karakter
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="input-group mb-3">
-                                                        <input 
-                                                            name="lastname" type="text" class="form-control w-100"
-                                                            placeholder="Nama belakang" aria-label="name" 
-                                                            aria-describedby="basic-addon1"
-                                                            v-model="form.lastname"
-                                                        />
                                                     </div>
                                                 </div>
                                             </div>

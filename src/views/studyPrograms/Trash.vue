@@ -268,7 +268,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                        <td class="textcenter align-middle">
+                                                        <td class="text-center align-middle">
                                                             <input v-model="this.filterIds" type="checkbox" :value="item.id">
                                                         </td>
                                                         <td class="align-middle"><b>{{item.name}}</b></td>

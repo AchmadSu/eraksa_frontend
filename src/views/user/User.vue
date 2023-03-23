@@ -408,7 +408,9 @@
                                                                 </big>
                                                                 <br>
                                                                 <big>No. WhatsApp: {{item.phone}}</big><br>
-                                                                <big v-if="item.study_program_name">Program Studi: {{item.study_program_name}}</big><br>
+                                                                <template v-if="item.study_program_name">
+                                                                    <big>Program Studi: {{item.study_program_name}}</big><br>
+                                                                </template>
                                                                 <big>Peran Pengguna: <b>{{item.user_role}}</b></big><br>
                                                             </p>
                                                             <div class="mt-3">

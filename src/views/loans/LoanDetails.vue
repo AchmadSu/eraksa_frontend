@@ -61,7 +61,7 @@
                                         <div class="text-start text-primary ml-3 alert alert-dismissible" role="alert">
                                             <strong> Apakah anda yakin akan mengonfirmasi pengembalian aset untuk transaksi ini? Konfirmasi tidak dapat dibatalkan</strong> <br/> 
                                         </div>
-                                        <div v-for="item in errorRestore" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                                        <div v-for="item in errorResponse" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
                                             <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
@@ -386,10 +386,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
-                                                    <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                                                    <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                                                 </div>
                                                 <div v-if="isLoadingResponse == false">
                                                     <button 

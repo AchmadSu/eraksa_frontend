@@ -26,7 +26,7 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <div v-if="this.$roles == 'Super-Admin'">
+                        <div v-if="this.$roles != 'Member'">
                             <Dashboard></Dashboard>
                             <hr class="sidebar-divider bg-secondary">
                         </div>
