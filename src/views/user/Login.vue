@@ -306,7 +306,9 @@
                         "email": response.data.data.user.email,
                         "status": response.data.data.user.status,
                         "phone": response.data.data.user.phone,
-                        "study_program_id": response.data.data.user.study_program_id
+                        "study_program_id": response.data.data.user.study_program_id,
+                        "code": response.data.data.user.code,
+                        "code_type": response.data.data.user.code_type
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     localStorage.setItem('loggedIn', true);

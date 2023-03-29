@@ -36,7 +36,7 @@
                     <th class="align-middle">Nama</th>
                     <th class="align-middle">Kode Aset</th>
                     <th class="align-middle">Kondisi</th>
-                    <th class="align-middle">Program Studi</th>
+                    <th class="align-middle">Pemilik</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,6 +46,57 @@
                     <td class="align-middle">{{item.code}}</td>
                     <td class="align-middle">Rusak</td>
                     <td class="align-middle">{{item.study_program_name}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="signatureAssetsMonthly" class="table table-borderless">
+            <tbody>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Laporan dibuat oleh
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            {{this.$session.name}}
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            <template v-if="this.$session.code_type == '0'">
+                                NIM. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '1'">
+                                NIDN. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '2'">
+                                NIP. 
+                            </template>
+                            {{this.$session.code}}
+                        </h5>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -116,6 +167,7 @@
                 selectedYear: currentYear,
                 selectedMonth: 'Bulan',
                 yearRange: Array.from({length: 10}, (_, i) => currentYear - i),
+                currentDate: new Date(),
                 currentTime: new Date().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -282,6 +334,10 @@
                     html: '#monthlyAssetDetails',
                     showHead: 'everyPage',
                     theme: 'grid'
+                })
+                pdf.autoTable({
+                    html: '#signatureAssetsMonthly',
+                    theme: 'plain',
                 })
                 pdf.save('ERAKSA_AssetsReportMonthly_'+this.range+'.pdf')
                 clonedElement1.remove();

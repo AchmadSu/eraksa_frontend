@@ -33,11 +33,12 @@
             <thead>
                 <tr class="text-center">
                     <th class="align-middle">No</th>
-                    <th class="align-middle">Kode</th>
+                    <th class="align-middle">Kode Transaksi</th>
                     <th class="align-middle">Status</th>
-                    <th class="align-middle">Waktu Mulai</th>
-                    <th class="align-middle">Tenggat Waktu</th>
+                    <th class="align-middle">Waktu Peminjaman</th>
+                    <th class="align-middle">Deadline Pengembalian</th>
                     <th class="align-middle">Periode</th>
+                    <th class="align-middle">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +53,7 @@
                             <b class="text-primary">Aktif</b>
                         </template>
                         <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                            <b class="text-danger">Overdue</b>
+                            <b class="text-danger">Terlambat</b>
                         </template>
                         <template v-if="item.status == '2'">
                             <b class="text-danger">Ditolak</b>
@@ -64,6 +65,71 @@
                     <td class="align-middle text-center">{{item.date_string}}</td>
                     <td class="align-middle text-center">{{item.due_date_string}}</td>
                     <td class="align-middle text-center"><b>{{item.difference}}</b></td>
+                    <td class="align-middle text-center">
+                        <b>{{item.loaner_name}}</b> <br>
+                        <template v-if="item.loaner_code_type == '0'">
+                            NIM.
+                        </template>
+                        <template v-else-if="item.loaner_code_type == '1'">
+                            NIDN.
+                        </template>
+                        <template v-else-if="item.loaner_code_type == '2'">
+                            NIP.
+                        </template>
+                        <b>{{item.loaner_code}}</b> <br>
+                        No. WhatsApp: <b>{{item.loaner_phone}}</b>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="signatureLoansWeekly" class="table table-borderless">
+            <tbody>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Laporan dibuat oleh
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            {{this.$session.name}}
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            <template v-if="this.$session.code_type == '0'">
+                                NIM. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '1'">
+                                NIDN. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '2'">
+                                NIP. 
+                            </template>
+                            {{this.$session.code}}
+                        </h5>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -111,6 +177,7 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
+                currentDate: new Date(),
                 currentYear: new Date().getFullYear(),
                 currentTime: new Date().getTime(),
                 setProgress: false,
@@ -203,6 +270,10 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
+                pdf.autoTable({
+                    html: '#signatureLoansWeekly',
+                    theme: 'plain',
+                })
                 pdf.save('ERAKSA_LoansReportWeekly_'+this.range+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
@@ -288,6 +359,10 @@
                                     "id": response.data.data.loans[item].id,
                                     "row": this.index++,
                                     "return_id": response.data.data.loans[item].return_id,
+                                    "loaner_name": response.data.data.loans[item].loaner_name,
+                                    "loaner_code_type": response.data.data.loans[item].loaner_code_type,
+                                    "loaner_code": response.data.data.loans[item].loaner_code,
+                                    "loaner_phone": response.data.data.loans[item].loaner_phone,
                                     "code": response.data.data.loans[item].code,
                                     "status": response.data.data.loans[item].status,
                                     "date_string": finalDate+" "+finalTime,

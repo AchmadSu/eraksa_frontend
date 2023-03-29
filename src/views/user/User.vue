@@ -142,27 +142,30 @@
                                                 <h5 class="text-center">
                                                     Menampilkan hasil pencarian
                                                     <template v-if="this.keyWords != ''">
-                                                        Kata Kunci: {{ this.keyWords }} 
+                                                        kata kunci: {{ this.keyWords }} 
                                                         <br>
                                                     </template>
                                                     <template v-if="this.keyCodeType != ''">
                                                         <template v-if="this.keyCodeType == '0'">
-                                                            Tipe: Mahasiswa
+                                                            jenis: Mahasiswa
                                                         </template>
                                                         <template v-else-if="this.keyCodeType == '1'">
-                                                            Tipe: Dosen
+                                                            jenis: Dosen
+                                                        </template>
+                                                        <template v-else-if="this.keyCodeType == '2'">
+                                                            jenis: Karyawan
                                                         </template>
                                                         <br>
                                                     </template>
                                                     <template v-if="this.keyRole != ''">
                                                         <template v-if="this.keyRole == '1'">
-                                                            Peran: Super-Admin
+                                                            peran: Super-Admin
                                                         </template>
                                                         <template v-else-if="this.keyRole == '2'">
-                                                            Peran: Admin
+                                                            peran: Admin
                                                         </template>
                                                         <template v-else-if="this.keyRole == '2'">
-                                                            Peran: Member
+                                                            peran: Member
                                                         </template>
                                                         <br>
                                                     </template>
@@ -206,6 +209,7 @@
                                                                 <option selected disabled>Jenis Pengguna</option>
                                                                 <option value="0">Mahasiswa</option>
                                                                 <option value="1">Dosen</option>
+                                                                <option value="2">Karyawan</option>
                                                             </select>
                                                             <select 
                                                                 class="form-select form-select mb-3"
@@ -217,7 +221,7 @@
                                                                 <option value="1">Aktif</option>
                                                                 <option value="0">Belum diverifikasi</option>
                                                             </select>
-                                                            <input type="text"
+                                                            <input v-if="$roles == 'Super-Admin'" type="text"
                                                                 v-model="form.study_program_keyWords"
                                                                 name="study_programs"
                                                                 class="form-control input-lg bg-light" 
@@ -272,7 +276,7 @@
                                                         <tr class="text-center">
                                                             <th class="align-middle">Pilih</th>
                                                             <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">NIM/NIDN</th>
+                                                            <th class="align-middle">NIM/NIDN/NIP</th>
                                                             <th class="align-middle">Email</th>
                                                             <th class="align-middle">Tipe</th>
                                                             <th class="align-middle">Status</th>
@@ -311,9 +315,14 @@
                                                                     Mahasiswa
                                                                 </b>
                                                             </td>
-                                                            <td v-else class="align-middle text-center">
+                                                            <td v-else-if="item.code_type == '1'" class="align-middle text-center">
                                                                 <b>
                                                                     Dosen
+                                                                </b>
+                                                            </td>
+                                                            <td v-else-if="item.code_type == '2'" class="align-middle text-center">
+                                                                <b>
+                                                                    Karyawan
                                                                 </b>
                                                             </td>
                                                             <td v-if="item.status == '1'" class="align-middle text-center text-primary">
@@ -381,8 +390,11 @@
                                                                     <template v-if="item.code_type == '0'">
                                                                         NIM: 
                                                                     </template>
-                                                                    <template v-else>
-                                                                        NIDN:
+                                                                    <template v-else-if="item.code_type == '1'">
+                                                                        NIDN: 
+                                                                    </template>
+                                                                    <template v-else-if="item.code_type == '2'">
+                                                                        NIP: 
                                                                     </template>
                                                                     {{item.code}}
                                                                 </big>
@@ -598,7 +610,7 @@
                     console.log(val)
                     this.searchKeyWords = val.keyWords;
                     
-                    if(val.code_type == '0' || val.code_type == '1') {
+                    if(val.code_type == '0' || val.code_type == '1' || val.code_type == '2') {
                         this.searchCodeType = val.code_type;
                     }
 

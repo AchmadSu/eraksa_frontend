@@ -234,7 +234,7 @@
                                                                                         </p>
                                                                                         <div class=" mt-3">
                                                                                             <div class="mt-3 text-left"> 
-                                                                                                <span class="text2">{{this.detailObject.study_program_name}}</span><br>
+                                                                                                <span class="text2">Pemilik: <br> {{this.detailObject.study_program_name}}</span><br>
                                                                                                 <span class="text2">{{this.detailObject.placement_name}}</span>
                                                                                             </div>
                                                                                         </div>
@@ -254,7 +254,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <div v-if="$roles != 'Member'" class="row my-4">
+                                        <div v-if="$roles == 'Super-Admin'" class="row my-4">
                                             <div :class="this.windowWidth <= $widthLandscapePhone ? 'd-none':'col-4'">
                                                 &nbsp;
                                             </div>
@@ -263,6 +263,18 @@
                                                     <i class="fa fa-download"></i>&ensp; Unduh Rincian
                                                 </button>
                                             </div>
+                                            <p class="text-center mt-3">Rincian yang diunduh menyesuaikan dengan tabel riwayat peminjaman aset</p>
+                                        </div>
+                                        <div v-else-if="$roles == 'Admin' && $session.study_program_id == this.detailObject.study_program_id" class="row my-4">
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'd-none':'col-4'">
+                                                &nbsp;
+                                            </div>
+                                            <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                                <button @click="downloadFunction(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                    <i class="fa fa-download"></i>&ensp; Unduh Rincian
+                                                </button>
+                                            </div>
+                                            <p class="text-center mt-3">Rincian yang diunduh menyesuaikan dengan tabel riwayat peminjaman aset</p>
                                         </div>
                                     </div>
                                 </div>
@@ -278,7 +290,9 @@
                                 </div>
                             </div>
                         </div>
-                        <AssetsHistory v-if="this.$roles != 'Member'" :dataId="this.detailObject.id">
+                        <AssetsHistory v-if="this.$roles == 'Super-Admin'" :dataId="this.detailObject.id">
+                        </AssetsHistory>
+                        <AssetsHistory v-else-if="this.$roles == 'Admin' && this.$session.study_program_id == this.detailObject.study_program_id" :dataId="this.detailObject.id">
                         </AssetsHistory>
                     </div>
                     <!-- /.container-fluid -->

@@ -14,7 +14,7 @@
                         <h5>Periode </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: Tahun Ajaran {{ this.academicYear +"/"+ (this.academicYear + 1) }} Semester {{this.range}}</h5>
+                        <h5>: Tahun Ajaran {{ this.resultAcademicYear }} Semester {{this.range}}</h5>
                     </td>
                 </tr>
                 <tr>
@@ -36,7 +36,7 @@
                     <th class="align-middle">Nama</th>
                     <th class="align-middle">Kode Aset</th>
                     <th class="align-middle">Kondisi</th>
-                    <th class="align-middle">Program Studi</th>
+                    <th class="align-middle">Pemilik</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,8 +49,69 @@
                 </tr>
             </tbody>
         </table>
+        <table id="signatureAssetsSemester" class="table table-borderless">
+            <tbody>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Laporan dibuat oleh
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            {{this.$session.name}}
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            <template v-if="this.$session.code_type == '0'">
+                                NIM. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '1'">
+                                NIDN. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '2'">
+                                NIP. 
+                            </template>
+                            {{this.$session.code}}
+                        </h5>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <form>
+        <div class="mb-3">
+            <select :disabled="isLoading" v-model="selectedYear" class="form-select form-select" aria-label=".form-select example">
+                <option selected disabled>Tahun Ajaran</option>
+                <template v-for="year in yearRange">
+                    <option :key="year" :value="year" v-if="this.academicYear >= year">
+                        {{year}}/{{year+1}}
+                    </option>
+                </template>
+            </select>
+        </div>
         <div class="mb-3">
             <select :disabled="isLoading" v-model="selectedSemester" class="form-select form-select" aria-label=".form-select example">
                 <option selected disabled>Semester</option>
@@ -103,6 +164,7 @@
                 isLoadingResponse: false,
                 isParams1: false,
                 isParams2: false,
+                resultAcademicYear: 0,
                 academicYear: isBeforeAugust ? currentYear - 1 : currentYear,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
@@ -111,9 +173,10 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                selectedYear: currentYear,
+                selectedYear: 'Tahun Ajaran',
                 selectedSemester: 'Semester',
                 yearRange: Array.from({length: 10}, (_, i) => currentYear - i),
+                currentDate: new Date(),
                 currentTime: new Date().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -171,6 +234,17 @@
             }
         },
         watch: {
+            selectedYear: {
+                handler: function (val) {
+                    this.year = val;
+                    if(val > 0) {
+                        this.isParamsChange = true;
+                    } else {
+                        this.isParamsChange = false;
+                    }
+                },
+                deep: true,
+            },
             selectedSemester: {
                 handler: function (val) {
                     // console.log(val)
@@ -219,7 +293,11 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('ERAKSA_AssetsReportSemester_'+this.academicYear +"/"+ (this.academicYear + 1)+"_"+this.range+'.pdf')
+                pdf.autoTable({
+                    html: '#signatureAssetsSemester',
+                    theme: 'plain',
+                })
+                pdf.save('ERAKSA_AssetsReportSemester_'+this.resultAcademicYear+"_"+this.range+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
@@ -235,7 +313,7 @@
                 try {
                     let data = {
                         "semester": this.selectedSemester,
-                        "year": this.academicYear
+                        "year": this.selectedYear
                     }
                     // console.log(data);
                     await axios.get('/assets/reportSemester/', {params: data})
@@ -261,6 +339,7 @@
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         this.range = response.data.data.range;
+                        this.resultAcademicYear = response.data.data.academicYear;
                         this.isLoadingResponse = false;
                         this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;

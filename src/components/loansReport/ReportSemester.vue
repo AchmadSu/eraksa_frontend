@@ -14,7 +14,7 @@
                         <h5>Periode </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: Tahun Ajaran {{ this.academicYear +"/"+ (this.academicYear + 1) }} Semester {{this.range}}</h5>
+                        <h5>: Tahun Ajaran {{ this.resultAcademicYear }} Semester {{this.range}}</h5>
                     </td>
                 </tr>
                 <tr>
@@ -33,11 +33,12 @@
             <thead>
                 <tr class="text-center">
                     <th class="align-middle">No</th>
-                    <th class="align-middle">Kode</th>
+                    <th class="align-middle">Kode Transaksi</th>
                     <th class="align-middle">Status</th>
-                    <th class="align-middle">Waktu Mulai</th>
-                    <th class="align-middle">Tenggat Waktu</th>
+                    <th class="align-middle">Waktu Peminjaman</th>
+                    <th class="align-middle">Deadline Pengembalian</th>
                     <th class="align-middle">Periode</th>
+                    <th class="align-middle">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +53,7 @@
                             <b class="text-primary">Aktif</b>
                         </template>
                         <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                            <b class="text-danger">Overdue</b>
+                            <b class="text-danger">Terlambat</b>
                         </template>
                         <template v-if="item.status == '2'">
                             <b class="text-danger">Ditolak</b>
@@ -64,11 +65,86 @@
                     <td class="align-middle text-center">{{item.date_string}}</td>
                     <td class="align-middle text-center">{{item.due_date_string}}</td>
                     <td class="align-middle text-center"><b>{{item.difference}}</b></td>
+                    <td class="align-middle text-center">
+                        <b>{{item.loaner_name}}</b> <br>
+                        <template v-if="item.loaner_code_type == '0'">
+                            NIM.
+                        </template>
+                        <template v-else-if="item.loaner_code_type == '1'">
+                            NIDN.
+                        </template>
+                        <template v-else-if="item.loaner_code_type == '2'">
+                            NIP.
+                        </template>
+                        <b>{{item.loaner_code}}</b> <br>
+                        No. WhatsApp: <b>{{item.loaner_phone}}</b>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="signatureLoansSemester" class="table table-borderless">
+            <tbody>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>
+                            Laporan dibuat oleh
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5>&nbsp;</h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            {{this.$session.name}}
+                        </h5>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <td>
+                        <h5 class="text-center">
+                            <template v-if="this.$session.code_type == '0'">
+                                NIM. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '1'">
+                                NIDN. 
+                            </template>
+                            <template v-else-if="this.$session.code_type == '2'">
+                                NIP. 
+                            </template>
+                            {{this.$session.code}}
+                        </h5>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
     <form>
+        <div class="mb-3">
+            <select :disabled="isLoading" v-model="selectedYear" class="form-select form-select" aria-label=".form-select example">
+                <option selected disabled>Tahun Ajaran</option>
+                <template v-for="year in yearRange">
+                    <option :key="year" :value="year" v-if="this.academicYear >= year">
+                        {{year}}/{{year+1}}
+                    </option>
+                </template>
+            </select>
+        </div>
         <div class="mb-3">
             <select :disabled="isLoading" v-model="selectedSemester" class="form-select form-select" aria-label=".form-select example">
                 <option selected disabled>Semester</option>
@@ -121,6 +197,7 @@
                 isLoadingResponse: false,
                 isParams1: false,
                 isParams2: false,
+                resultAcademicYear: 0,
                 academicYear: isBeforeAugust ? currentYear - 1 : currentYear,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
@@ -129,9 +206,10 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                selectedYear: currentYear,
+                selectedYear: 'Tahun Ajaran',
                 selectedSemester: 'Semester',
                 yearRange: Array.from({length: 10}, (_, i) => currentYear - i),
+                currentDate: new Date(),
                 currentTime: new Date().getTime(),
                 setProgress: false,
                 widthProgressBar: 0,
@@ -189,6 +267,17 @@
             }
         },
         watch: {
+            selectedYear: {
+                handler: function (val) {
+                    this.year = val;
+                    if(val > 0) {
+                        this.isParamsChange = true;
+                    } else {
+                        this.isParamsChange = false;
+                    }
+                },
+                deep: true,
+            },
             selectedSemester: {
                 handler: function (val) {
                     // console.log(val)
@@ -237,7 +326,11 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
-                pdf.save('ERAKSA_LoansReportSemester_'+this.academicYear +"/"+ (this.academicYear + 1)+"_"+this.range+'.pdf')
+                pdf.autoTable({
+                    html: '#signatureLoansSemester',
+                    theme: 'plain',
+                })
+                pdf.save('ERAKSA_LoansReportSemester_'+this.resultAcademicYear+"_"+this.range+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
@@ -253,7 +346,7 @@
                 try {
                     let data = {
                         "semester": this.selectedSemester,
-                        "year": this.academicYear
+                        "year": this.selectedYear
                     }
                     // console.log(data);
                     await axios.get('/loans/reportSemester/', {params: data})
@@ -329,6 +422,10 @@
                                     "id": response.data.data.loans[item].id,
                                     "row": this.index++,
                                     "return_id": response.data.data.loans[item].return_id,
+                                    "loaner_name": response.data.data.loans[item].loaner_name,
+                                    "loaner_code_type": response.data.data.loans[item].loaner_code_type,
+                                    "loaner_code": response.data.data.loans[item].loaner_code,
+                                    "loaner_phone": response.data.data.loans[item].loaner_phone,
                                     "code": response.data.data.loans[item].code,
                                     "status": response.data.data.loans[item].status,
                                     "date_string": finalDate+" "+finalTime,
@@ -344,6 +441,7 @@
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
                         this.range = response.data.data.range;
+                        this.resultAcademicYear = response.data.data.academicYear;
                         this.isLoadingResponse = false;
                         this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;
