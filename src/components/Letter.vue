@@ -11,7 +11,7 @@
                                         <table id="letterTable" class="table table-responsive table-sm table-borderless">
                                             <thead>
                                                 <tr>
-                                                    <td class="text-center align-middle" colspan="2">
+                                                    <td id="headerLetter" class="text-center align-middle" colspan="2">
                                                         <h4>Surat Pernyataan</h4>
                                                     </td>
                                                 </tr>
@@ -115,6 +115,18 @@
                                                 <tr class="text-center">
                                                     <td>
                                                         <h5>
+                                                            &nbsp;
+                                                        </h5>
+                                                    </td>
+                                                    <td>
+                                                        <h5>
+                                                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                                                        </h5>
+                                                    </td>
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <td>
+                                                        <h5>
                                                             Disetujui Oleh,
                                                         </h5>
                                                     </td>
@@ -167,8 +179,11 @@
                                                             <template v-if="this.detailObject.lender_code_type == '0'">
                                                                 NIM. 
                                                             </template>
-                                                            <template v-else>
+                                                            <template v-else-if="this.detailObject.lender_code_type == '1'">
                                                                 NIDN. 
+                                                            </template>
+                                                            <template v-else-if="this.detailObject.lender_code_type == '2'">
+                                                                NIP. 
                                                             </template>
                                                             {{this.detailObject.lender_code}}
                                                         </h5>
@@ -178,8 +193,11 @@
                                                             <template v-if="this.detailObject.loaner_code_type == '0'">
                                                                 NIM. 
                                                             </template>
-                                                            <template v-else>
+                                                            <template v-else-if="this.detailObject.loaner_code_type == '1'">
                                                                 NIDN. 
+                                                            </template>
+                                                            <template v-else-if="this.detailObject.loaner_code_type == '2'">
+                                                                NIP. 
                                                             </template>
                                                             {{this.detailObject.loaner_code}}
                                                         </h5>
@@ -285,6 +303,7 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
+                currentDate: new Date(),
                 currentYear: new Date().getFullYear(),
                 currentTime: new Date().getTime(),
                 setProgress: false,
@@ -395,6 +414,12 @@
                 pdf.autoTable({
                     html: '#letterTable',
                     theme: 'plain',
+                    body: [{
+                        content: '#headerLetter',
+                        styles: {
+                            halign:'center'
+                        }
+                    }]
                 })
                 pdf.autoTable({
                     html: '#signatureTable',

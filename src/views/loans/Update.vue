@@ -180,18 +180,18 @@
                                                                             <h6 class="h6 text-secondary">
                                                                                 <template v-if="this.windowWidth > $widthPotraitPhone">
                                                                                     <template v-if="item.study_program_name.length < 35">
-                                                                                        {{item.study_program_name}}
+                                                                                        Pemilik: {{item.study_program_name}}
                                                                                     </template>
                                                                                     <template v-else>
-                                                                                        {{item.study_program_name.substring(0,35)+"..."}}
+                                                                                        Pemilik: {{item.study_program_name.substring(0,35)+"..."}}
                                                                                     </template>
                                                                                 </template>
                                                                                 <template v-else>
                                                                                     <template v-if="item.study_program_name.length < 20">
-                                                                                        {{item.study_program_name}}
+                                                                                        Pemilik: {{item.study_program_name}}
                                                                                     </template>
                                                                                     <template v-else>
-                                                                                        {{item.study_program_name.substring(0,20)+"..."}}
+                                                                                        Pemilik: {{item.study_program_name.substring(0,20)+"..."}}
                                                                                     </template>
                                                                                 </template>
                                                                             </h6>
@@ -289,15 +289,15 @@
                                                                         {{item.code}}
                                                                     </template>
                                                                     <template v-else>
-                                                                        {{ (item.code).substring(0,30)+"..." }}
+                                                                        {{ (item.code).substring(0,24)+"..." }}
                                                                     </template>
                                                                 </h6>
                                                                 <h6>
                                                                     <template v-if="item.study_program_name.length < 30">
-                                                                        {{item.study_program_name}}
+                                                                        Pemilik: {{item.study_program_name}}
                                                                     </template>
                                                                     <template v-else>
-                                                                        {{(item.study_program_name).substring(0,30)+"..."}}
+                                                                        Pemilik: {{(item.study_program_name).substring(0,24)+"..."}}
                                                                     </template>
                                                                 </h6>
                                                                 <div class=" mt-3">

@@ -156,10 +156,10 @@
                                                     <thead>
                                                         <tr class="text-center">
                                                             <th class="align-middle">No</th>
-                                                            <th class="align-middle">Kode</th>
+                                                            <th class="align-middle">Kode Transaksi</th>
                                                             <th class="align-middle">Status</th>
-                                                            <th class="align-middle">Waktu Mulai</th>
-                                                            <th class="align-middle">Tenggat Waktu</th>
+                                                            <th class="align-middle">Waktu Peminjaman</th>
+                                                            <th class="align-middle">Deadline Pengembalian</th>
                                                             <th class="align-middle">Periode</th>
                                                             <th class="align-middle">Aksi</th>
                                                         </tr>
@@ -202,8 +202,8 @@
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
                                                                 <big v-if="item.status == '2'">Status: <b class="text-danger">Ditolak</b></big><br>
-                                                                <big>Tanggal: {{item.date_string}}</big><br>
-                                                                <big>Tenggat: {{item.due_date_string}}</big><br>
+                                                                <big>Waktu Pinjam: {{item.date_string}}</big><br>
+                                                                <big>Deadline: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
                                                             </p>
                                                             <div class="mt-3">

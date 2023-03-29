@@ -121,8 +121,11 @@
                                                                                         <template v-if="this.detailObject.loaner_code_type == '0'">
                                                                                             NIM
                                                                                         </template>
-                                                                                        <template v-else>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
                                                                                             NIDN
+                                                                                        </template>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
+                                                                                            NIP
                                                                                         </template>
                                                                                     </h5>
                                                                                 </td>
@@ -145,8 +148,11 @@
                                                                                             <template v-if="this.detailObject.lender_code_type == '0'">
                                                                                                 NIM
                                                                                             </template>
-                                                                                            <template v-else>
+                                                                                            <template v-else-if="this.detailObject.lender_code_type == '1'">
                                                                                                 NIDN
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.lender_code_type == '2'">
+                                                                                                NIP
                                                                                             </template>
                                                                                         </h5>
                                                                                     </td>
@@ -207,7 +213,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.name}} ({{ item.code }})
+                                                                                                {{item.code}} ({{ item.study_program_name }})
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
@@ -236,7 +242,7 @@
                                                                                     <h5>Kategori</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Prodi</h5>
+                                                                                    <h5>Pemilik</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </thead>
@@ -296,7 +302,7 @@
                                                                                                     <b class="text-primary">Aktif</b>
                                                                                                 </template> 
                                                                                                 <template v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time">
-                                                                                                    <b class="text-danger">Overdue</b>
+                                                                                                    <b class="text-danger">Terlambat</b>
                                                                                                 </template> 
                                                                                                 <template v-if="this.detailObject.status == '2'">
                                                                                                     <b>Ditolak</b>

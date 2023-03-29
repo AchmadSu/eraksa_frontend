@@ -202,10 +202,10 @@
                                                     <thead>
                                                         <tr class="text-center">
                                                             <th class="align-middle">No</th>
-                                                            <th class="align-middle">Kode</th>
+                                                            <th class="align-middle">Kode Transaksi</th>
                                                             <th class="align-middle">Status</th>
-                                                            <th class="align-middle">Waktu Mulai</th>
-                                                            <th class="align-middle">Tenggat Waktu</th>
+                                                            <th class="align-middle">Waktu Peminjaman</th>
+                                                            <th class="align-middle">Deadline Pengembalian</th>
                                                             <th class="align-middle">Periode</th>
                                                             <th class="align-middle">Peminjam</th>
                                                             <th class="align-middle">Disetujui Oleh</th>
@@ -218,7 +218,7 @@
                                                             <td class="align-middle text-center">{{index+1}}</td>
                                                             <td class="align-middle text-justify"><b>{{item.code}}</b></td>
                                                             <td class="align-middle text-center text-primary" v-if="item.status == '1' && this.currentTime <= item.due_date_time"><b>Aktif</b></td>
-                                                            <td class="align-middle text-center text-danger" v-else-if="item.status == '1' && this.currentTime > item.due_date_time"><b>Overdue</b></td>
+                                                            <td class="align-middle text-center text-danger" v-else-if="item.status == '1' && this.currentTime > item.due_date_time"><b>Terlambat</b></td>
                                                             <td class="align-middle text-center">{{item.date_string}}</td>
                                                             <td class="align-middle text-center">{{item.due_date_string}}</td>
                                                             <td class="align-middle text-center"><b>{{item.difference}}</b></td>
@@ -273,9 +273,9 @@
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
                                                                 <big v-if="item.status == '1' && this.currentTime <= item.due_date_time">Status: <b class="text-primary">Aktif</b></big><br>
-                                                                <big v-if="item.status == '1' && this.currentTime > item.due_date_time">Status: <b class="text-danger">Overdue</b></big><br>
-                                                                <big>Tanggal: {{item.date_string}}</big><br>
-                                                                <big>Tenggat: {{item.due_date_string}}</big><br>
+                                                                <big v-if="item.status == '1' && this.currentTime > item.due_date_time">Status: <b class="text-danger">Terlambat</b></big><br>
+                                                                <big>Waktu Pinjam: {{item.date_string}}</big><br>
+                                                                <big>Deadline: {{item.due_date_string}}</big><br>
                                                                 <big>Periode: <b>{{item.difference}}</b></big><br>
                                                                 <big>Peminjam:
                                                                     <template v-if="item.loaner_name.length < 20">
@@ -285,7 +285,7 @@
                                                                         {{item.loaner_name.substring(0,20)+"..."}}
                                                                     </template>
                                                                 </big><br>
-                                                                <big>Ditolak Oleh:
+                                                                <big>Disetujui Oleh:
                                                                     <template v-if="item.lender_name.length < 20">
                                                                         {{item.lender_name}}
                                                                     </template>

@@ -156,10 +156,10 @@
                                     :disabled="!this.radioEnabled">
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
                                     'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 w-100 col-6 btn btn-outline-success rounded-start'" 
+                                    'p-3 w-100 col-4 btn btn-outline-success rounded-start'" 
                                     for="code_type0"
                                 >
-                                Saya <b>MAHASISWA</b>
+                                <b>MAHASISWA</b>
                                 </label>
                                 <input 
                                     type="radio" 
@@ -172,10 +172,26 @@
                                     >
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
                                     'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 col-6 btn btn-outline-success rounded-end'" 
+                                    'p-3 col-4 btn btn-outline-success rounded-0'" 
                                     for="code_type1"
                                 >
-                                Saya <b>DOSEN</b>
+                                <b>DOSEN</b>
+                                </label>
+                                <input 
+                                    type="radio" 
+                                    class="btn-check" 
+                                    name="code_type"
+                                    value="2"
+                                    id="code_type2"
+                                    v-model="form.radio"
+                                    :disabled="!this.radioEnabled"
+                                    >
+                                <label :class="windowWidth <= $widthLandscapePhone ? 
+                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
+                                    'p-3 col-4 btn btn-outline-success rounded-end'" 
+                                    for="code_type2"
+                                >
+                                <b>KARYAWAN</b>
                                 </label>
                             </div>
                             <div class="input-group mb-3">
@@ -783,6 +799,10 @@
                         this.codeEnabled = true;
                         this.codeString = "Masukkan NIDN";
                         this.codeType = "1";
+                    } else if(code_type == "2") {
+                        this.codeEnabled = true;
+                        this.codeString = "Masukkan NIP";
+                        this.codeType = "2";
                     }
 
                     if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {

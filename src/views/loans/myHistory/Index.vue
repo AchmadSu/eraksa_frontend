@@ -88,10 +88,10 @@
                                             <thead>
                                                 <tr class="text-center">
                                                     <th class="align-middle">No</th>
-                                                    <th class="align-middle">Kode</th>
+                                                    <th class="align-middle">Kode Transaksi</th>
                                                     <th class="align-middle">Status</th>
-                                                    <th class="align-middle">Waktu Mulai</th>
-                                                    <th class="align-middle">Tenggat Waktu</th>
+                                                    <th class="align-middle">Waktu Peminjaman</th>
+                                                    <th class="align-middle">Deadline Pengembalian</th>
                                                     <th class="align-middle">Periode</th>
                                                     <!-- <th class="align-middle">Status Peminjaman</th> -->
                                                     <th class="align-middle" colspan="2">Aksi</th>
@@ -109,7 +109,7 @@
                                                             <b class="text-primary">Aktif</b>
                                                         </template>
                                                         <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                                                            <b class="text-danger">Overdue</b>
+                                                            <b class="text-danger">Terlambat</b>
                                                         </template>
                                                         <template v-if="item.status == '2'">
                                                             <b class="text-danger">Ditolak</b>
@@ -163,7 +163,7 @@
                                                                 Aktif
                                                             </b>
                                                             <b v-if="item.status == '1' && this.currentTime > item.due_date_time" class="text-danger">
-                                                                Overdue
+                                                                Terlambat
                                                             </b>
                                                             <b v-if="item.status == '2'" class="text-danger">
                                                                 Ditolak
@@ -173,8 +173,8 @@
                                                             </b>
                                                         </big>
                                                         <br>
-                                                        <big>Tanggal: {{item.date_string}}</big><br>
-                                                        <big>Tenggat: {{item.due_date_string}}</big><br>
+                                                        <big>Waktu Pinjam: {{item.date_string}}</big><br>
+                                                        <big>Deadline: {{item.due_date_string}}</big><br>
                                                         <big>Periode: <b>{{item.difference}}</b></big><br>
                                                     </p>
                                                     <div class="mt-3">

@@ -161,10 +161,10 @@
                                                     <thead>
                                                         <tr class="text-center">
                                                             <th class="align-middle">No</th>
-                                                            <th class="align-middle">Kode</th>
+                                                            <th class="align-middle">Kode Transaksi</th>
                                                             <th class="align-middle">Status</th>
-                                                            <th class="align-middle">Waktu Mulai</th>
-                                                            <th class="align-middle">Tenggat Waktu</th>
+                                                            <th class="align-middle">Waktu Peminjaman</th>
+                                                            <th class="align-middle">Deadline Pengembalian</th>
                                                             <th class="align-middle">Periode</th>
                                                             <th class="align-middle">Peminjam</th>
                                                             <!-- <th class="align-middle">Status Peminjaman</th> -->

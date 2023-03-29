@@ -164,8 +164,11 @@
                                                                                         <template v-if="this.detailObject.loaner_code_type == '0'">
                                                                                             NIM
                                                                                         </template>
-                                                                                        <template v-else>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
                                                                                             NIDN
+                                                                                        </template>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
+                                                                                            NIP
                                                                                         </template>
                                                                                     </h5>
                                                                                 </td>
@@ -175,7 +178,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5 v-if="this.detailObject.status == '0'">Status</h5>
+                                                                                    <h5>Status</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5 v-if="this.detailObject.status == '0'"> Menunggu Konfirmasi</h5>
@@ -183,7 +186,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Waktu Mulai</h5>
+                                                                                    <h5>Waktu Peminjaman</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.date}}</h5>
@@ -191,7 +194,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Tenggat Waktu</h5>
+                                                                                    <h5>Deadline Pengembalian</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.due_date}}</h5>
@@ -274,9 +277,9 @@
                                                                                                     <b>Menunggu Konfirmasi</b>
                                                                                                 </template> 
                                                                                             <br>
-                                                                                            Mulai: <br> <b>{{ this.detailObject.date }}</b>
+                                                                                            Waktu Pinjam: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
-                                                                                            Tenggat: <br> <b>{{ this.detailObject.due_date }}</b>
+                                                                                            Deadline: <br> <b>{{ this.detailObject.due_date }}</b>
                                                                                             <br>
                                                                                             Periode: <b>{{ this.detailObject.difference }}</b>
                                                                                             <br>

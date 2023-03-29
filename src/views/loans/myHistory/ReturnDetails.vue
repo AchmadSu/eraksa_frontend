@@ -161,8 +161,11 @@
                                                                                         <template v-if="this.detailObject.loaner_code_type == '0'">
                                                                                             NIM
                                                                                         </template>
-                                                                                        <template v-else>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
                                                                                             NIDN
+                                                                                        </template>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
+                                                                                            NIP
                                                                                         </template>
                                                                                     </h5>
                                                                                 </td>
@@ -184,8 +187,11 @@
                                                                                             <template v-if="this.detailObject.recipient_code_type == '0'">
                                                                                                 NIM
                                                                                             </template>
-                                                                                            <template v-else>
+                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '1'">
                                                                                                 NIDN
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '2'">
+                                                                                                NIP
                                                                                             </template>
                                                                                         </h5>
                                                                                     </td>
@@ -217,7 +223,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.name}} ({{ item.code }})
+                                                                                                {{item.code}} ({{ item.study_program_name }})
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
@@ -246,7 +252,7 @@
                                                                                     <h5>Kategori</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Prodi</h5>
+                                                                                    <h5>Pemilik</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </thead>
@@ -310,12 +316,7 @@
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
                                                                                                 <li v-for="item in selectDataArray">
-                                                                                                    <template v-if="item.name.length+item.code.length < 40">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
-                                                                                                    </template>
+                                                                                                    {{ item.code }} ({{ item.study_program_name }}) <br>
                                                                                                 </li>
                                                                                             </ol>
                                                                                         </p>
