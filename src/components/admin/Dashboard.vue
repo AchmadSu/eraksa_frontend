@@ -14,7 +14,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan transaksi peminjaman minggu lalu
+                                        Laporan transaksi peminjaman <br> 1 Pekan Terakhir
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ReportWeekly></ReportWeekly>
@@ -28,7 +28,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan transaksi peminjaman per bulan
+                                        Laporan transaksi peminjaman <br> per bulan
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ReportMonthly></ReportMonthly>
@@ -42,7 +42,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan transaksi peminjaman <br> tahun ajaran {{ this.academicYear +"/"+ (this.academicYear + 1) }}
+                                        Laporan transaksi peminjaman <br> per Semester
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ReportSemester></ReportSemester>
@@ -61,7 +61,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan Aset Rusak minggu lalu
+                                        Laporan Aset Rusak <br> 1 Pekan Terakhir
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ReportAssetsWeekly></ReportAssetsWeekly>
@@ -75,7 +75,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan Aset Rusak per bulan
+                                        Laporan Aset Rusak <br> per bulan
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ReportAssetsMonthly></ReportAssetsMonthly>
@@ -89,7 +89,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Laporan Aset Rusak <br> tahun ajaran {{ this.academicYear +"/"+ (this.academicYear + 1) }}
+                                        Laporan Aset Rusak <br> per Semester
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ReportAssetsSemester></ReportAssetsSemester>
@@ -191,6 +191,9 @@
                                     <i class="fa fa-info text-primary fa-2x"></i>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-footer bg-white">
+                            {{ this.fractionLoans }} Aset
                         </div>
                     </div>
                 </div>
@@ -294,6 +297,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-footer bg-white">
+                            {{ this.fractionBroken }} Aset
+                        </div>
                     </div>
                 </div>
         
@@ -344,6 +350,9 @@
                                     <i class="fa fa-plus-circle fa-2x text-info"></i>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-footer bg-white">
+                            {{ this.fractionAdded }} Aset
                         </div>
                     </div>
                 </div>
@@ -408,6 +417,9 @@
                 errorAdded: {},
                 errorResponse: [],
                 sessionData: [],
+                fractionLoans: '',
+                fractionBroken: '',
+                fractionAdded: '',
             }
         },
         components: {
@@ -473,6 +485,7 @@
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.loanPercentage = response.data.data.percentage.toString();
+                        this.fractionLoans = response.data.data.fraction;
                         // console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
@@ -578,8 +591,6 @@
                 weekAgo.setDate(weekAgo.getDate()-7);
                 weekAgo.toISOString().slice(0, 10);
                 this.weekAgo = weekAgo.toISOString().slice(0, 10);
-                console.log(this.weekAgo)
-                console.log(this.currentDate)
                 try {
                     this.isLoadingBroken = true;
                     await axios.get('/assets/percentage', {params: {
@@ -592,6 +603,7 @@
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.brokenPercentage = response.data.data.percentage.toString();
+                        this.fractionBroken = response.data.data.fraction;
                         // console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
@@ -644,6 +656,7 @@
                     .then((response) => {
                         this.styleAddedPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.addedPercentage = response.data.data.percentage.toString();
+                        this.fractionAdded = response.data.data.fraction;
                         // console.log(this.styleLoanPercentage);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
