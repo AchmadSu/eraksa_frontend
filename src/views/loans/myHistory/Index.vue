@@ -92,7 +92,7 @@
                                                     <th class="align-middle">Status</th>
                                                     <th class="align-middle">Waktu Peminjaman</th>
                                                     <th class="align-middle">Deadline Pengembalian</th>
-                                                    <th class="align-middle">Periode</th>
+                                                    <th class="align-middle">Lama Peminjaman</th>
                                                     <!-- <th class="align-middle">Status Peminjaman</th> -->
                                                     <th class="align-middle" colspan="2">Aksi</th>
                                                 </tr>
@@ -175,7 +175,7 @@
                                                         <br>
                                                         <big>Waktu Pinjam: {{item.date_string}}</big><br>
                                                         <big>Deadline: {{item.due_date_string}}</big><br>
-                                                        <big>Periode: <b>{{item.difference}}</b></big><br>
+                                                        <big>Lama Pinjam: <b>{{item.difference}}</b></big><br>
                                                     </p>
                                                     <div class="mt-3">
                                                         <div class="row my-3 py-2">

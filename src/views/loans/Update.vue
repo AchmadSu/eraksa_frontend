@@ -255,7 +255,7 @@
                                                                 <option v-for="item in timesArray" :key="item.id" :value="item.value">{{item.description}}</option>
                                                             </select>
                                                             <div :class="isNaN(this.form.time) ? 'text-start invalid-feedback' : 'd-none'">
-                                                                Pilih salah satu periode!
+                                                                Pilih salah satu lama peminjaman!
                                                             </div>
                                                         </div>
                                                     </div>

@@ -24,7 +24,7 @@
                         </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: {{this.dataCount}} unit</h5>
+                        <h5>: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}} unit</h5>
                     </td>
                 </tr>
             </tbody>

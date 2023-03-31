@@ -35,7 +35,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Penolakan</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                                             <th class="align-middle">Status</th>
                                                             <th class="align-middle">Waktu Peminjaman</th>
                                                             <th class="align-middle">Deadline Pengembalian</th>
-                                                            <th class="align-middle">Periode</th>
+                                                            <th class="align-middle">Lama Peminjaman</th>
                                                             <th class="align-middle">Aksi</th>
                                                         </tr>
                                                     </thead>
@@ -204,7 +204,7 @@
                                                                 <big v-if="item.status == '2'">Status: <b class="text-danger">Ditolak</b></big><br>
                                                                 <big>Waktu Pinjam: {{item.date_string}}</big><br>
                                                                 <big>Deadline: {{item.due_date_string}}</big><br>
-                                                                <big>Periode: <b>{{item.difference}}</b></big><br>
+                                                                <big>Lama Pinjam: <b>{{item.difference}}</b></big><br>
                                                             </p>
                                                             <div class="mt-3">
                                                                 <div v-if="item.status == '2'" class="row my-3 py-2">

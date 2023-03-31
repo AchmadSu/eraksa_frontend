@@ -118,7 +118,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Kategori Aset</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -206,8 +206,8 @@
                                                             <td class="text-center align-middle">
                                                                 <input v-model="this.filterIds" type="checkbox" :value="item.id">
                                                             </td>
-                                                            <td><b>{{item.name}}</b></td>
-                                                            <td>{{item.description}}</td>
+                                                            <td class="align-middle"><b>{{item.name}}</b></td>
+                                                            <td class="align-middle">{{item.description}}</td>
                                                             <td class="text-center">
                                                                 <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
                                                                     <i class="fa fa-pencil"></i> <br> Ubah data

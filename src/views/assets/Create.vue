@@ -513,14 +513,12 @@
                         "ids": [ids],
                         "skip": skip,
                         "take": take,
-                        "sleep": 3,
                         "name": this.name
                     }
                 } else {
                     this.data = {
                         "skip": skip,
                         "take": take,
-                        "sleep": 3,
                         "name": this.name
                     }
                 }
@@ -599,7 +597,6 @@
                 this.data = {
                     "skip": skip,
                     "take": take,
-                    "sleep": 3,
                     "order": "name"
                 }
                 try {
@@ -677,7 +674,6 @@
                 this.data = {
                     "skip": skip,
                     "take": take,
-                    "sleep": 3,
                 }
                 try {
                     await axios.get('/placements/getAll', {params: this.data})

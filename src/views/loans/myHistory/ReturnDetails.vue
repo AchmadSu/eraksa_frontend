@@ -309,9 +309,7 @@
                                                                                                 </template>
                                                                                                 {{this.detailObject.recipient_name}}
                                                                                             </b>
-                                                                                            Mulai: <br> <b>{{ this.detailObject.date }}</b>
-                                                                                            <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
+                                                                                            Waktu Pengembalian: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>

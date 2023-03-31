@@ -202,7 +202,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Periode</h5>
+                                                                                    <h5>Lama Peminjaman</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.difference}}</h5>
@@ -281,7 +281,7 @@
                                                                                             <br>
                                                                                             Deadline: <br> <b>{{ this.detailObject.due_date }}</b>
                                                                                             <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
+                                                                                            Lama Pinjam: <b>{{ this.detailObject.difference }}</b>
                                                                                             <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>

@@ -98,6 +98,21 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card bg-primary shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Unduh daftar aset <br> per Pemilik
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ListAllAssets></ListAllAssets>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
                 <div class="modal-footer">
@@ -374,6 +389,8 @@
     import ReportAssetsWeekly from '../assetsReport/ReportWeekly.vue';
     import ReportAssetsMonthly from '../assetsReport/ReportMonthly.vue';
     import ReportAssetsSemester from '../assetsReport/ReportSemester.vue';
+
+    import ListAllAssets from '../assetsReport/ListAllAssets.vue';
     export default{
         data() {
             const today = new Date();
@@ -428,7 +445,8 @@
             ReportSemester,
             ReportAssetsMonthly,
             ReportAssetsSemester,
-            ReportAssetsWeekly
+            ReportAssetsWeekly,
+            ListAllAssets
         },
         methods: {
             dashboard(){

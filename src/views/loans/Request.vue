@@ -36,7 +36,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Peminjaman</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +165,7 @@
                                                             <th class="align-middle">Status</th>
                                                             <th class="align-middle">Waktu Peminjaman</th>
                                                             <th class="align-middle">Deadline Pengembalian</th>
-                                                            <th class="align-middle">Periode</th>
+                                                            <th class="align-middle">Lama Peminjaman</th>
                                                             <th class="align-middle">Peminjam</th>
                                                             <!-- <th class="align-middle">Status Peminjaman</th> -->
                                                             <th class="align-middle" colspan="2">Aksi</th>
@@ -224,7 +224,7 @@
                                                                 <big v-if="item.status == '0'">Status: <b>Menunggu Konfirmasi</b></big><br>
                                                                 <big>Tanggal: {{item.date_string}}</big><br>
                                                                 <big>Tenggat: {{item.due_date_string}}</big><br>
-                                                                <big>Periode: <b>{{item.difference}}</b></big><br>
+                                                                <big>Lama Pinjam: <b>{{item.difference}}</b></big><br>
                                                                 <big>Peminjam:
                                                                     <template v-if="item.loaner_name.length < 20">
                                                                         {{item.loaner_name}}

@@ -11,7 +11,7 @@
             <tbody>
                 <tr>
                     <td class="align-middle px-5">
-                        <h5>Periode </h5>
+                        <h5>Lama Peminjaman</h5>
                     </td>
                     <td class="align-middle px-5">
                         <h5>: {{this.range}}</h5>
@@ -24,7 +24,7 @@
                         </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: {{this.dataCount}} transaksi</h5>
+                        <h5>: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}} transaksi</h5>
                     </td>
                 </tr>
             </tbody>
@@ -37,7 +37,7 @@
                     <th class="align-middle">Status</th>
                     <th class="align-middle">Waktu Peminjaman</th>
                     <th class="align-middle">Deadline</th>
-                    <th class="align-middle">Periode</th>
+                    <th class="align-middle">Lama Peminjaman</th>
                     <th class="align-middle">Keterangan</th>
                 </tr>
             </thead>

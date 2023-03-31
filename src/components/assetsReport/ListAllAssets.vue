@@ -1,88 +1,49 @@
 <template>
-    <div id="semesterRow" class="table-responsive d-none">
-        <table id="semesterTable" class="table table-sm table-borderless table-responsive">
+    <div id="listAssetsRow" class="table-responsive d-none">
+        <table id="listAssetsTable" class="table table-sm table-borderless table-responsive">
             <thead id="head" class="d-none">
                 <tr>
                     <th colspan="2">
-                        <h3 class="heading text-left">Detail Laporan Peminjaman per Semester</h3>
+                        <h3 class="heading text-left">Daftar Aset {{this.studyProgramName}}</h3>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="align-middle px-5">
-                        <h5>Lama Peminjaman</h5>
-                    </td>
-                    <td class="align-middle px-5">
-                        <h5>: Tahun Ajaran {{ this.resultAcademicYear }} Semester {{this.range}}</h5>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="align-middle px-5">
                         <h5>
-                            Total Transaksi Peminjaman
+                            Total Aset
                         </h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}} transaksi</h5>
+                        <h5>: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}} unit</h5>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <table class="table table-hover table-bordered border" id="semesterDetails" width="100%" cellspacing="0">
+        <table class="table table-hover table-bordered border" id="listAssetDetails" width="100%" cellspacing="0">
             <thead>
                 <tr class="text-center">
                     <th class="align-middle">No</th>
-                    <th class="align-middle">Kode Transaksi</th>
+                    <th class="align-middle">Nama</th>
+                    <th class="align-middle">Kode Aset</th>
+                    <th class="align-middle">Kondisi</th>
                     <th class="align-middle">Status</th>
-                    <th class="align-middle">Waktu Peminjaman</th>
-                    <th class="align-middle">Deadline Pengembalian</th>
-                    <th class="align-middle">Periode</th>
-                    <th class="align-middle">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item, index in this.loansArray" :key="item.id">
-                    <td class="align-middle text-center">{{index+1}}</td>
-                    <td class="align-middle text-justify"><b>{{item.code}}</b></td>
-                    <td class="align-middle text-center">
-                        <template v-if="item.status == '0'">
-                            <b class="text-secondary">Menunggu Konfirmasi</b>
-                        </template>
-                        <template v-if="item.status == '1' && this.currentTime <= item.due_date_time">
-                            <b class="text-primary">Aktif</b>
-                        </template>
-                        <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                            <b class="text-danger">Terlambat</b>
-                        </template>
-                        <template v-if="item.status == '2'">
-                            <b class="text-danger">Ditolak</b>
-                        </template>
-                        <template v-if="item.status == '3'">
-                            <b class="text-success">Selesai</b>
-                        </template>
-                    </td>
-                    <td class="align-middle text-center">{{item.date_string}}</td>
-                    <td class="align-middle text-center">{{item.due_date_string}}</td>
-                    <td class="align-middle text-center"><b>{{item.difference}}</b></td>
-                    <td class="align-middle text-center">
-                        <b>{{item.loaner_name}}</b> <br>
-                        <template v-if="item.loaner_code_type == '0'">
-                            NIM.
-                        </template>
-                        <template v-else-if="item.loaner_code_type == '1'">
-                            NIDN.
-                        </template>
-                        <template v-else-if="item.loaner_code_type == '2'">
-                            NIP.
-                        </template>
-                        <b>{{item.loaner_code}}</b> <br>
-                        No. WhatsApp: <b>{{item.loaner_phone}}</b>
-                    </td>
+                <tr v-for="item, index in this.dataArray" :key="item.id">
+                    <td class="text-center align-middle">{{index+1}}</td>
+                    <td class="align-middle"><b>{{item.name}}</b></td>
+                    <td class="align-middle">{{item.code}}</td>
+                    <td v-if="item.condition == '0'" class="align-middle">Optimal</td>
+                    <td v-else-if="item.condition == '1'" class="align-middle">Rusak</td>
+                    <td v-if="item.status == '0'" class="align-middle">Tersedia</td>
+                    <td v-else-if="item.status == '1'" class="align-middle">Dipinjam</td>
                 </tr>
             </tbody>
         </table>
-        <table id="signatureLoansSemester" class="table table-borderless">
+        <table id="signatureListAssets" class="table table-borderless">
             <tbody>
                 <tr class="text-center">
                     <td>
@@ -94,7 +55,7 @@
                 <tr class="text-center">
                     <td>
                         <h5>
-                            Laporan dibuat oleh
+                            List dicetak oleh
                         </h5>
                     </td>
                 </tr>
@@ -135,21 +96,31 @@
         </table>
     </div>
     <form>
-        <div class="mb-3">
-            <select :disabled="isLoading" v-model="selectedYear" class="form-select form-select" aria-label=".form-select example">
-                <option selected disabled>Tahun Ajaran</option>
-                <template v-for="year in yearRange">
-                    <option :key="year" :value="year" v-if="this.academicYear >= year">
-                        {{year}}/{{year+1}}
-                    </option>
-                </template>
+        <div class="input-group mb-3">
+            <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
+                <option selected disabled>Program Studi</option>
+                <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
             </select>
-        </div>
-        <div class="mb-3">
-            <select :disabled="isLoading" v-model="selectedSemester" class="form-select form-select" aria-label=".form-select example">
-                <option selected disabled>Semester</option>
-                <option v-for="semester in semesterData" :key="semester" :value="semester.value">{{semester.description}}</option>
-            </select>
+            <div v-if="this.isLoadingStudyPrograms == false">
+                <div class="rounded-0 d-none d-lg-block">
+                    <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-light rounded-0">Muat lebih</a>                                                  
+                    <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-light rounded-0">Muat ulang</a>                                                  
+                </div>
+                <div class="rounded-0 d-sm-block d-lg-none">
+                    <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-light rounded-0"></a>                                                  
+                    <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-light rounded-0"></a>                                                  
+                </div>
+            </div>
+            <div v-else>
+                <button type="submit" class="d-sm-block d-lg-none btn btn-light rounded-0" style="width:100%;" :disabled="true">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                <button type="submit" class="d-sm-none d-lg-block btn btn-light rounded-0" style="width:100%;" :disabled="true">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Memuat...
+                </button>
+            </div>
         </div>
     </form>
     <div v-if="isParamsChange">
@@ -160,15 +131,15 @@
         </div>
         <div v-else>
             <button v-if="this.errorDetail" :disabled="true" type="button" @click="report" class="btn btn-warning w-100 mb-3">
-                <i class="fa fa-times"></i>&ensp;Tidak ada Laporan untuk Semester yang dipilih
+                <i class="fa fa-times"></i>&ensp;Tidak ada data Aset
             </button>
-            <button type="button" @click="report" class="btn btn-light w-100">
+            <button :disabled="!this.isParamsChange || this.isLoadingStudyPrograms" type="button" @click="report" class="btn btn-light w-100">
                 <i class="fa fa-rocket"></i>&ensp;Generate Report
             </button>
         </div>
     </div>
     <div v-else>
-        <button :disabled="isNaN(this.selectedSemester)" type="button" @click="downloadReport" class="btn btn-light w-100">
+        <button :disabled="!isDownloadEnable" type="button" @click="downloadReport" class="btn btn-light w-100">
             <i class="fa fa-download"></i>&ensp;Unduh Laporan
         </button>
     </div>
@@ -182,9 +153,7 @@
     import 'jspdf-autotable'
     export default{
         data() {
-            const today = new Date();
             const currentYear = new Date().getFullYear();
-            const isBeforeAugust = today.getMonth() < 7;
             return {
                 windowWidth: window.innerWidth,
                 isLoading: false,
@@ -193,21 +162,21 @@
                 id: null,
                 radioEnabled: true,
                 buttonDisabled: false,
+                isDownloadEnable: false,
                 isLoadingContent: true,
                 isLoadingResponse: false,
                 isParams1: false,
                 isParams2: false,
-                resultAcademicYear: 0,
-                academicYear: isBeforeAugust ? currentYear - 1 : currentYear,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 isLoadingDelete: false,
+                isLoadingStudyPrograms: false,
                 sidebarShow: true,
                 imageLogo: false,
-                selectedYear: 'Tahun Ajaran',
-                selectedSemester: 'Semester',
+                selectedYear: currentYear,
+                selectedMonth: 'Bulan',
                 yearRange: Array.from({length: 10}, (_, i) => currentYear - i),
                 currentDate: new Date(),
                 currentTime: new Date().getTime(),
@@ -215,6 +184,9 @@
                 widthProgressBar: 0,
                 dataCount: 0,
                 range: '',
+                form: {
+                    study_programs: 'Program Studi',
+                },
                 errorDetail: false,
                 loansStatus: 0,
                 keyWords: '',
@@ -233,23 +205,19 @@
                 errorDelete: [],
                 successResponse: [],
                 successDemandResponse: [],
-                semesterData: [
-                    {
-                        "id": 1,
-                        "value": 1,
-                        "description": "Ganjil"
-                    },
-                    {
-                        "id": 2,
-                        "value": 2,
-                        "description": "Genap"
-                    },
-                ],
                 loansArray: [],
+                dataArray: [],
                 deleteArray: [],
                 detailObject: {},
                 skipAsset: 0,
                 takeAsset: 5,
+                studyProgramArray: [],
+                errorStudyPrograms: [],
+                studyProgramName: '',
+                studyProgramTotal: 0,
+                showAlertStudyPrograms: false,
+                skipStudyProgram: 0,
+                takeStudyProgram: 10,
                 username: this.$session.name,
                 asset_name: null,
                 asset_code: null,
@@ -267,32 +235,108 @@
             }
         },
         watch: {
-            selectedYear: {
+            form: {
                 handler: function (val) {
-                    this.year = val;
-                    if(val > 0) {
+                    let studyProgram = val.study_programs
+                    if(studyProgram > 0) {
                         this.isParamsChange = true;
                     } else {
                         this.isParamsChange = false;
                     }
                 },
                 deep: true,
-            },
-            selectedSemester: {
-                handler: function (val) {
-                    // console.log(val)
-                    if(val > 0) {
-                        this.isParamsChange = true;
-                    } else {
-                        this.isParamsChange = false;
-                    }
-                },
-                deep: true,
-            },
+            }
         },
         methods: {
             toTop(){
                 window.scrollTo(0,0);
+            },
+            nextStudyProgram(){
+                this.skipStudyProgram = this.skipStudyProgram+10;
+                this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)
+            },
+            async getStudyProgram(skip, take){
+                this.isLoadingStudyPrograms = true;
+                this.showAlertStudyPrograms = false;
+                this.errorStudyPrograms = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                if(this.$roles == 'Admin'){
+                    // console.log("test")
+                    const ids = this.$session.study_program_id
+                    this.data = {
+                        "ids": [ids],
+                        "skip": skip,
+                        "take": take,
+                    }
+                } else {
+                    this.data = {
+                        "skip": skip,
+                        "take": take,
+                        "name": this.name
+                    }
+                }
+                try {
+                    await axios.get('/studyPrograms/getAll', {params: this.data})
+                    .then((response) => {
+                        console.table(response.data.data);
+                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                            this.studyProgramArray.push(
+                                {
+                                    "id": response.data.data.study_programs[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.study_programs[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.studyProgramTotal = response.data.data.count;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertStudyPrograms = true;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorStudyPrograms = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertStudyPrograms = true;
+                    this.isLoadingStudyPrograms = false;
+                    this.buttonDisabled = false;
+                }
             },
             downloadReport(){
                 this.isLoadingResponse2 = true;
@@ -302,7 +346,7 @@
                 this.submitEnabled = false;
                 this.buttonDisabled = true;
                 this.isLoadingResponse = true;
-                const element1 = document.getElementById("semesterRow");
+                const element1 = document.getElementById("listAssetsRow");
                 let clonedElement1 = element1.cloneNode(true);
                 $(clonedElement1).css("display", "block");
                 // htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
@@ -318,19 +362,19 @@
                 // heightLeft -= pdfHeight;
                 // console.log("Test")
                 pdf.autoTable({
-                    html: '#semesterTable',
+                    html: '#listAssetsTable',
                     theme: 'plain',
                 })
                 pdf.autoTable({
-                    html: '#semesterDetails',
+                    html: '#listAssetDetails',
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
                 pdf.autoTable({
-                    html: '#signatureLoansSemester',
+                    html: '#signatureListAssets',
                     theme: 'plain',
                 })
-                pdf.save('ERAKSA_LoansReportSemester_'+this.resultAcademicYear+"_"+this.range+'.pdf')
+                pdf.save('ERAKSA_listAssets_'+this.studyProgramName+'.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
@@ -340,114 +384,44 @@
                 this.isLoading = false;
             },
             async report(){
-                this.loansArray = [];
+                this.dataArray = [];
                 this.isLoading = true;
                 this.errorDetail = false;
                 try {
                     let data = {
-                        "semester": this.selectedSemester,
-                        "year": this.selectedYear
+                        "study_program_id": this.form.study_programs,
+                        "order": "name"
                     }
-                    // console.log(data);
-                    await axios.get('/loans/reportSemester/', {params: data})
+                    await axios.get('/assets/getAll', {params: data})
                     .then((response) => {
-                        // console.log(response)
-                        let date = new Date(response.data.data.loans.date);
-                        let finalDate = date.toLocaleDateString("id");
-                        // console.log(finalDate)
-                        let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
-                        let difference = ''
-                        let dueDate = new Date(response.data.data.loans.due_date);
-                        const getDate = date.getDate();
-                        const getDateTime = date.getTime();
-                        const getTime = date.getHours();
-                        const getDueDate = dueDate.getDate();
-                        const getDueDateTime = dueDate.getTime();
-                        const getDueTime = dueDate.getHours();
-                        // console.log(compareDueDate);
-                        if(getDate == getDueDate) {
-                            difference = (getDueTime - getTime)+" Jam"
-                        } else {
-                            let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
-                            // console.log(calculate)
-                            // let calculateDays = calculate / (1000*3600*24) 
-                            if (calculate < 7 && calculate > 1) {
-                                difference = (calculate)+" Hari"   
-                            } else if(calculate > 7 && calculate < 30) {
-                                difference = (calculate/7)+" Minggu"   
-                            } else if(calculate > 30){
-                                difference = (calculate/30)+" Bulan"   
-                            } else {
-                                difference = (24 - (getTime - getDueTime))+" Jam" 
-                            }
-                        }
-                        let finalDueDate = dueDate.toLocaleDateString("id");
-                        let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
-                        // console.log(difference)
-                        Object.keys(response.data.data.loans).forEach((item) => {
-                            let date = new Date(response.data.data.loans[item].date);
+                        Object.keys(response.data.data.assets).forEach((item) => {
+                            let date = new Date(response.data.data.assets[item].date);
                             let finalDate = date.toLocaleDateString("id");
-                            let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
-                            // let finalTime = date.format("id");
-                            // // finalTime = finalTime.format('hh:mm')
-                            let difference = ''
-                            let dueDate = new Date(response.data.data.loans[item].due_date);
-                            const getDate = date.getDate();
-                            const getDateTime = date.getTime();
-                            const getTime = date.getHours();
-                            const getDueDate = dueDate.getDate();
-                            const getDueDateTime = dueDate.getTime();
-                            const getDueTime = dueDate.getHours();
-                            // console.log(compareDueDate);
-                            if(getDate == getDueDate) {
-                                difference = (getDueTime - getTime)+" Jam"
-                            } else {
-                                let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
-                                // console.log(calculate)
-                                // let calculateDays = calculate / (1000*3600*24) 
-                                if (calculate < 7 && calculate > 1) {
-                                    difference = (calculate)+" Hari"   
-                                } else if(calculate > 7 && calculate < 30) {
-                                    difference = (calculate/7)+" Minggu"   
-                                } else if(calculate > 30){
-                                    difference = (calculate/30)+" Bulan"   
-                                } else {
-                                    difference = (24 - (getTime - getDueTime))+" Jam" 
-                                }
-                            }
-                            let finalDueDate = dueDate.toLocaleDateString("id");
-                            let finalDueTime = (dueDate.toLocaleTimeString("id")).replace(".", ":").substring(0,5);
-                            this.loansArray.push(
+                            this.dataArray.push(
                                 {
-                                    "id": response.data.data.loans[item].id,
-                                    "row": this.index++,
-                                    "return_id": response.data.data.loans[item].return_id,
-                                    "loaner_name": response.data.data.loans[item].loaner_name,
-                                    "loaner_code_type": response.data.data.loans[item].loaner_code_type,
-                                    "loaner_code": response.data.data.loans[item].loaner_code,
-                                    "loaner_phone": response.data.data.loans[item].loaner_phone,
-                                    "code": response.data.data.loans[item].code,
-                                    "status": response.data.data.loans[item].status,
-                                    "date_string": finalDate+" "+finalTime,
-                                    "due_date_string": finalDueDate+" "+finalDueTime,
-                                    "due_date_time": getDueDateTime,
-                                    "date": date,
-                                    "difference": difference
+                                    "id": response.data.data.assets[item].id,
+                                    "name": response.data.data.assets[item].name,
+                                    "code": response.data.data.assets[item].code,
+                                    "condition": response.data.data.assets[item].condition,
+                                    "status": response.data.data.assets[item].status,
+                                    "date": finalDate,
+                                    "placement_name": response.data.data.assets[item].placement_name,
+                                    "category_name": response.data.data.assets[item].category_name,
+                                    "study_program_name": response.data.data.assets[item].study_program_name,
                                 }
                             );
-                            // console.log(new Date().getTime() == getDueDateTime)
+                            this.studyProgramName = response.data.data.assets[item].study_program_name;
                         });
 
                         // this.dataArray.filter((index) => index != 2)
                         this.dataCount = response.data.data.count;
-                        this.range = response.data.data.range;
-                        this.resultAcademicYear = response.data.data.academicYear;
                         this.isLoadingResponse = false;
                         this.isLoadingResponse1 = false;
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                         this.isLoading = false;
                         this.isParamsChange = false;
+                        this.isDownloadEnable = true;
                         // console.table(this.loansArray)
                     }).catch((err) => {
                         if(!err.response) {
@@ -522,9 +496,11 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
+            console.log("test")
+            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
             // this.report();
             // this.assignYearRange();
-            // console.log(this.selectedSemester)
+            // console.log(this.selectedMonth)
             setTimeout(() => this.isLoadingImage = false, 10000);
         },
     }

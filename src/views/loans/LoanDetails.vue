@@ -227,7 +227,7 @@
                                                                                 <td class="align-middle">
                                                                                     <h5 v-if="this.detailObject.status == '0'"> Menunggu Konfirmasi</h5>
                                                                                     <h5 class="text-primary" v-else-if="this.detailObject.status == '1' && this.currentTime <= this.detailObject.due_date_time"> Aktif</h5>
-                                                                                    <h5 class="text-danger" v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Overdue</h5>
+                                                                                    <h5 class="text-danger" v-else-if="this.detailObject.status == '1' && this.currentTime > this.detailObject.due_date_time"> Terlambat</h5>
                                                                                     <h5 class="text-danger" v-else-if="this.detailObject.status == '2'"> Ditolak</h5>
                                                                                     <h5 class="text-success" v-else-if="this.detailObject.status == '3'"> Selesai</h5>
                                                                                 </td>
@@ -250,7 +250,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Periode</h5>
+                                                                                    <h5>Lama Peminjaman</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.difference}}</h5>
@@ -401,7 +401,7 @@
                                                                                             <br>
                                                                                             Tenggat: <br> <b>{{ this.detailObject.due_date }}</b>
                                                                                             <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
+                                                                                            Lama Pinjam: <b>{{ this.detailObject.difference }}</b>
                                                                                             <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>

@@ -489,9 +489,12 @@
                 let clonedElement2 = element2.cloneNode(true);
                 const element3 = document.getElementById("head");
                 let clonedElement3 = element3.cloneNode(true);
+                const element4 = document.getElementById("signatureAssetsHistory");
+                let clonedElement4 = element4.cloneNode(true);
                 $(clonedElement1).css("display", "block");
                 $(clonedElement2).css("display", "block");
                 $(clonedElement3).css("display", "block");
+                $(clonedElement4).css("display", "block");
                 // htmlToImage.toJpeg(document.getElementById("target"), { quality: 1 })
                 // const imgData = dataUrl
                 const pdf = new jsPDF("p", "pt", "a4")
@@ -515,10 +518,15 @@
                     showHead: 'everyPage',
                     theme: 'grid'
                 })
+                pdf.autoTable({
+                    html: '#signatureAssetsHistory',
+                    theme: 'plain',
+                })
                 pdf.save('ERAKSA_assetDetails_'+name+'.pdf')
                 clonedElement1.remove();
                 clonedElement2.remove();
                 clonedElement3.remove();
+                clonedElement4.remove();
             },
             async detailFunction(id){
                 try {

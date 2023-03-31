@@ -333,8 +333,6 @@
                                                                                             <br>
                                                                                             Waktu Pengembalian: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
-                                                                                            <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
                                                                                                 <li v-for="item in selectDataArray">

@@ -95,11 +95,11 @@
                                 </tr>
                                 <tr class="text-center">
                                     <th class="align-middle">No</th>
-                                    <th class="align-middle">Kode</th>
+                                    <th class="align-middle">Kode Transaksi</th>
                                     <th class="align-middle">Status</th>
-                                    <th class="align-middle">Waktu Mulai</th>
-                                    <th class="align-middle">Tenggat Waktu</th>
-                                    <th class="align-middle">Periode</th>
+                                    <th class="align-middle">Waktu Peminjaman</th>
+                                    <th class="align-middle">Deadline Pengembalian</th>
+                                    <th class="align-middle">Lama Peminjaman</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -114,7 +114,7 @@
                                             <b class="text-primary">Aktif</b>
                                         </template>
                                         <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                                            <b class="text-danger">Overdue</b>
+                                            <b class="text-danger">Terlambat</b>
                                         </template>
                                         <template v-if="item.status == '2'">
                                             <b class="text-danger">Ditolak</b>
@@ -139,11 +139,11 @@
                             <thead>
                                 <tr class="text-center">
                                     <th class="align-middle">No</th>
-                                    <th class="align-middle">Kode</th>
+                                    <th class="align-middle">Kode Transaksi</th>
                                     <th class="align-middle">Status</th>
-                                    <th class="align-middle">Waktu Mulai</th>
-                                    <th class="align-middle">Tenggat Waktu</th>
-                                    <th class="align-middle">Periode</th>
+                                    <th class="align-middle">Waktu Peminjaman</th>
+                                    <th class="align-middle">Deadline Pengembalian</th>
+                                    <th class="align-middle">Lama Peminjaman</th>
                                     <!-- <th class="align-middle">Status Peminjaman</th> -->
                                     <th class="align-middle" colspan="2">Aksi</th>
                                 </tr>
@@ -160,7 +160,7 @@
                                             <b class="text-primary">Aktif</b>
                                         </template>
                                         <template v-if="item.status == '1' && this.currentTime > item.due_date_time">
-                                            <b class="text-danger">Overdue</b>
+                                            <b class="text-danger">Terlambat</b>
                                         </template>
                                         <template v-if="item.status == '2'">
                                             <b class="text-danger">Ditolak</b>
@@ -191,6 +191,57 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <table id="signatureAssetsHistory" class="d-none table table-borderless">
+                            <tbody>
+                                <tr class="text-center">
+                                    <td>
+                                        <h5>
+                                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <h5>
+                                            List dicetak oleh
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <h5>&nbsp;</h5>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <h5>&nbsp;</h5>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <h5 class="text-center">
+                                            {{this.$session.name}}
+                                        </h5>
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>
+                                        <h5 class="text-center">
+                                            <template v-if="this.$session.code_type == '0'">
+                                                NIM. 
+                                            </template>
+                                            <template v-else-if="this.$session.code_type == '1'">
+                                                NIDN. 
+                                            </template>
+                                            <template v-else-if="this.$session.code_type == '2'">
+                                                NIP. 
+                                            </template>
+                                            {{this.$session.code}}
+                                        </h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="row d-block d-lg-none d-flex justify-content-evenly">
                         <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 my-3">
@@ -214,7 +265,7 @@
                                                 Aktif
                                             </b>
                                             <b v-if="item.status == '1' && this.currentTime > item.due_date_time" class="text-danger">
-                                                Overdue
+                                                Terlambat
                                             </b>
                                             <b v-if="item.status == '2'" class="text-danger">
                                                 Ditolak
@@ -224,9 +275,9 @@
                                             </b>
                                         </big>
                                         <br>
-                                        <big>Tanggal: {{item.date_string}}</big><br>
-                                        <big>Tenggat: {{item.due_date_string}}</big><br>
-                                        <big>Periode: <b>{{item.difference}}</b></big><br>
+                                        <big>Waktu Pinjam: {{item.date_string}}</big><br>
+                                        <big>Deadline: {{item.due_date_string}}</big><br>
+                                        <big>Lama Pinjam: <b>{{item.difference}}</b></big><br>
                                     </p>
                                     <div class="mt-3">
                                         <div class="row my-3 py-2">
@@ -312,6 +363,7 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
+                currentDate: new Date(),
                 currentYear: new Date().getFullYear(),
                 currentTime: new Date().getTime(),
                 setProgress: false,
