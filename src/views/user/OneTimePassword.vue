@@ -374,7 +374,9 @@
                         "email": this.$session.email,
                         "status": "1",
                         "phone": this.$session.phone,
-                        "study_program_id": this.$session.study_program_id
+                        "study_program_id": this.$session.study_program_id,
+                        "code": this.$session.code,
+                        "code_type": this.$session.code_type
                     };
                     
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));

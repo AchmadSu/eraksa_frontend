@@ -207,7 +207,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white">
+                        <div class="card-footer bg-white text-center">
                             {{ this.fractionLoans }} Aset
                         </div>
                     </div>
@@ -312,7 +312,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white">
+                        <div class="card-footer bg-white text-center">
                             {{ this.fractionBroken }} Aset
                         </div>
                     </div>
@@ -366,7 +366,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white">
+                        <div class="card-footer bg-white text-center">
                             {{ this.fractionAdded }} Aset
                         </div>
                     </div>
