@@ -388,6 +388,11 @@
                 this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() });
             }
         },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
+        },
         mounted(){
             window.onresize = () => {
                 this.windowWidth = window.innerWidth

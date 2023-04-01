@@ -585,6 +585,11 @@
                 }
             }
         },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
+        },
         beforeMount(){
             if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {
                 this.$router.push({ name: "user.login" });
