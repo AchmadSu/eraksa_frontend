@@ -76,31 +76,29 @@
                                                     aria-label="Search" aria-describedby="basic-addon2">
 
                                                 <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                    <template v-if="this.$roles == 'Super-Admin'">
-                                                        <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
-                                                            <option selected disabled>Program Studi</option>
-                                                            <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                            <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                        </select>
-                                                        <div v-if="this.isLoadingStudyPrograms == false">
-                                                            <div class="rounded-0 d-none d-lg-block">
-                                                                <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                                <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                            </div>
-                                                            <div class="rounded-0 d-sm-block d-lg-none">
-                                                                <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                                <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                            </div>
+                                                    <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
+                                                        <option selected disabled>Program Studi</option>
+                                                        <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                        <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                    </select>
+                                                    <div v-if="this.isLoadingStudyPrograms == false">
+                                                        <div class="rounded-0 d-none d-lg-block">
+                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                            <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
                                                         </div>
-                                                        <div v-else>
-                                                            <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
-                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                            </button>
-                                                            <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
-                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                            </button>
+                                                        <div class="rounded-0 d-sm-block d-lg-none">
+                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                            <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
                                                         </div>
-                                                    </template>
+                                                    </div>
+                                                    <div v-else>
+                                                        <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        </button>
+                                                        <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        </button>
+                                                    </div>
 
                                                     <select :disabled="this.isLoadingCategory" v-model="form.category_assets" class="form-select form-select" aria-label=".form-select example">
                                                         <option selected disabled>Kategori</option>
