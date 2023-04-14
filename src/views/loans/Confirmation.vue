@@ -50,6 +50,33 @@
                         </div>
                     </div>
                     <div v-else>
+                        <div class="modal fade" id="confirmModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <h5 class="text-white modal-title" id="eraseModalLabel"><i class="fa fa-question-circle" aria-hidden="true"></i>&ensp;Konfirmasi Permintaan Peminjaman</h5>
+                                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="text-start text-primary ml-3 alert alert-dismissible" role="alert">
+                                            <strong> Apakah anda yakin akan mengonfirmasi peminjaman aset transaksi ini? Konfirmasi tidak dapat dibatalkan</strong> <br/> 
+                                        </div>
+                                        <div v-for="item in errorResponse" :key="item.id" :class="showAlertError == true ? 'text-start mt-3 alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                        <button v-if="this.isLoadingResponse == false" :disabled="buttonDisabled" @click="confirmFunction" type="button" class="btn btn-primary">Konfirmasi</button>
+                                        <button :disabled="buttonDisabled" v-if="this.isLoadingResponse" class="btn btn-primary">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Memuat...
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="successModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -102,7 +129,7 @@
                                                 KONFIRMASI PERMINTAAN PEMINJAMAN
                                             </h3>
                                         </div>
-                                        <form class="form needs-validation" id="app" @submit.prevent="confirmFunction" novalidate>
+                                        <form class="form needs-validation" id="app" novalidate>
                                             <div class="py-lg-4 py-md-0 py-sm-1">
                                                 <div class="row d-flex justify-content-evenly my-sm-5 my-md-3">
                                                     <div class="col-12">
@@ -137,8 +164,11 @@
                                                                                         <template v-if="this.detailObject.loaner_code_type == '0'">
                                                                                             NIM
                                                                                         </template>
-                                                                                        <template v-else>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
                                                                                             NIDN
+                                                                                        </template>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
+                                                                                            NIP
                                                                                         </template>
                                                                                     </h5>
                                                                                 </td>
@@ -148,7 +178,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5 v-if="this.detailObject.status == '0'">Status</h5>
+                                                                                    <h5>Status</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5 v-if="this.detailObject.status == '0'"> Menunggu Konfirmasi</h5>
@@ -156,7 +186,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Waktu Mulai</h5>
+                                                                                    <h5>Waktu Peminjaman</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.date}}</h5>
@@ -164,7 +194,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Tenggat Waktu</h5>
+                                                                                    <h5>Deadline Pengembalian</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.due_date}}</h5>
@@ -172,7 +202,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Periode</h5>
+                                                                                    <h5>Lama Peminjaman</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.difference}}</h5>
@@ -247,11 +277,11 @@
                                                                                                     <b>Menunggu Konfirmasi</b>
                                                                                                 </template> 
                                                                                             <br>
-                                                                                            Mulai: <br> <b>{{ this.detailObject.date }}</b>
+                                                                                            Waktu Pinjam: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
-                                                                                            Tenggat: <br> <b>{{ this.detailObject.due_date }}</b>
+                                                                                            Deadline: <br> <b>{{ this.detailObject.due_date }}</b>
                                                                                             <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
+                                                                                            Lama Pinjam: <b>{{ this.detailObject.difference }}</b>
                                                                                             <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
@@ -282,7 +312,7 @@
                                                         name="status"
                                                         value="2"
                                                         id="status2"
-                                                        v-model="form.radio"
+                                                        v-model="this.option"
                                                         :disabled="!this.radioEnabled">
                                                     <label :class="windowWidth <= $widthLandscapePhone ? 
                                                         'my-2 p-2 col-12 btn btn-outline-danger rounded-0':
@@ -297,7 +327,7 @@
                                                         name="status"
                                                         value="1"
                                                         id="status1"
-                                                        v-model="form.radio"
+                                                        v-model="this.option"
                                                         :disabled="!this.radioEnabled"
                                                         >
                                                     <label :class="windowWidth <= $widthLandscapePhone ? 
@@ -308,17 +338,17 @@
                                                     <b><i class="fa fa-circle-check"></i> &ensp; SETUJU</b>
                                                     </label>
                                                 </div>
-                                                <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
-                                                    <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
-                                                    <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
-                                                </div>
                                                 <div v-if="isLoadingResponse == false">
-                                                    <button v-if="$roles == 'Super-Admin'" type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled"><i class="fa fa-paper-plane"></i> Kirim Konfirmasi</button>
-                                                </div>
-                                                <div v-if="isLoadingResponse == true">
-                                                    <button type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="true">
-                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        Memuat ...
+                                                    <button 
+                                                        v-if="$roles == 'Super-Admin'" type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmModal"
+                                                        class="btn btn-primary" 
+                                                        :style="this.windowWidth <= $widthLandscapePhone ? 
+                                                        'width:100%;':'width:50%;'"
+                                                        :disabled="!submitEnabled"
+                                                    >
+                                                        <i class="fa fa-paper-plane"></i> Kirim Konfirmasi
                                                     </button>
                                                 </div>
                                             </div>
@@ -409,9 +439,7 @@
                 next: 5,
                 intervalProgressbar: null,
                 widhtStyle: '',
-                form: {
-                    radio: '',
-                },
+                option: 0,
                 filterIds: [],
                 timesArray: [
                     {
@@ -521,10 +549,12 @@
             Footer
         },
         watch: {
-            form: {
+            option: {
                 handler: function (val) {
-                    let radio = val.radio
-                    if(radio.length > 0) {
+                    // console.log(val)
+                    // let radio = val.radio
+                    if(val.length > 0) {
+                        // console.log(val);
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -549,6 +579,10 @@
             closeModal() {
                 // console.log("test")
                 $('#successModal').modal('hide')
+            },
+            closeConfirmModal() {
+                // console.log("test")
+                $('#confirmModal').modal('hide')
             },
             validateRequest(){
                 // console.log(value1);
@@ -604,7 +638,7 @@
                 let data = window.atob(this.id)
                 this.dataConfirm = {
                     "id": data,
-                    "status": this.form.radio,
+                    "status": this.option,
                 }
                 // console.log(this.dataConfirm)
                 // this.openModal();
@@ -629,6 +663,7 @@
                         this.isLoadingContent = false;
                         this.buttonDisabled = false;
                         // console.log(this.successResponse)
+                        this.closeConfirmModal();
                         this.openModal();
                         // this.backFunction();
                     }).catch((err) => {
@@ -714,7 +749,7 @@
                             let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
                             // console.log(calculate)
                             // let calculateDays = calculate / (1000*3600*24) 
-                            if (calculate < 7 && calculate > 0) {
+                            if (calculate < 7 && calculate > 1) {
                                 difference = (calculate)+" Hari"   
                             } else if(calculate > 7 && calculate < 30) {
                                 difference = (calculate/7)+" Minggu"   
@@ -843,6 +878,8 @@
                 this.$router.push({ name: "user.otpPage" });
             } else if (this.$roles === "Member"){
                 this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
+            } else if (this.$route.query.data == null) {
+                this.$router.push({ name: "dashboard" });
             }
         },  
         mounted(){

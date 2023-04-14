@@ -36,7 +36,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Peminjaman</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -49,6 +49,34 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="
+                                                this.keyCode != null ||
+                                                this.keyDateOne != null ||
+                                                this.keyDateTwo != null ||
+                                                this.keyDueDateOne != null ||
+                                                this.keyDueDateTwo != null ?
+                                                'col-12 pb-3':'d-none'"
+                                            >
+                                                <h5 class="text-center">
+                                                    Menampilkan hasil pencarian untuk
+                                                    <br>
+                                                    <template v-if="this.keyCode != ''">
+                                                        Kode Peminjaman: {{ this.keyCode }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDateOne != '' && keyDateTwo == ''">
+                                                        Tanggal Peminjaman: {{ new Date(this.keyDateOne).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDateOne != '' && keyDateTwo != ''">
+                                                        Tanggal Peminjaman di antara: {{ new Date(this.keyDateOne).toLocaleDateString("id") }} s/d {{ new Date(this.keyDateTwo).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDueDateOne != '' && keyDueDateTwo == ''">
+                                                        Tenggat: {{ new Date(this.keyDueDateOne).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                    <template v-if="this.keyDueDateOne != '' && keyDueDateTwo != ''">
+                                                        Tenggat Peminjaman di antara: {{ new Date(this.keyDueDateOne).toLocaleDateString("id") }} s/d {{ new Date(this.keyDueDateTwo).toLocaleDateString("id") }} <br>
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'mx-2 col-12 pb-3':'mx-2 col-12 pb-3'">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search row">
                                                     <div class="input-group col-12">
@@ -133,11 +161,11 @@
                                                     <thead>
                                                         <tr class="text-center">
                                                             <th class="align-middle">No</th>
-                                                            <th class="align-middle">Kode</th>
+                                                            <th class="align-middle">Kode Transaksi</th>
                                                             <th class="align-middle">Status</th>
-                                                            <th class="align-middle">Waktu Mulai</th>
-                                                            <th class="align-middle">Tenggat Waktu</th>
-                                                            <th class="align-middle">Periode</th>
+                                                            <th class="align-middle">Waktu Peminjaman</th>
+                                                            <th class="align-middle">Deadline Pengembalian</th>
+                                                            <th class="align-middle">Lama Peminjaman</th>
                                                             <th class="align-middle">Peminjam</th>
                                                             <th class="align-middle">Disetujui Oleh</th>
                                                             <th class="align-middle">Dikembalikan Kepada</th>
@@ -197,14 +225,14 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <div v-else class="row d-flex justify-content-evenly">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Permintaan</h6>
+                                                                    <h6 class="mb-0">Data Peminjaman</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -212,9 +240,9 @@
                                                             <h5 class="heading text-left">{{item.code}}</h5> <br>
                                                             <p>
                                                                 <big v-if="item.status == '3'">Status: <b class="text-success">Selesai</b></big><br>
-                                                                <big>Tanggal: {{item.date_string}}</big><br>
-                                                                <big>Tenggat: {{item.due_date_string}}</big><br>
-                                                                <big>Periode: <b>{{item.difference}}</b></big><br>
+                                                                <big>Waktu Pinjam: {{item.date_string}}</big><br>
+                                                                <big>Deadline: {{item.due_date_string}}</big><br>
+                                                                <big>Lama Pinjam: <b>{{item.difference}}</b></big><br>
                                                                 <big>Peminjam:
                                                                     <template v-if="item.loaner_name.length < 20">
                                                                         {{item.loaner_name}}
@@ -266,7 +294,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-pencil-square-o"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Permintaan</h6>
+                                                                    <h6 class="mb-0">Data Peminjaman</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -297,17 +325,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.keyCode != NULL ||
-                                            this.keyDateOne != NULL ||
-                                            this.keyDateTwo != NULL ||
-                                            this.keyDueDateOne != NULL ||
-                                            this.keyDueDateTwo != NULL ||
-                                            this.keyLoaner != NULL
+                                        <div v-if="this.keyCode != null ||
+                                            this.keyDateOne != null ||
+                                            this.keyDateTwo != null ||
+                                            this.keyDueDateOne != null ||
+                                            this.keyDueDateTwo != null ||
+                                            this.keyLoaner != null
                                             " class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat seluruh data
+                                                    Hapus Filter
                                                 </button>
                                             </div>
                                             <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
@@ -379,7 +407,7 @@
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
-                take: 0,
+                take: 10,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -534,13 +562,7 @@
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.skip+10;
-                    this.take = 10;
-                } else {
-                    this.skip = this.skip+4;
-                    this.take = 4;
-                }
+                this.skip = this.skip+10;
                 // console.log(this.skip)
                 this.getLoansDone(this.skip, this.take)
             },
@@ -663,7 +685,7 @@
                                 let calculate = Math.round((getDueDateTime - getDateTime) / (1000*3600*24))
                                 // console.log(calculate)
                                 // let calculateDays = calculate / (1000*3600*24) 
-                                if (calculate < 7 && calculate > 0) {
+                                if (calculate < 7 && calculate > 1) {
                                     difference = (calculate)+" Hari"   
                                 } else if(calculate > 7 && calculate < 30) {
                                     difference = (calculate/7)+" Minggu"   
@@ -695,7 +717,7 @@
                                     "difference": difference
                                 }
                             );
-                            console.log(new Date().getTime() == getDueDateTime)
+                            // console.log(new Date().getTime() == getDueDateTime)
                         });
 
                         // this.dataArray.filter((index) => index != 2)
@@ -799,13 +821,7 @@
             }
             // console.log(this.take);
             // this.loansList();
-            if(this.windowWidth > this.$widthLandscapePhone){
-                this.take = 10;
-                this.getLoansDone(this.skip, this.take);
-            } else {
-                this.take = 4;
-                this.getLoansDone(this.skip, this.take);
-            } 
+            this.getLoansDone(this.skip, this.take); 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)
 

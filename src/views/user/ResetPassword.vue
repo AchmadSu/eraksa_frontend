@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-1 py-3': 'row text-center mt-lg-1 pt-3'">
-                    <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                    <p class="text-secondary">Eraksa - Politeknik TEDC Bandung <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
                 </div>
             </div>
         </div>    
@@ -53,9 +53,13 @@
             <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
                 <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
                     <center>
-                        <picture class="mx-5">
-                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                        <picture v-if="windowWidth <= $widthPotraitPhone" class="mx-3">
+                            <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                        </picture>
+                        <picture v-else-if="windowWidth > $widthPotraitPhone && windowWidth < $widthComputer" class="mx-3">
+                            <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                            <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-25" alt="...">
                         </picture>
                     </center>
                 </div>
@@ -279,7 +283,7 @@
                 </div>
             </div>
             <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                <p class="text-secondary">Eraksa - Politeknik TEDC Bandung <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
             </div>
         </div>
     </div>
@@ -577,15 +581,14 @@
                 if (this.$session['status'] == "0") {
                     this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
                 } else {
-                    this.lastPath = this.$router.options.history.state.back
-                    if(this.lastPath != null) {
-                        this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
-                    }
-                    else {
-                        this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
-                    }
+                    this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
                 }
             }
+        },
+        created(){
+            window.addEventListener('resize', () => {
+                this.windowWidth = window.innerWidth;
+            });
         },
         beforeMount(){
             if(this.email === null || this.token === null || this.token.length !== 60 || JSON.stringify(this.expiredAt) == 'null') {

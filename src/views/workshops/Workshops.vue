@@ -90,6 +90,13 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="this.keyWords != null ? 'col-12 pb-3':'d-none'">
+                                                <h5 class="text-center">
+                                                    <template v-if="this.keyWords != ''">
+                                                        Menampilkan hasil pencarian: {{this.keyWords}}
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
                                                 <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-trash-o"></i> &ensp;Data Sampah
@@ -173,7 +180,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <div v-else class="row d-flex justify-content-evenly">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
@@ -244,7 +251,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
+                                        <div v-if="this.$route.query.search != null" class="row my-lg-3 my-5">
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
                                                     Muat seluruh data
@@ -311,7 +318,7 @@
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
-                take: 0,
+                take: 10,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -471,13 +478,7 @@
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.skip+10;
-                    this.take = 10;
-                } else {
-                    this.skip = this.skip+4;
-                    this.take = 4;
-                }
+                this.skip = this.skip+10;
                 // console.log(this.skip)
                 this.getWorkshops(this.skip, this.take)
             },
@@ -763,13 +764,7 @@
             }
             // console.log(this.take);
             // this.loansList();
-            if(this.windowWidth > this.$widthLandscapePhone){
-                this.take = 10;
-                this.getWorkshops(this.skip, this.take);
-            } else {
-                this.take = 4;
-                this.getWorkshops(this.skip, this.take);
-            } 
+            this.getWorkshops(this.skip, this.take); 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)
 

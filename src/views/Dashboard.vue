@@ -26,7 +26,7 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <div v-if="this.$roles == 'Super-Admin'">
+                        <div v-if="this.$roles != 'Member'">
                             <Dashboard></Dashboard>
                             <hr class="sidebar-divider bg-secondary">
                         </div>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="row d-flex justify-content-evenly">
                                 <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
-                                    <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
+                                    <div @click="assetDetails(item.id)" class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
@@ -186,24 +186,49 @@
             toTop(){
                 window.scrollTo(0,0);
             },
+            assetDetails(id){
+                // console.log("Teset")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                let data = window.btoa(id);
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ name: 'menu.assetsDetail', query: {data: data} }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
             async loansList(){
-                if (this.windowWidth >= this.$widthLandscapePhone) {
-                    // console.log('test1');
-                    this.dataLoans = {
-                        "status": "0",
-                        "condition": "0",
-                        "skip": 0,
-                        "take": 6,
-                        "order": "name"
-                    }
-                } else {
-                    this.dataLoans = {
-                        "status": "0",
-                        "condition": "0",
-                        "skip": 0,
-                        "take": 4,
-                        "order": "name"
-                    }
+                this.dataLoans = {
+                    "status": "0",
+                    "condition": "0",
+                    "skip": 0,
+                    "take": 6,
+                    "order": "name"
                 }
                 try {
                     await axios.get('/assets/getAll', {params: this.dataLoans})

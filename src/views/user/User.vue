@@ -5,6 +5,88 @@
         </div>
     </div>
     <div v-else>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'eraseModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>{{ item.name }}</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.delete(item.id)" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successDelete" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="setSuccessClose(item.id)" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="eraseModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalSelectedLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>Data Terpilih</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.deleteMultiple" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successDelete" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalSelectedLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -36,7 +118,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Pengguna</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -49,6 +131,58 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
+                                            <div :class="
+                                                this.keyWords != null ||
+                                                this.keyCodeType != null ||
+                                                this.keyRole != null ||
+                                                this.keyStatus != null ||
+                                                this.keyStudyProgramName != null 
+                                                ? 'col-12 pb-3':'d-none'"
+                                            >
+                                                <h5 class="text-center">
+                                                    Menampilkan hasil pencarian
+                                                    <template v-if="this.keyWords != ''">
+                                                        kata kunci: {{ this.keyWords }} 
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyCodeType != ''">
+                                                        <template v-if="this.keyCodeType == '0'">
+                                                            jenis: Mahasiswa
+                                                        </template>
+                                                        <template v-else-if="this.keyCodeType == '1'">
+                                                            jenis: Dosen
+                                                        </template>
+                                                        <template v-else-if="this.keyCodeType == '2'">
+                                                            jenis: Karyawan
+                                                        </template>
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyRole != ''">
+                                                        <template v-if="this.keyRole == '1'">
+                                                            peran: Super-Admin
+                                                        </template>
+                                                        <template v-else-if="this.keyRole == '2'">
+                                                            peran: Admin
+                                                        </template>
+                                                        <template v-else-if="this.keyRole == '2'">
+                                                            peran: Member
+                                                        </template>
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyStatus != ''">
+                                                        <template v-if="this.keyStatus == '1'">
+                                                            Status: Aktif
+                                                        </template>
+                                                        <template v-else-if="this.keyStatus == '0'">
+                                                            Status: Belum diverifikasi
+                                                        </template>
+                                                        <br>
+                                                    </template>
+                                                    <template v-if="this.keyStudyProgramName != ''">
+                                                        Program Studi: {{this.keyStudyProgramName}} <br>
+                                                    </template>
+                                                </h5>
+                                            </div>
                                             <div class="col-12 pb-3">
                                                 <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-trash-o"></i> &ensp;Data Sampah
@@ -61,15 +195,7 @@
                                                             v-model="form.keyWords"
                                                             name="search"
                                                             class="form-control input-lg bg-light"
-                                                            placeholder="Cari Nama/Email"
-                                                            aria-label="Code"
-                                                            aria-describedby="basic-addon2"
-                                                        />
-                                                        <input type="text"
-                                                            v-model="form.code"
-                                                            name="search"
-                                                            class="form-control input-lg bg-light"
-                                                            placeholder="Cari NIM/NIDN"
+                                                            placeholder="Cari Nama/Email/NIM/NIDN"
                                                             aria-label="Code"
                                                             aria-describedby="basic-addon2"
                                                         />
@@ -83,6 +209,7 @@
                                                                 <option selected disabled>Jenis Pengguna</option>
                                                                 <option value="0">Mahasiswa</option>
                                                                 <option value="1">Dosen</option>
+                                                                <option value="2">Karyawan</option>
                                                             </select>
                                                             <select 
                                                                 class="form-select form-select mb-3"
@@ -94,7 +221,7 @@
                                                                 <option value="1">Aktif</option>
                                                                 <option value="0">Belum diverifikasi</option>
                                                             </select>
-                                                            <input type="text"
+                                                            <input v-if="$roles == 'Super-Admin'" type="text"
                                                                 v-model="form.study_program_keyWords"
                                                                 name="study_programs"
                                                                 class="form-control input-lg bg-light" 
@@ -122,6 +249,11 @@
                                                     </div>
                                                 </form>
                                             </div>
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#eraseModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                    <i class="fa fa-trash-o"></i> &ensp;Hapus data terpilih
+                                                </button>
+                                            </div>
                                         </div>
                                         <div v-if="this.dataArray.length == 0">
                                             <div v-for="item in errorResponse" :key="item.id" class="row">
@@ -142,9 +274,9 @@
                                                 <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
                                                     <thead>
                                                         <tr class="text-center">
-                                                            <th class="align-middle">No</th>
+                                                            <th class="align-middle">Pilih</th>
                                                             <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">NIM/NIDN</th>
+                                                            <th class="align-middle">NIM/NIDN/NIP</th>
                                                             <th class="align-middle">Email</th>
                                                             <th class="align-middle">Tipe</th>
                                                             <th class="align-middle">Status</th>
@@ -156,7 +288,9 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                            <td class="align-middle text-center">{{index+1}}</td>
+                                                            <td class="text-center align-middle">
+                                                                <input v-model="this.filterIds" type="checkbox" :value="item.id">
+                                                            </td>
                                                             <td class="align-middle text-justify"><b>{{item.name}}</b></td>
                                                             <td class="align-middle text-justify">
                                                                 <b>
@@ -181,9 +315,14 @@
                                                                     Mahasiswa
                                                                 </b>
                                                             </td>
-                                                            <td v-else class="align-middle text-center">
+                                                            <td v-else-if="item.code_type == '1'" class="align-middle text-center">
                                                                 <b>
                                                                     Dosen
+                                                                </b>
+                                                            </td>
+                                                            <td v-else-if="item.code_type == '2'" class="align-middle text-center">
+                                                                <b>
+                                                                    Karyawan
                                                                 </b>
                                                             </td>
                                                             <td v-if="item.status == '1'" class="align-middle text-center text-primary">
@@ -199,7 +338,7 @@
                                                             <td class="align-middle text-left">{{item.phone}}</td>
                                                             <td class="align-middle text-left">
                                                                 <template v-if="item.study_program_name == null">
-                                                                    &nbsp;
+                                                                    Umum
                                                                 </template>
                                                                 <template v-else>
                                                                     {{ item.study_program_name }}
@@ -209,13 +348,13 @@
                                                                 {{ item.user_role }}
                                                             </td>
                                                             <td :class="$roles == 'Super-Admin' ? 'align-middle text-center':'d-none'">
-                                                                <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-pencil"></i> <br> Edit
+                                                                <button @click="assignRoles(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                                    <i class="fa fa-pencil"></i> <br> Edit Peran
                                                                 </button>
                                                             </td>
                                                             <td class="align-middle text-center" :colspan="$roles == 'Super-Admin' ? '2':''">
-                                                                <button @click="demand(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-trash"></i> <br> Hapus
+                                                                <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger ">
+                                                                    <i class="fa fa-trash"></i> <br> Hapus Data
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -228,7 +367,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <div v-else class="row d-flex justify-content-evenly">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
@@ -236,6 +375,11 @@
                                                                 <div class="icon"> <i class="fa fa-user"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Pengguna</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -246,8 +390,11 @@
                                                                     <template v-if="item.code_type == '0'">
                                                                         NIM: 
                                                                     </template>
-                                                                    <template v-else>
-                                                                        NIDN:
+                                                                    <template v-else-if="item.code_type == '1'">
+                                                                        NIDN: 
+                                                                    </template>
+                                                                    <template v-else-if="item.code_type == '2'">
+                                                                        NIP: 
                                                                     </template>
                                                                     {{item.code}}
                                                                 </big>
@@ -273,13 +420,15 @@
                                                                 </big>
                                                                 <br>
                                                                 <big>No. WhatsApp: {{item.phone}}</big><br>
-                                                                <big>Program Studi: {{item.study_program_name}}</big><br>
+                                                                <template v-if="item.study_program_name">
+                                                                    <big>Program Studi: {{item.study_program_name}}</big><br>
+                                                                </template>
                                                                 <big>Peran Pengguna: <b>{{item.user_role}}</b></big><br>
                                                             </p>
                                                             <div class="mt-3">
                                                                 <div class="row my-3 py-2">
                                                                     <div v-if="$roles == 'Super-Admin'" class="col-12 py-2">
-                                                                        <button @click="detailRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                        <button @click="assignRoles(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
                                                                             <i class="fa fa-pencil"></i> &ensp; Edit Peran Pengguna
                                                                         </button>
                                                                     </div>
@@ -333,17 +482,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.keyCode != NULL ||
-                                            this.keyCodeType != NULL ||
-                                            this.keyStudyProgramName != NULL ||
-                                            this.keyRole != NULL ||
-                                            this.keyWords != NULL ||
-                                            this.keyStatus != NULL
+                                        <div v-if="
+                                            this.keyCodeType != null ||
+                                            this.keyStudyProgramName != null ||
+                                            this.keyRole != null ||
+                                            this.keyWords != null ||
+                                            this.keyStatus != null
                                             " class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat seluruh data
+                                                    Hapus Filter
                                                 </button>
                                             </div>
                                             <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
@@ -402,7 +551,6 @@
                 sidebarShow: true,
                 imageLogo: false,
                 keyWords: this.$route.query.keyWords,
-                keyCode: this.$route.query.code,
                 keyCodeType: this.$route.query.codeType,
                 keyStatus: this.$route.query.status,
                 keyStudyProgramName: this.$route.query.studyProgramName,
@@ -415,7 +563,7 @@
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
-                take: 0,
+                take: 10,
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
@@ -429,7 +577,6 @@
                 isDateOneIsset: false,
                 isDueDateOneIsset: false,
                 searchKeyWords: '',
-                searchCode: '',
                 searchCodeType: '',
                 searchStatus: '',
                 searchStudyPrograms: '',
@@ -441,6 +588,7 @@
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
+                filterIds: [],
                 username: this.$session.name,
                 errorLoans: false,
                 errorMaintenance: false,
@@ -461,9 +609,8 @@
                 handler: function (val) {
                     console.log(val)
                     this.searchKeyWords = val.keyWords;
-                    this.searchCode = val.code;
                     
-                    if(val.code_type == '0' || val.code_type == '1') {
+                    if(val.code_type == '0' || val.code_type == '1' || val.code_type == '2') {
                         this.searchCodeType = val.code_type;
                     }
 
@@ -510,7 +657,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageloans.trash' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageUser.trash' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -523,7 +670,7 @@
                     ];
                 }
             },
-            detailRouter(id){
+            assignRoles(id){
                 // console.log("Teset")
                 this.setProgress = true;
                 this.isLoadingRouter = true;
@@ -546,7 +693,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageLoans.confirmation', query: {data: data} }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageUser.roles', query: {data: data} }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -561,6 +708,7 @@
             },
             setSuccessClose(id){
                 // console.log(id);
+                this.setAlert
                 this.successDelete = false;
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
@@ -569,13 +717,7 @@
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.skip+10;
-                    this.take = 10;
-                } else {
-                    this.skip = this.skip+4;
-                    this.take = 4;
-                }
+                this.skip = this.skip+10;
                 // console.log(this.skip)
                 this.getUsers(this.skip, this.take)
             },
@@ -638,7 +780,6 @@
                             this.$router.push({ name: 'manageUser', 
                                 query: {
                                     keyWords: this.searchKeyWords,
-                                    code: this.searchCode,
                                     codeType: this.searchCodeType,
                                     role: this.searchRole,
                                     status: this.searchStatus,
@@ -658,6 +799,7 @@
                 }
             },
             async delete(id){
+                this.setAlert
                 this.isLoadingDelete = true;
                 this.buttonDisabled = true;
                 this.dataObject = {
@@ -665,7 +807,89 @@
                 };
                 // this.dataArray = this.dataArray.filter((e) => e.id !== id);
                 try {
-                    await axios.delete('/loans/delete', {params: this.dataObject})
+                    await axios.delete('/users/delete', {params: this.dataObject})
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successDeleteResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingDelete = false;
+                        this.successDelete = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorDelete = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingDelete = false;
+                }
+            },
+            async deleteMultiple(){
+                this.setAlert
+                this.isLoadingDelete = true;
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": this.filterIds
+                };
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/users/delete', {params: this.dataObject})
                     .then((response) => {
                         // console.log(response.data.data);
                         // this.dataArray = this.dataArray.filter((item) => item.id !== id );
@@ -746,11 +970,11 @@
                     "skip": skip,
                     "take": take,
                     "status": this.keyStatus,
-                    "code": this.keyCode,
                     "keyWords": this.keyWords,
                     "code_type": this.keyCodeType,
                     "roles": this.keyRole,
-                    "study_program_keyWords": this.keyStudyProgramName
+                    "study_program_keyWords": this.keyStudyProgramName,
+                    "order": "name"
                 }
                 try {
                     await axios.get('/users/getAll', {params: this.dataObject})
@@ -875,13 +1099,7 @@
             }
             // console.log(this.take);
             // this.loansList();
-            if(this.windowWidth > this.$widthLandscapePhone){
-                this.take = 10;
-                this.getUsers(this.skip, this.take);
-            } else {
-                this.take = 4;
-                this.getUsers(this.skip, this.take);
-            } 
+            this.getUsers(this.skip, this.take); 
             // this.dataArray.filter((index) => index !== 1 )
             // console.log(this.dataArray.length)
 

@@ -46,6 +46,76 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="eraseModalSelected" tabindex="-1" data-bs-backdrop="static" aria-labelledby="eraseModalSelectedLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div v-if="successDelete == false" class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="text-light modal-title" id="eraseModalSelectedLabel"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> &ensp;Konfirmasi penghapusan</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-dark">
+                        Apakah anda yakin akan menghapus <b>Data Terpilih</b>?
+                        <div v-for="item in errorDelete" :key="item.id" :class="showAlertError == true ? 'text-start alert alert-warning alert-dismissible' : 'd-none'" role="alert">
+                            <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            <button v-if="this.isLoadingDelete == false" :disabled="buttonDisabled" @click="this.deleteMultiple" type="button" class="btn btn-danger">Hapus</button>
+                            <button :disabled="buttonDisabled" v-if="this.isLoadingDelete" class="btn btn-danger">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Memuat...
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="successDelete" class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="eraseModalSelectedLabel"><font-awesome-icon icon="fa-solid fa-circle-check" />  &ensp;Permintaan berhasil!</h5>
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="item in successDeleteResponse" :key="item.id" :class="showAlertSuccess == true ? 'd-block':'d-none'">
+                            <div class="text-start text-success alert ml-3 alert-dismissible" role="alert">
+                                <strong> {{ item.message }}</strong> <br/> {{ item.detail }} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="backFunction" :disabled="buttonDisabled" type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-for="item, index in dataArray" :key="item.id" class="modal fade" :id="'QrModal'+item.id" tabindex="-1" data-bs-backdrop="static" aria-labelledby="QrModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-success">
+                        <h5 class="text-light modal-title" id="QrModalLabel"><i class="fa fa-qrcode"></i> &ensp;Generate QrCode</h5>
+                        <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center text-dark">
+                        <div :id="'capture'+item.id" class="bg-light text-primary py-3">
+                            <h4 class="mb-2">
+                                <b>ERAKSA</b>
+                            </h4>
+                            <QrCode 
+                            :value="item.qrCode"
+                            size="300"
+                            level="H" 
+                            />
+                            <h6>
+                                <b>{{item.code}}</b>
+                            </h6>
+                        </div>
+                        <div class="mt-3 float-end">
+                            <button :disabled="buttonDisabled" type="button" class="mr-4 mr-lg-3 btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                            <button @click="this.downloadQrCode(item.code, ('capture'+item.id))" type="button" class="btn btn-success"><i class="fa fa-download"></i> Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px; z-index: 10000">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
@@ -77,7 +147,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">Data Aset</h6>
                                     </div>
                                     <div class="col-6">
-                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount}}</h6>
+                                        <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -90,16 +160,138 @@
                                     </div>
                                     <div v-else>
                                         <div class="row">
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6':'col-12 pb-3'">
+                                            <div :class="
+                                                this.keyWords != null ||
+                                                this.creator != null ||
+                                                this.studyProgram != null ||
+                                                this.placement != null ||
+                                                this.category != null ?
+                                                'col-12 pb-3':'d-none'"
+                                            >
+                                                <h5 class="text-center">
+                                                    Menampilkan hasil pencarian
+                                                    <br>
+                                                    <template v-if="this.keyWords != '' && this.keyWords != null">
+                                                        Nama Aset atau Kode Aset: {{ this.keyWords}} <br>
+                                                    </template>
+                                                    <template v-if="this.creator != '' && this.creator != null">
+                                                        Nama Pembuat: {{ this.creator}} <br>
+                                                    </template>
+                                                    <template v-for="item, index in dataArray" :key="item.id">
+                                                        <template v-if="this.studyProgram != '' && this.studyProgram != null && item.study_program_id == this.dataStudyProgram && index == 0">
+                                                            Program Studi: {{ item.study_program_name }}
+                                                            <br>
+                                                        </template>
+                                                    </template>
+                                                    <template v-for="item, index in dataArray" :key="item.id">
+                                                        <template v-if="this.category != '' && this.category != null && item.category_id == this.dataCategory && index == 0">
+                                                            Kategori: {{ item.category_name }}
+                                                            <br>
+                                                        </template>
+                                                    </template>
+                                                    <template v-for="item, index in dataArray" :key="item.id">
+                                                        <template v-if="this.placement != '' && this.placement != null && item.placement_id == this.dataPlacement && index == 0">
+                                                            Tempat: {{ item.placement_name }}
+                                                            <br>
+                                                        </template>
+                                                    </template>
+                                                </h5>
+                                            </div>
+                                            <div class="col-12 pb-3">
                                                 <button :disabled="buttonDisabled" @click="trashRouter" class="btn w-100 btn-secondary rounded-0">
                                                     <i class="fa fa-trash-o"></i> &ensp;Data Sampah
                                                 </button>
                                             </div>
-                                            <div :class="this.windowWidth >= this.$widthLandscapePhone ? 'col-6 pb-3':'col-12 pb-3'">
+                                            <div v-if="this.filterIds.length > 0" class="col-12 pb-3">
+                                                <button type="button" data-bs-toggle="modal" data-bs-target="#eraseModalSelected" :disabled="buttonDisabled" class="btn w-100 btn-danger rounded-0">
+                                                    <i class="fa fa-trash-o"></i> &ensp;Hapus data terpilih
+                                                </button>
+                                            </div>
+                                            <div class="col-12 pb-3">
                                                 <form class="w-100 d-sm-inline-block form-inline my-2 my-md-0 navbar-search">
                                                     <div class="input-group">
                                                         <input type="text" v-model="form.search" name="search" class="form-control input-lg bg-light" placeholder="Cari Nama atau Kode"
                                                             aria-label="Search" aria-describedby="basic-addon2">
+
+                                                        <template v-if="this.windowWidth > $widthPotraitPhone">
+                                                            <input type="text" v-model="form.creator" name="creator" class="form-control input-lg bg-light" placeholder="Cari Nama Pembuat"
+                                                                aria-label="Search" aria-describedby="basic-addon2">
+
+                                                            <template v-if="this.$roles == 'Super-Admin'">
+                                                                <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
+                                                                    <option selected disabled>Program Studi</option>
+                                                                    <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                                    <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                                </select>
+                                                                <div v-if="this.isLoadingStudyPrograms == false">
+                                                                    <div class="rounded-0 d-none d-lg-block">
+                                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                    </div>
+                                                                    <div class="rounded-0 d-sm-block d-lg-none">
+                                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
+                                                                    </div>
+                                                                </div>
+                                                                <div v-else>
+                                                                    <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    </button>
+                                                                    <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
+                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </template>
+    
+                                                            <select :disabled="this.isLoadingCategory" v-model="form.category_assets" class="form-select form-select" aria-label=".form-select example">
+                                                                <option selected disabled>Kategori</option>
+                                                                <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                                <option v-if="this.showAlertCategory" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                            </select>
+                                                            <div v-if="this.isLoadingCategory == false">
+                                                                <div class="rounded-0 d-none d-lg-block">
+                                                                    <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                    <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                            
+                                                                </div>
+                                                                <div class="rounded-0 d-sm-block d-lg-none">
+                                                                    <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                    <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                </div>
+                                                            </div> 
+                                                            <div v-else>
+                                                                <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                </button>
+                                                                <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                </button>
+                                                            </div>
+    
+                                                            <select :disabled="this.isLoadingPlacements" v-model="form.placements" class="form-select form-select" aria-label=".form-select example">
+                                                                <option selected disabled>Tempat</option>
+                                                                <option v-for="item in placementsArray" :key="item.id" :value="item.id">{{item.name}}</option>
+                                                                <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
+                                                            </select>
+                                                            <div v-if="this.isLoadingPlacements == false">
+                                                                <div class="rounded-0 d-none d-lg-block">
+                                                                    <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                    <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                                </div>
+                                                                <div class="rounded-0 d-sm-block d-lg-none">
+                                                                    <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                    <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
+                                                                </div>
+                                                            </div>
+                                                            <div v-else>
+                                                                <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                </button>
+                                                                <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                </button>
+                                                            </div>
+                                                        </template>
+
                                                         <div class="input-group-append">
                                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
@@ -138,7 +330,8 @@
                                                 <table class="table table-hover table-bordered border" id="dataTable" width="100%" cellspacing="0">
                                                     <thead>
                                                         <tr class="text-center">
-                                                            <th class="align-middle">No</th>
+                                                            <th class="align-middle">Pilih</th>
+                                                            <!-- <th class="align-middle">No</th> -->
                                                             <th class="align-middle">Nama</th>
                                                             <th class="align-middle">Kode Aset</th>
                                                             <th class="align-middle">Dibuat oleh</th>
@@ -148,7 +341,7 @@
                                                             <th class="align-middle">Tanggal Masuk</th>
                                                             <th class="align-middle">Penempatan</th>
                                                             <th class="align-middle">Kategori Aset</th>
-                                                            <th class="align-middle" colspan="6">
+                                                            <th class="align-middle" colspan="3">
                                                                 <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
@@ -157,34 +350,38 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr v-for="item, index in this.dataArray" :key="item.id">
-                                                            <td class="text-center">{{index+1}}</td>
-                                                            <td><b>{{item.name}}</b></td>
-                                                            <td>{{item.code}}</td>
-                                                            <td>{{item.user_name}}</td>
-                                                            <td>{{item.study_program_name}}</td>
-                                                            <td v-if="item.condition == 0">Optimal</td>
-                                                            <td v-else>Rusak</td>
-                                                            <td v-if="item.status == 0">Tersedia</td>
-                                                            <td v-else-if="item.status == 1">Dipinjam</td>
-                                                            <td v-else-if="item.status == 2">Diperbaiki</td>
-                                                            <td>{{item.date}}</td>
-                                                            <td>{{item.placement_name}}</td>
-                                                            <td>{{item.category_name}}</td>
-                                                            <td v-if="item.status == 0" class="text-center" colspan="3">
-                                                                <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
-                                                                    <i class="fa fa-pencil"></i> <br>
+                                                            <td class="text-center align-middle">
+                                                                <input v-if="item.status === '0'" v-model="this.filterIds" type="checkbox" :value="item.id">
+                                                            </td>
+                                                            <!-- <td class="text-center align-middle">{{index+1}}</td> -->
+                                                            <td class="align-middle"><b>{{item.name}}</b></td>
+                                                            <td class="align-middle">{{item.code}}</td>
+                                                            <td class="align-middle">{{item.user_name}}</td>
+                                                            <td class="align-middle">{{item.study_program_name}}</td>
+                                                            <td class="align-middle" v-if="item.condition == 0">Optimal</td>
+                                                            <td class="align-middle" v-else>Rusak</td>
+                                                            <td class="align-middle" v-if="item.status == 0">Tersedia</td>
+                                                            <td class="align-middle" v-else-if="item.status == 1">Dipinjam</td>
+                                                            <td class="align-middle" v-else-if="item.status == 2">Diperbaiki</td>
+                                                            <td class="align-middle">{{item.date}}</td>
+                                                            <td class="align-middle">{{item.placement_name}}</td>
+                                                            <td class="align-middle">{{item.category_name}}</td>
+                                                            <template v-if="item.status == 0">
+                                                                <td class="align-middle text-center">
+                                                                    <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary">
+                                                                        <i class="fa fa-pencil"></i> <br>
+                                                                    </button>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
+                                                                        <i class="fa fa-trash-o"></i> <br>
+                                                                    </button>
+                                                                </td>
+                                                            </template>
+                                                            <td :colspan="item.status == 0 ? '' : '3'" class="text-center align-middle">
+                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#QrModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-success">
+                                                                    <i class="fa fa-qrcode"></i> <br>
                                                                 </button>
-                                                            </td>
-                                                            <td v-else class="text-center bg-light" colspan="3">
-                                                                &nbsp;
-                                                            </td>
-                                                            <td v-if="item.status == 0" class="text-center" colspan="3">
-                                                                <button type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-danger">
-                                                                    <i class="fa fa-trash-o"></i> <br>
-                                                                </button>
-                                                            </td>
-                                                            <td v-else class="text-center bg-light" colspan="3">
-                                                                &nbsp;
                                                             </td>
                                                         </tr>
                                                         <tr v-for="item in errorResponse" :key="item.id" :class="showAlert == true">
@@ -196,19 +393,24 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div v-else class="row">
+                                            <div v-else class="row d-flex justify-content-evenly">
                                                 <div v-for="item in this.dataArray" :key="item.id" class="col-sm-6 my-3">
                                                     <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-info p-3">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-cubes"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Aset</h6>
                                                                 </div>
                                                             </div>
+                                                            <div class="d-flex flex-row align-items-center">
+                                                                <div v-if="item.status === '0'" class="form-check form-switch">
+                                                                    <input class="form-check-input" v-model="this.filterIds" :value="item.id" type="checkbox" id="flexSwitchCheckChecked">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="my-2">
-                                                            <h3 class="heading">{{item.name}}</h3>
+                                                            <h3 class="heading text-left">{{item.name}}</h3>
                                                             <p>{{item.code}}</p>
                                                             <p>
                                                                 <big>Dibuat oleh: {{item.user_name}}</big><br>
@@ -227,18 +429,22 @@
                                                                 <big>Kategori Aset: {{item.category_name}}</big><br>
                                                             </p>
                                                             <div class="mt-3">
-                                                                <div v-if="item.status == 0" class="row my-3 py-2">
+                                                                <div class="row my-3 py-2">
+                                                                    <template v-if="item.status == 0">
+                                                                        <div class="col-12 py-2">
+                                                                            <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
+                                                                                <i class="fa fa-pencil"></i> &ensp; Ubah data
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="col-12 py-2">
+                                                                            <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
+                                                                                <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                            </button>
+                                                                        </div>
+                                                                    </template>
                                                                     <div class="col-12 py-2">
-                                                                        <button @click="updateRouter(item.id)" :disabled="buttonDisabled" class="btn w-100 btn-primary rounded-0">
-                                                                            <i class="fa fa-pencil"></i> &ensp; Ubah data
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="col-12 w-100 text-center py-2">
-                                                                       ATAU
-                                                                    </div>
-                                                                    <div class="col-12 py-2">
-                                                                        <button :disabled="buttonDisabled" type="button" data-bs-toggle="modal" :data-bs-target="'#eraseModal'+item.id" class="btn w-100 btn-danger rounded-0">
-                                                                            <i class="fa fa-trash-o"></i> &ensp; Hapus
+                                                                        <button type="button" data-bs-toggle="modal" :data-bs-target="'#QrModal'+item.id" :disabled="buttonDisabled" class="btn w-100 btn-success rounded-0">
+                                                                            <i class="fa fa-qrcode"></i> &ensp; Generate QrCode
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -250,7 +456,7 @@
                                                     <div class="card btn text-dark text-justify shadow-lg border-bottom-info p-3 mb-4">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex flex-row align-items-center">
-                                                                <div class="icon"> <i class="fa fa-cubes"></i> </div>
+                                                                <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                 <div class="ms-2 c-details">
                                                                     <h6 class="mb-0">Data Aset</h6>
                                                                 </div>
@@ -283,10 +489,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div v-if="this.$route.query.search != NULL" class="row my-lg-3 my-5">
+                                        <div 
+                                            v-if="this.keyWords != null || this.placement != null || this.category != null || this.placement != null || this.studyProgram != null" 
+                                            class="row my-lg-3 my-5"
+                                        >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
                                                 <button :disabled="buttonDisabled" @click="backFunction" :class="this.windowWidth >= this.$widthPotraitPhone ? 'btn w-50 btn-light rounded-0':'btn w-100 btn-light rounded-0'">
-                                                    Muat seluruh data
+                                                    Hapus Filter
                                                 </button>
                                             </div>
                                             <div v-if="this.isLoadingResponse2 == true" class="col-12 text-center">
@@ -324,39 +533,60 @@
 <script>
     import Sidebar from '../../components/Sidebar.vue';
     import Navbar from '../../components/Navbar.vue';
+    import * as htmlToImage from 'html-to-image'
     // import Dashboard from '../components/admin/Dashboard.vue';
     // import Maintenance from '../components/admin/Maintenance.vue';
     import Footer from '../../components/Footer.vue';
+    import QrCode from 'qrcode.vue';
     import { useRouter } from 'vue-router'
     import axios from 'axios'
     export default{
         data() {
             return {
                 windowWidth: window.innerWidth,
+                QrValue: null,
                 isLoading: true,
                 isLoading: true,
                 buttonDisabled: false,
                 isLoadingContent: true,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
+                isLoadingStudyPrograms: true,
+                isLoadingCategory: true,
+                isLoadingPlacements: true,
                 isLoadingRouter: false,
                 isLoadingImage: true,
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
                 keyWords: this.$route.query.search,
+                creator: this.$route.query.creator,
+                studyProgram: this.$route.query.studyProgram,
+                placement: this.$route.query.placement,
+                category: this.$route.query.category,
                 currentYear: new Date().getFullYear(),
                 setProgress: false,
                 widthProgressBar: 0,
                 dataCount: 0,
                 skip: 0,
-                take: 0,
+                take: 10,
+                dataStudyProgram: '',
+                dataCategory: '',
+                dataPlacements: '',
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
                     search: '',
+                    creator: '',
+                    study_programs: 'Program Studi',
+                    category_assets: 'Kategori',
+                    placements: 'Tempat',
                 },
                 searchParams: '',
+                creatorParams: '',
+                studyProgramParams: '',
+                placementParams: '',
+                categoryParams: '',
                 errorResponse: [],
                 errorDelete: [],
                 successResponse: [],
@@ -364,6 +594,15 @@
                 sessionData: [],
                 dataArray: [],
                 deleteArray: [],
+                studyProgramArray: [],
+                errorStudyPrograms: [],
+                studyProgramTotal: 0,
+                categoryArray: [],
+                errorCategory: [],
+                categoryTotal: 0,
+                placementsArray: [],
+                errorPlacements: [],
+                placementsTotal: 0,
                 username: this.$session.name,
                 errorLoans: false,
                 errorMaintenance: false,
@@ -371,18 +610,46 @@
                 showAlertSuccess: false,
                 showAlertError: false,
                 successDelete: false,
-                accountIcon: this.$baseUrl+'/src/assets/img/account.png'
+                showAlertStudyPrograms: false,
+                showAlertCategory: false,
+                showAlertPlacements: false,
+                skipStudyProgram: 0,
+                takeStudyProgram: 10,
+                skipCategory: 0,
+                takeCategory: 10,
+                skipPlacements: 0,
+                takePlacements: 10,
+                accountIcon: this.$baseUrl+'/src/assets/img/account.png',
+                filterIds: [],
             }
         },
         components: {
             Sidebar,
             Navbar,
-            Footer
+            Footer,
+            QrCode
         },
         watch: {
             form: {
                 handler: function (val) {
+                    // console.log(val)
                     this.searchParams = val.search;
+                    this.creatorParams = val.creator;
+                    if(!isNaN(val.study_programs)) {
+                        this.studyProgramParams = window.btoa(val.study_programs);
+                    }
+                    if(!isNaN(val.category_assets)) {
+                        this.categoryParams = window.btoa(val.category_assets);
+                    }   
+                    if(!isNaN(val.placements)) {
+                        this.placementParams = window.btoa(val.placements);
+                    }   
+                },
+                deep: true,
+            },
+            filterIds: {
+                handler: function (val) {
+                    // console.log(val)
                 },
                 deep: true,
             },
@@ -429,6 +696,15 @@
                         }
                     ];
                 }
+            },
+            downloadQrCode(code, target){
+                htmlToImage.toJpeg(document.getElementById(target), { quality: 0.95 })
+                .then(function (dataUrl) {
+                    var link = document.createElement('a');
+                    link.download = code + '.jpeg';
+                    link.href = dataUrl;
+                    link.click();
+                });
             },
             createRouter(){
                 this.setProgress = true;
@@ -506,17 +782,12 @@
                 this.dataArray = this.dataArray.filter((item) => item.id !== id );
                 this.dataCount--;
                 this.successDeleteResponse = [];
+                this.setAlert()
             },
             nextFunction(){
                 this.isLoadingResponse1 = true;
                 this.buttonDisabled = true;
-                if(this.windowWidth > this.$widthLandscapePhone){
-                    this.skip = this.skip+10;
-                    this.take = 10;
-                } else {
-                    this.skip = this.skip+4;
-                    this.take = 4;
-                }
+                this.skip = this.skip+10;
                 // console.log(this.skip)
                 this.getAssets(this.skip, this.take)
             },
@@ -576,7 +847,16 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'manageAssets', query: {search: this.searchParams} }).then(() => { this.$router.go() })
+                            this.$router.push({ 
+                                name: 'manageAssets', 
+                                query: {
+                                    search: this.searchParams,
+                                    creator: this.creatorParams,
+                                    studyProgram: this.studyProgramParams,
+                                    category: this.categoryParams,
+                                    placement: this.placementParams,
+                                }
+                            }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -591,6 +871,7 @@
             },
             async delete(id){
                 this.isLoadingDelete = true;
+                this.setAlert
                 this.buttonDisabled = true;
                 this.dataObject = {
                     "ids": [id]
@@ -670,9 +951,104 @@
                     this.isLoadingDelete = false;
                 }
             },
+            async deleteMultiple(){
+                this.isLoadingDelete = true;
+                this.setAlert
+                this.buttonDisabled = true;
+                this.dataObject = {
+                    "ids": this.filterIds
+                };
+                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
+                try {
+                    await axios.delete('/assets/delete', {params: this.dataObject})
+                    .then((response) => {
+                        // console.log(response.data.data);
+                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
+                        this.successDeleteResponse = [
+                            {
+                                "id": 1,
+                                "message": response.data.message,
+                                "detail": response.data.data.token
+                            }
+                        ];
+                        this.showAlertSuccess = true;
+                        this.isLoadingDelete = false;
+                        this.successDelete = true;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            // this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        } else {
+                            this.showAlert = true;
+                            this.errorDelete = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                }
+                            ];
+                            this.showAlertError = true;
+                            this.isLoadingResponse = false;
+                            this.buttonDisabled = false;
+                            this.isLoadingDelete = false;
+                        }
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.errorDelete = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertError = true;
+                    this.isLoadingResponse = false;
+                    this.buttonDisabled = false;
+                    this.isLoadingDelete = false;
+                }
+            },
             async getAssets(skip, take){
                 // console.log('test1');
                 this.showAlert = false;
+                let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+                let testStudyProgram = base64regex.test(this.studyProgram)
+                let testCategory = base64regex.test(this.category)
+                let testPlacements = base64regex.test(this.placement)
+                if(testStudyProgram) {
+                    this.dataStudyProgram = window.atob(this.studyProgram)
+                }
+                if(testCategory) {
+                    this.dataCategory = window.atob(this.category)
+                }
+                if(testPlacements) {
+                    this.dataPlacements = window.atob(this.placement)
+                }
                 if(this.$roles == 'Admin'){
                     const study_program_id = this.$session.study_program_id
                     this.dataObject = {
@@ -680,6 +1056,9 @@
                         "take": take,
                         "sleep": 3,
                         "keyWords": this.keyWords,
+                        "user_keyWords": this.creator,
+                        "category_id": this.dataCategory,
+                        "placement_id": this.dataPlacements,
                         "order": "name",
                         "study_program_id": study_program_id
                     }
@@ -689,6 +1068,10 @@
                         "take": take,
                         "sleep": 3,
                         "keyWords": this.keyWords,
+                        "user_keyWords": this.creator,
+                        "category_id": this.dataCategory,
+                        "placement_id": this.dataPlacements,
+                        "study_program_id": this.dataStudyProgram,
                         "order": "name"
                     }
                 }
@@ -697,6 +1080,7 @@
                     .then((response) => {
                         // console.log(response.data.data);
                         Object.keys(response.data.data.assets).forEach((item) => {
+                            let data = window.btoa(response.data.data.assets[item].id);
                             let date = new Date(response.data.data.assets[item].date);
                             let finalDate = date.toLocaleDateString("id");
                             this.dataArray.push(
@@ -716,6 +1100,7 @@
                                     "user_name": response.data.data.assets[item].user_name,
                                     "study_program_id": response.data.data.assets[item].study_program_id,
                                     "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "qrCode": "localhost:3000/assets/details?data="+data
                                 }
                             );
                         });
@@ -791,12 +1176,258 @@
                     this.buttonDisabled = false;
                 }
             },
+            nextStudyProgram(){
+                this.skipStudyProgram = this.skipStudyProgram+10;
+                this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)
+            },
+            async getStudyProgram(skip, take){
+                this.isLoadingStudyPrograms = true;
+                this.showAlertStudyPrograms = false;
+                this.errorStudyPrograms = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                if(this.$roles == 'Admin'){
+                    // console.log("test")
+                    const ids = this.$session.study_program_id
+                    this.data = {
+                        "ids": [ids],
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "name": this.name
+                    }
+                } else {
+                    this.data = {
+                        "skip": skip,
+                        "take": take,
+                        "sleep": 3,
+                        "name": this.name
+                    }
+                }
+                try {
+                    await axios.get('/studyPrograms/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.study_programs).forEach((item) => {
+                            this.studyProgramArray.push(
+                                {
+                                    "id": response.data.data.study_programs[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.study_programs[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.studyProgramTotal = response.data.data.count;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorStudyPrograms = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertStudyPrograms = true;
+                        this.isLoadingStudyPrograms = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorStudyPrograms = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertStudyPrograms = true;
+                    this.isLoadingStudyPrograms = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            nextCategory(){
+                this.skipCategory = this.skipCategory+10;
+                this.getCategory(this.skipCategory, this.takeCategory)
+            },
+            async getCategory(skip, take){
+                this.isLoadingCategory = true;
+                this.showAlertCategory = false;
+                this.errorCategory = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                    "order": "name"
+                }
+                try {
+                    await axios.get('/categoryAssets/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.category_assets).forEach((item) => {
+                            this.categoryArray.push(
+                                {
+                                    "id": response.data.data.category_assets[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.category_assets[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.categoryTotal = response.data.data.count;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorCategory = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertCategory = true;
+                        this.isLoadingCategory = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorCategory = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertCategory = true;
+                    this.isLoadingCategory = false;
+                    this.buttonDisabled = false;
+                }
+            },
+            nextPlacements(){
+                this.skipPlacements = this.skipPlacements+10;
+                this.getPlacements(this.skipPlacements, this.takePlacements)
+            },
+            async getPlacements(skip, take){
+                this.isLoadingPlacements = true;
+                this.showAlertPlacements = false;
+                this.errorPlacements = [];
+                this.buttonDisabled = true;
+                // console.log('test1');
+                this.data = {
+                    "skip": skip,
+                    "take": take,
+                    "sleep": 3,
+                }
+                try {
+                    await axios.get('/placements/getAll', {params: this.data})
+                    .then((response) => {
+                        // console.table(response.data.data.count);
+                        Object.keys(response.data.data.placements).forEach((item) => {
+                            this.placementsArray.push(
+                                {
+                                    "id": response.data.data.placements[item].id,
+                                    "row": this.index++,
+                                    "name": response.data.data.placements[item].name,
+                                }
+                            );
+                        });
+                        // this.studyProgramArray.filter((index) => index != 2)
+                        this.placementsTotal = response.data.data.count;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    }).catch((err) => {
+                        if(!err.response) {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': "Network Error", 
+                                    'detail': "Silakan periksa jaringan internet anda!",
+                                }
+                            ];
+                            // console.log(err.response);
+                        } else if (err.response.data.message == 'Error!'){
+                            // console.log(err.response.data);
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.data.message,
+                                    'detail': err.response.data.data.error
+                                }
+                            ];
+                        } else {
+                            this.errorPlacements = [
+                                {
+                                    'id': 1,
+                                    'message': err.response.status +' '+ err.response.statusText,
+                                    'detail': ''
+                                }
+                            ];
+                        }
+                        this.showAlertPlacements = true;
+                        this.isLoadingPlacements = false;
+                        this.buttonDisabled = false;
+                    });
+                } catch (error) {
+                    this.errorPlacements = [
+                        {
+                            'id': 1,
+                            'message': error.code, 
+                            'detail': error.message,
+                        }
+                    ];
+                    this.showAlertPlacements = true;
+                    this.isLoadingPlacements = false;
+                    this.buttonDisabled = false;
+                }
+            },
         },
         created(){
             window.addEventListener('resize', () => {
                 this.windowWidth = window.innerWidth;
             });
-            // console.table(this.dataArray)
+            
+            // console.table(this.filterIds)
         },
         destroyed() {
             window.removeEventListener("resize", this.sizeHandler);
@@ -827,15 +1458,12 @@
             }
             // console.log(this.take);
             // this.loansList();
-            if(this.windowWidth > this.$widthLandscapePhone){
-                this.take = 10;
-                this.getAssets(this.skip, this.take);
-            } else {
-                this.take = 4;
-                this.getAssets(this.skip, this.take);
-            } 
+            this.getAssets(this.skip, this.take);
+            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
+            this.getCategory(this.skipCategory, this.takeCategory);
+            this.getPlacements(this.skipPlacements, this.takePlacements); 
             // this.dataArray.filter((index) => index !== 1 )
-            // console.log(this.dataArray.length)
+            // console.log(this.studyProgram)
 
             
             window.scrollTo(0,0);

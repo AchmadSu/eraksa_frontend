@@ -15,8 +15,8 @@
         <ul class="navbar-nav d-sm-block d-md-none">
             <li class="nav-item">
                 <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
-                    <img v-if="this.windowWidth <= this.$widthPotraitPhone" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
-                    <img v-else-if="this.windowWidth > this.$widthPotraitPhone && this.windowWidth <= 640" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
+                    <img v-if="this.windowWidth <= 570" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo-01.png'" alt="">
+                    <img v-else-if="this.windowWidth > 570 && this.windowWidth <= 1999" class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                     <img v-else-if="this.windowWidth <= this.$widthComputer" class="w-25 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                     <img v-else class="w-50 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logo.png'" alt="">
                 </a>
@@ -27,10 +27,10 @@
             <div class="col-8">
                 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg bg-light" placeholder="Cari Aset, Kategori Aset..."
+                        <input type="text" v-model="this.form.search" class="form-control input-lg bg-light" placeholder="Cari Nama Aset atau Kode Aset"
                             aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
+                            <button @click="searchFunction" class="btn btn-primary" type="button">
                                 <i class="fa fa-search fa-sm"></i>
                             </button>
                         </div>
@@ -52,11 +52,11 @@
                     aria-labelledby="searchDropdown">
                     <form class="form-inline mr-auto w-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small"
-                                placeholder="Search for..." aria-label="Search"
+                            <input v-model="this.form.search" type="text" class="form-control bg-light border-0 small"
+                                placeholder="Cari Nama atau Kode Aset" aria-label="Search"
                                 aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button @click="searchFunction" class="btn btn-primary" type="button">
                                     <i class="fa fa-search fa-sm"></i>
                                 </button>
                             </div>
@@ -84,7 +84,7 @@
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#" :style="this.cursorStyle">
+                    <a @click="router('user.update')" class="dropdown-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-user mr-2 text-primary"></i>
                         Ubah Profil
                     </a>
@@ -97,7 +97,7 @@
             </li>
         </ul>
     </nav>
-    <div class="bg-primary offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="bg-primary offcanvas offcanvas-start py-3" data-bs-backdrop="static" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header text-light">
             <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center ml-3" href="#" :style="this.cursorStyle">
                 <img class="w-75 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/logoPhone-white.png'" alt="">
@@ -187,7 +187,7 @@
                                 <li @click="router('manageLoans.reject')" v-if="this.$roles != 'Member'" class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"><i class="fa fa-times"></i>&ensp; Permintaan Ditolak</a>
                                 </li>
-                                <li class="list-group-item">
+                                <li @click="router('loans.myHistory')" class="list-group-item">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle"> <i class="fa fa-history"></i>&ensp; Riwayat Saya</a>
                                 </li>
                             </ul>
@@ -249,7 +249,7 @@
                 </div>
         
                 <!-- Nav Item - Users -->
-                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
+                <li @click="router('manageUser')" v-if="this.$roles != 'Member'" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-users"></i>&ensp;
                         <span>Kelola Users</span>
@@ -274,30 +274,36 @@
                     Menu Master
                 </div>
                 <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item my-2">
+                <li @click="router('menu.assets')" class="nav-item my-2">
+                    <a class="nav-link" href="#" :style="this.cursorStyle">
+                        <i class="fa fa-list" aria-hidden="true"></i>&ensp;
+                        <span>Daftar Aset</span>
+                    </a>
+                </li>
+                <li @click="router('menu.studyPrograms')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-graduation-cap"></i>&ensp;
                         <span>Program Studi</span>
                     </a>
                 </li>
-                <li class="nav-item my-2">
+                <li @click="router('menu.categories')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-cubes"></i>&ensp;
                         <span>Kategori Aset</span>
                     </a>
                 </li>
-                <li class="nav-item my-2">
+                <li @click="router('menu.placements')" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         &nbsp;<i class="fa fa-map-marker"></i>&nbsp;&ensp;
                         <span>Tempat Aset</span>
                     </a>
                 </li>
-                <li v-if="this.$roles != 'Member'" class="nav-item my-2">
+                <!-- <li v-if="this.$roles != 'Member'" class="nav-item my-2">
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-briefcase"></i>&ensp;
                         <span>Bengkel</span>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
       </div>
@@ -320,15 +326,67 @@
                 intervalProgressbar: null,
                 widhtStyle: '',
                 cursorStyle: '',
+                searchParams: '',
+                form: {
+                    search: ''
+                },
                 errorResponse: [],
                 sessionData: [],
                 username: this.$session.name,
                 accountIcon: this.$baseUrl+'/src/assets/img/account.png'
             }
         },
+        watch: {
+            form: {
+                handler: function (val) {
+                    // console.log(val)
+                    this.searchParams = val.search;   
+                },
+                deep: true,
+            },
+        },
         methods: {
             toggleSideBar(){
                 this.$parent.$emit('toggleSideBar')
+            },
+            searchFunction(){
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
+                this.buttonDisabled = true;
+                try{
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                        if(this.widthProgressBar == 100) {
+                            clearInterval(this.intervalProgressbar);
+                            this.widthProgressBar = 0;
+                            this.setProgress == false;
+                            // this.setProgress = false;
+                        }
+                        // console.log("Test");
+                        setTimeout(() => {
+                            this.$router.push({ 
+                                name: 'menu.assets', 
+                                query: {
+                                    search: this.searchParams,
+                                }
+                            }).then(() => { this.$router.go() })
+                        }, 4000);
+                    }
+                } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
             },
             dashboard(){
                 this.setProgress = true;

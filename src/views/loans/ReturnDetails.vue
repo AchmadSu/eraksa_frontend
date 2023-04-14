@@ -124,8 +124,8 @@
                                                     <div class="col-12">
                                                         <div class="card w-100 h-100 btn text-dark text-justify p-3">
                                                             <div class="my-2">
-                                                                <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                                    <table class="table table-sm table-borderless">
+                                                                <!-- <template v-if="this.windowWidth > $widthPotraitPhone"> -->
+                                                                    <table id="primaryTable" class="d-none d-md-block table table-sm table-borderless">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th colspan="2">
@@ -161,8 +161,11 @@
                                                                                         <template v-if="this.detailObject.loaner_code_type == '0'">
                                                                                             NIM
                                                                                         </template>
-                                                                                        <template v-else>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
                                                                                             NIDN
+                                                                                        </template>
+                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
+                                                                                            NIP
                                                                                         </template>
                                                                                     </h5>
                                                                                 </td>
@@ -184,8 +187,11 @@
                                                                                             <template v-if="this.detailObject.recipient_code_type == '0'">
                                                                                                 NIM
                                                                                             </template>
-                                                                                            <template v-else>
+                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '1'">
                                                                                                 NIDN
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '2'">
+                                                                                                NIP
                                                                                             </template>
                                                                                         </h5>
                                                                                     </td>
@@ -203,44 +209,76 @@
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                    <table class="table table-sm table-borderless">
+                                                                    <table class="d-none d-md-block table table-sm table-borderless">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td colspan="2">
+                                                                                    <h4>Rincian Aset</h4>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </thead>
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td class="align-middle">
-                                                                                    <h5>Rincian Aset</h5>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="align-middle">
-                                                                                    <ol>
-                                                                                        <h5>
+                                                                                    <h5>
+                                                                                        <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                <template v-if="this.windowWidth > $widthLandscapePhone">
-                                                                                                    <template v-if="item.name.length+item.code.length < 60">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,60)+"..."}} <br>
-                                                                                                    </template>
-                                                                                                </template>
-                                                                                                <template v-else>
-                                                                                                    <template v-if="item.name.length+item.code.length < 40">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
-                                                                                                    </template>
-                                                                                                </template>
+                                                                                                {{item.code}} ({{ item.study_program_name }})
                                                                                             </li>
-                                                                                        </h5>
-                                                                                    </ol>
+                                                                                        </ol>
+                                                                                    </h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
-                                                                </template>
-                                                                <template v-else>
-                                                                    <div class="row d-flex justify-content-evenly mb-5">
+                                                                    <table id="targetTable" class="d-none table table-sm table-borderless">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td colspan="5">
+                                                                                    <h4>Rincian Aset</h4>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>No</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Nama Aset</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Kode</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Kategori</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Pemilik</h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr v-for="item, index in selectDataArray" :key="item.id">
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{index+1}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.name}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.code}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.category_name}}</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{item.study_program_name}}</h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                <!-- </template> -->
+                                                                <!-- <template v-else> -->
+                                                                    <div class="row d-block d-md-none d-flex justify-content-evenly mb-5">
                                                                         <div class="col-12">
                                                                             <h6 class="heading text-center mb-3">{{this.detailObject.code}}</h6>
                                                                         </div>
@@ -259,31 +297,46 @@
                                                                                         <p>
                                                                                             Peminjam:
                                                                                             <b>
-                                                                                                <template v-if="this.detailObject.loaner_name.length > 20">
-                                                                                                    {{(this.detailObject.loaner_name).substring(0,20)+"..."}}
-                                                                                                </template>
                                                                                                 {{this.detailObject.loaner_name}}
                                                                                             </b>
+                                                                                            <br>
+                                                                                            <template v-if="this.detailObject.loaner_code_type == '0'">
+                                                                                                NIM:
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.loaner_code_type == '1'">
+                                                                                                NIDN:
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.loaner_code_type == '0'">
+                                                                                                NIP:
+                                                                                            </template>
+                                                                                            <b>
+                                                                                                {{ this.detailObject.loaner_code }}
+                                                                                            </b>
+                                                                                            <br>
                                                                                             Dikembalikan kepada:
                                                                                             <b>
-                                                                                                <template v-if="this.detailObject.recipient_name.length > 20">
-                                                                                                    {{(this.detailObject.recipient_name).substring(0,20)+"..."}}
-                                                                                                </template>
                                                                                                 {{this.detailObject.recipient_name}}
                                                                                             </b>
-                                                                                            Mulai: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
-                                                                                            Periode: <b>{{ this.detailObject.difference }}</b>
+                                                                                            <template v-if="this.detailObject.recipient_code_type == '0'">
+                                                                                                NIM:
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '1'">
+                                                                                                NIDN:
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '0'">
+                                                                                                NIP:
+                                                                                            </template>
+                                                                                            <b>
+                                                                                                {{ this.detailObject.recipient_code }}
+                                                                                            </b>
+                                                                                            <br>
+                                                                                            Waktu Pengembalian: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
                                                                                                 <li v-for="item in selectDataArray">
-                                                                                                    <template v-if="item.name.length+item.code.length < 40">
-                                                                                                        {{ item.name }} ({{ item.code }}) <br>
-                                                                                                    </template>
-                                                                                                    <template v-else>
-                                                                                                        {{ (item.name+' ('+item.code).substring(0,40)+"..."}} <br>
-                                                                                                    </template>
+                                                                                                    {{ item.code }} ({{ item.study_program_name }})
                                                                                                 </li>
                                                                                             </ol>
                                                                                         </p>
@@ -292,7 +345,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </template>
+                                                                <!-- </template> -->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -306,15 +359,22 @@
                                     </div>
                                     <div class="row my-4 d-flex justify-content-center">
                                         <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                            <button @click="createLetterFunction" :disabled="buttonDisabled" class="btn btn-success w-100">
-                                                <i class="fa fa-print"></i>&ensp;Cetak Rincian
+                                            <button type="button" @click="downloadReturnDetail(this.detailObject.code)" :disabled="buttonDisabled" class="btn btn-success w-100">
+                                                <i class="fa fa-download"></i>&ensp;Unduh Rincian Pengembalian
                                             </button>
                                         </div>
                                     </div>
                                     <div class="row my-4 d-flex justify-content-center">
                                         <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
                                             <button @click="loanRouterFunction(this.detailObject.loan_id)" :disabled="buttonDisabled" class="btn btn-primary w-100">
-                                                Lihat Rincian Peminjaman&ensp; <i class="fa fa-arrow-right"></i>
+                                                Lihat Rincian Peminjaman&ensp; <i class="fa fa-pencil-square-o"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
                                             </button>
                                         </div>
                                     </div>
@@ -333,12 +393,12 @@
                                     </div>
                                     <h3 class="text-center my-3">Status tidak sesuai</h3>
                                     <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman. Permintaan perbaruan data tidak dapat dilakukan</p>
-                                </div>
-                                <div class="row my-4 d-flex justify-content-center">
-                                    <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
-                                        <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
-                                            <i class="fa fa-arrow-left"></i>&ensp; Kembali
-                                        </button>
+                                    <div class="row my-4 d-flex justify-content-center">
+                                        <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
+                                            <button @click="backFunction" :disabled="buttonDisabled" class="btn btn-light w-100">
+                                                <i class="fa fa-arrow-left"></i>&ensp; Kembali
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -372,6 +432,8 @@
     import Footer from '../../components/Footer.vue';
     import { useRouter } from 'vue-router'
     import axios from 'axios'
+    import 'jspdf-autotable'
+    import jsPDF from 'jspdf'
     export default{
         data() {
             return {
@@ -565,7 +627,7 @@
                         }
                         // console.log("Test");
                         setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
+                            this.$router.push({ name: 'manageLoans.done' }).then(() => { this.$router.go() })
                         }, 4000);
                     }
                 } catch(e) {
@@ -616,105 +678,47 @@
                     ];
                 }
             },
-            async confirmFunction(){
-                this.setAlert();
-                this.isLoadingResponse = true;
+            downloadReturnDetail(name){
+                this.isLoadingResponse2 = true;
+                // this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.secondaryButtonDisabled = true;
+                this.submitEnabled = false;
                 this.buttonDisabled = true;
-                this.cursorStyle = 'cursor: not-allowed';
-                this.radioEnabled = false;
-                // let asset_ids = Object.values(this.filterIds)
-                let data = parseInt(window.atob(this.id))
-                this.dataConfirm = {
-                    "loan_id": data,
-                }
-                console.log(this.dataConfirm)
-                // this.openModal();
-                // console.log(this.dataPlacements);
-                try {
-                    await axios.post('/returns/create', this.dataConfirm)
-                    .then((response) => {
-                        this.showAlert = true;
-                        this.isLoadingResponse = false;
-                        this.secondaryButtonDisabled = false;
-                        this.radioEnabled = true;
-                        // this.submitEnabled = false;
-                        this.successResponse = [
-                            {
-                                'id': 1,
-                                'message': response.data.message, 
-                                'detail': response.data.data.message,
-                            }
-                        ];
-                        // this.dataArray.filter((index) => index != 2)
-                        this.isLoadingResponse = false;
-                        this.isLoadingContent = false;
-                        this.buttonDisabled = false;
-                        // console.log(this.successResponse)
-                        this.openModal();
-                        // this.backFunction();
-                    }).catch((err) => {
-                        if(!err.response) {
-                            this.showAlert = true;
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': "Network Error", 
-                                    'detail': "Silakan periksa jaringan internet anda!",
-                                }
-                            ];
-                        this.isLoadingResponse = false;
-                        this.buttonDisabled = false;
-                        this.isLoadingContent = false;
-                        // console.log(err.response);
-                        } else if (err.response.data.message == 'Error!'){
-                            // console.log(err.response.data);
-                            this.showAlert = true;
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.data.message,
-                                    'detail': err.response.data.data.error
-                                }
-                            ];
-                            this.isLoadingResponse = false;
-                            this.isLoadingContent = false;
-                            this.buttonDisabled = false;
-                        } else {
-                            this.showAlert = true;
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.statusText,
-                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
-                                }
-                            ];
-                            this.isLoadingResponse = false;
-                            this.isLoadingContent = false;
-                            this.buttonDisabled = false;
-                        }
-                        this.radioEnabled = false;
-                    });
-                    this.isLoadingContent = false;
-                } catch (error) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': error.code, 
-                            'detail': error.message,
-                        }
-                    ];
-                    this.isLoadingResponse = false;
-                    this.isLoadingContent = false;
-                    this.isLoadingContent = false;
-                    this.showAlert = true;
-                    this.buttonDisabled = false;
-                    this.radioEnabled = false;
-                }
+                this.closeModal();
+                const element1 = document.getElementById("primaryTable");
+                const element2 = document.getElementById("targetTable");
+                let clonedElement1 = element1.cloneNode(true);
+                let clonedElement2 = element2.cloneNode(true);
+                $(clonedElement1).css("display", "block");
+                $(clonedElement2).css("display", "block");
+
+                const pdf = new jsPDF("p", "pt", "a4")
+                pdf.setFont("Times New Roman");
+                pdf.autoTable({
+                    html: '#primaryTable',
+                    theme: 'plain',
+                })
+                pdf.autoTable({
+                    html: '#targetTable',
+                    showHead: 'everyPage',
+                    theme: 'grid'
+                })
+                pdf.save('ERAKSA_'+name+'.pdf')
+                clonedElement1.remove();
+                clonedElement2.remove();
+                this.isLoadingResponse2 = false;
+                // this.setProgress = false;
+                this.isLoadingRouter = false;
+                this.secondaryButtonDisabled = false;
+                this.submitEnabled = false;
+                this.buttonDisabled = false;
             },
             async detailFunction(id){
                 try {
                     let data = window.atob(id)
-                    await axios.get('/returns/detail/'+data)
+                    // console.log(data)
+                    await axios.get('/returns/detail/'+ data)
                     .then((response) => {
                         let date = new Date(response.data.data.returns.date);
                         let finalDate = date.toLocaleDateString("id");
@@ -817,87 +821,6 @@
                     this.isLoading = false;
                 }
             },
-            async demand(id){
-                this.isLoadingDemand = true;
-                this.buttonDisabled = true;
-                this.dataObject = {
-                    "id": id
-                };
-                // this.dataArray = this.dataArray.filter((e) => e.id !== id);
-                try {
-                    await axios.post('/loans/demand', this.dataObject)
-                    .then((response) => {
-                        // console.log(response.data.data);
-                        // this.dataArray = this.dataArray.filter((item) => item.id !== id );
-                        this.successDemandResponse = [
-                            {
-                                "id": 1,
-                                "message": response.data.message,
-                                "detail": response.data.data.message
-                            }
-                        ];
-                        this.showAlertSuccess = true;
-                        this.isLoadingDemand = false;
-                        this.buttonDisabled = false;
-                        this.openDemandModal();
-                    }).catch((err) => {
-                        if(!err.response) {
-                            this.errorResponse = [
-                                {
-                                    'id': 1,
-                                    'message': "Network Error", 
-                                    'detail': "Silakan periksa jaringan internet anda!",
-                                }
-                            ];
-                            this.showAlertError = true;
-                            this.isLoadingResponse = false;
-                            this.buttonDisabled = false;
-                            this.isLoadingDemand = false;
-                        // console.log(err.response);
-                        } else if (err.response.data.message == 'Error!'){
-                            // console.log(err.response.data);
-                            // this.showAlert = true;
-                            this.errorDelete = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.data.message,
-                                    'detail': err.response.data.data.error
-                                }
-                            ];
-                            this.showAlertError = true;
-                            this.isLoadingResponse = false;
-                            this.buttonDisabled = false;
-                            this.isLoadingDemand = false;
-                        } else {
-                            this.showAlert = true;
-                            this.errorDelete = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.statusText,
-                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
-                                }
-                            ];
-                            this.showAlertError = true;
-                            this.isLoadingResponse = false;
-                            this.buttonDisabled = false;
-                            this.isLoadingDemand = false;
-                        }
-                    });
-                    this.isLoadingContent = false;
-                } catch (error) {
-                    this.errorDelete = [
-                        {
-                            'id': 1,
-                            'message': error.code, 
-                            'detail': error.message,
-                        }
-                    ];
-                    this.showAlertError = true;
-                    this.isLoadingResponse = false;
-                    this.buttonDisabled = false;
-                    this.isLoadingDemand = false;
-                }
-            },
             setAlert(){
                 // this.alertMsg = null;
                 this.showAlert = false;
@@ -924,6 +847,8 @@
                 this.$router.push({ name: "user.otpPage" });
             } else if (this.$roles == "Member") {
                 this.$router.push({ name: "dashboard" });
+            } else if (this.$route.query.data == null) {
+                this.$router.push({ name: "dashboard" });
             }
         },  
         mounted(){
@@ -931,10 +856,8 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
+            // console.log(window.atob(this.id))
             this.detailFunction(this.id)
-            if (this.$roles == 'Member') {
-                this.submitEnabled = false;
-            }
             // console.log(this.$route.query.search);
             // this.loansList();
             // this.dataArray.filter((index) => index !== 1 )

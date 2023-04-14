@@ -69,7 +69,7 @@
                         <div class="container-fluid">
                             <!-- DataTales Example -->
                             <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
-                                <div :class="this.loansStatus == '0' ? 'row':'d-none'">
+                                <div :class="this.loansStatus == '0' && this.detailObject.loaner_id == $session.id ? 'row':'d-none'">
                                     <div v-if="isLoadingImage == true" class="col-sm-12 d-lg-none text-center my-5">
                                         <div v-if="windowWidth < 720">
                                             <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
@@ -180,18 +180,18 @@
                                                                             <h6 class="h6 text-secondary">
                                                                                 <template v-if="this.windowWidth > $widthPotraitPhone">
                                                                                     <template v-if="item.study_program_name.length < 35">
-                                                                                        {{item.study_program_name}}
+                                                                                        Pemilik: {{item.study_program_name}}
                                                                                     </template>
                                                                                     <template v-else>
-                                                                                        {{item.study_program_name.substring(0,35)+"..."}}
+                                                                                        Pemilik: {{item.study_program_name.substring(0,35)+"..."}}
                                                                                     </template>
                                                                                 </template>
                                                                                 <template v-else>
                                                                                     <template v-if="item.study_program_name.length < 20">
-                                                                                        {{item.study_program_name}}
+                                                                                        Pemilik: {{item.study_program_name}}
                                                                                     </template>
                                                                                     <template v-else>
-                                                                                        {{item.study_program_name.substring(0,20)+"..."}}
+                                                                                        Pemilik: {{item.study_program_name.substring(0,20)+"..."}}
                                                                                     </template>
                                                                                 </template>
                                                                             </h6>
@@ -255,7 +255,7 @@
                                                                 <option v-for="item in timesArray" :key="item.id" :value="item.value">{{item.description}}</option>
                                                             </select>
                                                             <div :class="isNaN(this.form.time) ? 'text-start invalid-feedback' : 'd-none'">
-                                                                Pilih salah satu periode!
+                                                                Pilih salah satu lama peminjaman!
                                                             </div>
                                                         </div>
                                                     </div>
@@ -289,15 +289,15 @@
                                                                         {{item.code}}
                                                                     </template>
                                                                     <template v-else>
-                                                                        {{ (item.code).substring(0,30)+"..." }}
+                                                                        {{ (item.code).substring(0,24)+"..." }}
                                                                     </template>
                                                                 </h6>
                                                                 <h6>
                                                                     <template v-if="item.study_program_name.length < 30">
-                                                                        {{item.study_program_name}}
+                                                                        Pemilik: {{item.study_program_name}}
                                                                     </template>
                                                                     <template v-else>
-                                                                        {{(item.study_program_name).substring(0,30)+"..."}}
+                                                                        Pemilik: {{(item.study_program_name).substring(0,24)+"..."}}
                                                                     </template>
                                                                 </h6>
                                                                 <div class=" mt-3">
@@ -327,7 +327,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div :class="this.loansStatus == '0' ? 'd-none':'row mh-100'">
+                                <div :class="this.loansStatus == '0' && this.detailObject.loaner_id == $session.id ? 'd-none':'row mh-100'">
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
                                     </div>
                                     <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-4 mx-5">
@@ -340,7 +340,7 @@
                                         <img  class="w-100 img-thumbnails" :src="this.$baseUrl+'/src/assets/img/404.png'" alt="">
                                     </div>
                                     <h3 class="text-center my-3">Status tidak sesuai</h3>
-                                    <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman. Permintaan perbaruan data tidak dapat dilakukan</p>
+                                    <p class="text-center my-3">Status data peminjaman bukan permintaan peminjaman atau anda bukan peminjam untuk transaksi terkait. Permintaan perbaruan data tidak dapat dilakukan</p>
                                 </div>
                                 <div class="row my-4 d-flex justify-content-center">
                                     <div :class="this.windowWidth <= $widthLandscapePhone ? 'col-12' :'col-4'">
@@ -1001,6 +1001,8 @@
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
             } else if (this.$session['status'] === "0") {
                 this.$router.push({ name: "user.otpPage" });
+            } else if (this.$route.query.data == null) {
+                this.$router.push({ name: "dashboard" });
             }
         },  
         mounted(){

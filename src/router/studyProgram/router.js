@@ -19,21 +19,11 @@ const studyProgramRouter = [
         name : 'manageStudyPrograms.update',
         component : () => import("../../views/studyPrograms/Update.vue")
     },
-    // {
-    //     path:'/register',
-    //     name : 'user.register',
-    //     component : () => import("../../views/user/Register.vue")
-    // },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
+    {
+        path:'/menu/studyPrograms',
+        name : 'menu.studyPrograms',
+        component : () => import("../../views/studyPrograms/Index.vue")
+    },
 ]
 
 export default studyProgramRouter;

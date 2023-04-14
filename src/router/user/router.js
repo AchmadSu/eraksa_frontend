@@ -20,6 +20,11 @@ const userRouter = [
         component : () => import("../../views/user/Register.vue")
     },
     {
+        path:'/updateProfile',
+        name : 'user.update',
+        component : () => import("../../views/user/Edit.vue")
+    },
+    {
         path:'/verification',
         name : 'user.otpPage',
         component : () => import("../../views/user/OneTimePassword.vue"),
@@ -33,6 +38,16 @@ const userRouter = [
         path:'/users',
         name : 'manageUser',
         component : () => import("../../views/user/User.vue"),
+    },
+    {
+        path:'/users/trash',
+        name : 'manageUser.trash',
+        component : () => import("../../views/user/Trash.vue"),
+    },
+    {
+        path:'/users/roles',
+        name : 'manageUser.roles',
+        component : () => import("../../views/user/Roles.vue"),
     }
 ]
 

@@ -46,9 +46,13 @@
             </div>
             <div class="row">
                 <div class="col-sm-12 d-sm-block d-md-none text-center">
-                    <picture class="mx-3">
+                    <picture v-if="windowWidth <= $widthPotraitPhone" class="mx-3">
                         <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                    </picture>
+                    <picture v-else-if="windowWidth > $widthPotraitPhone && windowWidth < $widthComputer" class="mx-3">
+                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-25" alt="...">
                     </picture>
                 </div>
                 <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
@@ -152,10 +156,10 @@
                                     :disabled="!this.radioEnabled">
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
                                     'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 w-100 col-6 btn btn-outline-success rounded-start'" 
+                                    'p-3 w-100 col-4 btn btn-outline-success rounded-start'" 
                                     for="code_type0"
                                 >
-                                Saya <b>MAHASISWA</b>
+                                <b>MAHASISWA</b>
                                 </label>
                                 <input 
                                     type="radio" 
@@ -168,10 +172,26 @@
                                     >
                                 <label :class="windowWidth <= $widthLandscapePhone ? 
                                     'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 col-6 btn btn-outline-success rounded-end'" 
+                                    'p-3 col-4 btn btn-outline-success rounded-0'" 
                                     for="code_type1"
                                 >
-                                Saya <b>DOSEN</b>
+                                <b>DOSEN</b>
+                                </label>
+                                <input 
+                                    type="radio" 
+                                    class="btn-check" 
+                                    name="code_type"
+                                    value="2"
+                                    id="code_type2"
+                                    v-model="form.radio"
+                                    :disabled="!this.radioEnabled"
+                                    >
+                                <label :class="windowWidth <= $widthLandscapePhone ? 
+                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
+                                    'p-3 col-4 btn btn-outline-success rounded-end'" 
+                                    for="code_type2"
+                                >
+                                <b>KARYAWAN</b>
                                 </label>
                             </div>
                             <div class="input-group mb-3">
@@ -423,7 +443,7 @@
                 </div>
             </div>
             <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
+                <p class="text-secondary">Eraksa - Politeknik TEDC Bandung <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
             </div>
         </div>
     </div>
@@ -540,8 +560,6 @@
                 this.isLoadingResponse = true;
                 this.radioEnabled = false;
                 this.secondaryButtonDisabled = true;
-                console.log(this.form.code);
-                console.log(this.form.code_type);
                 // if()
                 const data = {
                     "name": this.fullname,
@@ -781,6 +799,10 @@
                         this.codeEnabled = true;
                         this.codeString = "Masukkan NIDN";
                         this.codeType = "1";
+                    } else if(code_type == "2") {
+                        this.codeEnabled = true;
+                        this.codeString = "Masukkan NIP";
+                        this.codeType = "2";
                     }
 
                     if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
@@ -799,13 +821,7 @@
                 if (this.$session['status'] == "0") {
                     this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
                 } else {
-                    this.lastPath = this.$router.options.history.state.back
-                    if(this.lastPath != null) {
-                        this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
-                    }
-                    else {
-                        this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
-                    }
+                    this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
                 }
             }
         },

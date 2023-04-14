@@ -19,21 +19,11 @@ const categoryAssetsRouter = [
         name : 'manageCategoryAssets.update',
         component : () => import("../../views/categoryAssets/Update.vue")
     },
-    // {
-    //     path:'/register',
-    //     name : 'user.register',
-    //     component : () => import("../../views/user/Register.vue")
-    // },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
+    {
+        path:'/menu/categories',
+        name : 'menu.categories',
+        component : () => import("../../views/categoryAssets/Index.vue")
+    },
 ]
 
 export default categoryAssetsRouter;

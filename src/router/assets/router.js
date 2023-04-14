@@ -19,21 +19,16 @@ const assetsRouter = [
         name : 'manageAssets.update',
         component : () => import("../../views/assets/Update.vue")
     },
-    // {
-    //     path:'/register',
-    //     name : 'user.register',
-    //     component : () => import("../../views/user/Register.vue")
-    // },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
+    {
+        path:'/menu/assets',
+        name : 'menu.assets',
+        component : () => import("../../views/assets/Index.vue")
+    },
+    {
+        path:'/assets/details',
+        name : 'menu.assetsDetail',
+        component : () => import("../../views/assets/AssetDetails.vue")
+    },
 ]
 
 export default assetsRouter;

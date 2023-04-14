@@ -1,5 +1,126 @@
 <template>
     <!-- Page Heading -->
+    <div class="modal fade" id="reportModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="text-white modal-title" id="eraseModalLabel"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &ensp;Generate Report</h5>
+                    <button :disabled="buttonDisabled" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-light">
+                    <!-- Report Loans -->
+                    <div class="card bg-success shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan transaksi peminjaman <br> 1 Pekan Terakhir
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportWeekly></ReportWeekly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-success shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan transaksi peminjaman <br> per bulan
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportMonthly></ReportMonthly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-success shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan transaksi peminjaman <br> per Semester
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportSemester></ReportSemester>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <hr>
+
+                    <!-- Report Assets -->
+                    <div class="card bg-danger shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan Aset Rusak <br> 1 Pekan Terakhir
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportAssetsWeekly></ReportAssetsWeekly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-danger shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan Aset Rusak <br> per bulan
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportAssetsMonthly></ReportAssetsMonthly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-danger shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Laporan Aset Rusak <br> per Semester
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ReportAssetsSemester></ReportAssetsSemester>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-primary shadow w-100 mb-3 pb-2">
+                        <div class="card-body mt-3">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
+                                        Unduh daftar aset <br> per Pemilik
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <ListAllAssets></ListAllAssets>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div v-if="this.isLoadingResponse == true" class="row d-flex align-items-center justify-content-center">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -31,20 +152,20 @@
         <div>
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                <a href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#reportModal" href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                     <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
-                </a>
+                </button>
             </div>
         
             <!-- Content Row -->
             <div class="row d-flex justify-content-evenly">
                 <!-- Aset yang dipinjam -->
-                <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingLoans == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-primary shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Banyak Aset <br> yang sedang dipinjam <br> Saat ini
+                                    Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
                                 </div>
                                 <div class="ml-2 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -53,13 +174,13 @@
                         </div>
                     </div>
                 </div>
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-primary shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang dipinjam <br> Saat ini
+                                        Banyak Aset <br> yang sedang dipinjam <br> satu pekan terakhir
                                     </div>
                                     <div v-if="this.isErrorLoans" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -86,11 +207,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-footer bg-white text-center">
+                            {{ this.fractionLoans }} Aset
+                        </div>
                     </div>
                 </div>
         
                 <!-- Aset yang diperbaiki -->
-                <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <!-- <div v-if="this.isLoadingMaintenance == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -103,9 +227,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
-                <!-- <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <!-- <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-success shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -142,7 +266,7 @@
                 </div> -->
         
                 <!-- Aset yang rusak -->
-                <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingBroken == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-danger shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -156,13 +280,13 @@
                         </div>
                     </div>
                 </div>
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-danger shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                        Banyak Aset <br> yang rusak <br> Saat ini
+                                        Banyak Aset <br> yang rusak <br> satu pekan terakhir
                                     </div>
                                     <div v-if="this.isErrorBroken" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -188,11 +312,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-footer bg-white text-center">
+                            {{ this.fractionBroken }} Aset
+                        </div>
                     </div>
                 </div>
         
                 <!-- Aset baru -->
-                <div v-if="this.isLoadingAdded == true" class="d-flex align-items-center justify-content-center col-xl-3 col-sm-6 mb-4">
+                <div v-if="this.isLoadingAdded == true" class="d-flex align-items-center justify-content-center col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-info shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -207,13 +334,13 @@
                     </div>
                 </div>
 
-                <div v-else class="col-xl-3 col-sm-6 mb-4">
+                <div v-else class="col-xl-4 col-sm-6 mb-4">
                     <div class="card border-left-info shadow h-100 w-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                        Banyak Aset <br> baru yang ditambahkan <br> pekan ini
+                                        Banyak Aset <br> baru yang ditambahkan <br> satu pekan terakhir
                                     </div>
                                     <div v-if="this.isErrorAdded" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -239,99 +366,36 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Content Row -->
-    
-        <div class="row">
-    
-            <!-- Area Chart -->
-            <div class="col-xl-8 col-lg-7">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
+                        <div class="card-footer bg-white text-center">
+                            {{ this.fractionAdded }} Aset
                         </div>
                     </div>
                 </div>
             </div>
-    
-            <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                    <!-- Card Header - Dropdown -->
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card Body -->
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <canvas id="myPieChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="this.errorResponse == false" class="col-12 mb-5">
-                    <a href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 p-2 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
-                        <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
-                    </a>
-                </div>
+            <div class="col-12 mb-5 d-block d-md-none">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#reportModal" href="#" style="text-decoration: none;" class="w-100 d-block d-md-none btn btn-sm btn-primary shadow-sm">
+                    <i class="fa fa-arrow-down"></i>&nbsp;Unduh Laporan
+                </button>
             </div>
         </div>
     </div>
 </template>
 <script>
     import axios from 'axios'
+    import ReportWeekly from '../loansReport/ReportWeekly.vue';
+    import ReportMonthly from '../loansReport/ReportMonthly.vue';
+    import ReportSemester from '../loansReport/ReportSemester.vue';
+
+    import ReportAssetsWeekly from '../assetsReport/ReportWeekly.vue';
+    import ReportAssetsMonthly from '../assetsReport/ReportMonthly.vue';
+    import ReportAssetsSemester from '../assetsReport/ReportSemester.vue';
+
+    import ListAllAssets from '../assetsReport/ListAllAssets.vue';
     export default{
         data() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const isBeforeAugust = today.getMonth() < 7;
             return {
                 windowWidth: window.innerWidth,
                 isLoading: true,
@@ -356,6 +420,7 @@
                 styleAddedPercentage: '',
                 isLoadingloanPercentage: false, 
                 cursorStyle: '',
+                academicYear: isBeforeAugust ? currentYear - 1 : currentYear,
                 currentYear: new Date().getFullYear(),
                 currentDate: new Date().toISOString().slice(0, 10),
                 weekAgo: '',
@@ -369,7 +434,19 @@
                 errorAdded: {},
                 errorResponse: [],
                 sessionData: [],
+                fractionLoans: '',
+                fractionBroken: '',
+                fractionAdded: '',
             }
+        },
+        components: {
+            ReportWeekly,
+            ReportMonthly,
+            ReportSemester,
+            ReportAssetsMonthly,
+            ReportAssetsSemester,
+            ReportAssetsWeekly,
+            ListAllAssets
         },
         methods: {
             dashboard(){
@@ -420,10 +497,13 @@
                     await axios.get('/loans/percentage', {params: {
                         "sleep": 0,
                         "status": "1",
+                        "dateOne": this.weekAgo,
+                        "dateTwo": this.currentDate
                     }})
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.loanPercentage = response.data.data.percentage.toString();
+                        this.fractionLoans = response.data.data.fraction;
                         // console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
@@ -469,74 +549,79 @@
                 // setTimeout(() => this.isLoadingResponse = false, 20000);
                 // console.log('test');
             },
-            async maintenance(){
-                try {
-                    this.isLoadingMaintenance = true;
+            // async maintenance(){
+            //     try {
+            //         this.isLoadingMaintenance = true;
                     
-                    // Banyak aset yang diperbaiki
-                    await axios.get('/assets/percentage', {params: {
-                        "sleep": 0,
-                        "status": "2",
-                        "condition": "0",
-                        "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate+' 23:59:59'
-                    }})
-                    .then((response) => {
-                        this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
-                        this.maintenancePercentage = response.data.data.percentage.toString();
-                        // console.log(this.styleLoanPercentage);
-                        // setTimeout(() => this.isLoadingLoans = false, 8000);
-                    }).catch((err) => {
-                        if(err.response.data.message == 'Error!'){
-                            // console.log(err.response.data.message);
-                            this.errorMaintenance = {
-                                'id': 1,
-                                'message': err.response.data.message,
-                                'detail': err.response.data.data.error
-                            }
-                            this.isErrorMaintenance = true;
-                            // this.returnMainisErrorMaintenancePercentage = true;
-                            // this.isLoadingResponse = false;
-                            // this.isErrorMaintenance = true;
-                            // setTimeout(() => this.isLoadingMainisErrorMaintenance = false, 8000);
-                        } else if(!err.response){
-                            this.errorMaintenance = {
-                                'id': 1,
-                                'message': 'Error!', 
-                                'detail': 'Network Error. Silakan cek koneksi anda!',
-                            }
-                            this.isErrorMaintenance = true;
-                            // this.errorResponseMessage.push(error);
-                            // console.log(this.errorResponseMessage);
-                        } else {
-                            this.errorMaintenance = {
-                                'id': 1,
-                                'message': err.response.status +' '+ err.response.statusText,
-                                'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
-                            }
-                            this.isErrorMaintenance = true;
-                        }
-                    });
-                    this.isLoadingMaintenance = false;
-                } catch (error) {
-                    this.errorMaintenance = true;
-                    this.isLoadingMaintenance = false;
-                }
-            },
+            //         // Banyak aset yang diperbaiki
+            //         await axios.get('/assets/percentage', {params: {
+            //             "sleep": 0,
+            //             "status": "2",
+            //             "condition": "0",
+            //             "dateOne": this.weekAgo,
+            //             "dateTwo": this.currentDate
+            //         }})
+            //         .then((response) => {
+            //             this.styleMaintenancePercentage = 'width: '+response.data.data.percentage+'%;';
+            //             this.maintenancePercentage = response.data.data.percentage.toString();
+            //             // console.log(this.styleLoanPercentage);
+            //             // setTimeout(() => this.isLoadingLoans = false, 8000);
+            //         }).catch((err) => {
+            //             if(err.response.data.message == 'Error!'){
+            //                 // console.log(err.response.data.message);
+            //                 this.errorMaintenance = {
+            //                     'id': 1,
+            //                     'message': err.response.data.message,
+            //                     'detail': err.response.data.data.error
+            //                 }
+            //                 this.isErrorMaintenance = true;
+            //                 // this.returnMainisErrorMaintenancePercentage = true;
+            //                 // this.isLoadingResponse = false;
+            //                 // this.isErrorMaintenance = true;
+            //                 // setTimeout(() => this.isLoadingMainisErrorMaintenance = false, 8000);
+            //             } else if(!err.response){
+            //                 this.errorMaintenance = {
+            //                     'id': 1,
+            //                     'message': 'Error!', 
+            //                     'detail': 'Network Error. Silakan cek koneksi anda!',
+            //                 }
+            //                 this.isErrorMaintenance = true;
+            //                 // this.errorResponseMessage.push(error);
+            //                 // console.log(this.errorResponseMessage);
+            //             } else {
+            //                 this.errorMaintenance = {
+            //                     'id': 1,
+            //                     'message': err.response.status +' '+ err.response.statusText,
+            //                     'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+            //                 }
+            //                 this.isErrorMaintenance = true;
+            //             }
+            //         });
+            //         this.isLoadingMaintenance = false;
+            //     } catch (error) {
+            //         this.errorMaintenance = true;
+            //         this.isLoadingMaintenance = false;
+            //     }
+            // },
             async broken(){
                 // Banyak aset yang dalam keadaan rusak
+                let weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate()-7);
+                weekAgo.toISOString().slice(0, 10);
+                this.weekAgo = weekAgo.toISOString().slice(0, 10);
                 try {
                     this.isLoadingBroken = true;
                     await axios.get('/assets/percentage', {params: {
                         "sleep": 0,
                         "status": "0",
                         "condition": "1",
-                        "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate+' 23:59:59'
+                        "updated1": this.weekAgo,
+                        "updated2": this.currentDate
                     }})
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.brokenPercentage = response.data.data.percentage.toString();
+                        this.fractionBroken = response.data.data.fraction;
                         // console.log(response);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
@@ -584,11 +669,12 @@
                         "sleep": 0,
                         "condition": "0",
                         "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate+' 23:59:59'
+                        "dateTwo": this.currentDate
                     }})
                     .then((response) => {
                         this.styleAddedPercentage = 'width: '+response.data.data.percentage+'%;';
                         this.addedPercentage = response.data.data.percentage.toString();
+                        this.fractionAdded = response.data.data.fraction;
                         // console.log(this.styleLoanPercentage);
                         // setTimeout(() => this.isLoadingLoans = false, 8000);
                     }).catch((err) => {
@@ -643,7 +729,7 @@
         mounted(){
             setTimeout(() => this.isLoadingResponse = false, 3000);
             this.loans();
-            this.maintenance();
+            // this.maintenance();
             this.broken();
             this.added();
             window.onresize = () => {

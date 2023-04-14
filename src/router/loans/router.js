@@ -4,16 +4,6 @@ const loansRouter = [
         name : 'loans.create',
         component : () => import("../../views/loans/Create.vue")
     },
-    // {
-    //     path:'/manage/assets/trash',
-    //     name : 'manageAssets.trash',
-    //     component : () => import("../../views/assets/Trash.vue")
-    // },
-    // {
-    //     path:'/manage/assets/create',
-    //     name : 'manageAssets.create',
-    //     component : () => import("../../views/assets/Create.vue")
-    // },
     {
         path:'/loans/edit',
         name : 'loans.update',
@@ -54,21 +44,41 @@ const loansRouter = [
         name : 'manageLoans.returnDetails',
         component : () => import("../../views/loans/ReturnDetails.vue")
     },
-    // {
-    //     path:'/register',
-    //     name : 'user.register',
-    //     component : () => import("../../views/user/Register.vue")
-    // },
-    // {
-    //     path:'/verification',
-    //     name : 'user.otpPage',
-    //     component : () => import("../../views/user/OneTimePassword.vue"),
-    // },
-    // {
-    //     path:'/resetPhone',
-    //     name : 'user.resetPhone',
-    //     component : () => import("../../views/user/ResetPhone.vue"),
-    // }
+    {
+        path:'/loans/myHistory',
+        name : 'loans.myHistory',
+        component : () => import("../../views/loans/myHistory/Index.vue")
+    },
+    {
+        path:'/loans/myRequest',
+        name : 'myLoans.request',
+        component : () => import("../../views/loans/myHistory/Request.vue")
+    },
+    {
+        path:'/loans/myActive',
+        name : 'myLoans.active',
+        component : () => import("../../views/loans/myHistory/Accept.vue")
+    },
+    {
+        path:'/loans/myReject',
+        name : 'myLoans.reject',
+        component : () => import("../../views/loans/myHistory/Reject.vue")
+    },
+    {
+        path:'/loans/myDone',
+        name : 'myLoans.done',
+        component : () => import("../../views/loans/myHistory/Done.vue")
+    },
+    {
+        path:'/loans/myDetails',
+        name : 'myLoans.details',
+        component : () => import("../../views/loans/myHistory/LoanDetails.vue")
+    },
+    {
+        path:'/loans/myReturnDetails',
+        name : 'myLoans.returnDetails',
+        component : () => import("../../views/loans/myHistory/ReturnDetails.vue")
+    },
 ]
 
 export default loansRouter;

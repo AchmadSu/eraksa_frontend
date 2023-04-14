@@ -45,9 +45,13 @@
             </div>
             <div class="row">
                 <div class="col-sm-12 d-sm-block d-md-none text-center">
-                    <picture class="mx-3">
+                    <picture v-if="windowWidth <= $widthPotraitPhone" class="mx-3">
                         <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" :class="windowWidth <= $widthPotraitPhone ? 'img-fluid w-50':'img-fluid w-25'" alt="...">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
+                    </picture>
+                    <picture v-else-if="windowWidth > $widthPotraitPhone && windowWidth < $widthComputer" class="mx-3">
+                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
+                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-25" alt="...">
                     </picture>
                 </div>
                 <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
@@ -184,7 +188,7 @@
                 </div>
             </div>
             <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-                <p class="text-secondary">Eraksa <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                <p class="text-secondary">Eraksa - Politeknik TEDC Bandung <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
             </div>
         </div>
     </div>
@@ -370,7 +374,9 @@
                         "email": this.$session.email,
                         "status": "1",
                         "phone": this.$session.phone,
-                        "study_program_id": this.$session.study_program_id
+                        "study_program_id": this.$session.study_program_id,
+                        "code": this.$session.code,
+                        "code_type": this.$session.code_type
                     };
                     
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
@@ -528,12 +534,7 @@
             if(this.$session == null || this.$loggedIn == 'null') {
                 this.$router.push({ name: "user.login" }).then(() => { this.$router.go() });
             } else if(this.$session.status === "1") {
-                this.lastPath = this.$router.options.history.state.back
-                if(this.lastPath != null) {
-                    this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
-                } else {
-                    this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
-                }
+                this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
             }
         },
         created(){
