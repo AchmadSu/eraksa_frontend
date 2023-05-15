@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-1 py-3': 'row text-center mt-lg-1 pt-3'">
-                    <p class="text-secondary">Eraksa - Politeknik TEDC Bandung <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                    <p class="text-secondary">Eraksa - Ecep Achmad Sutisna <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
                 </div>
             </div>
         </div>    
@@ -283,7 +283,7 @@
                 </div>
             </div>
             <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-                <p class="text-secondary">Eraksa - Politeknik TEDC Bandung <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                <p class="text-secondary">Eraksa - Ecep Achmad Sutisna <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
             </div>
         </div>
     </div>
