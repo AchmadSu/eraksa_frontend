@@ -614,9 +614,7 @@
                     await axios.get('/assets/percentage', {params: {
                         "sleep": 0,
                         "status": "0",
-                        "condition": "1",
-                        "updated1": this.weekAgo,
-                        "updated2": this.currentDate
+                        "condition": "1"
                     }})
                     .then((response) => {
                         this.styleBrokenPercentage = 'width: '+response.data.data.percentage+'%;';
