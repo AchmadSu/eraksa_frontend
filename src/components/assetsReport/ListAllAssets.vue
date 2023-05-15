@@ -80,7 +80,7 @@
                     <td>
                         <h5 class="text-center">
                             <template v-if="this.$session.code_type == '0'">
-                                NIM. 
+                                NISN. 
                             </template>
                             <template v-else-if="this.$session.code_type == '1'">
                                 NIDN. 
@@ -95,34 +95,6 @@
             </tbody>
         </table>
     </div>
-    <form>
-        <div class="input-group mb-3">
-            <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
-                <option selected disabled>Program Studi</option>
-                <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-            </select>
-            <div v-if="this.isLoadingStudyPrograms == false">
-                <div class="rounded-0 d-none d-lg-block">
-                    <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-light rounded-0">Muat lebih</a>                                                  
-                    <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-light rounded-0">Muat ulang</a>                                                  
-                </div>
-                <div class="rounded-0 d-sm-block d-lg-none">
-                    <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-light rounded-0"></a>                                                  
-                    <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-light rounded-0"></a>                                                  
-                </div>
-            </div>
-            <div v-else>
-                <button type="submit" class="d-sm-block d-lg-none btn btn-light rounded-0" style="width:100%;" :disabled="true">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                </button>
-                <button type="submit" class="d-sm-none d-lg-block btn btn-light rounded-0" style="width:100%;" :disabled="true">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Memuat...
-                </button>
-            </div>
-        </div>
-    </form>
     <div v-if="isParamsChange">
         <div v-if="isLoading">
             <button type="button" :disabled="true" class="btn btn-light w-100">
@@ -133,7 +105,7 @@
             <button v-if="this.errorDetail" :disabled="true" type="button" @click="report" class="btn btn-warning w-100 mb-3">
                 <i class="fa fa-times"></i>&ensp;Tidak ada data Aset
             </button>
-            <button :disabled="!this.isParamsChange || this.isLoadingStudyPrograms" type="button" @click="report" class="btn btn-light w-100">
+            <button :disabled="!this.isParamsChange" type="button" @click="report" class="btn btn-light w-100">
                 <i class="fa fa-rocket"></i>&ensp;Generate Report
             </button>
         </div>
@@ -194,7 +166,7 @@
                 take: 0,
                 intervalProgressbar: null,
                 widhtStyle: '',
-                isParamsChange: false,
+                isParamsChange: true,
                 searchDateOne: '',
                 searchDateTwo: '',
                 searchDueDateOne: '',
@@ -255,89 +227,6 @@
                 this.skipStudyProgram = this.skipStudyProgram+10;
                 this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)
             },
-            async getStudyProgram(skip, take){
-                this.isLoadingStudyPrograms = true;
-                this.showAlertStudyPrograms = false;
-                this.errorStudyPrograms = [];
-                this.buttonDisabled = true;
-                // console.log('test1');
-                if(this.$roles == 'Admin'){
-                    // console.log("test")
-                    const ids = this.$session.study_program_id
-                    this.data = {
-                        "ids": [ids],
-                        "skip": skip,
-                        "take": take,
-                    }
-                } else {
-                    this.data = {
-                        "skip": skip,
-                        "take": take,
-                        "name": this.name
-                    }
-                }
-                try {
-                    await axios.get('/studyPrograms/getAll', {params: this.data})
-                    .then((response) => {
-                        console.table(response.data.data);
-                        Object.keys(response.data.data.study_programs).forEach((item) => {
-                            this.studyProgramArray.push(
-                                {
-                                    "id": response.data.data.study_programs[item].id,
-                                    "row": this.index++,
-                                    "name": response.data.data.study_programs[item].name,
-                                }
-                            );
-                        });
-                        // this.studyProgramArray.filter((index) => index != 2)
-                        this.studyProgramTotal = response.data.data.count;
-                        this.isLoadingStudyPrograms = false;
-                        this.buttonDisabled = false;
-                    }).catch((err) => {
-                        if(!err.response) {
-                            this.errorStudyPrograms = [
-                                {
-                                    'id': 1,
-                                    'message': "Network Error", 
-                                    'detail': "Silakan periksa jaringan internet anda!",
-                                }
-                            ];
-                            // console.log(err.response);
-                        } else if (err.response.data.message == 'Error!'){
-                            // console.log(err.response.data);
-                            this.errorStudyPrograms = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.data.message,
-                                    'detail': err.response.data.data.error
-                                }
-                            ];
-                        } else {
-                            this.errorStudyPrograms = [
-                                {
-                                    'id': 1,
-                                    'message': err.response.status +' '+ err.response.statusText,
-                                    'detail': ''
-                                }
-                            ];
-                        }
-                        this.showAlertStudyPrograms = true;
-                        this.isLoadingStudyPrograms = false;
-                        this.buttonDisabled = false;
-                    });
-                } catch (error) {
-                    this.errorStudyPrograms = [
-                        {
-                            'id': 1,
-                            'message': error.code, 
-                            'detail': error.message,
-                        }
-                    ];
-                    this.showAlertStudyPrograms = true;
-                    this.isLoadingStudyPrograms = false;
-                    this.buttonDisabled = false;
-                }
-            },
             downloadReport(){
                 this.isLoadingResponse2 = true;
                 this.setProgress = true;
@@ -374,7 +263,7 @@
                     html: '#signatureListAssets',
                     theme: 'plain',
                 })
-                pdf.save('ERAKSA_listAssets_'+this.studyProgramName+'.pdf')
+                pdf.save('ERAKSA_listAssets.pdf')
                 clonedElement1.remove();
                 this.isLoadingResponse2 = false;
                 this.setProgress = false;
@@ -384,15 +273,12 @@
                 this.isLoading = false;
             },
             async report(){
+                console.log("test")
                 this.dataArray = [];
                 this.isLoading = true;
                 this.errorDetail = false;
                 try {
-                    let data = {
-                        "study_program_id": this.form.study_programs,
-                        "order": "name"
-                    }
-                    await axios.get('/assets/getAll', {params: data})
+                    await axios.get('/assets/getAll')
                     .then((response) => {
                         Object.keys(response.data.data.assets).forEach((item) => {
                             let date = new Date(response.data.data.assets[item].date);
@@ -406,8 +292,7 @@
                                     "status": response.data.data.assets[item].status,
                                     "date": finalDate,
                                     "placement_name": response.data.data.assets[item].placement_name,
-                                    "category_name": response.data.data.assets[item].category_name,
-                                    "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "category_name": response.data.data.assets[item].category_name
                                 }
                             );
                             this.studyProgramName = response.data.data.assets[item].study_program_name;
@@ -496,8 +381,6 @@
             window.onresize = () => {
                 this.windowWidth = window.innerWidth
             }
-            console.log("test")
-            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
             // this.report();
             // this.assignYearRange();
             // console.log(this.selectedMonth)

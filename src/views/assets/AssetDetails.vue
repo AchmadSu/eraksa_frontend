@@ -148,16 +148,6 @@
                                                                                 <tr>
                                                                                     <td class="align-middle px-5">
                                                                                         <h5>
-                                                                                            Program Studi
-                                                                                        </h5>
-                                                                                    </td>
-                                                                                    <td class="align-middle px-5">
-                                                                                        <h5>{{this.detailObject.study_program_name}}</h5>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="align-middle px-5">
-                                                                                        <h5>
                                                                                             Penempatan
                                                                                         </h5>
                                                                                     </td>
@@ -232,12 +222,6 @@
                                                                                                 Rusak
                                                                                             </template>
                                                                                         </p>
-                                                                                        <div class=" mt-3">
-                                                                                            <div class="mt-3 text-left"> 
-                                                                                                <span class="text2">Pemilik: <br> {{this.detailObject.study_program_name}}</span><br>
-                                                                                                <span class="text2">{{this.detailObject.placement_name}}</span>
-                                                                                            </div>
-                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -291,8 +275,6 @@
                             </div>
                         </div>
                         <AssetsHistory v-if="this.$roles == 'Super-Admin'" :dataId="this.detailObject.id">
-                        </AssetsHistory>
-                        <AssetsHistory v-else-if="this.$roles == 'Admin' && this.$session.study_program_id == this.detailObject.study_program_id" :dataId="this.detailObject.id">
                         </AssetsHistory>
                     </div>
                     <!-- /.container-fluid -->
@@ -542,8 +524,6 @@
                             "placement_name": response.data.data.placement_name,
                             "category_id": response.data.data.category_id,
                             "category_name": response.data.data.category_name,
-                            "study_program_id": response.data.data.study_program_id,
-                            "study_program_name": response.data.data.study_program_name,
                             "condition": response.data.data.condition,
                             "status": response.data.data.status
                         };
@@ -552,7 +532,6 @@
                         this.form.category_assets = this.detailObject.category_id
                         this.form.name = this.detailObject.name
                         this.form.condition = this.detailObject.condition
-                        // console.log(typeof this.detailObject.placement_id)
                         // this.form.name = this.detailObject.name;
                     }).catch((err) => {
                         if(!err.response) {

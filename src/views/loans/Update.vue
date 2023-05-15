@@ -177,24 +177,6 @@
                                                                                     </template>
                                                                                 </template>
                                                                             </h6>
-                                                                            <h6 class="h6 text-secondary">
-                                                                                <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                                                    <template v-if="item.study_program_name.length < 35">
-                                                                                        Pemilik: {{item.study_program_name}}
-                                                                                    </template>
-                                                                                    <template v-else>
-                                                                                        Pemilik: {{item.study_program_name.substring(0,35)+"..."}}
-                                                                                    </template>
-                                                                                </template>
-                                                                                <template v-else>
-                                                                                    <template v-if="item.study_program_name.length < 20">
-                                                                                        Pemilik: {{item.study_program_name}}
-                                                                                    </template>
-                                                                                    <template v-else>
-                                                                                        Pemilik: {{item.study_program_name.substring(0,20)+"..."}}
-                                                                                    </template>
-                                                                                </template>
-                                                                            </h6>
                                                                         </a>
                                                                     </div>
                                                                 </li>
@@ -290,14 +272,6 @@
                                                                     </template>
                                                                     <template v-else>
                                                                         {{ (item.code).substring(0,24)+"..." }}
-                                                                    </template>
-                                                                </h6>
-                                                                <h6>
-                                                                    <template v-if="item.study_program_name.length < 30">
-                                                                        Pemilik: {{item.study_program_name}}
-                                                                    </template>
-                                                                    <template v-else>
-                                                                        Pemilik: {{(item.study_program_name).substring(0,24)+"..."}}
                                                                     </template>
                                                                 </h6>
                                                                 <div class=" mt-3">
@@ -776,8 +750,7 @@
                                     "code": response.data.data.assets[item].code,
                                     "condition": response.data.data.assets[item].condition,
                                     "status": response.data.data.assets[item].status,
-                                    "category_name": response.data.data.assets[item].category_name,
-                                    "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "category_name": response.data.data.assets[item].category_name
                                 }
                             );
                         });
@@ -904,8 +877,7 @@
                                     "code": select[item].asset_code,
                                     "condition": select[item].asset_condition,
                                     "status": select[item].asset_status,
-                                    "category_name": select[item].asset_category_name,
-                                    "study_program_name": select[item].asset_study_program_name,
+                                    "category_name": select[item].asset_category_name
                                 }
                             )
                             // console.log(this.selectDataArray)

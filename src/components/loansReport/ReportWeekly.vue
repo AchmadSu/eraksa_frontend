@@ -68,7 +68,7 @@
                     <td class="align-middle text-center">
                         <b>{{item.loaner_name}}</b> <br>
                         <template v-if="item.loaner_code_type == '0'">
-                            NIM.
+                            NISN.
                         </template>
                         <template v-else-if="item.loaner_code_type == '1'">
                             NIDN.
@@ -119,7 +119,7 @@
                     <td>
                         <h5 class="text-center">
                             <template v-if="this.$session.code_type == '0'">
-                                NIM. 
+                                NISN. 
                             </template>
                             <template v-else-if="this.$session.code_type == '1'">
                                 NIDN. 

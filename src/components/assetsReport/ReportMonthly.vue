@@ -45,7 +45,7 @@
                     <td class="align-middle"><b>{{item.name}}</b></td>
                     <td class="align-middle">{{item.code}}</td>
                     <td class="align-middle">Rusak</td>
-                    <td class="align-middle">{{item.study_program_name}}</td>
+                    <td class="align-middle">Sarana dan Prasarana</td>
                 </tr>
             </tbody>
         </table>
@@ -86,7 +86,7 @@
                     <td>
                         <h5 class="text-center">
                             <template v-if="this.$session.code_type == '0'">
-                                NIM. 
+                                NISN. 
                             </template>
                             <template v-else-if="this.$session.code_type == '1'">
                                 NIDN. 

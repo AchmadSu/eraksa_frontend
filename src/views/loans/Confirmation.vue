@@ -787,8 +787,7 @@
                                     "code": select[item].asset_code,
                                     "condition": select[item].asset_condition,
                                     "status": select[item].asset_status,
-                                    "category_name": select[item].asset_category_name,
-                                    "study_program_name": select[item].asset_study_program_name,
+                                    "category_name": select[item].asset_category_name
                                 }
                             )
                             // console.log(this.selectDataArray)

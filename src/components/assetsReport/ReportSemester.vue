@@ -45,7 +45,7 @@
                     <td class="align-middle"><b>{{item.name}}</b></td>
                     <td class="align-middle">{{item.code}}</td>
                     <td class="align-middle">Rusak</td>
-                    <td class="align-middle">{{item.study_program_name}}</td>
+                    <td class="align-middle">Sarana dan Prasarana</td>
                 </tr>
             </tbody>
         </table>
@@ -86,7 +86,7 @@
                     <td>
                         <h5 class="text-center">
                             <template v-if="this.$session.code_type == '0'">
-                                NIM. 
+                                NISN. 
                             </template>
                             <template v-else-if="this.$session.code_type == '1'">
                                 NIDN. 
@@ -151,7 +151,7 @@
         data() {
             const today = new Date();
             const currentYear = new Date().getFullYear();
-            const isBeforeAugust = today.getMonth() < 7;
+            const isBeforeJuly = today.getMonth() < 6;
             return {
                 windowWidth: window.innerWidth,
                 isLoading: false,
@@ -165,7 +165,7 @@
                 isParams1: false,
                 isParams2: false,
                 resultAcademicYear: 0,
-                academicYear: isBeforeAugust ? currentYear - 1 : currentYear,
+                academicYear: isBeforeJuly ? currentYear - 1 : currentYear,
                 isLoadingResponse1: false,
                 isLoadingResponse2: false,
                 isLoadingRouter: false,
@@ -330,8 +330,7 @@
                                     "condition": response.data.data.assets[item].condition,
                                     "date": finalDate,
                                     "placement_name": response.data.data.assets[item].placement_name,
-                                    "category_name": response.data.data.assets[item].category_name,
-                                    "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "category_name": response.data.data.assets[item].category_name
                                 }
                             );
                         });

@@ -139,11 +139,6 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <ul class="list-group list-group-flush">
-                                <li v-if="this.$roles == 'Super-Admin'" @click="router('manageStudyPrograms')" class="list-group-item">
-                                    <a class="text-dark collapse-item" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-graduation-cap"></i>&ensp; Program Studi
-                                    </a>
-                                </li>
                                 <li class="list-group-item" @click="router('managePlacements')">
                                     <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
                                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
@@ -278,12 +273,6 @@
                     <a class="nav-link" href="#" :style="this.cursorStyle">
                         <i class="fa fa-list" aria-hidden="true"></i>&ensp;
                         <span>Daftar Aset</span>
-                    </a>
-                </li>
-                <li @click="router('menu.studyPrograms')" class="nav-item my-2">
-                    <a class="nav-link" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-graduation-cap"></i>&ensp;
-                        <span>Program Studi</span>
                     </a>
                 </li>
                 <li @click="router('menu.categories')" class="nav-item my-2">

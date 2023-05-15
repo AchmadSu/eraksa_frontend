@@ -43,7 +43,6 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Tabel</h6>
-                    <a @click="router('manageStudyPrograms')" :class="this.$roles == 'Super-Admin' ? 'd-block collapse-item': 'd-none'" href="#" :style="this.cursorStyle"><i class="fa fa-graduation-cap"></i>&ensp; Program Studi</a>
                     <a @click="router('managePlacements')" class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
                         &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
                     </a>
@@ -155,12 +154,6 @@
             <a @click="router('menu.assets')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-list" aria-hidden="true"></i>&ensp;&nbsp;
                 <span>Daftar Aset</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a @click="router('menu.studyPrograms')" class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-graduation-cap"></i>&ensp;
-                <span>Program Studi</span>
             </a>
         </li>
         <li class="nav-item">

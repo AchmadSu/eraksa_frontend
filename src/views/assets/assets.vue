@@ -163,7 +163,6 @@
                                             <div :class="
                                                 this.keyWords != null ||
                                                 this.creator != null ||
-                                                this.studyProgram != null ||
                                                 this.placement != null ||
                                                 this.category != null ?
                                                 'col-12 pb-3':'d-none'"
@@ -176,12 +175,6 @@
                                                     </template>
                                                     <template v-if="this.creator != '' && this.creator != null">
                                                         Nama Pembuat: {{ this.creator}} <br>
-                                                    </template>
-                                                    <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.studyProgram != '' && this.studyProgram != null && item.study_program_id == this.dataStudyProgram && index == 0">
-                                                            Program Studi: {{ item.study_program_name }}
-                                                            <br>
-                                                        </template>
                                                     </template>
                                                     <template v-for="item, index in dataArray" :key="item.id">
                                                         <template v-if="this.category != '' && this.category != null && item.category_id == this.dataCategory && index == 0">
@@ -216,33 +209,6 @@
                                                         <template v-if="this.windowWidth > $widthPotraitPhone">
                                                             <input type="text" v-model="form.creator" name="creator" class="form-control input-lg bg-light" placeholder="Cari Nama Pembuat"
                                                                 aria-label="Search" aria-describedby="basic-addon2">
-
-                                                            <template v-if="this.$roles == 'Super-Admin'">
-                                                                <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
-                                                                    <option selected disabled>Program Studi</option>
-                                                                    <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                                    <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                                </select>
-                                                                <div v-if="this.isLoadingStudyPrograms == false">
-                                                                    <div class="rounded-0 d-none d-lg-block">
-                                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                                    </div>
-                                                                    <div class="rounded-0 d-sm-block d-lg-none">
-                                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                                    </div>
-                                                                </div>
-                                                                <div v-else>
-                                                                    <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
-                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                    </button>
-                                                                    <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
-                                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                    </button>
-                                                                </div>
-                                                            </template>
-    
                                                             <select :disabled="this.isLoadingCategory" v-model="form.category_assets" class="form-select form-select" aria-label=".form-select example">
                                                                 <option selected disabled>Kategori</option>
                                                                 <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
@@ -335,7 +301,6 @@
                                                             <th class="align-middle">Nama</th>
                                                             <th class="align-middle">Kode Aset</th>
                                                             <th class="align-middle">Dibuat oleh</th>
-                                                            <th class="align-middle">Program Studi</th>
                                                             <th class="align-middle">Kondisi</th>
                                                             <th class="align-middle">Status</th>
                                                             <th class="align-middle">Tanggal Masuk</th>
@@ -357,7 +322,6 @@
                                                             <td class="align-middle"><b>{{item.name}}</b></td>
                                                             <td class="align-middle">{{item.code}}</td>
                                                             <td class="align-middle">{{item.user_name}}</td>
-                                                            <td class="align-middle">{{item.study_program_name}}</td>
                                                             <td class="align-middle" v-if="item.condition == 0">Optimal</td>
                                                             <td class="align-middle" v-else>Rusak</td>
                                                             <td class="align-middle" v-if="item.status == 0">Tersedia</td>
@@ -414,7 +378,6 @@
                                                             <p>{{item.code}}</p>
                                                             <p>
                                                                 <big>Dibuat oleh: {{item.user_name}}</big><br>
-                                                                <big>Program Studi: <br>{{item.study_program_name}}</big><br>
                                                                 <big>Kondisi: </big>
                                                                 <big v-if="item.condition == 0">Optimal</big>
                                                                 <big v-else>Rusak</big>
@@ -490,7 +453,7 @@
                                             </div>
                                         </div>
                                         <div 
-                                            v-if="this.keyWords != null || this.placement != null || this.category != null || this.placement != null || this.studyProgram != null" 
+                                            v-if="this.keyWords != null || this.placement != null || this.category != null || this.placement != null" 
                                             class="row my-lg-3 my-5"
                                         >
                                             <div v-if="this.isLoadingResponse2 == false" class="col-12 text-center">
@@ -578,7 +541,6 @@
                 form: {
                     search: '',
                     creator: '',
-                    study_programs: 'Program Studi',
                     category_assets: 'Kategori',
                     placements: 'Tempat',
                 },
@@ -1100,7 +1062,7 @@
                                     "user_name": response.data.data.assets[item].user_name,
                                     "study_program_id": response.data.data.assets[item].study_program_id,
                                     "study_program_name": response.data.data.assets[item].study_program_name,
-                                    "qrCode": "localhost:3000/assets/details?data="+data
+                                    "qrCode": this.$baseUrl+"/assets/details?data="+data
                                 }
                             );
                         });

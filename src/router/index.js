@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import studyProgramRouter from './studyProgram/router';
+// import studyProgramRouter from './studyProgram/router';
 import placementsRouter from './placements/router';
 import userRouter from './user/router';
 import categoryAssetsRouter from './categoryAssets/router';
-import workshopsRouter from './workshops/router';
+// import workshopsRouter from './workshops/router';
 import assetsRouter from './assets/router';
 import loansRouter from './loans/router';
 
@@ -24,9 +24,9 @@ Object.keys(userRouter).forEach((item) => {
     routes.push(userRouter[item]);
 })
 
-Object.keys(studyProgramRouter).forEach((item) => {
-    routes.push(studyProgramRouter[item]);
-})
+// Object.keys(studyProgramRouter).forEach((item) => {
+//     routes.push(studyProgramRouter[item]);
+// })
 
 Object.keys(placementsRouter).forEach((item) => {
     routes.push(placementsRouter[item]);

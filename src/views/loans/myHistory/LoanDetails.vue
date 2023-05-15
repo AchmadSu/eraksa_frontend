@@ -213,7 +213,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.code}} ({{ item.study_program_name }})
+                                                                                                {{item.code}}
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
@@ -261,7 +261,7 @@
                                                                                     <h5>{{item.category_name}}</h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
-                                                                                    <h5>{{item.study_program_name}}</h5>
+                                                                                    <h5>Sarana dan Prasarana</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -811,7 +811,6 @@
                                     "condition": select[item].asset_condition,
                                     "status": select[item].asset_status,
                                     "category_name": select[item].asset_category_name,
-                                    "study_program_name": select[item].asset_study_program_name,
                                 }
                             )
                             // console.log(this.selectDataArray)

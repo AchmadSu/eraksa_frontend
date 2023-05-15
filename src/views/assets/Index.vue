@@ -76,30 +76,6 @@
                                                     aria-label="Search" aria-describedby="basic-addon2">
 
                                                 <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                    <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" class="form-select form-select" aria-label=".form-select example">
-                                                        <option selected disabled>Program Studi</option>
-                                                        <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                        <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                    </select>
-                                                    <div v-if="this.isLoadingStudyPrograms == false">
-                                                        <div class="rounded-0 d-none d-lg-block">
-                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                            <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                        </div>
-                                                        <div class="rounded-0 d-sm-block d-lg-none">
-                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                            <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-success rounded-0"></a>                                                  
-                                                        </div>
-                                                    </div>
-                                                    <div v-else>
-                                                        <button type="submit" class="d-sm-block d-lg-none btn btn-success rounded-0" style="width:100%;" :disabled="true">
-                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        </button>
-                                                        <button type="submit" class="d-sm-none d-lg-block btn btn-success rounded-0" style="width:100%;" :disabled="true">
-                                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        </button>
-                                                    </div>
-
                                                     <select :disabled="this.isLoadingCategory" v-model="form.category_assets" class="form-select form-select" aria-label=".form-select example">
                                                         <option selected disabled>Kategori</option>
                                                         <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
@@ -208,14 +184,6 @@
                                                         </template>
                                                         <template v-else>
                                                             {{ (item.code).substring(0,24)+"..." }}
-                                                        </template>
-                                                    </h6>
-                                                    <h6>
-                                                        <template v-if="item.study_program_name.length < 30">
-                                                            Pemilik: {{item.study_program_name}}
-                                                        </template>
-                                                        <template v-else>
-                                                            Pemilik: {{(item.study_program_name).substring(0,24)+"..."}}
                                                         </template>
                                                     </h6>
                                                     <div class=" mt-3">
@@ -328,7 +296,6 @@
                 form: {
                     search: '',
                     creator: '',
-                    study_programs: 'Program Studi',
                     category_assets: 'Kategori',
                     placements: 'Tempat',
                 },
@@ -531,7 +498,6 @@
                                 name: 'menu.assets', 
                                 query: {
                                     search: this.searchParams,
-                                    studyProgram: this.studyProgramParams,
                                     category: this.categoryParams,
                                     placement: this.placementParams,
                                 }
@@ -571,7 +537,6 @@
                     "keyWords": this.keyWords,
                     "category_id": this.dataCategory,
                     "placement_id": this.dataPlacements,
-                    "study_program_id": this.dataStudyProgram,
                     "order": "name"
                 }
                 try {
@@ -597,9 +562,7 @@
                                     "category_name": response.data.data.assets[item].category_name,
                                     "user_id": response.data.data.assets[item].user_id,
                                     "user_name": response.data.data.assets[item].user_name,
-                                    "study_program_id": response.data.data.assets[item].study_program_id,
-                                    "study_program_name": response.data.data.assets[item].study_program_name,
-                                    "qrCode": "localhost:3000/assets/edit?"+data
+                                    "qrCode": this.$baseUrl+"assets/edit?"+data
                                 }
                             );
                         });

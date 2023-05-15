@@ -104,7 +104,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-md text-center font-weight-bold text-light text-uppercase mb-3">
-                                        Unduh daftar aset <br> per Pemilik
+                                        Unduh daftar aset
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <ListAllAssets></ListAllAssets>

@@ -245,39 +245,6 @@
                                                     </div>
                                                 </div>
                                                 <!-- </div> -->
-                                                <div v-if="this.isAdmin" class="input-group mb-3">
-                                                    <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" :class="isNaN(this.form.study_programs) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
-                                                        <option selected disabled>Pilih Program Studi</option>
-                                                        <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                        <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                    </select>
-                                                    <div v-if="this.isLoadingStudyPrograms == false">
-                                                        <div class="rounded-0 d-none d-lg-block">
-                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>                                                  
-                                                            <a @click="getStudyProgram(this.skip, this.take)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
-                                                        </div>
-                                                        <div class="rounded-0 d-sm-block d-lg-none">
-                                                            <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>                                                  
-                                                            <a @click="getStudyProgram(this.skip, this.take)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>                                                  
-                                                        </div>
-                                                    </div>
-                                                    <div v-else>
-                                                        <div class="rounded-0 d-sm-block d-lg-none">
-                                                            <button type="submit" class="d-sm-block d-lg-none btn btn-primary rounded-0" style="width:100%;" :disabled="true">
-                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="rounded-0 d-none d-lg-block">
-                                                            <button type="submit" class="d-sm-none d-lg-block btn btn-primary rounded-0" style="width:100%;" :disabled="true">
-                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                Memuat...
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div :class="isNaN(this.form.study_programs) ? 'text-start invalid-feedback' : 'd-none'">
-                                                        Pilih salah satu Program Studi!
-                                                    </div>
-                                                </div>
                                                 <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
                                                     <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                     <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
@@ -365,8 +332,7 @@
                 intervalProgressbar: null,
                 widhtStyle: '',
                 form: {
-                    roles: 'Pilih Peran',
-                    study_programs: 'Pilih Program Studi'
+                    roles: 'Pilih Peran'
                 },
                 filterIds: [],
                 studyProgramArray: [],
@@ -516,7 +482,7 @@
                 this.dataConfirm = {
                     "id": data,
                     "roles": this.form.roles,
-                    "study_program_id": this.form.study_programs,
+                    "study_program_id": 0,
                 }
                 // console.log(this.dataConfirm)
                 // this.openModal();
@@ -615,8 +581,6 @@
                             "code_type": response.data.data.code_type,
                             "status": response.data.data.status,
                             "phone": response.data.data.phone,
-                            "study_program_id": response.data.data.study_program_id,
-                            "study_program_name": response.data.data.study_program_name,
                             "user_role": response.data.data.user_role,
                             "email": response.data.data.email,
                         };

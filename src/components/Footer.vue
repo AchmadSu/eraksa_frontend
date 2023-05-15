@@ -3,7 +3,7 @@
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>Copyright &copy; Eraksa - Politeknik TEDC Bandung {{ this.currentYear }}</span>
+                <span>Copyright &copy; Eraksa - Ecep Achmad Sutisna {{ this.currentYear }}</span>
             </div>
         </div>
     </footer>

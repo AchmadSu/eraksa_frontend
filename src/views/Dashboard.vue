@@ -92,14 +92,6 @@
                                                     {{ (item.code).substring(0,30)+"..." }}
                                                 </template>
                                             </h6>
-                                            <h6>
-                                                <template v-if="item.study_program_name.length < 30">
-                                                    {{item.study_program_name}}
-                                                </template>
-                                                <template v-else>
-                                                    {{(item.study_program_name).substring(0,30)+"..."}}
-                                                </template>
-                                            </h6>
                                             <div class=" mt-3">
                                                 <div class="mt-3 text-center"> 
                                                     <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
