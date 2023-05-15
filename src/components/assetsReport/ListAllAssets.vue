@@ -279,7 +279,6 @@
                 try {
                     await axios.get('/studyPrograms/getAll', {params: this.data})
                     .then((response) => {
-                        console.table(response.data.data);
                         Object.keys(response.data.data.study_programs).forEach((item) => {
                             this.studyProgramArray.push(
                                 {
