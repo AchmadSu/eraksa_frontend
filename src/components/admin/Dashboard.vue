@@ -165,7 +165,7 @@
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Banyak Aset <br> yang sedang dipinjam <br> Pekan ini
+                                    Banyak Aset <br> yang sedang dipinjam <br> Saat ini
                                 </div>
                                 <div class="ml-2 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -180,7 +180,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Banyak Aset <br> yang sedang dipinjam <br> satu pekan terakhir
+                                        Banyak Aset <br> yang sedang dipinjam <br> saat ini
                                     </div>
                                     <div v-if="this.isErrorLoans" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -286,7 +286,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                        Banyak Aset <br> yang rusak <br> satu pekan terakhir
+                                        Banyak Aset <br> yang rusak <br> saat ini
                                     </div>
                                     <div v-if="this.isErrorBroken" class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -496,9 +496,7 @@
                     // Banyak aset yg dipinjam
                     await axios.get('/loans/percentage', {params: {
                         "sleep": 0,
-                        "status": "1",
-                        "dateOne": this.weekAgo,
-                        "dateTwo": this.currentDate
+                        "status": "1"
                     }})
                     .then((response) => {
                         this.styleLoanPercentage = 'width: '+response.data.data.percentage+'%;';
