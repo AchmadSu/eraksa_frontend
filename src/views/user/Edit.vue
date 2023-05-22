@@ -169,7 +169,7 @@
                                                     'p-3 w-100 col-4 btn btn-outline-success rounded-start'" 
                                                     for="code_type0"
                                                 >
-                                                <b>MAHASISWA</b>
+                                                <b>SISWA</b>
                                                 </label>
                                                 <input 
                                                     type="radio" 
@@ -185,7 +185,7 @@
                                                     'p-3 col-4 btn btn-outline-success rounded-0'" 
                                                     for="code_type1"
                                                 >
-                                                <b>DOSEN</b>
+                                                <b>GURU</b>
                                                 </label>
                                                 <input 
                                                     type="radio" 
@@ -967,7 +967,7 @@
                     
                     if(code_type == "0") {
                         this.codeEnabled = true;
-                        this.codeString = "Masukkan NIM";
+                        this.codeString = "Masukkan NISN";
                         this.codeType = "0";
                     } else if(code_type == "1") {
                         this.codeEnabled = true;
