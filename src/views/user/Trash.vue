@@ -280,6 +280,7 @@
                                                                 <option selected disabled>Jenis Pengguna</option>
                                                                 <option value="0">Mahasiswa</option>
                                                                 <option value="1">Dosen</option>
+                                                                <option value="2">Karyawan</option>
                                                             </select>
                                                             <select 
                                                                 class="form-select form-select mb-3"
