@@ -221,10 +221,10 @@
                                                     </template>
                                                     <template v-if="this.keyCodeType != ''">
                                                         <template v-if="this.keyCodeType == '0'">
-                                                            Tipe: Mahasiswa
+                                                            Tipe: Siswa
                                                         </template>
                                                         <template v-else-if="this.keyCodeType == '1'">
-                                                            Tipe: Dosen
+                                                            Tipe: Guru
                                                         </template>
                                                         <br>
                                                     </template>
@@ -266,7 +266,7 @@
                                                             v-model="form.keyWords"
                                                             name="search"
                                                             class="form-control input-lg bg-light"
-                                                            placeholder="Cari Nama/Email/NIM/NIDN"
+                                                            placeholder="Cari Nama/Email/NISN/NIDN"
                                                             aria-label="Code"
                                                             aria-describedby="basic-addon2"
                                                         />
@@ -278,8 +278,8 @@
                                                                 v-model="form.code_type"
                                                             >
                                                                 <option selected disabled>Jenis Pengguna</option>
-                                                                <option value="0">Mahasiswa</option>
-                                                                <option value="1">Dosen</option>
+                                                                <option value="0">Siswa</option>
+                                                                <option value="1">Guru</option>
                                                             </select>
                                                             <select 
                                                                 class="form-select form-select mb-3"
@@ -307,7 +307,7 @@
                                                             >
                                                                 <option selected disabled>Peran Pengguna</option>
                                                                 <option value="1">Super-Admin</option>
-                                                                <option value="2">Admin</option>
+                                                                <!-- <option value="2">Admin</option> -->
                                                                 <option value="3">Member</option>
                                                             </select>
                                                         </template>
@@ -351,7 +351,7 @@
                                                         <tr class="text-center">
                                                             <th class="align-middle">Pilih</th>
                                                             <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">NIM/NIDN</th>
+                                                            <th class="align-middle">NISN/NIDN</th>
                                                             <th class="align-middle">Email</th>
                                                             <th class="align-middle">Tipe</th>
                                                             <th class="align-middle">Status</th>
@@ -387,12 +387,12 @@
                                                             </td>
                                                             <td v-if="item.code_type == '0'" class="align-middle text-center">
                                                                 <b>
-                                                                    Mahasiswa
+                                                                    Siswa
                                                                 </b>
                                                             </td>
                                                             <td v-else class="align-middle text-center">
                                                                 <b>
-                                                                    Dosen
+                                                                    Guru
                                                                 </b>
                                                             </td>
                                                             <td v-if="item.status == '1'" class="align-middle text-center text-primary">
@@ -458,10 +458,13 @@
                                                                 <big>Nama: <b>{{item.name}}</b></big><br>
                                                                 <big>
                                                                     <template v-if="item.code_type == '0'">
-                                                                        NIM: 
+                                                                        NISN: 
                                                                     </template>
-                                                                    <template v-else>
+                                                                    <template v-else-if="item.code_type == '1'">
                                                                         NIDN:
+                                                                    </template>
+                                                                    <template v-else-if="item.code_type == '2'">
+                                                                        NIP:
                                                                     </template>
                                                                     {{item.code}}
                                                                 </big>
