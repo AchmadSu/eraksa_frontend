@@ -209,8 +209,7 @@
                                                 this.keyWords != null ||
                                                 this.keyCodeType != null ||
                                                 this.keyRole != null ||
-                                                this.keyStatus != null ||
-                                                this.keyStudyProgramName != null 
+                                                this.keyStatus != null
                                                 ? 'col-12 pb-3':'d-none'"
                                             >
                                                 <h5 class="text-center">
@@ -225,6 +224,9 @@
                                                         </template>
                                                         <template v-else-if="this.keyCodeType == '1'">
                                                             Tipe: Guru
+                                                        </template>
+                                                        <template v-else-if="this.keyCodeType == '2'">
+                                                            Tipe: Karyawan
                                                         </template>
                                                         <br>
                                                     </template>
@@ -248,9 +250,6 @@
                                                             Status: Belum diverifikasi
                                                         </template>
                                                         <br>
-                                                    </template>
-                                                    <template v-if="this.keyStudyProgramName != ''">
-                                                        Program Studi: {{this.keyStudyProgramName}} <br>
                                                     </template>
                                                 </h5>
                                             </div>
@@ -280,6 +279,7 @@
                                                                 <option selected disabled>Jenis Pengguna</option>
                                                                 <option value="0">Siswa</option>
                                                                 <option value="1">Guru</option>
+                                                                <option value="2">Karyawan</option>
                                                             </select>
                                                             <select 
                                                                 class="form-select form-select mb-3"
@@ -291,14 +291,6 @@
                                                                 <option value="1">Aktif</option>
                                                                 <option value="0">Belum diverifikasi</option>
                                                             </select>
-                                                            <input type="text"
-                                                                v-model="form.study_program_keyWords"
-                                                                name="study_programs"
-                                                                class="form-control input-lg bg-light" 
-                                                                placeholder="Program Studi"
-                                                                aria-label="Date"
-                                                                aria-describedby="basic-addon2"
-                                                            />
                                                             <select v-if="$roles == 'Super-Admin'"
                                                                 class="form-select form-select mb-3"
                                                                 aria-describedby="basic-addon2"
@@ -351,12 +343,12 @@
                                                         <tr class="text-center">
                                                             <th class="align-middle">Pilih</th>
                                                             <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">NISN/NIDN</th>
+                                                            <th class="align-middle">NISN/NIDN/NIP</th>
                                                             <th class="align-middle">Email</th>
                                                             <th class="align-middle">Tipe</th>
                                                             <th class="align-middle">Status</th>
                                                             <th class="align-middle">No WhatsApp</th>
-                                                            <th class="align-middle">Program Studi</th>
+                                                            <!-- <th class="align-middle">Program Studi</th> -->
                                                             <th class="align-middle">Peran Pengguna</th>
                                                             <th class="align-middle" colspan="2">Aksi</th>
                                                         </tr>
@@ -390,9 +382,14 @@
                                                                     Siswa
                                                                 </b>
                                                             </td>
-                                                            <td v-else class="align-middle text-center">
+                                                            <td v-else-if="item.code_type == '1'" class="align-middle text-center">
                                                                 <b>
                                                                     Guru
+                                                                </b>
+                                                            </td>
+                                                            <td v-else-if="item.code_type == '2'" class="align-middle text-center">
+                                                                <b>
+                                                                    Karyawan
                                                                 </b>
                                                             </td>
                                                             <td v-if="item.status == '1'" class="align-middle text-center text-primary">
@@ -406,14 +403,14 @@
                                                                 </b>
                                                             </td>
                                                             <td class="align-middle text-left">{{item.phone}}</td>
-                                                            <td class="align-middle text-left">
+                                                            <!-- <td class="align-middle text-left">
                                                                 <template v-if="item.study_program_name == null">
                                                                     Umum
                                                                 </template>
                                                                 <template v-else>
                                                                     {{ item.study_program_name }}
                                                                 </template>
-                                                            </td>
+                                                            </td> -->
                                                             <td class="align-middle text-center">
                                                                 {{ item.user_role }}
                                                             </td>
@@ -552,7 +549,6 @@
                                         </div>
                                         <div v-if="this.keyCode != null ||
                                             this.keyCodeType != null ||
-                                            this.keyStudyProgramName != null ||
                                             this.keyRole != null ||
                                             this.keyWords != null ||
                                             this.keyStatus != null
@@ -641,7 +637,6 @@
                     code: '',
                     code_type: 'Jenis Pengguna',
                     status: 'Status',
-                    study_program_keyWords: '',
                     roles: 'Peran Pengguna',
                 },
                 isDateOneIsset: false,
@@ -1259,7 +1254,6 @@
                     "keyWords": this.keyWords,
                     "code_type": this.keyCodeType,
                     "roles": this.keyRole,
-                    "study_program_keyWords": this.keyStudyProgramName,
                     "order": "name",
                     "trash": 1
                 }
@@ -1276,8 +1270,6 @@
                                     "code_type": response.data.data.users[item].code_type,
                                     "status": response.data.data.users[item].status,
                                     "phone": response.data.data.users[item].phone,
-                                    "study_program_id": response.data.data.users[item].study_program_id,
-                                    "study_program_name": response.data.data.users[item].study_program_name,
                                     "user_role": response.data.data.users[item].user_role,
                                     "email": response.data.data.users[item].email,
                                 }
