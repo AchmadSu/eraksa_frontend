@@ -94,35 +94,6 @@
                                                 </div>
                                             </div>
                                             <div class="input-group mb-3">
-                                                <select :disabled="this.isLoadingStudyPrograms" v-model="form.study_programs" :class="isNaN(this.form.study_programs) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
-                                                    <option selected disabled>Program Studi</option>
-                                                    <option v-for="item in studyProgramArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                    <option v-if="this.showAlertStudyPrograms" v-for="item in errorStudyPrograms" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                </select>
-                                                <div v-if="this.isLoadingStudyPrograms == false">
-                                                    <div class="rounded-0 d-none d-lg-block">
-                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0">Muat lebih</a>                                                  
-                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0">Muat ulang</a>                                                  
-                                                    </div>
-                                                    <div class="rounded-0 d-sm-block d-lg-none">
-                                                        <a @click="nextStudyProgram" v-if="this.studyProgramTotal > this.studyProgramArray.length" href="#" class="btn btn-primary rounded-0"></a>                                                  
-                                                        <a @click="getStudyProgram(this.skipStudyProgram, this.takeStudyProgram)" v-if="this.showAlertStudyPrograms" href="#" class="btn btn-primary rounded-0"></a>                                                  
-                                                    </div>
-                                                </div>
-                                                <div v-else>
-                                                    <button type="submit" class="d-sm-block d-lg-none btn btn-primary rounded-0" style="width:100%;" :disabled="true">
-                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="submit" class="d-sm-none d-lg-block btn btn-primary rounded-0" style="width:100%;" :disabled="true">
-                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        Memuat...
-                                                    </button>
-                                                </div>
-                                                <div :class="isNaN(this.form.study_programs) ? 'text-start invalid-feedback' : 'd-none'">
-                                                    Pilih salah satu Program Studi!
-                                                </div>
-                                            </div>
-                                            <div class="input-group mb-3">
                                                 <select :disabled="this.isLoadingCategory" v-model="form.category_assets" :class="isNaN(this.form.category_assets) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
                                                     <option selected disabled>Kategori</option>
                                                     <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
@@ -325,7 +296,7 @@
                     // console.log(!(isNaN(study_program_id)))
                     // console.log(!(isNaN(category_id)))
                     // console.log(!(isNaN(placement_id)))
-                    if(validateName && !(isNaN(study_program_id)) && !(isNaN(category_id)) && !(isNaN(placement_id))) {
+                    if(validateName && (!isNaN(category_id)) && !(isNaN(placement_id))) {
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -405,7 +376,6 @@
                 this.cursorStyle = 'cursor: not-allowed';
                 this.dataObject = {
                     "name": this.form.name,
-                    "study_program_id": this.form.study_programs,
                     "category_id": this.form.category_assets,
                     "placement_id": this.form.placements,
                 }
@@ -771,7 +741,7 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
+            // this.getStudyProgram(this.skipStudyProgram, this.takeStudyProgram);
             this.getCategory(this.skipCategory, this.takeCategory);
             this.getPlacements(this.skipPlacements, this.takePlacements);
 
