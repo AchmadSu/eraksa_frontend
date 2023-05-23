@@ -130,8 +130,11 @@
                                                                                         <template v-if="this.detailObject.code_type == '0'">
                                                                                             NIM
                                                                                         </template>
-                                                                                        <template v-else>
-                                                                                            NIDN
+                                                                                        <template v-else-if="this.detailObject.code_type == '1'">
+                                                                                            NUPTK
+                                                                                        </template>
+                                                                                        <template v-else-if="this.detailObject.code_type == '2'">
+                                                                                            NIP
                                                                                         </template>
                                                                                     </h5>
                                                                                 </td>
@@ -207,7 +210,10 @@
                                                                                                 NIM: <b>{{this.detailObject.code}}</b>
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.code_type == '1'">
-                                                                                                NIDN: <b>{{this.detailObject.code}}</b>
+                                                                                                NUPTK: <b>{{this.detailObject.code}}</b>
+                                                                                            </template>
+                                                                                            <template v-else-if="this.detailObject.code_type == '2'">
+                                                                                                NIP: <b>{{this.detailObject.code}}</b>
                                                                                             </template>
                                                                                             <br> 
                                                                                             Email: {{ this.detailObject.email }}

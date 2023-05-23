@@ -191,7 +191,7 @@
                                                             v-model="form.keyWords"
                                                             name="search"
                                                             class="form-control input-lg bg-light"
-                                                            placeholder="Cari Nama/Email/NISN/NIDN"
+                                                            placeholder="Cari Nama/Email/NISN/NUPTK"
                                                             aria-label="Code"
                                                             aria-describedby="basic-addon2"
                                                         />
@@ -264,7 +264,7 @@
                                                         <tr class="text-center">
                                                             <th class="align-middle">Pilih</th>
                                                             <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">NISN/NIDN/NIP</th>
+                                                            <th class="align-middle">NISN/NUPTK/NIP</th>
                                                             <th class="align-middle">Email</th>
                                                             <th class="align-middle">Tipe</th>
                                                             <th class="align-middle">Status</th>
@@ -379,7 +379,7 @@
                                                                         NISN: 
                                                                     </template>
                                                                     <template v-else-if="item.code_type == '1'">
-                                                                        NIDN: 
+                                                                        NUPTK: 
                                                                     </template>
                                                                     <template v-else-if="item.code_type == '2'">
                                                                         NIP: 

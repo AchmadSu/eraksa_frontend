@@ -971,7 +971,7 @@
                         this.codeType = "0";
                     } else if(code_type == "1") {
                         this.codeEnabled = true;
-                        this.codeString = "Masukkan NIDN";
+                        this.codeString = "Masukkan NUPTK";
                         this.codeType = "1";
                     } else if(code_type == "2") {
                         this.codeEnabled = true;

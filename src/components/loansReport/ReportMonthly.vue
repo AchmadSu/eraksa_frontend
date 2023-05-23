@@ -71,7 +71,7 @@
                             NISN.
                         </template>
                         <template v-else-if="item.loaner_code_type == '1'">
-                            NIDN.
+                            NUPTK.
                         </template>
                         <template v-else-if="item.loaner_code_type == '2'">
                             NIP.
@@ -122,7 +122,7 @@
                                 NISN. 
                             </template>
                             <template v-else-if="this.$session.code_type == '1'">
-                                NIDN. 
+                                NUPTK. 
                             </template>
                             <template v-else-if="this.$session.code_type == '2'">
                                 NIP. 

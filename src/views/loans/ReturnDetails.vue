@@ -159,10 +159,10 @@
                                                                                 <td class="align-middle">
                                                                                     <h5>
                                                                                         <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                            NIM
+                                                                                            NISN
                                                                                         </template>
                                                                                         <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                            NIDN
+                                                                                            NUPTK
                                                                                         </template>
                                                                                         <template v-else-if="this.detailObject.loaner_code_type == '2'">
                                                                                             NIP
@@ -185,10 +185,10 @@
                                                                                     <td class="align-middle">
                                                                                         <h5>
                                                                                             <template v-if="this.detailObject.recipient_code_type == '0'">
-                                                                                                NIM
+                                                                                                NISN
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.recipient_code_type == '1'">
-                                                                                                NIDN
+                                                                                                NUPTK
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.recipient_code_type == '2'">
                                                                                                 NIP
@@ -301,10 +301,10 @@
                                                                                             </b>
                                                                                             <br>
                                                                                             <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                                NIM:
+                                                                                                NISN:
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                                NIDN:
+                                                                                                NUPTK:
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.loaner_code_type == '0'">
                                                                                                 NIP:
@@ -319,10 +319,10 @@
                                                                                             </b>
                                                                                             <br>
                                                                                             <template v-if="this.detailObject.recipient_code_type == '0'">
-                                                                                                NIM:
+                                                                                                NISN:
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.recipient_code_type == '1'">
-                                                                                                NIDN:
+                                                                                                NUPTK:
                                                                                             </template>
                                                                                             <template v-else-if="this.detailObject.recipient_code_type == '0'">
                                                                                                 NIP:
