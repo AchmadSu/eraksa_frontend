@@ -351,11 +351,6 @@
                         "description": "Super-Admin"
                     },
                     {
-                        "id": 2,
-                        "value": 2,
-                        "description": "Admin"
-                    },
-                    {
                         "id": 3,
                         "value": 3,
                         "description": "Member"
