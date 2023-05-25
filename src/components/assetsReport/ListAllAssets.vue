@@ -48,7 +48,7 @@
                 <tr class="text-center">
                     <td>
                         <h5>
-                            Cimahi, {{this.currentDate.toLocaleDateString("id")}} 
+                            Bandung Barat, {{this.currentDate.toLocaleDateString("id")}} 
                         </h5>
                     </td>
                 </tr>
