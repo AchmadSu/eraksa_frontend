@@ -1100,7 +1100,7 @@
                                     "user_name": response.data.data.assets[item].user_name,
                                     "study_program_id": response.data.data.assets[item].study_program_id,
                                     "study_program_name": response.data.data.assets[item].study_program_name,
-                                    "qrCode": "localhost:3000/assets/details?data="+data
+                                    "qrCode": this.$baseUrl+"/assets/details?data="+data
                                 }
                             );
                         });

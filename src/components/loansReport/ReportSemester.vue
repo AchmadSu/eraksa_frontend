@@ -14,7 +14,7 @@
                         <h5>Lama Peminjaman</h5>
                     </td>
                     <td class="align-middle px-5">
-                        <h5>: Tahun Ajaran {{ this.resultAcademicYear }} Semester {{this.range}}</h5>
+                        <h5>: Tahun Akademik {{ this.resultAcademicYear }} Semester {{this.range}}</h5>
                     </td>
                 </tr>
                 <tr>
@@ -137,7 +137,7 @@
     <form>
         <div class="mb-3">
             <select :disabled="isLoading" v-model="selectedYear" class="form-select form-select" aria-label=".form-select example">
-                <option selected disabled>Tahun Ajaran</option>
+                <option selected disabled>Tahun Akademik</option>
                 <template v-for="year in yearRange">
                     <option :key="year" :value="year" v-if="this.academicYear >= year">
                         {{year}}/{{year+1}}
@@ -184,7 +184,7 @@
         data() {
             const today = new Date();
             const currentYear = new Date().getFullYear();
-            const isBeforeAugust = today.getMonth() < 7;
+            const isBeforeAugust = today.getMonth() < 8;
             return {
                 windowWidth: window.innerWidth,
                 isLoading: false,
@@ -206,7 +206,7 @@
                 isLoadingDelete: false,
                 sidebarShow: true,
                 imageLogo: false,
-                selectedYear: 'Tahun Ajaran',
+                selectedYear: 'Tahun Akademik',
                 selectedSemester: 'Semester',
                 yearRange: Array.from({length: 10}, (_, i) => currentYear - i),
                 currentDate: new Date(),

@@ -280,6 +280,7 @@
                                                                 <option selected disabled>Jenis Pengguna</option>
                                                                 <option value="0">Mahasiswa</option>
                                                                 <option value="1">Dosen</option>
+                                                                <option value="2">Karyawan</option>
                                                             </select>
                                                             <select 
                                                                 class="form-select form-select mb-3"
@@ -390,9 +391,14 @@
                                                                     Mahasiswa
                                                                 </b>
                                                             </td>
-                                                            <td v-else class="align-middle text-center">
+                                                            <td v-else-if="item.code_type == '1'" class="align-middle text-center">
                                                                 <b>
                                                                     Dosen
+                                                                </b>
+                                                            </td>
+                                                            <td v-else-if="item.code_type == '2'" class="align-middle text-center">
+                                                                <b>
+                                                                    Karyawan
                                                                 </b>
                                                             </td>
                                                             <td v-if="item.status == '1'" class="align-middle text-center text-primary">
@@ -460,8 +466,11 @@
                                                                     <template v-if="item.code_type == '0'">
                                                                         NIM: 
                                                                     </template>
+                                                                    <template v-else-if="item.code_type == '1'">
+                                                                        NIDN: 
+                                                                    </template>
                                                                     <template v-else>
-                                                                        NIDN:
+                                                                        NIP:
                                                                     </template>
                                                                     {{item.code}}
                                                                 </big>

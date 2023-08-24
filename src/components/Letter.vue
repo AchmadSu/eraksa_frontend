@@ -29,7 +29,8 @@
                                                     <td class="align-middle">
                                                         <h5>
                                                             <template v-if="this.detailObject.loaner_code_type == '0'">NIM</template>
-                                                            <template v-else>NIDN</template>
+                                                            <template v-else-if="this.detailObject.loaner_code_type == '1'">NIDN</template>
+                                                            <template v-else-if="this.detailObject.loaner_code_type == '2'">NIP</template>
                                                         </h5>
                                                     </td>
                                                     <td class="align-middle">
