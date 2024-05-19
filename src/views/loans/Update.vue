@@ -177,6 +177,9 @@
                                                                                     </template>
                                                                                 </template>
                                                                             </h6>
+                                                                            <h6 class="h6 text-secondary">
+                                                                                {{ formatCurrency(item.price) }} / Hari
+                                                                            </h6>
                                                                         </a>
                                                                     </div>
                                                                 </li>
@@ -274,6 +277,9 @@
                                                                         {{ (item.code).substring(0,24)+"..." }}
                                                                     </template>
                                                                 </h6>
+                                                                <h6 class="h6 text-secondary">
+                                                                    {{ formatCurrency(item.price) }} / Hari
+                                                                </h6>
                                                                 <div class=" mt-3">
                                                                     <div class="mt-3 text-center"> 
                                                                         <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk membatalkan</span>
@@ -287,6 +293,9 @@
                                                 <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3 text-center' : 'd-none'" role="alert">
                                                     <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                     <a @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                                                </div>
+                                                <div v-if="this.calculateEstimate() !== 0" class="mb-3">
+                                                    <h6 class="text-secondary">Estimasi awal: {{ formatCurrency(this.calculateEstimate()) }}</h6>
                                                 </div>
                                                 <div v-if="isLoadingResponse == false">
                                                     <button type="submit" class="btn btn-primary" :style="this.windowWidth <= $widthLandscapePhone ? 'width:100%;':'width:50%;'" :disabled="!submitEnabled"><i class="fa fa-paper-plane"></i> Update Permintaan</button>
@@ -379,6 +388,9 @@
                 dataCount: 0,
                 errorDetail: false,
                 loansStatus: 0,
+                estimate: 0,
+                prices: 0,
+                times: 0,
                 keyWords: '',
                 prev: 0,
                 next: 5,
@@ -392,79 +404,39 @@
                 timesArray: [
                     {
                         "id": 1,
-                        "value": 2,
-                        "description": "2 Jam"
-                    },
-                    {
-                        "id": 2,
-                        "value": 3,
-                        "description": "3 Jam"
-                    },
-                    {
-                        "id": 3,
-                        "value": 4,
-                        "description": "4 Jam"
-                    },
-                    {
-                        "id": 4,
-                        "value": 8,
-                        "description": "8 Jam"
-                    },
-                    {
-                        "id": 5,
-                        "value": 12,
-                        "description": "12 Jam"
-                    },
-                    {
-                        "id": 6,
                         "value": 24,
                         "description": "1 Hari"
                     },
                     {
-                        "id": 7,
+                        "id": 2,
                         "value": 48,
                         "description": "2 Hari"
                     },
                     {
-                        "id": 8,
+                        "id": 3,
                         "value": 72,
                         "description": "3 Hari"
                     },
                     {
-                        "id": 9,
+                        "id": 4,
                         "value": 96,
                         "description": "4 Hari"
                     },
                     {
-                        "id": 10,
+                        "id": 5,
                         "value": 120,
                         "description": "5 Hari"
                     },
                     {
-                        "id": 11,
+                        "id": 6,
                         "value": 144,
                         "description": "6 Hari"
                     },
                     {
-                        "id": 12,
+                        "id": 7,
                         "value": 168,
                         "description": "1 Minggu"
-                    },
-                    {
-                        "id": 13,
-                        "value": 336,
-                        "description": "2 Minggu"
-                    },
-                    {
-                        "id": 14,
-                        "value": 504,
-                        "description": "3 Minggu"
-                    },
-                    {
-                        "id": 15,
-                        "value": 720,
-                        "description": "1 Bulan"
-                    },
+                    }
                 ],
                 selectDataArray: [],
                 errorResponse: [],
@@ -530,6 +502,7 @@
                     }
 
                     if (!isNaN(time)) {
+                        this.times = time/24;
                         this.validateForm = true;
                     } else {
                         this.validateForm = false;
@@ -543,6 +516,22 @@
         methods: {
             toTop(){
                 window.scrollTo(0,0);
+            },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
+            },
+            calculateEstimate(){
+                let sum = 0;
+                this.selectDataArray.forEach((obj) => {
+                    sum += parseFloat(obj.price);
+                });
+                this.prices = sum;
+                this.estimate = this.prices * this.times;
+                return this.estimate;
             },
             setAlert(){
                 // this.alertMsg = null;
@@ -734,7 +723,6 @@
                     "sleep": 3,
                     "keyWords": this.keyWords,
                     "order": "name",
-                    "condition": 0,
                     "status": 0,
                     "negation_ids": negation_ids 
                 }
@@ -748,7 +736,7 @@
                                     "id": response.data.data.assets[item].id,
                                     "name": response.data.data.assets[item].name,
                                     "code": response.data.data.assets[item].code,
-                                    "condition": response.data.data.assets[item].condition,
+                                    "price": response.data.data.assets[item].price,
                                     "status": response.data.data.assets[item].status,
                                     "category_name": response.data.data.assets[item].category_name
                                 }
@@ -875,12 +863,12 @@
                                     "id": select[item].asset_id,
                                     "name": select[item].asset_name,
                                     "code": select[item].asset_code,
-                                    "condition": select[item].asset_condition,
+                                    "price": select[item].asset_price,
                                     "status": select[item].asset_status,
                                     "category_name": select[item].asset_category_name
                                 }
                             )
-                            // console.log(this.selectDataArray)
+                            console.log(this.selectDataArray)
                             this.filterIds.push(select[item].asset_id)
                         })
                         this.getAssets(this.skipAsset, this.takeAsset)

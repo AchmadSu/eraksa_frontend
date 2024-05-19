@@ -137,14 +137,14 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Aset</h1>
+                        <h1 class="h3 mb-5 text-center text-gray-800">Kelola Data <br> Mobil</h1>
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h6 class="m-0 font-weight-bold text-primary">Data Aset</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Data Mobil</h6>
                                     </div>
                                     <div class="col-6">
                                         <h6 class="text-right font-weight-bold m-0 text-primary">Total Data: {{this.dataCount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ".")}}</h6>
@@ -163,7 +163,6 @@
                                             <div :class="
                                                 this.keyWords != null ||
                                                 this.creator != null ||
-                                                this.placement != null ||
                                                 this.category != null ?
                                                 'col-12 pb-3':'d-none'"
                                             >
@@ -171,7 +170,7 @@
                                                     Menampilkan hasil pencarian
                                                     <br>
                                                     <template v-if="this.keyWords != '' && this.keyWords != null">
-                                                        Nama Aset atau Kode Aset: {{ this.keyWords}} <br>
+                                                        Nama Mobil atau No. Plat: {{ this.keyWords}} <br>
                                                     </template>
                                                     <template v-if="this.creator != '' && this.creator != null">
                                                         Nama Pembuat: {{ this.creator}} <br>
@@ -179,12 +178,6 @@
                                                     <template v-for="item, index in dataArray" :key="item.id">
                                                         <template v-if="this.category != '' && this.category != null && item.category_id == this.dataCategory && index == 0">
                                                             Kategori: {{ item.category_name }}
-                                                            <br>
-                                                        </template>
-                                                    </template>
-                                                    <template v-for="item, index in dataArray" :key="item.id">
-                                                        <template v-if="this.placement != '' && this.placement != null && item.placement_id == this.dataPlacement && index == 0">
-                                                            Tempat: {{ item.placement_name }}
                                                             <br>
                                                         </template>
                                                     </template>
@@ -224,30 +217,6 @@
                                                                     <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
                                                                 </div>
                                                             </div> 
-                                                            <div v-else>
-                                                                <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
-                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                </button>
-                                                                <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
-                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                </button>
-                                                            </div>
-    
-                                                            <select :disabled="this.isLoadingPlacements" v-model="form.placements" class="form-select form-select" aria-label=".form-select example">
-                                                                <option selected disabled>Tempat</option>
-                                                                <option v-for="item in placementsArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                                <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                            </select>
-                                                            <div v-if="this.isLoadingPlacements == false">
-                                                                <div class="rounded-0 d-none d-lg-block">
-                                                                    <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
-                                                                    <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
-                                                                </div>
-                                                                <div class="rounded-0 d-sm-block d-lg-none">
-                                                                    <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
-                                                                    <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
-                                                                </div>
-                                                            </div>
                                                             <div v-else>
                                                                 <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
                                                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -299,13 +268,12 @@
                                                             <th class="align-middle">Pilih</th>
                                                             <!-- <th class="align-middle">No</th> -->
                                                             <th class="align-middle">Nama</th>
-                                                            <th class="align-middle">Kode Aset</th>
+                                                            <th class="align-middle">No. Plat</th>
                                                             <th class="align-middle">Dibuat oleh</th>
-                                                            <th class="align-middle">Kondisi</th>
                                                             <th class="align-middle">Status</th>
+                                                            <th class="align-middle">Harga Sewa</th>
                                                             <th class="align-middle">Tanggal Masuk</th>
-                                                            <th class="align-middle">Penempatan</th>
-                                                            <th class="align-middle">Kategori Aset</th>
+                                                            <th class="align-middle">Kategori Mobil</th>
                                                             <th class="align-middle" colspan="3">
                                                                 <button @click="createRouter" :disabled="buttonDisabled" class="btn w-100 btn-success">
                                                                     <i class="fa fa-plus"></i>
@@ -322,13 +290,11 @@
                                                             <td class="align-middle"><b>{{item.name}}</b></td>
                                                             <td class="align-middle">{{item.code}}</td>
                                                             <td class="align-middle">{{item.user_name}}</td>
-                                                            <td class="align-middle" v-if="item.condition == 0">Optimal</td>
-                                                            <td class="align-middle" v-else>Rusak</td>
                                                             <td class="align-middle" v-if="item.status == 0">Tersedia</td>
                                                             <td class="align-middle" v-else-if="item.status == 1">Dipinjam</td>
                                                             <td class="align-middle" v-else-if="item.status == 2">Diperbaiki</td>
+                                                            <td class="align-middle">{{formatCurrency(item.price) }}</td>
                                                             <td class="align-middle">{{item.date}}</td>
-                                                            <td class="align-middle">{{item.placement_name}}</td>
                                                             <td class="align-middle">{{item.category_name}}</td>
                                                             <template v-if="item.status == 0">
                                                                 <td class="align-middle text-center">
@@ -364,7 +330,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Aset</h6>
+                                                                    <h6 class="mb-0">Data Mobil</h6>
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex flex-row align-items-center">
@@ -377,19 +343,15 @@
                                                             <h3 class="heading text-left">{{item.name}}</h3>
                                                             <p>{{item.code}}</p>
                                                             <p>
-                                                                <big>Dibuat oleh: {{item.user_name}}</big><br>
-                                                                <big>Kondisi: </big>
-                                                                <big v-if="item.condition == 0">Optimal</big>
-                                                                <big v-else>Rusak</big>
-                                                                <br>
+                                                                <big>Dibuat oleh: {{item.user_name}}</big><br>                                                                <br>
                                                                 <big>Status: </big>
                                                                 <big v-if="item.status == 0">Tersedia</big>
                                                                 <big v-else-if="item.status == 1">Dipinjam</big>
                                                                 <big v-else-if="item.status == 2">Diperbaiki</big>
                                                                 <br>
                                                                 <big>Tanggal masuk: {{item.date}}</big><br>
-                                                                <big>Penempatan: {{item.placement_name}}</big><br>
-                                                                <big>Kategori Aset: {{item.category_name}}</big><br>
+                                                                <big>Harga Sewa: {{formatCurrency(item.price) }}</big><br>
+                                                                <big>Kategori Mobil: {{item.category_name}}</big><br>
                                                             </p>
                                                             <div class="mt-3">
                                                                 <div class="row my-3 py-2">
@@ -421,7 +383,7 @@
                                                             <div class="d-flex flex-row align-items-center">
                                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                 <div class="ms-2 c-details">
-                                                                    <h6 class="mb-0">Data Aset</h6>
+                                                                    <h6 class="mb-0">Data Mobil</h6>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -619,6 +581,13 @@
         methods: {
             toTop(){
                 window.scrollTo(0,0);
+            },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
             },
             setAlert(){
                 // this.alertMsg = null;
@@ -1001,15 +970,11 @@
                 let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
                 let testStudyProgram = base64regex.test(this.studyProgram)
                 let testCategory = base64regex.test(this.category)
-                let testPlacements = base64regex.test(this.placement)
                 if(testStudyProgram) {
                     this.dataStudyProgram = window.atob(this.studyProgram)
                 }
                 if(testCategory) {
                     this.dataCategory = window.atob(this.category)
-                }
-                if(testPlacements) {
-                    this.dataPlacements = window.atob(this.placement)
                 }
                 if(this.$roles == 'Admin'){
                     const study_program_id = this.$session.study_program_id
@@ -1020,9 +985,7 @@
                         "keyWords": this.keyWords,
                         "user_keyWords": this.creator,
                         "category_id": this.dataCategory,
-                        "placement_id": this.dataPlacements,
                         "order": "name",
-                        "study_program_id": study_program_id
                     }
                 } else {
                     this.dataObject = {
@@ -1032,8 +995,6 @@
                         "keyWords": this.keyWords,
                         "user_keyWords": this.creator,
                         "category_id": this.dataCategory,
-                        "placement_id": this.dataPlacements,
-                        "study_program_id": this.dataStudyProgram,
                         "order": "name"
                     }
                 }
@@ -1054,19 +1015,17 @@
                                     "condition": response.data.data.assets[item].condition,
                                     "status": response.data.data.assets[item].status,
                                     "date": finalDate,
-                                    "placement_id": response.data.data.assets[item].placement_id,
-                                    "placement_name": response.data.data.assets[item].placement_name,
                                     "category_id": response.data.data.assets[item].category_id,
                                     "category_name": response.data.data.assets[item].category_name,
                                     "user_id": response.data.data.assets[item].user_id,
                                     "user_name": response.data.data.assets[item].user_name,
-                                    "study_program_id": response.data.data.assets[item].study_program_id,
-                                    "study_program_name": response.data.data.assets[item].study_program_name,
+                                    "price": response.data.data.assets[item].price,
                                     "qrCode": this.$baseUrl+"/assets/details?data="+data
                                 }
                             );
                         });
                         // this.dataArray.filter((index) => index != 2)
+                        console.log(this.dataCategory)
                         this.dataCount = response.data.data.count;
                         // if (this.windowWidth < ) {
                             

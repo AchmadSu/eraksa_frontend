@@ -144,18 +144,6 @@
                                                         kata kunci: {{ this.keyWords }} 
                                                         <br>
                                                     </template>
-                                                    <template v-if="this.keyCodeType != ''">
-                                                        <template v-if="this.keyCodeType == '0'">
-                                                            jenis: Siswa
-                                                        </template>
-                                                        <template v-else-if="this.keyCodeType == '1'">
-                                                            jenis: Guru
-                                                        </template>
-                                                        <template v-else-if="this.keyCodeType == '2'">
-                                                            jenis: Karyawan
-                                                        </template>
-                                                        <br>
-                                                    </template>
                                                     <template v-if="this.keyRole != ''">
                                                         <template v-if="this.keyRole == '1'">
                                                             peran: Super-Admin
@@ -195,40 +183,6 @@
                                                             aria-label="Code"
                                                             aria-describedby="basic-addon2"
                                                         />
-                                                        <template v-if="this.windowWidth > $widthPotraitPhone">
-                                                            <select 
-                                                                class="form-select form-select mb-3"
-                                                                aria-describedby="basic-addon2"
-                                                                aria-label=".form-select-lg example"
-                                                                v-model="form.code_type"
-                                                            >
-                                                                <option selected disabled>Jenis Pengguna</option>
-                                                                <option value="0">Siswa</option>
-                                                                <option value="1">Guru</option>
-                                                                <option value="2">Karyawan</option>
-                                                            </select>
-                                                            <select 
-                                                                class="form-select form-select mb-3"
-                                                                aria-describedby="basic-addon2"
-                                                                aria-label=".form-select-lg example"
-                                                                v-model="form.status"
-                                                            >
-                                                                <option selected disabled>Status</option>
-                                                                <option value="1">Aktif</option>
-                                                                <option value="0">Belum diverifikasi</option>
-                                                            </select>
-                                                            <select v-if="$roles == 'Super-Admin'"
-                                                                class="form-select form-select mb-3"
-                                                                aria-describedby="basic-addon2"
-                                                                aria-label=".form-select-lg example"
-                                                                v-model="form.roles"
-                                                            >
-                                                                <option selected disabled>Peran Pengguna</option>
-                                                                <option value="1">Super-Admin</option>
-                                                                <!-- <option value="2">Admin</option> -->
-                                                                <option value="3">Member</option>
-                                                            </select>
-                                                        </template>
                                                         <div class="input-group-append h-50">
                                                             <button @click="searchFunction" :disabled="buttonDisabled" class="btn btn-primary" type="button">
                                                                 <i class="fa fa-search fa-sm"></i>
@@ -297,31 +251,6 @@
                                                                 <template v-else>
                                                                     {{item.email.substring(0,19)+"..."}}
                                                                 </template>
-                                                            </td>
-                                                            <td v-if="item.code_type == '0'" class="align-middle text-center">
-                                                                <b>
-                                                                    Siswa
-                                                                </b>
-                                                            </td>
-                                                            <td v-else-if="item.code_type == '1'" class="align-middle text-center">
-                                                                <b>
-                                                                    Guru
-                                                                </b>
-                                                            </td>
-                                                            <td v-else-if="item.code_type == '2'" class="align-middle text-center">
-                                                                <b>
-                                                                    Karyawan
-                                                                </b>
-                                                            </td>
-                                                            <td v-if="item.status == '1'" class="align-middle text-center text-primary">
-                                                                <b>
-                                                                    Aktif
-                                                                </b>
-                                                            </td>
-                                                            <td v-else class="align-middle text-center text-danger">
-                                                                <b>
-                                                                    Akun Belum Diaktivasi
-                                                                </b>
                                                             </td>
                                                             <td class="align-middle text-left">{{item.phone}}</td>
                                                             <!-- <td class="align-middle text-left">

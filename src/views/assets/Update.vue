@@ -103,21 +103,18 @@
                                             </div>
                                             <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                                                 <h5 class="text-secondary">
-                                                    {{this.detailObject.name}}
+                                                    {{this.detailObject.name}} ({{ this.detailObject.code }})
                                                 </h5>
-                                                <h6 class="text-secondary text-justify">
-                                                    {{this.detailObject.code}}
-                                                </h6>
                                             </div>
                                             <form class="form needs-validation" id="app" @submit.prevent="updateFunction" novalidate>
                                                 <div class="py-lg-4 py-md-0 py-sm-1">
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                            <i class="fa fa-cube"></i>
+                                                            <i class="fa fa-car"></i>
                                                         </span>
                                                         <input 
                                                             name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                            placeholder="Nama Aset" aria-label="name" 
+                                                            placeholder="Nama Mobil" aria-label="name" 
                                                             aria-describedby="basic-addon1"
                                                             v-model="form.name"
                                                         />
@@ -126,29 +123,48 @@
                                                         </div>
                                                     </div>
                                                     <div class="input-group mb-3">
+                                                        <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                            <i class="fa fa-key"></i>
+                                                        </span>
+                                                        <input 
+                                                            name="code" type="text" class="form-control"
+                                                            placeholder="No Plat (Kosongkan jika tidak akan diubah)" aria-label="name" 
+                                                            aria-describedby="basic-addon1"
+                                                            v-model="form.code"
+                                                        />
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                            <i class="fa fa-usd"></i>
+                                                        </span>
+                                                        <input 
+                                                            name="price" type="number" class="form-control"
+                                                            placeholder="Harga Sewa per Hari" aria-label="name" 
+                                                            aria-describedby="basic-addon1"
+                                                            v-model="form.price" minlength="5"
+                                                        />
+                                                    </div>
+                                                    <div class="input-group mb-3">
                                                         <select :disabled="this.isLoadingCategory" v-model="form.category_assets" :class="isNaN(this.form.category_assets) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
                                                             <option selected disabled>Kategori</option>
-                                                            <option :value="this.detailObject.category_id" selected>{{this.detailObject.category_name}}</option>
-                                                            <template v-for="item in categoryArray" :key="item.id">
-                                                                <option v-if="item.id !== this.detailObject.category_id" :value="item.id">{{item.name}}</option>
-                                                            </template>
+                                                            <option v-for="item in categoryArray" :key="item.id" :value="item.id">{{item.name}}</option>
                                                             <option v-if="this.showAlertCategory" v-for="item in errorCategory" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
                                                         </select>
                                                         <div v-if="this.isLoadingCategory == false">
                                                             <div class="rounded-0 d-none d-lg-block">
-                                                                <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
-                                                                <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                            
+                                                                <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
+                                                                <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                            
                                                             </div>
                                                             <div class="rounded-0 d-sm-block d-lg-none">
-                                                                <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
-                                                                <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
+                                                                <a @click="nextCategory" v-if="this.categoryTotal > this.categoryArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>
+                                                                <a @click="getCategory(this.skipCategory, this.takeCategory)" v-if="this.showAlertCategory" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>
                                                             </div>
                                                         </div> 
                                                         <div v-else>
-                                                            <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
+                                                            <button type="submit" class="btn btn-primary rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
                                                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                             </button>
-                                                            <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
+                                                            <button type="submit" class="btn btn-primary rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
                                                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                                 Memuat...
                                                             </button>
@@ -157,59 +173,12 @@
                                                             Pilih salah satu kategori!
                                                         </div>
                                                     </div>
-                                                    <div class="input-group mb-3">
-                                                        <select :disabled="this.isLoadingPlacements" v-model="form.placements" :class="isNaN(this.form.placements) ? 'form-select form-select is-invalid':'is-valid form-select form-select'" aria-label=".form-select example">
-                                                            <option selected disabled>Tempat</option>
-                                                            <option :value="this.detailObject.placement_id" selected>{{this.detailObject.placement_name}}</option>
-                                                            <template v-for="item in placementsArray" :key="item.id">
-                                                                <option v-if="item.id !== this.detailObject.placement_id" :value="item.id">{{item.name}}</option>
-                                                            </template>
-                                                            <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                        </select>
-                                                        <div v-if="this.isLoadingPlacements == false">
-                                                            <div class="rounded-0 d-none d-lg-block">
-                                                                <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
-                                                                <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                                  
-                                                            </div>
-                                                            <div class="rounded-0 d-sm-block d-lg-none">
-                                                                <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>
-                                                                <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-success rounded-0"><i class="fa fa-undo"></i></a>                                                  
-                                                            </div>
-                                                        </div>
-                                                        <div v-else>
-                                                            <button type="submit" class="btn btn-success rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
-                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                            </button>
-                                                            <button type="submit" class="btn btn-success rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
-                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                                Memuat...
-                                                            </button>
-                                                        </div>
-                                                        <div :class="isNaN(this.form.placements) ? 'text-start invalid-feedback' : 'd-none'">
-                                                            Pilih salah satu tempat!
-                                                        </div>
-                                                    </div>
-                                                    <div class="input-group mb-3">
-                                                        <select v-model="form.condition" class="form-select form-select" aria-label=".form-select example">
-                                                            <option disabled>Kondisi</option>
-                                                            <option :value="this.detailObject.condition" selected>
-                                                                <template v-if="this.detailObject.condition == '0'">Optimal</template>
-                                                                <template v-else-if="this.detailObject.condition == '1'">Rusak</template>
-                                                            </option>
-                                                            <template v-for="item in conditionArray" :key="item.condition">
-                                                                <option v-if="item.condition !== this.detailObject.condition" :value="item.condition">
-                                                                    {{item.description}}
-                                                                </option>
-                                                            </template>
-                                                            <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                        </select>
-                                                    </div>
                                                     <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
                                                         <strong> <font-awesome-icon icon="fa-solid fa-triangle-exclamation" /> {{ item.message }}</strong> <br/> {{ item.detail }} 
                                                         <button @click="setAlert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                     </div>
                                                     <div v-if="isLoadingResponse == false">
-                                                        <button type="submit" class="btn btn-primary mt-3" style="width:100%;" :disabled="!submitEnabled">Update</button>
+                                                        <button type="submit" class="btn btn-primary mt-3" style="width:100%;" :disabled="!submitEnabled">Update Data</button>
                                                     </div>
                                                     <div v-if="isLoadingResponse == true">
                                                         <button type="submit" class="btn btn-primary mt-3" style="width:100%;" :disabled="true">
@@ -357,15 +326,15 @@
             form: {
                 handler: function (val) {
                     let name = val.name;
+                    let code = val.code;
                     let category_id = val.category_assets;
-                    let placement_id = val.placements;
-                    let condition = val.condition;
+                    let price = val.price;
                     let validateName = this.validateName(name);
 
                     // console.log(!(isNaN(study_program_id)))
                     // console.log(!(isNaN(category_id)))
                     // console.log(!(isNaN(placement_id)))
-                    if(validateName && !(isNaN(category_id)) && !(isNaN(placement_id)) && condition != null) {
+                    if(validateName && !(isNaN(category_id)) && price != null && (code.length == 0 || code.length >= 3)) {
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -448,19 +417,13 @@
                             "id": response.data.data.id,
                             "name": response.data.data.name,
                             "code": response.data.data.code,
-                            "placement_id": response.data.data.placement_id,
-                            "placement_name": response.data.data.placement_name,
                             "category_id": response.data.data.category_id,
                             "category_name": response.data.data.category_name,
-                            "study_program_id": response.data.data.study_program_id,
-                            "study_program_name": response.data.data.study_program_name,
-                            "condition": response.data.data.condition
+                            "price": response.data.data.price
                         };
-                        this.form.study_programs = this.detailObject.study_program_id
-                        this.form.placements = this.detailObject.placement_id
+                        this.form.price = this.detailObject.price
                         this.form.category_assets = this.detailObject.category_id
                         this.form.name = this.detailObject.name
-                        this.form.condition = this.detailObject.condition
                         // console.log(typeof this.detailObject.placement_id)
                         // this.form.name = this.detailObject.name;
                     }).catch((err) => {
@@ -524,9 +487,8 @@
                 this.dataObject = {
                     "id": parseInt(data),
                     "name": this.form.name,
-                    "placement_id": parseInt(this.form.placements),
                     "category_id": parseInt(this.form.category_assets),
-                    "condition": this.form.condition,
+                    "price": this.form.price,
                 }
                 // console.table(this.dataObject)
                 // console.log(this.dataObject);

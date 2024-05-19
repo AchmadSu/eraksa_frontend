@@ -98,7 +98,7 @@
                                         <div class="col-12 px-lg-5 text-center">
                                             <div class="input-group py-md-0 py-lg-1 d-flex justify-content-center">
                                                 <h3 class="fw-bolder text-secondary">
-                                                    DETAIL ASET
+                                                    DETAIL MOBIL
                                                 </h3>
                                             </div>
                                             <form class="form needs-validation" id="app" novalidate>
@@ -112,14 +112,14 @@
                                                                             <thead id="head" class="d-none">
                                                                                 <tr>
                                                                                     <th colspan="2">
-                                                                                        <h3 class="heading text-left">Detail Aset</h3>
+                                                                                        <h3 class="heading text-left">Detail Mobil</h3>
                                                                                     </th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td class="align-middle px-5">
-                                                                                        <h5>Nama Aset</h5>
+                                                                                        <h5>Nama Mobil</h5>
                                                                                     </td>
                                                                                     <td class="align-middle px-5">
                                                                                         <h5>{{this.detailObject.name}}</h5>
@@ -128,7 +128,7 @@
                                                                                 <tr>
                                                                                     <td class="align-middle px-5">
                                                                                         <h5>
-                                                                                            Kode Aset
+                                                                                            Plat Nomor
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle px-5">
@@ -138,7 +138,7 @@
                                                                                 <tr>
                                                                                     <td class="align-middle px-5">
                                                                                         <h5>
-                                                                                            Kategori Aset
+                                                                                            Kategori Mobil
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle px-5">
@@ -148,21 +148,11 @@
                                                                                 <tr>
                                                                                     <td class="align-middle px-5">
                                                                                         <h5>
-                                                                                            Penempatan
+                                                                                            Harga Sewa per Hari
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle px-5">
-                                                                                        <h5>{{this.detailObject.placement_name}}</h5>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="align-middle px-5">
-                                                                                        <h5>Kondisi</h5>
-                                                                                    </td>
-                                                                                    <td class="align-middle px-5">
-                                                                                        <h5 class="text-primary" v-if="this.detailObject.condition == '0'">Optimal</h5>
-                                                                                        <h5 class="text-danger" v-else-if="this.detailObject.condition == '1'">Rusak</h5>
-                                                                                        <!-- <h5 class="text-success" v-else-if="this.detailObject.condition == '2'">Sedang Diperbaiki</h5> -->
+                                                                                        <h5>{{formatCurrency(this.detailObject.price) }}</h5>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -189,7 +179,7 @@
                                                                                         <div class="d-flex flex-row align-items-center">
                                                                                             <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                                                             <div class="ms-2 c-details">
-                                                                                                <span>Kategori Aset</span> <h6>{{this.detailObject.category_name}}</h6>
+                                                                                                <span>Kategori mobil</span> <h6>{{this.detailObject.category_name}}</h6>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div v-if="this.detailObject.status == '0' && this.detailObject.condition == '0'" class="badge text-primary">
@@ -247,7 +237,7 @@
                                                     <i class="fa fa-download"></i>&ensp; Unduh Rincian
                                                 </button>
                                             </div>
-                                            <p class="text-center mt-3">Rincian yang diunduh menyesuaikan dengan tabel riwayat peminjaman aset</p>
+                                            <p class="text-center mt-3">Rincian yang diunduh menyesuaikan dengan tabel riwayat peminjaman mobil</p>
                                         </div>
                                         <div v-else-if="$roles == 'Admin' && $session.study_program_id == this.detailObject.study_program_id" class="row my-4">
                                             <div :class="this.windowWidth <= $widthLandscapePhone ? 'd-none':'col-4'">
@@ -258,7 +248,7 @@
                                                     <i class="fa fa-download"></i>&ensp; Unduh Rincian
                                                 </button>
                                             </div>
-                                            <p class="text-center mt-3">Rincian yang diunduh menyesuaikan dengan tabel riwayat peminjaman aset</p>
+                                            <p class="text-center mt-3">Rincian yang diunduh menyesuaikan dengan tabel riwayat peminjaman mobil</p>
                                         </div>
                                     </div>
                                 </div>
@@ -417,6 +407,13 @@
                 // console.log("test")
                 $('#successModal').modal('hide')
             },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
+            },
             validateName(value){
                 // console.log(value1);
                 if(value.length >= 3) {
@@ -525,13 +522,15 @@
                             "category_id": response.data.data.category_id,
                             "category_name": response.data.data.category_name,
                             "condition": response.data.data.condition,
-                            "status": response.data.data.status
+                            "status": response.data.data.status,
+                            "price": response.data.data.price,
                         };
                         this.form.study_programs = this.detailObject.study_program_id
                         this.form.placements = this.detailObject.placement_id
                         this.form.category_assets = this.detailObject.category_id
                         this.form.name = this.detailObject.name
                         this.form.condition = this.detailObject.condition
+                        this.form.price = this.detailObject.price
                         // this.form.name = this.detailObject.name;
                     }).catch((err) => {
                         if(!err.response) {

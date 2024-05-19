@@ -158,15 +158,7 @@
                                                                             <tr>
                                                                                 <td class="align-middle">
                                                                                     <h5>
-                                                                                        <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                            NISN
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                            NUPTK
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
-                                                                                            NIP
-                                                                                        </template>
+                                                                                        No. SIM
                                                                                     </h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
@@ -184,15 +176,7 @@
                                                                                 <tr>
                                                                                     <td class="align-middle">
                                                                                         <h5>
-                                                                                            <template v-if="this.detailObject.recipient_code_type == '0'">
-                                                                                                NISN
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '1'">
-                                                                                                NUPTK
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '2'">
-                                                                                                NIP
-                                                                                            </template>
+                                                                                            No. SIM
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle">
@@ -205,6 +189,14 @@
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.date}}</h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Biaya Akhir</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{formatCurrency(this.detailObject.cost)}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -223,7 +215,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.code}}
+                                                                                                {{item.name}} ({{item.code}})
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
@@ -300,15 +292,7 @@
                                                                                                 {{this.detailObject.loaner_name}}
                                                                                             </b>
                                                                                             <br>
-                                                                                            <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                                NISN:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                                NUPTK:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.loaner_code_type == '0'">
-                                                                                                NIP:
-                                                                                            </template>
+                                                                                            No. SIM
                                                                                             <b>
                                                                                                 {{ this.detailObject.loaner_code }}
                                                                                             </b>
@@ -318,25 +302,19 @@
                                                                                                 {{this.detailObject.recipient_name}}
                                                                                             </b>
                                                                                             <br>
-                                                                                            <template v-if="this.detailObject.recipient_code_type == '0'">
-                                                                                                NISN:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '1'">
-                                                                                                NUPTK:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.recipient_code_type == '0'">
-                                                                                                NIP:
-                                                                                            </template>
+                                                                                            No. SIM
                                                                                             <b>
                                                                                                 {{ this.detailObject.recipient_code }}
                                                                                             </b>
                                                                                             <br>
                                                                                             Waktu Pengembalian: <br> <b>{{ this.detailObject.date }}</b>
                                                                                             <br>
+                                                                                            Biaya Akhir: <br> <b>{{ formatCurrency(this.detailObject.cost) }}</b>
+                                                                                            <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
                                                                                                 <li v-for="item in selectDataArray">
-                                                                                                    {{ item.code }}
+                                                                                                   {{ item.name }} ({{ item.code }})
                                                                                                 </li>
                                                                                             </ol>
                                                                                         </p>
@@ -583,6 +561,13 @@
             toTop(){
                 window.scrollTo(0,0);
             },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
+            },
             setAlert(){
                 // this.alertMsg = null;
                 this.showAlert = false;
@@ -742,6 +727,7 @@
                             "recipient_name": response.data.data.returns.recipient_name,
                             "recipient_code_type": response.data.data.returns.recipient_code_type,
                             "recipient_code": response.data.data.returns.recipient_code,
+                            "cost": response.data.data.returns.cost,
                         };
                         // console.log(this.detailObject)
                         // this.form.time = response.data.data.hours;

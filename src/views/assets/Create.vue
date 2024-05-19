@@ -74,24 +74,49 @@
                                 <div class="col-md-6 col-12 px-lg-5 text-center">
                                     <div class="input-group mb-3 py-sm-3 py-md-0 py-lg-1">
                                         <h3 class="fw-bolder text-secondary">
-                                            TAMBAH ASET
+                                            TAMBAH MOBIL
                                         </h3>
                                     </div>
                                     <form class="form needs-validation" id="app" @submit.prevent="createFunction" novalidate>
                                         <div class="py-lg-4 py-md-0 py-sm-1">
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text bg-transparent" id="basic-addon1">
-                                                    <i class="fa fa-cube"></i>
+                                                    <i class="fa fa-car"></i>
                                                 </span>
                                                 <input 
                                                     name="name" type="text" :class="this.checkName == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                                    placeholder="Nama Aset" aria-label="name" 
+                                                    placeholder="Nama Mobil" aria-label="name" 
                                                     aria-describedby="basic-addon1"
                                                     v-model="form.name"
                                                 />
                                                 <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
                                                     Panjang minimal nama adalah 3 karakter
                                                 </div>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                    <i class="fa fa-key"></i>
+                                                </span>
+                                                <input 
+                                                    name="code" type="text" :class="this.checkCode == false ? 'form-control is-invalid' : 'form-control is-valid'"
+                                                    placeholder="No Plat" aria-label="name" 
+                                                    aria-describedby="basic-addon1"
+                                                    v-model="form.code"
+                                                />
+                                                <div :class="this.checkName == false ? 'text-start invalid-feedback' : 'd-none'">
+                                                    Panjang minimal No Plat  adalah 3 karakter
+                                                </div>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text bg-transparent" id="basic-addon1">
+                                                    <i class="fa fa-usd"></i>
+                                                </span>
+                                                <input 
+                                                    name="price" type="number" class="form-control"
+                                                    placeholder="Harga Sewa per Hari" aria-label="name" 
+                                                    aria-describedby="basic-addon1"
+                                                    v-model="form.price" minlength="5"
+                                                />
                                             </div>
                                             <div class="input-group mb-3">
                                                 <select :disabled="this.isLoadingCategory" v-model="form.category_assets" :class="isNaN(this.form.category_assets) ? 'form-select form-select is-invalid' : 'form-select form-select is-valid'" aria-label=".form-select example">
@@ -120,35 +145,6 @@
                                                 </div>
                                                 <div :class="isNaN(this.form.category_assets) ? 'text-start invalid-feedback' : 'd-none'">
                                                     Pilih salah satu kategori!
-                                                </div>
-                                            </div>
-                                            <div class="input-group mb-3">
-                                                <select :disabled="this.isLoadingPlacements" v-model="form.placements" :class="isNaN(this.form.placements) ? 'form-select form-select is-invalid':'is-valid form-select form-select'" aria-label=".form-select example">
-                                                    <option selected disabled>Tempat</option>
-                                                    <option v-for="item in placementsArray" :key="item.id" :value="item.id">{{item.name}}</option>
-                                                    <option v-if="this.showAlertPlacements" v-for="item in errorPlacements" :key="item.id" disabled>{{item.message}} {{item.detail}}</option>
-                                                </select>
-                                                <div v-if="this.isLoadingPlacements == false">
-                                                    <div class="rounded-0 d-none d-lg-block">
-                                                        <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat lebih</a>
-                                                        <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i> Muat ulang</a>                                                  
-                                                    </div>
-                                                    <div class="rounded-0 d-sm-block d-lg-none">
-                                                        <a @click="nextPlacements" v-if="this.placementsTotal > this.placementsArray.length" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>
-                                                        <a @click="getPlacements(this.skipPlacements, this.takePlacements)" v-if="this.showAlertPlacements" href="#" class="btn btn-primary rounded-0"><i class="fa fa-undo"></i></a>                                                  
-                                                    </div>
-                                                </div>
-                                                <div v-else>
-                                                    <button type="submit" class="btn btn-primary rounded-0 d-sm-block d-lg-none" style="width:100%;" :disabled="true">
-                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="submit" class="btn btn-primary rounded-0 d-none d-lg-block" style="width:100%;" :disabled="true">
-                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                        Memuat...
-                                                    </button>
-                                                </div>
-                                                <div :class="isNaN(this.form.placements) ? 'text-start invalid-feedback' : 'd-none'">
-                                                    Pilih salah satu tempat!
                                                 </div>
                                             </div>
                                             <div v-for="item in errorResponse" :key="item.id" :class="showAlert == true ? 'text-start alert alert-warning alert-dismissible my-3' : 'd-none'" role="alert">
@@ -215,6 +211,8 @@
                 isLoading: true,
                 isLoading: true,
                 checkName: false,
+                checkCode: false,
+                checkNumber: false,
                 checkDescription: false,
                 submitEnabled: false,
                 buttonDisabled: false,
@@ -288,15 +286,18 @@
             form: {
                 handler: function (val) {
                     let name = val.name;
+                    let code = val.code;
+                    let price = val.price;
                     let study_program_id = val.study_programs;
                     let category_id = val.category_assets;
                     let placement_id = val.placements;
                     let validateName = this.validateName(name);
+                    let validateCode = this.validateCode(code);
 
                     // console.log(!(isNaN(study_program_id)))
                     // console.log(!(isNaN(category_id)))
                     // console.log(!(isNaN(placement_id)))
-                    if(validateName && (!isNaN(category_id)) && !(isNaN(placement_id))) {
+                    if(validateName && validateCode && !isNaN(category_id)) {
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -330,6 +331,28 @@
                     return true;
                 } else {
                     this.checkName = false;
+                    return false;
+                }
+            },
+            validateCode(value){
+                // console.log(value1);
+                if(value.length >= 3) {
+                    this.checkCode = true;
+                    // console.log(this.fullname);
+                    return true;
+                } else {
+                    this.checkCode = false;
+                    return false;
+                }
+            },
+            validateNumber(value){
+                console.log(value)
+                if(value.length >= 4) {
+                    this.checkNumber = true;
+                    // console.log(this.fullname);
+                    return true;
+                } else {
+                    this.checkNumber = false;
                     return false;
                 }
             },
@@ -376,8 +399,11 @@
                 this.cursorStyle = 'cursor: not-allowed';
                 this.dataObject = {
                     "name": this.form.name,
+                    "code": this.form.code,
                     "category_id": this.form.category_assets,
-                    "placement_id": this.form.placements,
+                    "price": this.form.price,
+                    "placement_id": 1,
+                    "study_program_id": 0,
                 }
                 // this.openModal();
                 // console.log(this.dataObject);

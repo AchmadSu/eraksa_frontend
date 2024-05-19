@@ -33,7 +33,7 @@
                         <!-- Page Heading -->
                         <div v-if="this.isLoadingContent == true" class="row d-flex align-items-center justify-content-center">
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h4 mb-0 text-gray-800">Aset yang dapat dipinjam</h1>
+                                <h1 class="h4 mb-0 text-gray-800">Mobil yang dapat dipinjam</h1>
                             </div>
                             <div class="my-5 spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -41,10 +41,10 @@
                         </div>
                         <div v-else>
                             <div v-if="this.errorLoans == true" class="text-lg-center text-sm-justify d-sm-flex align-items-center justify-content-between mb-3">
-                                <h3 class="h4 mb-0 text-gray-800">Tidak ada Aset yang dapat dipinjam untuk saat ini</h3>
+                                <h3 class="h4 mb-0 text-gray-800">Tidak ada Mobil yang dapat dipinjam untuk saat ini</h3>
                             </div>
                             <div v-else class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h4 mb-0 text-gray-800">Aset yang dapat dipinjam</h1>
+                                <h1 class="h4 mb-0 text-gray-800">Mobil yang dapat dipinjam</h1>
                                 <a @click="createLoans" href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                     <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
                                 </a>
@@ -70,7 +70,7 @@
                                             <div class="d-flex flex-row align-items-center">
                                                 <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                 <div class="ms-2 c-details">
-                                                    <span>Kategori Aset</span> <h6>{{item.category_name}}</h6>
+                                                    <span>Kategori Mobil</span> <h6>{{item.category_name}}</h6>
                                                 </div>
                                             </div>
                                             <div class="badge text-primary"> <span>TERSEDIA</span> </div>
@@ -90,6 +90,14 @@
                                                 </template>
                                                 <template v-else>
                                                     {{ (item.code).substring(0,30)+"..." }}
+                                                </template>
+                                            </h6>
+                                            <h6>
+                                                <template v-if="item.code.length < 30">
+                                                    {{formatCurrency(item.price) }}
+                                                </template>
+                                                <template v-else>
+                                                    {{ formatCurrency(item.price).substring(0,20)+"..." }}
                                                 </template>
                                             </h6>
                                             <div class=" mt-3">
@@ -177,6 +185,13 @@
         methods: {
             toTop(){
                 window.scrollTo(0,0);
+            },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
             },
             assetDetails(id){
                 // console.log("Teset")

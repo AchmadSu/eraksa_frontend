@@ -40,30 +40,20 @@
                 <i class="fa fa-clone" aria-hidden="true"></i>&ensp;
                 <span>Kelola Master</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Master Tabel</h6>
-                    <a @click="router('managePlacements')" class="collapse-item" href="#" :style="this.cursorStyle" aria-disabled="true">
-                        &nbsp;<i class="fa fa-map-marker"></i>&ensp;&nbsp; Penempatan Aset
-                    </a>
-                    <a @click="router('manageCategoryAssets')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-cubes"></i>&ensp;Kategori Aset</a>
-                    <!-- <a @click="router('manageWorkshops')" class="collapse-item" href="#" :style="this.cursorStyle"><i class="fa fa-briefcase"></i>&ensp; Bengkel Perawatan</a> -->
-                </div>
-            </div>
         </li>
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseUtilities"
                 aria-expanded="true" aria-controls="collapseUtilities">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&ensp;
-                <span>Kelola Peminjaman</span>
+                <span>Kelola Rental</span>
             </a>
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Peminjaman</h6>
+                    <h6 class="collapse-header">Rental</h6>
                     <a @click="router('loans.create')" class="collapse-item" href="#" :style="this.cursorStyle"> 
-                        <i class="fa fa-plus-circle"></i>&ensp; Buat Peminjaman
+                        <i class="fa fa-plus-circle"></i>&ensp; Buat Rental
                     </a>
                     <a @click="router('manageLoans.accept')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
                         <i class="fa fa-spinner"></i>&ensp; Aktif
@@ -136,7 +126,7 @@
         <li v-if="this.$roles != 'Member'" class="nav-item">
             <a @click="router('manageAssets')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-cube"></i>&ensp;
-                <span>Kelola Aset</span>
+                <span>Kelola Mobil</span>
             </a>
         </li>
 
@@ -153,19 +143,13 @@
         <li class="nav-item">
             <a @click="router('menu.assets')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-list" aria-hidden="true"></i>&ensp;&nbsp;
-                <span>Daftar Aset</span>
+                <span>Daftar Mobil</span>
             </a>
         </li>
         <li class="nav-item">
             <a @click="router('menu.categories')" class="nav-link" href="#" :style="this.cursorStyle">
                 <i class="fa fa-cubes"></i>&ensp;
-                <span>Kategori Aset</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a @click="router('menu.placements')" class="nav-link" href="#" :style="this.cursorStyle">
-                &nbsp;<i class="fa fa-map-marker"></i>&nbsp;&ensp;
-                <span>Tempat Aset</span>
+                <span>Kategori Mobil</span>
             </a>
         </li>
         <!-- <li v-if="this.$roles != 'Member'" class="nav-item">

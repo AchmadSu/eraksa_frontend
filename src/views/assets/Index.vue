@@ -47,7 +47,7 @@
                                             Menampilkan hasil pencarian
                                             <br>
                                             <template v-if="this.keyWords != null && this.keyWords != ''">
-                                                Nama Aset atau Kode Aset: {{ this.keyWords}} <br>
+                                                Nama Mobil atau No. Plat: {{ this.keyWords}} <br>
                                             </template>
                                             <template v-for="item, index in dataArray" :key="item.id">
                                                 <template v-if="this.studyProgram != '' && this.studyProgram != null && item.study_program_id == this.dataStudyProgram && index == 0">
@@ -156,7 +156,7 @@
                                                     <div class="d-flex flex-row align-items-center">
                                                         <div class="icon"> <i class="fa fa-cube"></i> </div>
                                                         <div class="ms-2 c-details">
-                                                            <span>Kategori Aset</span> <h6>{{item.category_name}}</h6>
+                                                            <span>Kategori Mobil</span> <h6>{{item.category_name}}</h6>
                                                         </div>
                                                     </div>
                                                     <div v-if="item.status == '0' && item.condition == '0'" class="badge text-primary"> 

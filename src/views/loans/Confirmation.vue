@@ -161,15 +161,7 @@
                                                                             <tr>
                                                                                 <td class="align-middle">
                                                                                     <h5>
-                                                                                        <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                            NISN
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                            NUPTK
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
-                                                                                            NIP
-                                                                                        </template>
+                                                                                        No. SIM
                                                                                     </h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
@@ -206,6 +198,14 @@
                                                                                 </td>
                                                                                 <td class="align-middle">
                                                                                     <h5>{{this.detailObject.difference}}</h5>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Estimasi Biaya</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{formatCurrency(this.detailObject.estimate)}}</h5>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -282,6 +282,8 @@
                                                                                             Deadline: <br> <b>{{ this.detailObject.due_date }}</b>
                                                                                             <br>
                                                                                             Lama Pinjam: <b>{{ this.detailObject.difference }}</b>
+                                                                                            <br>
+                                                                                            Estimasi Biaya: <b>{{ formatCurrency(this.detailObject.estimate) }}</b>
                                                                                             <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
@@ -725,6 +727,13 @@
                     this.radioEnabled = false;
                 }
             },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
+            },
             async detailFunction(id){
                 try {
                     let data = window.atob(id)
@@ -773,8 +782,8 @@
                             "loaner_code_type": response.data.data.loans.loaner_code_type,
                             "loaner_code": response.data.data.loans.loaner_code,
                             "difference": difference,
+                            "estimate": response.data.data.estimate
                         };
-                        // console.log(this.detailObject)
                         // this.form.time = response.data.data.hours;
                         let select = response.data.data.loan_details;
                         // console.log(select[0]['asset_id'])

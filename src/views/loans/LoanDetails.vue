@@ -177,15 +177,7 @@
                                                                             <tr>
                                                                                 <td class="align-middle">
                                                                                     <h5>
-                                                                                        <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                            NISN
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                            NUPTK
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
-                                                                                            NIP
-                                                                                        </template>
+                                                                                        No. SIM
                                                                                     </h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
@@ -204,15 +196,7 @@
                                                                                 <tr>
                                                                                     <td class="align-middle">
                                                                                         <h5>
-                                                                                            <template v-if="this.detailObject.lender_code_type == '0'">
-                                                                                                NISN
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.lender_code_type == '1'">
-                                                                                                NUPTK
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.lender_code_type == '2'">
-                                                                                                NIP
-                                                                                            </template>
+                                                                                            No. SIM
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle">
@@ -256,6 +240,14 @@
                                                                                     <h5>{{this.detailObject.difference}}</h5>
                                                                                 </td>
                                                                             </tr>
+                                                                            <tr>
+                                                                                <td class="align-middle">
+                                                                                    <h5>Estimasi Biaya</h5>
+                                                                                </td>
+                                                                                <td class="align-middle">
+                                                                                    <h5>{{ formatCurrency(this.detailObject.estimate)}}</h5>
+                                                                                </td>
+                                                                            </tr>
                                                                         </tbody>
                                                                     </table>
                                                                     <table class="d-none d-md-block table table-sm table-borderless">
@@ -272,7 +264,8 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.code}}                                                                                            </li>
+                                                                                               {{ item.name }} ({{item.code}})
+                                                                                            </li>
                                                                                         </ol>
                                                                                     </h5>
                                                                                 </td>
@@ -348,15 +341,7 @@
                                                                                                 {{this.detailObject.loaner_name}}
                                                                                             </b>
                                                                                             <br>
-                                                                                            <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                                NISN:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                                NUPTK:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.loaner_code_type == '0'">
-                                                                                                NIP:
-                                                                                            </template>
+                                                                                            No. SIM: 
                                                                                             <b>
                                                                                                 {{ this.detailObject.loaner_code }}
                                                                                             </b>
@@ -366,15 +351,7 @@
                                                                                                 {{this.detailObject.lender_name}}
                                                                                             </b>
                                                                                             <br>
-                                                                                            <template v-if="this.detailObject.lender_code_type == '0'">
-                                                                                                NISN:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.lender_code_type == '1'">
-                                                                                                NUPTK:
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.lender_code_type == '0'">
-                                                                                                NIP:
-                                                                                            </template>
+                                                                                            No. SIM:
                                                                                             <b>
                                                                                                 {{ this.detailObject.lender_code }}
                                                                                             </b>
@@ -402,10 +379,13 @@
                                                                                             <br>
                                                                                             Lama Pinjam: <b>{{ this.detailObject.difference }}</b>
                                                                                             <br>
+                                                                                            <br>
+                                                                                            Estimasi Biaya: <b>{{ formatCurrency(this.detailObject.estimate) }}</b>
+                                                                                            <br>
                                                                                             <b>Rincian Aset</b> <br>
                                                                                             <ol>
                                                                                                 <li v-for="item in selectDataArray">
-                                                                                                    {{ item.code }}
+                                                                                                   {{ item.name }} ({{ item.code }})
                                                                                                 </li>
                                                                                             </ol>
                                                                                         </p>
@@ -683,6 +663,13 @@
             toTop(){
                 window.scrollTo(0,0);
             },
+            formatCurrency(amount) {
+                if (!amount) return '';
+                return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                }).format(amount);
+            },
             setAlert(){
                 // this.alertMsg = null;
                 this.showAlert = false;
@@ -912,7 +899,7 @@
                     .then((response) => {
                         let date = new Date(response.data.data.loans.date);
                         let finalDate = date.toLocaleDateString("id");
-                        // console.log(finalDate)
+                        console.log(response.data.data.loans)
                         let finalTime = (date.toLocaleTimeString("id")).replace(".", ":").substring(0,5)+" WIB";
                         let difference = ''
                         let dueDate = new Date(response.data.data.loans.due_date);
@@ -959,6 +946,7 @@
                             "lender_code_type": response.data.data.loans.lender_code_type,
                             "lender_code": response.data.data.loans.lender_code,
                             "difference": difference,
+                            "estimate": response.data.data.estimate,
                         };
                         // console.log(this.detailObject)
                         // this.form.time = response.data.data.hours;

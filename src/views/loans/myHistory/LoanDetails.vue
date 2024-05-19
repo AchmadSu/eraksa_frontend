@@ -118,15 +118,7 @@
                                                                             <tr>
                                                                                 <td class="align-middle">
                                                                                     <h5>
-                                                                                        <template v-if="this.detailObject.loaner_code_type == '0'">
-                                                                                            NISN
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '1'">
-                                                                                            NUPTK
-                                                                                        </template>
-                                                                                        <template v-else-if="this.detailObject.loaner_code_type == '2'">
-                                                                                            NIP
-                                                                                        </template>
+                                                                                        No. SIM
                                                                                     </h5>
                                                                                 </td>
                                                                                 <td class="align-middle">
@@ -145,15 +137,7 @@
                                                                                 <tr>
                                                                                     <td class="align-middle">
                                                                                         <h5>
-                                                                                            <template v-if="this.detailObject.lender_code_type == '0'">
-                                                                                                NISN
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.lender_code_type == '1'">
-                                                                                                NUPTK
-                                                                                            </template>
-                                                                                            <template v-else-if="this.detailObject.lender_code_type == '2'">
-                                                                                                NIP
-                                                                                            </template>
+                                                                                            No. SIM
                                                                                         </h5>
                                                                                     </td>
                                                                                     <td class="align-middle">
@@ -213,7 +197,7 @@
                                                                                     <h5>
                                                                                         <ol>
                                                                                             <li v-for="item, index in selectDataArray" :key="item.id">
-                                                                                                {{item.code}}
+                                                                                                {{item.name}} ({{item.code}})
                                                                                             </li>
                                                                                         </ol>
                                                                                     </h5>
@@ -795,6 +779,7 @@
                             "lender_code_type": response.data.data.loans.lender_code_type,
                             "lender_code": response.data.data.loans.lender_code,
                             "difference": difference,
+                            "estimate": response.data.data.estimate
                         };
                         // console.log(this.detailObject.loaner_id)
                         // console.log(this.$session.id)

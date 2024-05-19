@@ -145,65 +145,15 @@
                                     Masukkan data email dengan benar!
                                 </div>
                             </div>
-                            <div class="row ml-1 input-group mb-3 btn-group rounded-0" role="group">
-                                <input 
-                                    type="radio" 
-                                    class="btn-check" 
-                                    name="code_type"
-                                    value="0"
-                                    id="code_type0"
-                                    v-model="form.radio"
-                                    :disabled="!this.radioEnabled">
-                                <label :class="windowWidth <= $widthLandscapePhone ? 
-                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 w-100 col-4 btn btn-outline-success rounded-start'" 
-                                    for="code_type0"
-                                >
-                                <b>SISWA</b>
-                                </label>
-                                <input 
-                                    type="radio" 
-                                    class="btn-check" 
-                                    name="code_type"
-                                    value="1"
-                                    id="code_type1"
-                                    v-model="form.radio"
-                                    :disabled="!this.radioEnabled"
-                                    >
-                                <label :class="windowWidth <= $widthLandscapePhone ? 
-                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 col-4 btn btn-outline-success rounded-0'" 
-                                    for="code_type1"
-                                >
-                                <b>GURU</b>
-                                </label>
-                                <input 
-                                    type="radio" 
-                                    class="btn-check" 
-                                    name="code_type"
-                                    value="2"
-                                    id="code_type2"
-                                    v-model="form.radio"
-                                    :disabled="!this.radioEnabled"
-                                    >
-                                <label :class="windowWidth <= $widthLandscapePhone ? 
-                                    'my-2 p-2 col-12 btn btn-outline-success rounded-0':
-                                    'p-3 col-4 btn btn-outline-success rounded-end'" 
-                                    for="code_type2"
-                                >
-                                <b>KARYAWAN</b>
-                                </label>
-                            </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text bg-transparent" id="basic-addon1">
                                     <font-awesome-icon class="text-secondary" icon="fa-solid fa-key" />
                                 </span>
                                 <input 
-                                    name="code" type="text" class="form-control"
+                                    name="code" placeholder="No SIM A/B" type="text" class="form-control"
                                     :placeholder="this.codeString" aria-label="Code" 
                                     aria-describedby="basic-addon1"
                                     v-model="form.code" required
-                                    :disabled="!this.codeEnabled"
                                 />
                                 <div :class="this.checkCode == false ? 'text-start invalid-feedback' : 'd-none'">
                                     Masukkan data dengan benar!
@@ -568,7 +518,7 @@
                     "password": this.form.password,
                     "confirm_pass": this.form.confirmPassword, 
                     "code": this.form.code,
-                    "code_type": this.form.radio
+                    "code_type": 1
                 }
                 await axios.post('/register', data)
                 .then(response => {
@@ -790,20 +740,6 @@
                     let validatePhone = this.validatePhone(phone);
                     let validatePassword = this.validatePassword(password);
                     let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
-                    
-                    if(code_type == "0") {
-                        this.codeEnabled = true;
-                        this.codeString = "Masukkan NISN";
-                        this.codeType = "0";
-                    } else if(code_type == "1") {
-                        this.codeEnabled = true;
-                        this.codeString = "Masukkan NUPTK";
-                        this.codeType = "1";
-                    } else if(code_type == "2") {
-                        this.codeEnabled = true;
-                        this.codeString = "Masukkan NIP";
-                        this.codeType = "2";
-                    }
 
                     if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
                         // console.log('Test');    
