@@ -1,163 +1,76 @@
 <template>
-    <ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" id="accordionSidebar">
         <div :class="this.setProgress == true ? 'fixed-top progress':'d-none'" style="height: 5px;">
             <div class="bg-primary progress-bar" role="progressbar" :style="this.widhtStyle" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <!-- Sidebar - Brand -->
         <a @click="dashboard" class="sidebar-brand align-items-center justify-content-center mb-lg-5" href="#" :style="this.cursorStyle">
             <div class="sidebar-brand-icon">
-                <img :class="windowWidth >= this.$widthComputer ? 'w-25 img-thumbnails':'w-50 img-thumbnails'" :src="this.$baseUrl+'/src/assets/img/logo-white-01.png'" alt="">
+                <img :class="windowWidth >= this.$widthComputer ? 'w-50 img-thumbnails':'w-50 img-thumbnails'" :src="this.$baseUrl+'/src/assets/img/logo-white-01.png'" alt="">
             </div>
-            <div class="sidebar-brand-text my-5 mx-3">Eraksa</div>
         </a>
 
         <!-- Divider -->
-        <hr class="sidebar-divider bg-white my-0">
+        <!-- <hr class="sidebar-divider bg-white my-0"> -->
         
         <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-tachometer" aria-hidden="true"></i>&ensp;
+                <span>Dashboard</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-home" aria-hidden="true"></i>&ensp;
-                <span>Home</span>
+                <i class="fa fa-book" aria-hidden="true"></i>&ensp;
+                <span>Modul</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-users" aria-hidden="true"></i>&ensp;
+                <span>Peserta</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-comments" aria-hidden="true"></i>&ensp;
+                <span>Group Chat</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-user-circle" aria-hidden="true"></i>&ensp;
+                <span>Pemateri</span>
             </a>
         </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider bg-white">
 
-        <!-- Heading -->
-        <div v-if="this.$roles != 'Member'" class="sidebar-heading">
-            Menu Admin
-        </div>
+        <a @click="dashboard" class="sidebar-brand text-left" href="#" :style="this.cursorStyle">
+            <div class="sidebar-brand-text">Profile</div>
+        </a>
 
-        <div v-else class="sidebar-heading">
-            Menu Kelola
-        </div>
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseTwo"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fa fa-clone" aria-hidden="true"></i>&ensp;
-                <span>Kelola Master</span>
-            </a>
-        </li>
-        <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseUtilities"
-                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>&ensp;
-                <span>Kelola Rental</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Rental</h6>
-                    <a @click="router('loans.create')" class="collapse-item" href="#" :style="this.cursorStyle"> 
-                        <i class="fa fa-plus-circle"></i>&ensp; Buat Rental
-                    </a>
-                    <a @click="router('manageLoans.accept')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-spinner"></i>&ensp; Aktif
-                    </a>
-                    <a @click="router('manageLoans.request')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
-                    </a>
-                    <a @click="router('manageLoans.done')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-check"></i>&ensp; Selesai
-                    </a>
-                    <a @click="router('manageLoans.reject')" v-if="this.$roles != 'Member'" class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
-                    </a>
-                    <a @click="router('loans.myHistory')" class="collapse-item" href="#" :style="this.cursorStyle"> 
-                        <i class="fa fa-history"></i>&ensp; Riwayat Saya
-                    </a>
-                </div>
-            </div>
-        </li>
-
-        <!-- <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseMaintenances"
-                aria-expanded="true" aria-controls="collapseMaintenances">
-                <i class="fa fa-recycle" aria-hidden="true"></i>&ensp;
-                <span>Kelola Perawatan</span>
-            </a>
-            <div id="collapseMaintenances" class="collapse" aria-labelledby="headingMaintenances"
-                data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Jadwal Perawatan</h6>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal
-                    </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-spinner"></i>&ensp; Aktif
-                    </a>
-                    <a v-if="this.$roles == 'Super-Admin'" class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
-                    </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-check"></i>&ensp; Selesai
-                    </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
-                    </a>
-                    <a class="collapse-item" href="#" :style="this.cursorStyle"> 
-                        <i class="fa fa-history"></i>&ensp; Riwayat Saya
-                    </a>
-                </div>
-            </div>
-        </li> -->
-
-        <!-- Divider -->
-        <hr v-if="this.$roles != 'Member'" class="sidebar-divider">
-
-        <!-- Heading -->
-        <div v-if="this.$roles != 'Member'" class="sidebar-heading">
-            Kelola Objek
-        </div>
-
-        <!-- Nav Item - Users -->
-        <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a @click="router('manageUser')" class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-users"></i>&ensp;
-                <span>Kelola Users</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Assets -->
-        <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a @click="router('manageAssets')" class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-cube"></i>&ensp;
-                <span>Kelola Mobil</span>
-            </a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
-
-        <!-- Divider -->
-        <hr class="sidebar-divider bg-white">
-
-        <div class="sidebar-heading">
-            Menu Master
-        </div>
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a @click="router('menu.assets')" class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-list" aria-hidden="true"></i>&ensp;&nbsp;
-                <span>Daftar Mobil</span>
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-cog" aria-hidden="true"></i>&ensp;
+                <span>Settings</span>
             </a>
         </li>
         <li class="nav-item">
-            <a @click="router('menu.categories')" class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-cubes"></i>&ensp;
-                <span>Kategori Mobil</span>
+            <a @click="dashboard" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-calendar" aria-hidden="true"></i>&ensp;
+                <span>Calendar</span>
             </a>
         </li>
-        <!-- <li v-if="this.$roles != 'Member'" class="nav-item">
-            <a class="nav-link" href="#" :style="this.cursorStyle">
-                <i class="fa fa-briefcase"></i>&ensp;
-                <span>Bengkel</span>
+        <hr class="sidebar-divider bg-white mt-3">
+        <li class="nav-item">
+            <a @click="logout" class="nav-link" href="#" :style="this.cursorStyle">
+                <i class="fa fa-power-off" aria-hidden="true"></i>&ensp;
+                <span>Logout</span>
             </a>
-        </li> -->
+        </li>
     </ul>
 </template>
 <script>
@@ -215,6 +128,39 @@
                         }, 4000);
                     }
                 } catch(e) {
+                    this.errorResponse = [
+                        {
+                            'id': 1,
+                            'message': 'Error!', 
+                            'detail': e,
+                        }
+                    ];
+                }
+            },
+            async logout(){
+                // console.log("Test")
+                this.setProgress = true;
+                this.isLoadingRouter = true;
+                this.submitEnabled = false;
+                this.cursorStyle = 'cursor: not-allowed';
+                try {
+                    if(this.setProgress == true) {
+                        this.intervalProgressbar = setInterval(() => {
+                            this.widthProgressBar += 35;
+                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
+                            if(this.widthProgressBar == 100) {
+                                clearInterval(this.intervalProgressbar);
+                                this.widthProgressBar = 0;
+                                this.setProgress == false;
+                                // this.setProgress = false;
+                            }
+                            // console.log(this.widhtStyle);
+                        }, 1000);
+                    }
+                    await axios.post('/logout')
+                    localStorage.clear();
+                    setTimeout(() => this.$router.push({ name: "user.login" }), 3000);
+                } catch (e) {
                     this.errorResponse = [
                         {
                             'id': 1,

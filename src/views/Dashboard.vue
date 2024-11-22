@@ -26,14 +26,10 @@
     
                     <!-- Begin Page Content -->
                     <div :class="this.windowWidth >= this.$widthPotraitPhone ? 'container-fluid':'container-fluid my-5 py-5'">
-                        <div v-if="this.$roles != 'Member'">
-                            <Dashboard></Dashboard>
-                            <hr class="sidebar-divider bg-secondary">
-                        </div>
                         <!-- Page Heading -->
                         <div v-if="this.isLoadingContent == true" class="row d-flex align-items-center justify-content-center">
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h4 mb-0 text-gray-800">Mobil yang dapat dipinjam</h1>
+                                <h1 class="h4 mb-0 text-gray-800">Modul Kompetensi</h1>
                             </div>
                             <div class="my-5 spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -41,13 +37,7 @@
                         </div>
                         <div v-else>
                             <div v-if="this.errorLoans == true" class="text-lg-center text-sm-justify d-sm-flex align-items-center justify-content-between mb-3">
-                                <h3 class="h4 mb-0 text-gray-800">Tidak ada Mobil yang dapat dipinjam untuk saat ini</h3>
-                            </div>
-                            <div v-else class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h4 mb-0 text-gray-800">Mobil yang dapat dipinjam</h1>
-                                <a @click="createLoans" href="#" style="text-decoration: none;" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                                    <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
-                                </a>
+                                <h3 class="h4 mb-0 text-gray-800">Tidak ada Modul untuk saat ini</h3>
                             </div>
                             <div class="row" v-if="this.errorLoans == true">
                                 <div v-if="this.windowWidth >= this.$widthLandscapePhone" class="col-3">&nbsp;
@@ -63,60 +53,107 @@
                                 </div>
                                 <h6 class="text-center my-3">Atau mungkin koneksi anda terganggu, silakan muat ulang!</h6>
                             </div>
+                            <div v-for="item in this.lessonArray" :key="item.lesson_id" class="row d-flex justify-content-evenly">
+                                <div class="col-12">
+                                    <div class="card w-100 h-100 btn text-light text-justify shadow-lg border-bottom-light p-3"
+                                    style="background-image: linear-gradient(to bottom right, #32a8a8, #3277a8);">
+                                        <div class="my-2">
+                                            <h3 class="heading text-justify">
+                                                {{item.lesson}}
+                                            </h3>
+                                            <div class="mt-4">
+                                                <h6 class="text-justify">{{item.lesson_desc}}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <p>
+                                                    <i class="fa fa-user" aria-hidden="true"></i>&ensp;
+                                                    Pemateri by John Doe
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    <i class="fa fa-calendar" aria-hidden="true"></i>&ensp;
+                                                    14-01-2025
+                                                </p>
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <button class="btn btn-light">
+                                                    MULAI LEARNING
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-sm-flex align-items-center justify-content-between mt-4 mb-3">
+                                <h1 class="h4 mb-0 text-gray-800">MODUL KOMPETENSI</h1>
+                            </div>
                             <div class="row d-flex justify-content-evenly">
-                                <div v-for="item in this.loansArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
-                                    <div @click="assetDetails(item.id)" class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
+                                <div v-for="item in this.moduleArray" :key="item.id" class="col-sm-6 col-lg-4 my-3">
+                                    <div class="card w-100 h-100 btn text-dark text-justify shadow-lg border-bottom-primary p-3">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
-                                                <div class="icon"> <i class="fa fa-cube"></i> </div>
+                                                <div class="icon"> <i class="fa fa-book"></i> </div>
                                                 <div class="ms-2 c-details">
-                                                    <span>Kategori Mobil</span> <h6>{{item.category_name}}</h6>
+                                                    <span>{{item.code}}</span> <h6>Adhivasindo</h6>
                                                 </div>
                                             </div>
-                                            <div class="badge text-primary"> <span>TERSEDIA</span> </div>
+                                            <div class="badge text-primary"> <span>MODULES</span> </div>
                                         </div>
                                         <div class="my-2">
-                                            <h3 class="heading text-left">
-                                                <template v-if="item.name.length < 20">
-                                                    {{item.name}}
+                                            <h3 class="heading text-center">
+                                                <template v-if="item.module.length < 20">
+                                                    {{(item.module).toUpperCase()}}
                                                 </template>
                                                 <template v-else>
-                                                    {{(item.name).substring(0,20)+"..."}}
+                                                    {{(item.module).substring(0,20)+"..."}}
                                                 </template>
                                             </h3>
-                                            <h6>
-                                                <template v-if="item.code.length < 30">
-                                                    {{item.code}}
-                                                </template>
-                                                <template v-else>
-                                                    {{ (item.code).substring(0,30)+"..." }}
-                                                </template>
-                                            </h6>
-                                            <h6>
-                                                <template v-if="item.code.length < 30">
-                                                    {{formatCurrency(item.price) }}
-                                                </template>
-                                                <template v-else>
-                                                    {{ formatCurrency(item.price).substring(0,20)+"..." }}
-                                                </template>
-                                            </h6>
-                                            <div class=" mt-3">
-                                                <div class="mt-3 text-center"> 
-                                                    <span v-if="this.windowWidth <= this.$widthLandscapePhone" class="text2">Ketuk untuk selengkapnya</span>
-                                                    <span v-else class="text2">Klik untuk selengkapnya</span>
+                                            <div class="mt-4">
+                                                <h6 class="text-center">MATERI KOMPETENSI</h6>
+                                                <div class="mt-3 list-group">
+                                                    <table class="table table-sm">
+                                                        <tbody>
+                                                            <tr v-for="item in item.lessons" :key="item.lesson_id" href="#">
+                                                                <td>{{item.lesson}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="this.errorLoans == false" class="col-12 mb-5">
-                                    <a @click="createLoans" href="#" style="text-decoration: none;" :class="this.windowWidth <= this.$widthPotraitPhone ? 'w-100 d-md-none btn btn-sm btn-primary shadow-sm' : 'd-none'">
-                                        <i class="fa fa-paper-plane"></i>&ensp;Ajukan Peminjaman
-                                    </a>
+                            </div>
+                            <div class="d-sm-flex align-items-center justify-content-between mt-4 mb-3">
+                                <h1 class="h4 mb-0 text-gray-800">NILAI PESERTA</h1>
+                            </div>
+                            <div class="row rounded px-1 pt-1 mb-3 shadow-lg" style="background-image: linear-gradient(to bottom right, #32a8a8, #3277a8);">
+                                <div class="col-12 bg-light">
+                                    <table class="table">
+                                        <thead>
+                                            <tr style="font-weight: bold;">
+                                                <td class="text-center">Rank</td>
+                                                <td>Name</td>
+                                                <td class="text-center">Class</td>
+                                                <td class="text-center">Modul</td>
+                                                <td class="text-center">Point</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, index) in this.valuationArray" :key="item.id">
+                                                <td class="text-center">{{index + 1}}</td>
+                                                <td><b>{{item.name}}</b></td>
+                                                <td class="text-center">{{item.module.toUpperCase()}}</td>
+                                                <td class="text-center">{{item.lesson_code.toUpperCase()}}</td>
+                                                <td class="text-center">{{item.point}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <hr class="sidebar-divider bg-secondary">
                         <!-- <Maintenance v-if="this.$roles != 'Member'"></Maintenance> -->
 
                     </div>
@@ -167,8 +204,10 @@
                 widhtStyle: '',
                 errorResponse: [],
                 sessionData: [],
-                loansArray: [],
-                maintenanceArray: [],
+                moduleArray: [],
+                lessonArray: [],
+                valuationArray: [],
+                keyWords: this.$route.query.search,
                 username: this.$session.name,
                 errorLoans: false,
                 errorMaintenance: false,
@@ -186,65 +225,27 @@
             toTop(){
                 window.scrollTo(0,0);
             },
-            formatCurrency(amount) {
-                if (!amount) return '';
-                return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                }).format(amount);
-            },
-            assetDetails(id){
-                // console.log("Teset")
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.buttonDisabled = true;
-                let data = window.btoa(id);
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'menu.assetsDetail', query: {data: data} }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
+            addOneLesson(data) {
+            const selectedRecord = data[0]; // Example: picking the first item
+                if (selectedRecord) {
+                    this.lessonArray.push(selectedRecord);
                 }
             },
-            async loansList(){
-                this.dataLoans = {
-                    "status": "0",
-                    "condition": "0",
-                    "skip": 0,
-                    "take": 6,
-                    "order": "name"
+            async getModules(){
+                this.param = {
+                    "paginate": "10",
+                    "keyword": this.keyWords
                 }
                 try {
-                    await axios.get('/assets/getAll', {params: this.dataLoans})
+                    await axios.get('/modules', {params: this.param})
                     .then((response) => {
-                        // console.table(this.dataLoans);
-                        Object.keys(response.data.data.assets).forEach((item) => {
-                            this.loansArray.push(response.data.data.assets[item]);
+                        console.log(response.data.data);
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.moduleArray.push(response.data.data[item]);
                         });
-                        // console.log(this.loansArray);
+                        console.log(this.moduleArray);
+                        this.addOneLesson(this.moduleArray[0].lessons);
+                        console.log(this.lessonArray);
                         this.isLoadingContent = false;
                     }).catch((err) => {
                         if(!err.response || err.response){
@@ -257,71 +258,30 @@
                     this.errorLoans = true;
                 }
             },
-            createLoans(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                this.cursorStyle = 'cursor: not-allowed';
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
-                        }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'loans.create' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
+            async getValuations(){
+                this.param = {
+                    "paginate": "10",
+                    "order_by": "point",
+                    "sort": "DESC"
                 }
-            },
-            dashboard(){
-                this.setProgress = true;
-                this.isLoadingRouter = true;
-                this.secondaryButtonDisabled = true;
-                this.submitEnabled = false;
-                try{
-                    if(this.setProgress == true) {
-                        this.intervalProgressbar = setInterval(() => {
-                            this.widthProgressBar += 35;
-                            this.widhtStyle = "width: "+ this.widthProgressBar.toString() +"%;";
-                            // console.log(this.widhtStyle);
-                        }, 1000);
-                        if(this.widthProgressBar == 100) {
-                            clearInterval(this.intervalProgressbar);
-                            this.widthProgressBar = 0;
-                            this.setProgress == false;
-                            // this.setProgress = false;
+                try {
+                    await axios.get('/valuations', {params: this.param})
+                    .then((response) => {
+                        console.log(response.data.data);
+                        Object.keys(response.data.data).forEach((item) => {
+                            this.valuationArray.push(response.data.data[item]);
+                        });
+                        console.log(this.valuationArray);
+                        this.isLoadingContent = false;
+                    }).catch((err) => {
+                        if(!err.response || err.response){
+                            this.errorLoans = true;
                         }
-                        // console.log("Test");
-                        setTimeout(() => {
-                            this.$router.push({ name: 'dashboard' }).then(() => { this.$router.go() })
-                        }, 4000);
-                    }
-                } catch(e) {
-                    this.errorResponse = [
-                        {
-                            'id': 1,
-                            'message': 'Error!', 
-                            'detail': e,
-                        }
-                    ];
+                    });
+                    this.isLoadingContent = false;
+                } catch (error) {
+                    this.isLoadingContent = false;
+                    this.errorLoans = true;
                 }
             }
         },
@@ -339,8 +299,6 @@
                 // console.log(this.lastPath);
                 // this.lastPath = this.$router.options.history.state.back
                 this.$router.push({ name: 'user.login' }).then(() => { this.$router.go() })
-            } else if (this.$session['status'] === "0") {
-                this.$router.push({ name: "user.otpPage" });
             }
         },  
         mounted(){
@@ -348,12 +306,9 @@
                 this.windowWidth = window.innerWidth
                 // window.location.reload();
             }
-            // console.log(this.$router.options.history.state.back === '/login');
-            this.loansList();
+            this.getModules();
+            this.getValuations();
             window.scrollTo(0,0);
-            // console.log(this.loansArray.length === 0);
-            
-            // setTimeout(() => this.isLoadingContent = false, 8000);
             setTimeout(() => this.isLoading = false, 5000);
         },
     }

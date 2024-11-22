@@ -30,18 +30,10 @@
         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
             <div :class="windowWidth >= $widthLandscapePhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
                 <div :class="windowWidth >= $widthPotraitPhone && windowWidth < $widthComputer? 'd-block' : 'd-none'">
-                    <center>
-                        <picture class="mx-5">
-                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                            <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-50" alt="...">
-                        </picture>
-                    </center>
+                    <H5>LEARNING MANAGEMENT SYSTEM</H5>
                 </div>
                 <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
-                    <picture class="mx-5">
-                        <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
-                    </picture>
+                    <H5>LEARNING MANAGEMENT SYSTEM</H5>
                 </div>
             </div>
             <div class="row">
@@ -79,7 +71,7 @@
                     </div>
                 </div>
                 <div v-else class="col-md-6 col-sm-12 text-center">
-                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/otp-01.png'" class="img-fluid" alt="...">
                 </div>
                 <div class="col-md-6 col-sm-12 px-lg-5 text-center">
                     <form class="form needs-validation" id="app" @submit.prevent="register" novalidate>    
@@ -143,67 +135,6 @@
                                 />
                                 <div :class="this.checkEmail == false ? 'text-start invalid-feedback' : 'd-none'">
                                     Masukkan data email dengan benar!
-                                </div>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <font-awesome-icon class="text-secondary" icon="fa-solid fa-key" />
-                                </span>
-                                <input 
-                                    name="code" placeholder="No SIM A/B" type="text" class="form-control"
-                                    :placeholder="this.codeString" aria-label="Code" 
-                                    aria-describedby="basic-addon1"
-                                    v-model="form.code" required
-                                />
-                                <div :class="this.checkCode == false ? 'text-start invalid-feedback' : 'd-none'">
-                                    Masukkan data dengan benar!
-                                </div>
-                            </div>
-                            <div class="input-group mb-3" tabindex="-1" id="inner">
-                                <span class="input-group-text bg-transparent" id="basic-addon1">
-                                    <i class="text-secondary fa fa-whatsapp" aria-hidden="true"></i>
-                                </span>
-                                <div class="form-floating">
-                                    <input 
-                                        name="phone" type="number" :class="this.checkPhone == false ? 'form-control is-invalid' : 'form-control is-valid'"
-                                        placeholder="Contoh: 6289 XXX atau 895 XXX" aria-label="Phone" 
-                                        aria-describedby="basic-addon1"
-                                        v-model="form.phone"
-                                        required
-                                    />
-                                    <label v-if="windowWidth >= $widthComputer" for="floatingInputValue">
-                                        <p v-if="this.floatingTextPhone == true">
-                                            WhatsApp. Contoh: 6289 XXX
-                                        </p>
-                                        <p v-else-if="this.checkPhone == false">
-                                            Masukkan antara 9 s/d 14 karakter
-                                        </p>
-                                        <p v-else>
-                                            Data sesuai
-                                        </p>
-                                    </label>
-                                    <label v-else-if="windowWidth <= $widthComputer && windowWidth >= $widthLandscapePhone" for="floatingInputValue">
-                                        <p v-if="this.floatingTextPhone == true">
-                                            <small>WhatsApp. Contoh: 6289 XXX</small>
-                                        </p>
-                                        <p v-else-if="this.checkPhone == false">
-                                            <small>Masukkan antara 9 s/d 14 karakter</small>
-                                        </p>
-                                        <p v-else>
-                                            Data sesuai
-                                        </p>
-                                    </label>
-                                    <label v-else-if="windowWidth <= $widthLandscapePhone" for="floatingInputValue">
-                                        <p v-if="this.floatingTextPhone == true">
-                                            <small>Contoh: 6289 XXX</small>
-                                        </p>
-                                        <p v-else-if="this.checkPhone == false">
-                                            <small>Masukkan antara 9 s/d 14 karakter</small>
-                                        </p>
-                                        <p v-else>
-                                            Data sesuai
-                                        </p>
-                                    </label>
                                 </div>
                             </div>
                             <div v-if="passwordHidden">
@@ -393,7 +324,7 @@
                 </div>
             </div>
             <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-                <p class="text-secondary">Eraksa - Ecep Achmad Sutisna <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
+                <p class="text-secondary">Ecep Achmad Sutisna <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}}</p>
             </div>
         </div>
     </div>
@@ -482,12 +413,8 @@
                     firstname: '',
                     lastname: '',
                     email: '',
-                    radio:'',
-                    code:'',
-                    radio:'',
                     password: '',
-                    confirmPassword: '',
-                    phone: '',   
+                    confirmPassword: ''   
                 },
                 fullname: '',
                 modalShow: false,
@@ -513,12 +440,9 @@
                 // if()
                 const data = {
                     "name": this.fullname,
-                    "email": this.form.email,
-                    "phone": this.form.phone.toString(),
+                    "email": this.form.email,                   
                     "password": this.form.password,
-                    "confirm_pass": this.form.confirmPassword, 
-                    "code": this.form.code,
-                    "code_type": 1
+                    "confirm_pass": this.form.confirmPassword
                 }
                 await axios.post('/register', data)
                 .then(response => {
@@ -569,7 +493,7 @@
                                 {
                                     'id': 1,
                                     'message': error.response.status +' '+ error.response.statusText,
-                                    'detail': 'Maaf permintaan anda tidak dapat dilakukan'
+                                    'detail': error.response.data.message
                                 }
                             ];
                             // this.modalShow = true;
@@ -633,7 +557,7 @@
                     else {
                         this.fullname = value1;
                     }
-                    // console.log(this.fullname);
+                    console.log(this.fullname);
                     return true;
                 } else {
                     this.checkName = false;
@@ -674,7 +598,7 @@
                     }
 
                     if (this.upper.test(value) && this.lower.test(value) && this.textnumber.test(value) && value.length >= 6) {
-                        // console.log('Bener semua');
+                        console.log('Bener semua');
                         return true;
                     } else {
                         if (!this.upper.test(value)) {
@@ -707,6 +631,7 @@
                 } else if (value2 === value1) {
                     this.floatingTextConfirmation = false;
                     this.checkConfirmPassword = true;
+                    console.log("test")
                     return true;
                 } else {
                     this.floatingTextConfirmation = false;
@@ -726,23 +651,23 @@
             form: {
                 handler: function (val) {
                     // console.log(val.code);
-                    let code_type = val.radio;
-                    let code = val.code;
                     // console.log(code_type);
                     let firstname = val.firstname;
                     let lastname = val.lastname;
-                    let email = val.email;
-                    let phone = val.phone.toString();
                     let password = val.password;
                     let confirmPassword = val.confirmPassword;
+                    let email = val.email;
                     
                     let validateName = this.validateName(firstname, lastname);
-                    let validatePhone = this.validatePhone(phone);
                     let validatePassword = this.validatePassword(password);
                     let validateConfirmPassword = this.validateConfirmPassword(password, confirmPassword);
 
-                    if(code.length > 3 && email.length >= 6 && validateName && validatePhone && validatePassword && validateConfirmPassword) {
-                        // console.log('Test');    
+                    console.table(validateName)
+                    console.table(validatePassword)
+                    console.table(validateConfirmPassword)
+                    
+                    if(email.length >= 6 && validateName && validatePassword && validateConfirmPassword) {
+                        console.log('Test');    
                         this.submitEnabled = true;
                     } else {
                         this.submitEnabled = false;
@@ -754,11 +679,7 @@
         beforeCreate(){
             // console.table(this.$session != null, this.$loggedIn != 'null', this.$token != null);
             if(this.$session != null || this.$loggedIn != 'null') {
-                if (this.$session['status'] == "0") {
-                    this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
-                } else {
-                    this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
-                }
+                this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
             }
         },
         created(){

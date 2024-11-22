@@ -11,56 +11,22 @@
         <div :class= "windowWidth <= $widthPotraitPhone ? 'container my-5 p-5' : 'container my-5 p-5 shadow-lg bg-body rounded'">
             <div :class="windowWidth >= $widthPotraitPhone ? 'row d-md-block d-sm-none mx-5' : 'd-none'">
                 <div :class="windowWidth >= $widthLandscapePhone && windowWidth <= $widthComputer? 'd-block' : 'd-none'">
-                    <center>
-                        <picture class="mx-5">
-                            <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                            <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-50" alt="...">
-                        </picture>
-                    </center>
+                    <H5>LEARNING MANAGEMENT SYSTEM</H5>
                 </div>
                 <div :class="windowWidth >= $widthComputer ? 'd-block' : 'd-none'">
-                    <picture class="mx-5">
-                        <source :srcset="$baseUrl+'/src/assets/img/logo-01.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logo-01.png'" class="img-fluid w-25" alt="...">
-                    </picture>
+                    <H5>LEARNING MANAGEMENT SYSTEM</H5>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 d-sm-block d-md-none text-center">
-                    <picture v-if="windowWidth <= $widthPotraitPhone" class="mx-3">
-                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-50" alt="...">
-                    </picture>
-                    <picture v-else-if="windowWidth > $widthPotraitPhone && windowWidth < $widthComputer" class="mx-3">
-                        <source :srcset="$baseUrl+'/src/assets/img/logoPhone.png'" type="image/svg+xml">
-                        <img :src="$baseUrl+'/src/assets/img/logoPhone.png'" class="img-fluid w-25" alt="...">
-                    </picture>
-                </div>
                 <div v-if="isLoadingImage == true" class="col-md-6 col-sm-12 text-center my-5">
-                    <div v-if="windowWidth < 720">
-                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <div class="m-3 spinner-grow spinner-grow-sm text-secondary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                    <div v-else-if="windowWidth < $widthComputer">
-                        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                    <div v-else>
+                    <div>
                         <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
                 </div>
                 <div v-else class="col-md-6 col-sm-12 text-center">
-                    <img :src="$baseUrl+'/src/assets/img/Data_security_28.png'" class="img-fluid" alt="...">
+                    <img :src="$baseUrl+'/src/assets/img/otp-01.png'" class="img-fluid" alt="...">
                 </div>
                 <div class="col-md-6 col-sm-12 px-lg-5 text-center">
                     <form class="form needs-validation" id="app" @submit.prevent="login" novalidate>    
@@ -225,7 +191,7 @@
                 </div>
             </div>
             <div :class="windowWidth >= $widthComputer ? 'row text-center mt-lg-5 py-3': 'row text-center mt-lg-5 pt-5'">
-                <p class="text-secondary">Eraksa - Ecep Achmad Sutisna <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
+                <p class="text-secondary">Ecep Achmad Sutisna <font-awesome-icon icon="fa-solid fa-copyright" /> {{currentYear}} </p>
             </div>
         </div>
     </div>
@@ -295,20 +261,14 @@
                     "email": this.form.email,
                     "password": this.form.password, 
                 }
-                await axios.post('/login', data)
+                await axios.post('/auth', data)
                 .then(response => {
-                    // console.log(response.headers);
-                    localStorage.setItem('token', response.data.data.token);
-                    localStorage.setItem('roles', response.data.data.roles);
+                    // console.log(response.data);
+                    localStorage.setItem('token', response.data.token);
                     this.sessionData = {
-                        "id": response.data.data.user.id,
-                        "name": response.data.data.user.name,
-                        "email": response.data.data.user.email,
-                        "status": response.data.data.user.status,
-                        "phone": response.data.data.user.phone,
-                        "study_program_id": response.data.data.user.study_program_id,
-                        "code": response.data.data.user.code,
-                        "code_type": response.data.data.user.code_type
+                        "id": response.data.user.id,
+                        "name": response.data.user.name,
+                        "email": response.data.user.email
                     };
                     localStorage.setItem('sessionObject', JSON.stringify(this.sessionData));
                     localStorage.setItem('loggedIn', true);
@@ -327,11 +287,7 @@
                         }
                     }
                     setTimeout(() => {
-                        if (response.data.data.user.status === "1") {
-                            this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
-                        } else {
-                            this.$router.push({ name: "user.otpPage" });
-                        }                        
+                        this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });                        
                     }, 4000);
                 })
                 .catch(error => {
@@ -348,6 +304,7 @@
                         ];
                         // console.log(!error.response);
                     } else if (error.response) {
+                        console.log(error.response)
                         this.secondaryButtonDisabled = false;
                         this.showAlert = true;
                         this.isLoadingResponse = false;
@@ -384,7 +341,7 @@
                                 {
                                     'id': 1,
                                     'message': error.response.status +' '+ error.response.statusText,
-                                    'detail': 'Mohon maaf permintaan anda tidak dapat dilakukan'
+                                    'detail': error.response.message
                                 }
                             ]
                         }
@@ -503,7 +460,6 @@
         beforeCreate(){
             // console.table(this.$session != null, this.$loggedIn != 'null');
             if(this.$session != null || this.$loggedIn != 'null') {
-                if (this.$session['status'] == "1") {
                     this.lastPath = this.$router.options.history.state.back
                     if(this.lastPath != null) {
                         this.$router.push({ path: this.lastPath }).then(() => { this.$router.go() });
@@ -511,10 +467,6 @@
                     else {
                         this.$router.push({ name: "dashboard" }).then(() => { this.$router.go() });
                     }
-                }
-                else {
-                    this.$router.push({ name: "user.otpPage" }).then(() => { this.$router.go() });
-                }
             }
         },
         created(){

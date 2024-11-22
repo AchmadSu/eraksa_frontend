@@ -24,18 +24,25 @@
         </ul>
         <!-- Topbar Search -->
         <div class="row">
-            <div class="col-8">
-                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" v-model="this.form.search" class="form-control input-lg bg-light" placeholder="Cari Nama Mobil atau Plat Mobil"
-                            aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button @click="searchFunction" class="btn btn-primary" type="button">
-                                <i class="fa fa-search fa-sm"></i>
-                            </button>
-                        </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <h4>LEARNING MANAGEMENT SYSTEM</h4>
                     </div>
-                </form>
+                    <div class="col-5">
+                        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" v-model="this.form.search" class="form-control input-lg bg-light" placeholder="Cari Class atau Modul"
+                                aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button @click="searchFunction" class="btn btn-primary" type="button">
+                                        <i class="fa fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -66,34 +73,13 @@
             </li>
 
             <!-- Nav Item - User Information -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" :style="this.cursorStyle" id="userDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline text-success">
-                        <b>
-                            <template v-if="username.length < 20">
-                                {{username}}
-                            </template>
-                            <template v-else>
-                                {{username.substring(0,20)+"..."}}
-                            </template>
-                        </b>
-                    </span>
-                    <img class="img-profile rounded-circle" :src="this.accountIcon">
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                    aria-labelledby="userDropdown">
-                    <a @click="router('user.update')" class="dropdown-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-user mr-2 text-primary"></i>
-                        Ubah Profil
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a @click="logout" class="dropdown-item" href="#" :style="this.cursorStyle">
-                        <i class="fa fa-sign-out fa-sm mr-2 text-danger"></i>
-                        Logout
-                    </a>
-                </div>
+            <li class="nav-item d-flex justify-content-evenly">
+                <button class="mx-1 btn btn-light">
+                    <i class="fa fa-bell-o fa-sm"></i>
+                </button>
+                <button class="btn btn-light">
+                    <i class="fa fa-envelope fa-sm"></i>
+                </button>
             </li>
         </ul>
     </nav>
@@ -189,51 +175,6 @@
                         </div>
                     </div>
                 </li>
-        
-                <!-- <li v-if="this.$roles != 'Member'" class="nav-item my-2">
-                    <a class="nav-link collapsed" href="#" :style="this.cursorStyle" data-toggle="collapse" data-target="#collapseMaintenances"
-                        aria-expanded="true" aria-controls="collapseMaintenances">
-                        <i class="fa fa-recycle" aria-hidden="true"></i>&ensp;
-                        <span>Kelola Perawatan</span>
-                    </a>
-                    <div id="collapseMaintenances" class="collapse" aria-labelledby="headingMaintenances"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-plus-circle"></i>&ensp; Buat Jadwal
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-spinner"></i>&ensp; Aktif
-                                    </a>
-                                </li>
-                                <li v-if="this.$roles == 'Super-Admin'" class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-paper-plane"></i>&ensp; Permintaan Baru
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-check"></i>&ensp; Selesai
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-times"></i>&ensp; Permintaan Ditolak
-                                    </a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a class="collapse-item text-dark" href="#" :style="this.cursorStyle">
-                                        <i class="fa fa-history"></i>&ensp; Riwayat Saya
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li> -->
         
                 <!-- Divider -->
                 <hr v-if="this.$roles != 'Member'" class="sidebar-divider">
@@ -360,7 +301,7 @@
                         // console.log("Test");
                         setTimeout(() => {
                             this.$router.push({ 
-                                name: 'menu.assets', 
+                                name: 'dashboard', 
                                 query: {
                                     search: this.searchParams,
                                 }
